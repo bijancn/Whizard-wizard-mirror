@@ -1,23 +1,27 @@
 # Tip: export RIVET_ANALYSIS_PATH=$PWD or use --pwd
 # For new template: rivet-mkanalysis WHIZARD_*
+# yodamerge -o Rivet.yoda $(YODAFILES) combines multiple yoda files to one
+# (adding statistics etc.)
 
-hepfile=test.hepmc
+yodafiles=nlo_powheg_500K.yoda lo_pythia_1emission_500k.yoda
 yodafile=Rivet.yoda
-ANALYIS=WHIZARD_2015_SINGLEEMISSION
+ANALYSIS=WHIZARD_2015_SINGLEEMISSION
 
 all: plots/index.html
 
 RivetAnalysis.so: *.cc
 	rivet-buildplugin *.cc
 
-Rivet.yoda: RivetAnalysis.so $(hepfile)
-	rivet --analysis $(ANALYIS) $(hepfile)
+$(yodafiles): RivetAnalysis.so
 
-debug: RivetAnalysis.so $(hepfile)
-	rivet --analysis $(ANALYIS) $(hepfile) -l Rivet.Analysis=DEBUG -n 5
+%.yoda: %.hepmc
+	rivet --pwd -a $(ANALYSIS) -H $@ $< -q
 
-plots/index.html: $(yodafile)
-	rivet-mkhtml $(yodafile)
+debug: RivetAnalysis.so
+	rivet --analysis $(ANALYSIS) $(hepfile) -l Rivet.Analysis=DEBUG -n 5
+
+plots/index.html: $(yodafiles)
+	rivet-mkhtml $(yodafiles)
 
 clean:
 	rm *.so *.yoda plots -rf

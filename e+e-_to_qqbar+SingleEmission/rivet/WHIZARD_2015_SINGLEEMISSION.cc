@@ -1,6 +1,6 @@
 // -*- C++ -*-
 #include "Rivet/Analysis.hh"
-#include "Rivet/Projections/Beam.hh"
+#include "Rivet/Projections/FinalState.hh"
 #include "Rivet/Projections/ChargedFinalState.hh"
 /// @todo Include more projections as required, e.g. ChargedFinalState, FastJets, ZFinder...
 
@@ -19,15 +19,30 @@ namespace Rivet {
     /// Book histograms and initialise projections before the run
     void init() {
       // Projections
-      addProjection(Beam(), "Beams");
-      addProjection(ChargedFinalState(), "FS");
-      // Charged and neutral final state
-      const FinalState cnfs;
-      addProjection(cnfs, "CNFS");
+      addProjection(ChargedFinalState(), "CFS");
+      const FinalState fs;
+      addProjection(fs, "FS");
 
-      _hist_quarkpt = bookHisto1D("d01-x01-y01", 30, 1., 260.);
-      _hist_aquarkpt = bookHisto1D("d02-x01-y01", 30, 1., 260.);
-      _hist_gluonpt = bookHisto1D("d03-x01-y01", 30, 1., 260.);
+      _h_Quark_Pt = bookHisto1D("q-pT", 30, 0., 260.);
+      _h_Aquark_Pt = bookHisto1D("qbar-pT", 30, 0., 260.);
+      _h_Gluon_Pt = bookHisto1D("gluon-pT", 30, 0., 260.);
+
+      _h_Quark_E = bookHisto1D("q-E", 30, 0, 260.);
+      _h_Aquark_E = bookHisto1D("qbar-E", 30, 0., 260.);
+      _h_Gluon_E = bookHisto1D("gluon-E", 30, 0., 260.);
+
+      _h_Quark_Phi = bookHisto1D("q-Phi", 50, 0, TWOPI);
+      _h_Aquark_Phi = bookHisto1D("qbar-Phi", 50, 0, TWOPI);
+      _h_Gluon_Phi = bookHisto1D("gluon-Phi", 50, 0, TWOPI);
+
+      _h_Quark_Rapidity = bookHisto1D("q-Rapidity", 50, -5, 5);
+      _h_Aquark_Rapidity = bookHisto1D("qbar-Rapidity", 50, -5, 5);
+      _h_Gluon_Rapidity = bookHisto1D("gluon-Rapidity", 50, -5, 5);
+
+      n_events = 0;
+      n_photons = 0;
+
+      //_histEta    = bookHisto1D("Eta", 50, -5, 5);
     }
 
     /// Perform the per-event analysis
@@ -36,21 +51,35 @@ namespace Rivet {
       // Get event weight for histo filling
       const double weight = event.weight();
 
-      const FinalState& fs = applyProjection<FinalState>(event, "CNFS");
+      const FinalState& fs = applyProjection<FinalState>(event, "FS");
       if (fs.particles().size() < 2) {
-        MSG_DEBUG("Less than two final state particles in the event");
+        cout << "Less than two final state particles in the event";
         vetoEvent;
       }
+
+      n_events++;
 
       foreach (const Particle& p, fs.particles()) {
         int id = p.pid();
         MSG_DEBUG("ID" << id);
         if(id == PID::UQUARK) {
-          _hist_quarkpt->fill(p.pT()/GeV, weight);
+          _h_Quark_Pt->fill(p.pT()/GeV, weight);
+          _h_Quark_E->fill(p.E()/GeV, weight);
+          _h_Quark_Phi->fill(p.phi(), weight);
+          _h_Quark_Rapidity->fill(p.rapidity(), weight);
         } else if(id == - PID::UQUARK) {
-          _hist_aquarkpt->fill(p.pT()/GeV, weight);
+          _h_Aquark_Pt->fill(p.pT()/GeV, weight);
+          _h_Aquark_E->fill(p.E()/GeV, weight);
+          _h_Aquark_Phi->fill(p.phi(), weight);
+          _h_Aquark_Rapidity->fill(p.rapidity(), weight);
         } else if(id == PID::GLUON) {
-          _hist_gluonpt->fill(p.pT()/GeV, weight);
+          _h_Gluon_Pt->fill(p.pT()/GeV, weight);
+          _h_Gluon_E->fill(p.E()/GeV, weight);
+          _h_Gluon_Phi->fill(p.phi(), weight);
+          _h_Gluon_Rapidity->fill(p.rapidity(), weight);
+        } else if(id ==  PID::PHOTON) {
+          n_photons ++;
+          vetoEvent;
         }
       }
     }
@@ -61,18 +90,50 @@ namespace Rivet {
       /// @todo Normalise, scale and otherwise manipulate histograms here
       // scale(_h_YYYY, crossSection()/sumOfWeights()); // norm to cross section
       // normalize(_h_YYYY); // normalize to unity
-      scale(_hist_quarkpt, 1./sumOfWeights());
-      scale(_hist_aquarkpt, 1./sumOfWeights());
-      scale(_hist_gluonpt, 1./sumOfWeights());
+
+      cout << "\nNumber of photons: " << n_photons << "\n";
+      cout << "\nNumber of events: " << n_events << "\n";
+      cout << "\nPhotons/Events: " << (1.0*n_photons) / n_events << "\n";
+
+      scale(_h_Quark_Pt, 1./sumOfWeights());
+      scale(_h_Aquark_Pt, 1./sumOfWeights());
+      scale(_h_Gluon_Pt, 1./sumOfWeights());
+
+      scale(_h_Quark_E, 1./sumOfWeights());
+      scale(_h_Aquark_E, 1./sumOfWeights());
+      scale(_h_Gluon_E, 1./sumOfWeights());
+
+      scale(_h_Quark_Phi, 1./sumOfWeights());
+      scale(_h_Aquark_Phi, 1./sumOfWeights());
+      scale(_h_Gluon_Phi, 1./sumOfWeights());
+
+      scale(_h_Quark_Rapidity, 1./sumOfWeights());
+      scale(_h_Aquark_Rapidity, 1./sumOfWeights());
+      scale(_h_Gluon_Rapidity, 1./sumOfWeights());
+
     }
 
 
   private:
 
     // Data members like post-cuts event weight counters go here
-    Histo1DPtr _hist_quarkpt;
-    Histo1DPtr _hist_aquarkpt;
-    Histo1DPtr _hist_gluonpt;
+    Histo1DPtr _h_Quark_Pt;
+    Histo1DPtr _h_Aquark_Pt;
+    Histo1DPtr _h_Gluon_Pt;
+
+    Histo1DPtr _h_Quark_E;
+    Histo1DPtr _h_Aquark_E;
+    Histo1DPtr _h_Gluon_E;
+
+    Histo1DPtr _h_Quark_Phi;
+    Histo1DPtr _h_Aquark_Phi;
+    Histo1DPtr _h_Gluon_Phi;
+
+    Histo1DPtr _h_Quark_Rapidity;
+    Histo1DPtr _h_Aquark_Rapidity;
+    Histo1DPtr _h_Gluon_Rapidity;
+
+    int n_events, n_photons;
 
   };
 
