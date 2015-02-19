@@ -26,29 +26,23 @@ int main() {
   pythia.readString("HadronLevel:Decay = off");
   pythia.readString("HadronLevel:BoseEinstein = off");
   pythia.readString("Check:event = off");
-//  pythia.readString("SigmaProcess:factorFixScale = 10000.0");
-//  pythia.readString("SigmaProcess:factorScale1 = 1");
-// pythia.readString("SigmaProcess:factorScale2 = 5");
-//  pythia.readString("TimeShower:ptmaxMatch = 2");
   pythia.readString("SigmaProcess:alphaSvalue = 0.1178");
   pythia.readString("TimeShower:pTmin = 1.0");
+//Switch off photon emissions (?)
+  pythia.readString("StandardModel:alphaEM0 = 0.0");
+  pdthia.readString("StandardModel:alphaEMmZ = 0.0");
 
   HepMC::Pythia8ToHepMC ToHepMC;
   HepMC::IO_GenEvent ascii_io("Test_hepmc_no_emission", std::ios::out);
 
   pythia.init();
-//  myLHA.setInit();
-//  myLHA.initLHEF();
   for (int iEvent = 0; iEvent < n_events; ++iEvent) {
      pythia.next ();
-//     cout << "*********EVENT TO BE SHOWERED************";
+// Unless this values are set, there will be no emissions
      pythia.event[3].scale(500.0);
      pythia.event[4].scale(500.0);
-//     pythia.event.list (true, true);
-//     n_branchings = pythia.forceTimeShower (3,4,10000.0,1);
-//     cout << "Number of branchings: " << n_branchings << "\n";
-//     cout << "**********NEXT EVENT*************";
-//     pythia.event.list ();
+// Performs splitting
+     n_branchings = pythia.forceTimeShower (3,4,10000.0,1);
      HepMC::GenEvent* hepmcevt = new HepMC::GenEvent();
      ToHepMC.fill_next_event(pythia, hepmcevt);
 
