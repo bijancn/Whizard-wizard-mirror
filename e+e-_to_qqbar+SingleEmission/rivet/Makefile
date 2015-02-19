@@ -13,6 +13,9 @@ RivetAnalysis.so: *.cc
 Rivet.yoda: RivetAnalysis.so $(hepfile)
 	rivet --analysis $(ANALYIS) $(hepfile)
 
+debug: RivetAnalysis.so $(hepfile)
+	rivet --analysis $(ANALYIS) $(hepfile) -l Rivet.Analysis=DEBUG -n 5
+
 plots/index.html: $(yodafile)
 	rivet-mkhtml $(yodafile)
 

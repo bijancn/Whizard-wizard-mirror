@@ -21,6 +21,7 @@ namespace Rivet {
       // Projections
       addProjection(Beam(), "Beams");
       addProjection(ChargedFinalState(), "FS");
+      // Charged and neutral final state
       const FinalState cnfs;
       addProjection(cnfs, "CNFS");
 
@@ -35,17 +36,15 @@ namespace Rivet {
       // Get event weight for histo filling
       const double weight = event.weight();
 
-      // Even if we only generate hadronic events, we still need a cut on numCharged >= 2
       const FinalState& fs = applyProjection<FinalState>(event, "CNFS");
       if (fs.particles().size() < 2) {
-        MSG_DEBUG("Failed ncharged cut");
+        MSG_DEBUG("Less than two final state particles in the event");
         vetoEvent;
       }
-      MSG_DEBUG("Passed ncharged cut");
 
       foreach (const Particle& p, fs.particles()) {
-        int id = p.abspid();
-        // charged pions
+        int id = p.pid();
+        MSG_DEBUG("ID" << id);
         if(id == PID::UQUARK) {
           _hist_quarkpt->fill(p.pT()/GeV, weight);
         } else if(id == - PID::UQUARK) {
