@@ -30,7 +30,7 @@ int main() {
   pythia.readString("TimeShower:pTmin = 1.0");
 //Switch off photon emissions (?)
   pythia.readString("StandardModel:alphaEM0 = 0.0");
-  pdthia.readString("StandardModel:alphaEMmZ = 0.0");
+  pythia.readString("StandardModel:alphaEMmZ = 0.0");
 
   HepMC::Pythia8ToHepMC ToHepMC;
   HepMC::IO_GenEvent ascii_io("Test_hepmc_no_emission", std::ios::out);

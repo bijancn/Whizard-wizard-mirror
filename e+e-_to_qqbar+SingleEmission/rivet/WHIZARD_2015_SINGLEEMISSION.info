@@ -1,9 +1,9 @@
 Name: WHIZARD_2015_SINGLEEMISSION
-Year: <Insert year of publication>
-Summary: <Insert short WHIZARD_2015_SINGLEEMISSION description>
-Experiment: <Insert the experiment name>
-Collider: <Insert the collider name>
-SpiresID: <Insert the Inspire ID>
+Year: 2015
+Summary: Analysis of POWHEG sudakov factor
+Experiment: WHIZARD
+Collider: ILC
+SpiresID: 1234
 Status: UNVALIDATED
 Authors:
  - Your Name <your@email.address>
@@ -12,23 +12,20 @@ Authors:
 # - <Example: doi:10.1016/j.physletb.2006.04.048>
 # - <Example: arXiv:hep-ex/0511054 (plus erratum)>
 RunInfo:
-  <Insert event types (not gen-specific), energy, any kinematic
-  efficiency cut(s) that may be needed; essentially any details needed to set
-  up a generator to reproduce the data.>
-NumEvents: 1000000
+  $\sqrt{s}=500\;\GeV$
+NumEvents: 500000
 NeedCrossSection: no
-#Beams: <Insert beam pair(s), e.g. [p-, p+] or [[p-, e-], [p-, e+]]>
-#Energies: <Insert list of run energies or beam energy pairs in GeV,
-#           e.g. [1960] or [[8.0, 3.5]] or [630, 1800]. Order pairs to match "Beams">
-#PtCuts: <Insert list of kinematic pT cuts in GeV, e.g. [0, 20]>
-#NeedCrossSection: True
+
+# This is apparently incompatible with the provided hepmc's
+# Beams: [e+, e-]
+# Energies: [250, 250]
+
+# This removes nlo_powheg_500K. Cross section is nan. Bogus output of whizards
+# hepmc?
+# NeedCrossSection: True
+
 Description:
-  '<Insert a fairly long description, including what is measured
-  and if possible what it is useful for in terms of MC validation
-  and tuning. Use LaTeX for maths like $\pT > 50\;\GeV$.
-  Use single quotes around the block if required (see http://www.yaml.org)>'
+  'We try to set all scales equal. Especially, the renormalization scale
+  ($\mu=\sqrt{s}$), $\alpha_s(m_z)=0.1178$'
 BibKey: 
 BibTeX: ''
-ToDo:
- - Implement the analysis, test it, remove this ToDo, and mark as VALIDATED :-)
-
