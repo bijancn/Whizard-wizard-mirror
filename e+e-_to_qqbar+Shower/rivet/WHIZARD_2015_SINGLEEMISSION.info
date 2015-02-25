@@ -1,0 +1,31 @@
+Name: WHIZARD_2015_SINGLEEMISSION
+Year: 2015
+Summary: Analysis of POWHEG sudakov factor
+Experiment: WHIZARD
+Collider: ILC
+SpiresID: 1234
+Status: UNVALIDATED
+Authors:
+ - Your Name <your@email.address>
+#References:
+# - <Example: Phys.Lett.B639:151-158,2006, Erratum-ibid.B658:285-289,2008>
+# - <Example: doi:10.1016/j.physletb.2006.04.048>
+# - <Example: arXiv:hep-ex/0511054 (plus erratum)>
+RunInfo:
+  $\sqrt{s}=500\;\GeV$
+NumEvents: 500000
+NeedCrossSection: no
+
+# This is apparently incompatible with the provided hepmc's
+# Beams: [e+, e-]
+# Energies: [250, 250]
+
+# This removes nlo_powheg_500K. Cross section is nan. Bogus output of whizards
+# hepmc?
+# NeedCrossSection: True
+
+Description:
+  'We try to set all scales equal. Especially, the renormalization scale
+  ($\mu=\sqrt{s}$), $\alpha_s(m_z)=0.1178$'
+BibKey: 
+BibTeX: ''

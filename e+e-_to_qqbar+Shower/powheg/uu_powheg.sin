@@ -1,0 +1,85 @@
+#Gosam parameters
+mW = 80.376
+mZ = 91.1876
+GF = 1.16637E-005
+wZ = 2.4952
+wW = 2.124
+wtop = 0
+mb = 4.8
+
+# => alpha = 132.16066
+mmu = 0
+me = 0
+
+
+?vis_channels = true
+?use_vamp_equivalences = false
+#alpha_s options
+?alpha_s_is_fixed = false
+?alpha_s_from_mz = true
+?alpha_s_from_lambda_qcd = false
+alpha_s_order = 0
+#GoSam options
+?use_gosam_loops = true
+?use_gosam_correlations = false
+?use_gosam_real_trees = false
+alpha_power = 2
+alphas_power = 0
+#Powheg options
+?combined_nlo_integration = true
+?powheg_matching = true
+powheg_grid_size_xi = 5
+powheg_grid_size_xi = 1
+powheg_grid_size_y = 5
+powheg_grid_size_y = 1
+powheg_grid_sampling_points = 3000000
+powheg_grid_sampling_points = 300000
+powheg_pt_min = 1.0
+
+?vis_history = true
+
+process uu_powheg = E1, e1 =>  u, U {nlo_calculation="Full"}
+
+sqrts = 500 GeV
+seed = 1
+iterations = 5:10000
+
+#Various histograms
+#histogram theta_uu (0, 3.5, 0.25)
+#histogram pt_t (178, 182 GeV, 0.1 GeV)
+#histogram pt_t_nlo (178, 182 GeV, 0.1 GeV)
+#histogram pt_tbar (0, 150 GeV, 5 GeV)
+#histogram pt_g (0, 150 GeV, 5 GeV)
+#histogram eta_u (-5, 5, 0.25)
+#histogram eta_ubar (-5, 5, 0.25)
+#histogram E_g (0, 150 GeV, 5 GeV)
+
+sample_format = lhef
+#sample_format = hepmc
+n_events = 5
+checkpoint = n_events/20
+
+#Fill all the histograms
+#analysis = record phi_uu (eval Phi [u, U]);
+#           record m_tt (eval M [t, T]);
+#           record theta_uu (eval Theta [u, U]);
+#           record pt_t (eval Pt [t]);
+#           record pt_tbar (eval Pt [T]);
+#           record pt_g (eval Pt [gl]);
+#           record eta_u (eval Eta [u]);
+#           record eta_ubar (eval Eta [U]);
+#           record E_g (eval E [gl])
+
+simulate (uu_powheg)
+
+#Create output
+#compile_analysis (g) {$out_file = "combined.dat"}
+#compile_analysis (phi_uu) {$out_file = "phi_uu.dat"}
+#compile_analysis (m_tt) {$out_file = "m_tt.dat"}
+#compile_analysis (theta_uu) {$out_file = "theta_uu.dat"}
+#compile_analysis (pt_t) {$out_file = "pt_t.dat"}
+#compile_analysis (pt_tbar) {$out_file = "pt_tbar.dat"}
+#compile_analysis (pt_g) {$out_file = "pt_g.dat"}
+#compile_analysis (eta_u) {$out_file = "eta_u.dat"}
+#compile_analysis (eta_ubar) {$out_file = "eta_ubar.dat"}
+#compile_analysis (E_g) {$out_file = "E_g.dat"}
