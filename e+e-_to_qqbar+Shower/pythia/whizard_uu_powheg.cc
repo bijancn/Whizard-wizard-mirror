@@ -52,7 +52,7 @@ int main() {
 //  }
 
   HepMC::Pythia8ToHepMC ToHepMC;
-  HepMC::IO_GenEvent ascii_io("Test_pwhg.hepmc", std::ios::out);
+  HepMC::IO_GenEvent ascii_io("whizard_uu_powheg.hepmc", std::ios::out);
 
   // Initialise and list settings
   pythia.init();
