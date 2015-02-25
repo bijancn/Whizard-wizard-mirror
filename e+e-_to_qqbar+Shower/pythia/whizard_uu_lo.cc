@@ -19,7 +19,7 @@ int main() {
   Pythia pythia;
 
   // Load configuration file
-  pythia.readFile("main31.cmnd");
+  pythia.readFile("whizard_uu_lo.cmnd");
 
   // Read in main settings
   int nEvent      = pythia.settings.mode("Main:numberOfEvents");
@@ -31,7 +31,7 @@ int main() {
 
   // Add in user hooks for shower vetoing
   PowhegHooks *powhegHooks = NULL;
-  loadHooks = true;
+  loadHooks = false;
   if (loadHooks) {
 
 
@@ -52,7 +52,7 @@ int main() {
 //  }
 
   HepMC::Pythia8ToHepMC ToHepMC;
-  HepMC::IO_GenEvent ascii_io("Test_pwhg.hepmc", std::ios::out);
+  HepMC::IO_GenEvent ascii_io("whizard_uu_lo.hepmc", std::ios::out);
 
   // Initialise and list settings
   pythia.init();

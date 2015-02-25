@@ -58,7 +58,7 @@ main% : main%.cc $(PREFIX_LIB)/libpythia8.a
 	$(CXX) $^ -o $@ $(CXX_COMMON)
 
 # HEPMC2.
-main02 main41 main42 main43 main85 main86 main87 main88 main89 main31: $$@.cc\
+whizard_uu_lo whizard_uu_powheg: $$@.cc\
 	$(PREFIX_LIB)/libpythia8.a
 ifeq ($(HEPMC2_USE),true)
 	$(CXX) $^ -o $@ -I$(HEPMC2_INCLUDE) $(CXX_COMMON)\
@@ -67,71 +67,6 @@ else
 	@echo "Error: $@ requires HEPMC2"
 endif
 
-# PROMC.
-main46: $$@.cc $(PREFIX_LIB)/libpythia8.a
-ifeq ($(PROMC_USE),true)
-	$(CXX) $^ -o $@ -I$(PROMC_INCLUDE)/src -I$(PROMC_INCLUDE)/include\
-	 $(CXX_COMMON) -DPROMC=\"$(PROMC_INCLUDE)\" -Wno-long-long\
-	 -L$(PROMC_LIB) -lpromc -lprotoc -lprotobuf -lprotobuf-lite -lcbook
-else
-	@echo "Error: $@ requires PROMC"
-endif
-
-# EVTGEN (and HEPMC2).
-main48: $$@.cc $(PREFIX_LIB)/libpythia8.so
-ifeq ($(EVTGEN_USE)$(HEPMC2_USE),truetrue)
-	$(CXX) $< -o $@ -I$(EVTGEN_INCLUDE) $(CXX_COMMON)\
-	 -DEVTGEN_PYTHIA -DEVTGEN_EXTERNAL -Wl,-rpath $(HEPMC2_LIB)\
-	 -L$(PREFIX_LIB) -Wl,-rpath $(PREFIX_LIB) -lpythia8\
-	 -L$(EVTGEN_LIB) -Wl,-rpath $(EVTGEN_LIB) -lEvtGenExternal -lEvtGen
-else
-	@echo "Error: $@ requires EVTGEN and HEPMC2"
-endif
-
-# FASTJET3.
-main71 main72: $$@.cc $(PREFIX_LIB)/libpythia8.a
-ifeq ($(FASTJET3_USE),true)
-	$(CXX) $^ -o $@ -I$(FASTJET3_INCLUDE) $(CXX_COMMON)\
-	 -L$(FASTJET3_LIB) -Wl,-rpath $(FASTJET3_LIB) -lfastjet
-else
-	@echo "Error: $@ requires FASTJET3"
-endif
-
-# FASTJET3 and HEPMC2.
-main81 main82 main83 main84: $$@.cc $(PREFIX_LIB)/libpythia8.a
-ifeq ($(FASTJET3_USE)$(HEPMC2_USE),truetrue)
-	$(CXX) $^ -o $@ -I$(FASTJET3_INCLUDE) -I$(HEPMC2_INCLUDE) $(CXX_COMMON)\
-	 -L$(HEPMC2_LIB) -Wl,-rpath $(HEPMC2_LIB) -lHepMC\
-	 -L$(FASTJET3_LIB) -Wl,-rpath $(FASTJET3_LIB) -lfastjet
-else
-	@echo "Error: $@ requires FASTJET3 and HEPMC2"
-endif
-
-# ROOT (turn off all warnings for readability).
-main91: $$@.cc $(PREFIX_LIB)/libpythia8.a
-ifeq ($(ROOT_USE),true)
-	$(CXX) $^ -o $@ -w -I$(ROOT_INCLUDE) $(CXX_COMMON)\
-	 -Wl,-rpath $(ROOT_LIB) `$(ROOT_BIN)root-config --glibs`
-else
-	@echo "Error: $@ requires ROOT"
-endif
-main92: $$@.cc $$@.h $$@LinkDef.h $(PREFIX_LIB)/libpythia8.a
-ifeq ($(ROOT_USE),true)
-	export LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:$(ROOT_LIB);\
-	 $(ROOT_BIN)rootcint -f $@Dct.cc -c -I$(PREFIX_INCLUDE) $@.h $@LinkDef.h
-	$(CXX) $@Dct.cc $^ -o $@ -w -I$(ROOT_INCLUDE) $(CXX_COMMON)\
-	 -Wl,-rpath $(ROOT_LIB) `$(ROOT_BIN)root-config --glibs`
-else
-	@echo "Error: $@ requires ROOT"
-endif
-
-# User-written examples for tutorials, without external dependencies.
-mymain% : mymain%.cc $(PREFIX_LIB)/libpythia8.a
-	$(CXX) $^ -o $@ $(CXX_COMMON)
-
-# Internally used tests, without external dependencies.
-test% : test%.cc $(PREFIX_LIB)/libpythia8.a
-	$(CXX) $^ -o $@ $(CXX_COMMON)
 
 # Clean.
 clean:

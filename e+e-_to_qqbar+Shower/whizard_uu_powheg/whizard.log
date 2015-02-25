@@ -1,0 +1,232 @@
+|=============================================================================|
+|                                                                             |
+|    WW             WW  WW   WW  WW  WWWWWW      WW      WWWWW    WWWW        |
+|     WW    WW     WW   WW   WW  WW     WW      WWWW     WW  WW   WW  WW      |
+|      WW  WW WW  WW    WWWWWWW  WW    WW      WW  WW    WWWWW    WW   WW     |
+|       WWWW   WWWW     WW   WW  WW   WW      WWWWWWWW   WW  WW   WW  WW      |
+|        WW     WW      WW   WW  WW  WWWWWW  WW      WW  WW   WW  WWWW        |
+|                                                                             |
+|                                                                             |
+|                                        W                                    |
+|                                       sW                                    |
+|                                       WW                                    |
+|                                      sWW                                    |
+|                                      WWW                                    |
+|                                     wWWW                                    |
+|                                    wWWWW                                    |
+|                                    WW WW                                    |
+|                                    WW WW                                    |
+|                                   wWW WW                                    |
+|                                  wWW  WW                                    |
+|                                  WW   WW                                    |
+|                                  WW   WW                                    |
+|                                 WW    WW                                    |
+|                                 WW    WW                                    |
+|                                WW     WW                                    |
+|                                WW     WW                                    |
+|           wwwwww              WW      WW                                    |
+|              WWWWWww          WW      WW                                    |
+|                 WWWWWwwwww   WW       WW                                    |
+|                     wWWWwwwwwWW       WW                                    |
+|                 wWWWWWWWWWWwWWW       WW                                    |
+|                wWWWWW       wW        WWWWWWW                               |
+|                  WWWW       wW        WW  wWWWWWWWwww                       |
+|                   WWWW                      wWWWWWWWwwww                    |
+|                     WWWW                      WWWW     WWw                  |
+|                       WWWWww                   WWWW                         |
+|                           WWWwwww              WWWW                         |
+|                               wWWWWwww       wWWWWW                         |
+|                                     WwwwwwwwwWWW                            |
+|                                                                             |
+|                                                                             |
+|                                                                             |
+|  by:   Wolfgang Kilian, Thorsten Ohl, Juergen Reuter                        |
+|        with contributions from Christian Speckner                           |
+|        Contact: <whizard@desy.de>                                           |
+|                                                                             |
+|  if you use WHIZARD please cite:                                            |
+|        W. Kilian, T. Ohl, J. Reuter,  Eur.Phys.J.C71 (2011) 1742            |
+|                                          [arXiv: 0708.4233 [hep-ph]]        |
+|        M. Moretti, T. Ohl, J. Reuter, arXiv: hep-ph/0102195                 |
+|                                                                             |
+|=============================================================================|
+|                               WHIZARD 2.2.5
+|=============================================================================|
+| Reading model file '/scratch/whizard_git/whizard_make_gfortran/../whizard_run_gfortran/share/whizard/models/SM.mdl'
+| Preloaded model: SM
+| Process library 'default_lib': initialized
+| Preloaded library: default_lib
+| Reading model file '/scratch/whizard_git/whizard_make_gfortran/../whizard_run_gfortran/share/whizard/models/SM_hadrons.mdl'
+| Reading model file '/scratch/whizard_git/whizard_make_gfortran/../whizard_run_gfortran/share/whizard/models/SM_rad.mdl'
+| Reading commands from file 'run.sin'
+| Including Sindarin from '../../general_settings.sin'
+SM.mW =>  8.037600000000E+01
+SM.mZ =>  9.118760000000E+01
+SM.GF =>  1.166370000000E-05
+SM.wZ =>  2.495200000000E+00
+SM.wW =>  2.124000000000E+00
+SM.wtop =>  0.000000000000E+00
+SM.mb =>  4.800000000000E+00
+SM.mmu =>  0.000000000000E+00
+SM.me =>  0.000000000000E+00
+?vis_channels = false
+?use_vamp_equivalences = false
+?vis_history = false
+?diags = false
+?alpha_s_is_fixed = false
+?alpha_s_from_mz = true
+?alpha_s_from_lambda_qcd = false
+alpha_s_order = 0
+?use_gosam_loops = true
+?use_gosam_correlations = false
+?use_gosam_real_trees = false
+[user variable] K = 1000
+checkpoint = 1000
+| End of included '../../general_settings.sin'
+| Including Sindarin from '../process_settings.sin'
+alpha_power = 2
+alphas_power = 0
+sqrts =  5.000000000000E+02
+n_events = 10000
+checkpoint = 500
+| End of included '../process_settings.sin'
+alpha_power = 2
+alphas_power = 0
+?combined_nlo_integration = true
+?powheg_matching = true
+powheg_grid_size_xi = 1
+powheg_grid_size_y = 1
+powheg_grid_sampling_points = 500000
+powheg_pt_min =  1.000000000000E+00
+| Process library 'default_lib': recorded process 'whizard_uu_powheg'
+| Starting simulation for process 'whizard_uu_powheg'
+| Simulate: process 'whizard_uu_powheg' needs integration
+| Integrate: current process library needs compilation
+| Process library 'default_lib': compiling ...
+| Process library 'default_lib': keeping makefile
+| Process library 'default_lib': keeping driver
+| Process library 'default_lib': active
+| Process library 'default_lib': ... success.
+| Integrate: compilation done
+| QCD alpha: using a running strong coupling
+| RNG: Initializing TAO random-number generator
+| RNG: Setting seed for random-number generator to 11336
+| Initializing integration for process whizard_uu_powheg:
+| command: test -d "Generated_Loops"
+| ------------------------------------------------------------------------
+| Process [scattering]: 'whizard_uu_powheg'
+|   Library name  = 'default_lib'
+|   Process index = 1
+|   Process components:
+|     1: 'whizard_uu_powheg_i1':   e+, e- => u, ubar [omega]
+|     2: 'whizard_uu_powheg_i2':   e+, e- => u, ubar, gl [omega], [Real]
+|     3: 'whizard_uu_powheg_i3':   e+, e- => u, ubar [gosam], [Virtual]
+|     4: 'whizard_uu_powheg_i4':   e+, e- => u, ubar [omega], [Subtraction]
+| ------------------------------------------------------------------------
+| Beam structure: [any particles]
+| Beam data (collision):
+|   e+  (mass = 0.0000000E+00 GeV)
+|   e-  (mass = 0.0000000E+00 GeV)
+|   sqrts = 5.000000000000E+02 GeV
+| Phase space: keeping configuration file 'whizard_uu_powheg_i1.phs'
+| Phase space: 2 channels, 2 dimensions
+| Phase space: found 2 channels, collected in 2 groves.
+| Phase space: no equivalences between channels used.
+| Phase space: wood
+| Phase space: 2 channels, 5 dimensions
+| Phase space: found 2 channels, collected in 2 groves.
+| Phase space: no equivalences between channels used.
+| Phase space: wood
+| Phase space: keeping configuration file 'whizard_uu_powheg_i3.phs'
+| Phase space: 2 channels, 2 dimensions
+| Phase space: found 2 channels, collected in 2 groves.
+| Phase space: no equivalences between channels used.
+| Phase space: wood
+| Phase space: keeping configuration file 'whizard_uu_powheg_i4.phs'
+| Phase space: 2 channels, 2 dimensions
+| Phase space: found 2 channels, collected in 2 groves.
+| Phase space: no equivalences between channels used.
+| Phase space: wood
+Warning: No cuts have been defined.
+| Starting integration for process 'whizard_uu_powheg'
+| Integrate: iterations = 5:20000:"gw"
+| Integrator: 2 chains, 2 channels, 5 dimensions
+| Integrator: 20000 initial calls, 20 bins, stratified = T
+| Integrator: VAMP
+|=============================================================================|
+| It      Calls  Integral[fb]  Error[fb]   Err[%]    Acc  Eff[%]   Chi2 N[It] |
+|=============================================================================|
+| VAMP: using grids and results from file 'whizard_uu_powheg_m1.vg'
+   1      20000  7.2339179E+02  3.79E+00    0.52    0.74*  29.09
+   2      19999  7.2676330E+02  9.40E-01    0.13    0.18*  47.04
+   3      19998  7.2709934E+02  3.79E-01    0.05    0.07*  45.93
+   4      19997  7.2719411E+02  2.98E-01    0.04    0.06*  57.17
+   5      19996  7.2706365E+02  2.96E-01    0.04    0.06*  43.20
+|-----------------------------------------------------------------------------|
+   5      99990  7.2710014E+02  1.80E-01    0.02    0.08   43.20    0.30   5
+|=============================================================================|
+| Simulate: integration done
+| Simulate: using integration grids from file 'whizard_uu_powheg_m1.vg'
+| Simulate: activating pure parton shower
+| QCD alpha: using a running strong coupling
+| Generating grid for process 'whizard_uu_powheg'
+| Number of xi-points:          1
+| Number of y-points:          1
+| Using     500000 sampling points
+| Average:  500000.00 points per cell
+| Progress:
+|  10.0%
+|  20.0%
+|  30.0%
+|  40.0%
+|  50.0%
+|  60.0%
+|  70.0%
+|  80.0%
+|  90.0%
+| 100.0%
+| RNG: Initializing TAO random-number generator
+| RNG: Setting seed for random-number generator to 11337
+| Simulation: requested number of events = 10000
+|             corr. to luminosity [fb-1] =   1.3753E+01
+| Events: writing to LHEF file 'whizard_uu_powheg.lhe'
+| Events: writing to raw file 'whizard_uu_powheg.evx'
+| Events: generating 10000 unweighted, unpolarized events ...
+| Events: event normalization mode '1'
+| Using WHIZARD's internal showering
+| 
+| |===================================================================|
+| | % complete | events generated | events remaining | time remaining
+| |===================================================================|
+|      0.0               0              10000              ???
+|      5.0             500               9500              0m:19s
+|     10.0            1000               9000              0m:18s
+|     15.0            1500               8500              0m:18s
+|     20.0            2000               8000              0m:17s
+|     25.0            2500               7500              0m:16s
+|     30.0            3000               7000              0m:15s
+|     35.0            3500               6500              0m:13s
+|     40.0            4000               6000              0m:12s
+|     45.0            4500               5500              0m:11s
+|     50.0            5000               5000              0m:10s
+|     55.0            5500               4500              0m:09s
+|     60.0            6000               4000              0m:08s
+|     65.0            6500               3500              0m:07s
+|     70.0            7000               3000              0m:06s
+|     75.0            7500               2500              0m:05s
+|     80.0            8000               2000              0m:04s
+|     85.0            8500               1500              0m:03s
+|     90.0            9000               1000              0m:02s
+|     95.0            9500                500              0m:01s
+|    100.0           10000                  0              0m:00s
+| |===================================================================|
+| 
+|         ... event sample complete.
+Warning: Encountered events with excess weight: 139 events (  1.390 %)
+| Maximum excess weight = 5.359E+01
+| Average excess weight = 4.145E-02
+| Events: closing LHEF file 'whizard_uu_powheg.lhe'
+| Events: closing raw file 'whizard_uu_powheg.evx'
+| There were no errors and    2 warning(s).
+| WHIZARD run finished.
+|=============================================================================|

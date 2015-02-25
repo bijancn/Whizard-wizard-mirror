@@ -8,6 +8,6 @@ alphas_power = 0
 ?combined_nlo_integration = false
 ?powheg_matching = false
 
-process uu = E1, e1 =>  u, U
+process whizard_uu_lo = E1, e1 =>  u, U
 
-simulate (uu)
+simulate (whizard_uu_lo)

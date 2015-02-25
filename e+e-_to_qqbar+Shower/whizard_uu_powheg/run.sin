@@ -1,0 +1,17 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+alpha_power = 2
+alphas_power = 0
+
+#Powheg options
+?combined_nlo_integration = true
+?powheg_matching = true
+powheg_grid_size_xi = 1
+powheg_grid_size_y = 1
+powheg_grid_sampling_points = 500000
+powheg_pt_min = 1.0
+
+process whizard_uu_powheg = E1, e1 =>  u, U {nlo_calculation="Full"}
+
+simulate (whizard_uu_powheg)

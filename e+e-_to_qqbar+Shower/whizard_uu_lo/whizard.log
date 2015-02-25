@@ -1,0 +1,189 @@
+|=============================================================================|
+|                                                                             |
+|    WW             WW  WW   WW  WW  WWWWWW      WW      WWWWW    WWWW        |
+|     WW    WW     WW   WW   WW  WW     WW      WWWW     WW  WW   WW  WW      |
+|      WW  WW WW  WW    WWWWWWW  WW    WW      WW  WW    WWWWW    WW   WW     |
+|       WWWW   WWWW     WW   WW  WW   WW      WWWWWWWW   WW  WW   WW  WW      |
+|        WW     WW      WW   WW  WW  WWWWWW  WW      WW  WW   WW  WWWW        |
+|                                                                             |
+|                                                                             |
+|                                        W                                    |
+|                                       sW                                    |
+|                                       WW                                    |
+|                                      sWW                                    |
+|                                      WWW                                    |
+|                                     wWWW                                    |
+|                                    wWWWW                                    |
+|                                    WW WW                                    |
+|                                    WW WW                                    |
+|                                   wWW WW                                    |
+|                                  wWW  WW                                    |
+|                                  WW   WW                                    |
+|                                  WW   WW                                    |
+|                                 WW    WW                                    |
+|                                 WW    WW                                    |
+|                                WW     WW                                    |
+|                                WW     WW                                    |
+|           wwwwww              WW      WW                                    |
+|              WWWWWww          WW      WW                                    |
+|                 WWWWWwwwww   WW       WW                                    |
+|                     wWWWwwwwwWW       WW                                    |
+|                 wWWWWWWWWWWwWWW       WW                                    |
+|                wWWWWW       wW        WWWWWWW                               |
+|                  WWWW       wW        WW  wWWWWWWWwww                       |
+|                   WWWW                      wWWWWWWWwwww                    |
+|                     WWWW                      WWWW     WWw                  |
+|                       WWWWww                   WWWW                         |
+|                           WWWwwww              WWWW                         |
+|                               wWWWWwww       wWWWWW                         |
+|                                     WwwwwwwwwWWW                            |
+|                                                                             |
+|                                                                             |
+|                                                                             |
+|  by:   Wolfgang Kilian, Thorsten Ohl, Juergen Reuter                        |
+|        with contributions from Christian Speckner                           |
+|        Contact: <whizard@desy.de>                                           |
+|                                                                             |
+|  if you use WHIZARD please cite:                                            |
+|        W. Kilian, T. Ohl, J. Reuter,  Eur.Phys.J.C71 (2011) 1742            |
+|                                          [arXiv: 0708.4233 [hep-ph]]        |
+|        M. Moretti, T. Ohl, J. Reuter, arXiv: hep-ph/0102195                 |
+|                                                                             |
+|=============================================================================|
+|                               WHIZARD 2.2.5
+|=============================================================================|
+| Reading model file '/scratch/whizard_git/whizard_make_gfortran/../whizard_run_gfortran/share/whizard/models/SM.mdl'
+| Preloaded model: SM
+| Process library 'default_lib': initialized
+| Preloaded library: default_lib
+| Reading model file '/scratch/whizard_git/whizard_make_gfortran/../whizard_run_gfortran/share/whizard/models/SM_hadrons.mdl'
+| Reading model file '/scratch/whizard_git/whizard_make_gfortran/../whizard_run_gfortran/share/whizard/models/SM_rad.mdl'
+| Reading commands from file 'run.sin'
+| Including Sindarin from '../../general_settings.sin'
+SM.mW =>  8.037600000000E+01
+SM.mZ =>  9.118760000000E+01
+SM.GF =>  1.166370000000E-05
+SM.wZ =>  2.495200000000E+00
+SM.wW =>  2.124000000000E+00
+SM.wtop =>  0.000000000000E+00
+SM.mb =>  4.800000000000E+00
+SM.mmu =>  0.000000000000E+00
+SM.me =>  0.000000000000E+00
+?vis_channels = false
+?use_vamp_equivalences = false
+?vis_history = false
+?diags = false
+?alpha_s_is_fixed = false
+?alpha_s_from_mz = true
+?alpha_s_from_lambda_qcd = false
+alpha_s_order = 0
+?use_gosam_loops = true
+?use_gosam_correlations = false
+?use_gosam_real_trees = false
+[user variable] K = 1000
+checkpoint = 1000
+| End of included '../../general_settings.sin'
+| Including Sindarin from '../process_settings.sin'
+alpha_power = 2
+alphas_power = 0
+sqrts =  5.000000000000E+02
+n_events = 10000
+checkpoint = 500
+| End of included '../process_settings.sin'
+alpha_power = 2
+alphas_power = 0
+?combined_nlo_integration = false
+?powheg_matching = false
+| Process library 'default_lib': recorded process 'whizard_uu_lo'
+| Starting simulation for process 'whizard_uu_lo'
+| Simulate: process 'whizard_uu_lo' needs integration
+| Integrate: current process library needs compilation
+| Process library 'default_lib': compiling ...
+| Process library 'default_lib': keeping makefile
+| Process library 'default_lib': keeping driver
+| Process library 'default_lib': active
+| Process library 'default_lib': ... success.
+| Integrate: compilation done
+| QCD alpha: using a running strong coupling
+| RNG: Initializing TAO random-number generator
+| RNG: Setting seed for random-number generator to 5065
+| Initializing integration for process whizard_uu_lo:
+| ------------------------------------------------------------------------
+| Process [scattering]: 'whizard_uu_lo'
+|   Library name  = 'default_lib'
+|   Process index = 1
+|   Process components:
+|     1: 'whizard_uu_lo_i1':   e+, e- => u, ubar [omega]
+| ------------------------------------------------------------------------
+| Beam structure: [any particles]
+| Beam data (collision):
+|   e+  (mass = 0.0000000E+00 GeV)
+|   e-  (mass = 0.0000000E+00 GeV)
+|   sqrts = 5.000000000000E+02 GeV
+| Phase space: keeping configuration file 'whizard_uu_lo_i1.phs'
+| Phase space: 2 channels, 2 dimensions
+| Phase space: found 2 channels, collected in 2 groves.
+| Phase space: no equivalences between channels used.
+| Phase space: wood
+Warning: No cuts have been defined.
+| Starting integration for process 'whizard_uu_lo'
+| Integrate: iterations = 5:20000:"gw"
+| Integrator: 2 chains, 2 channels, 2 dimensions
+| Integrator: 20000 initial calls, 20 bins, stratified = T
+| Integrator: VAMP
+|=============================================================================|
+| It      Calls  Integral[fb]  Error[fb]   Err[%]    Acc  Eff[%]   Chi2 N[It] |
+|=============================================================================|
+| VAMP: using grids and results from file 'whizard_uu_lo_m1.vg'
+   1      16384  7.0606096E+02  7.46E-02    0.01    0.01*  36.48
+   2      16384  7.0590526E+02  6.31E-02    0.01    0.01*  65.46
+   3      16384  7.0598431E+02  6.39E-02    0.01    0.01   48.39
+   4      16384  7.0595282E+02  6.37E-02    0.01    0.01*  55.91
+   5      16384  7.0585682E+02  6.51E-02    0.01    0.01   54.32
+|-----------------------------------------------------------------------------|
+   5      81920  7.0594641E+02  2.94E-02    0.00    0.01   54.32    1.26   5
+|=============================================================================|
+| Simulate: integration done
+| Simulate: using integration grids from file 'whizard_uu_lo_m1.vg'
+| QCD alpha: using a running strong coupling
+| RNG: Initializing TAO random-number generator
+| RNG: Setting seed for random-number generator to 5066
+| Simulation: requested number of events = 10000
+|             corr. to luminosity [fb-1] =   1.4165E+01
+| Events: writing to LHEF file 'whizard_uu_lo.lhe'
+| Events: writing to raw file 'whizard_uu_lo.evx'
+| Events: generating 10000 unweighted, unpolarized events ...
+| Events: event normalization mode '1'
+| 
+| |===================================================================|
+| | % complete | events generated | events remaining | time remaining
+| |===================================================================|
+|      0.0               0              10000              ???
+|      5.0             500               9500              0m:00s
+|     10.0            1000               9000              0m:01s
+|     15.0            1500               8500              0m:01s
+|     20.0            2000               8000              0m:01s
+|     25.0            2500               7500              0m:01s
+|     30.0            3000               7000              0m:01s
+|     35.0            3500               6500              0m:01s
+|     40.0            4000               6000              0m:01s
+|     45.0            4500               5500              0m:00s
+|     50.0            5000               5000              0m:00s
+|     55.0            5500               4500              0m:00s
+|     60.0            6000               4000              0m:00s
+|     65.0            6500               3500              0m:00s
+|     70.0            7000               3000              0m:00s
+|     75.0            7500               2500              0m:00s
+|     80.0            8000               2000              0m:00s
+|     85.0            8500               1500              0m:00s
+|     90.0            9000               1000              0m:00s
+|     95.0            9500                500              0m:00s
+|    100.0           10000                  0              0m:00s
+| |===================================================================|
+| 
+|         ... event sample complete.
+| Events: closing LHEF file 'whizard_uu_lo.lhe'
+| Events: closing raw file 'whizard_uu_lo.evx'
+| There were no errors and    1 warning(s).
+| WHIZARD run finished.
+|=============================================================================|

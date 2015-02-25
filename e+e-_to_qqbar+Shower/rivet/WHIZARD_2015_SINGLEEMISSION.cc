@@ -39,7 +39,7 @@ namespace Rivet {
       _h_Aquark_Rapidity = bookHisto1D("qbar-Rapidity", 50, -5, 5);
       _h_Gluon_Rapidity = bookHisto1D("gluon-Rapidity", 50, -5, 5);
 
-      _h_xy = bookScatter2D("xy");
+//      _h_xy = bookScatter2D("xy");
 
       n_events = 0;
       n_photons = 0;
@@ -62,7 +62,9 @@ namespace Rivet {
       n_events++;
 
       double xval, yval, xerr, yerr, gl_fraction;
-      const double roots = 2 * lepton_energy;
+//      const double roots = 2 * lepton_energy;
+//      const double roots = 2*fs.particles()[1].E();      
+//      const double roots = 500;
       xval = 0.0; yval = 0.0;
       xerr = 0.0; yerr = 0.0;
 
@@ -71,13 +73,13 @@ namespace Rivet {
         // x and y are energy fractions and are in [0,1]
         MSG_DEBUG("ID = " << id);
         if(id == PID::UQUARK) {
-          xval = p.E()/roots;
+//          xval = p.E()/roots;
           _h_Quark_Pt->fill(p.pT()/GeV, weight);
           _h_Quark_E->fill(p.E()/GeV, weight);
           _h_Quark_Phi->fill(p.phi(), weight);
           _h_Quark_Rapidity->fill(p.rapidity(), weight);
         } else if(id == - PID::UQUARK) {
-          yval = p.E()/roots;
+//          yval = p.E()/roots;
           _h_Aquark_Pt->fill(p.pT()/GeV, weight);
           _h_Aquark_E->fill(p.E()/GeV, weight);
           _h_Aquark_Phi->fill(p.phi(), weight);
@@ -96,7 +98,7 @@ namespace Rivet {
         }
         MSG_DEBUG( "x " << xval << " xerr " << xerr);
         MSG_DEBUG( "y " << yval << " yerr " << yerr);
-        _h_xy->addPoint(xval, yval, xerr, yerr);
+//        _h_xy->addPoint(xval, yval, xerr, yerr);
       }
     }
 
@@ -149,7 +151,7 @@ namespace Rivet {
     Histo1DPtr _h_Aquark_Rapidity;
     Histo1DPtr _h_Gluon_Rapidity;
 
-    Scatter2DPtr _h_xy;
+//    Scatter2DPtr _h_xy;
 
     int n_events, n_photons;
 
