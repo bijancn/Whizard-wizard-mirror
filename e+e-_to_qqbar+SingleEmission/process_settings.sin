@@ -1,0 +1,7 @@
+alpha_power = 2
+alphas_power = 0
+
+sqrts = 500 GeV
+iterations = 5:20000:"gw"
+n_events = 500 * K
+checkpoint = n_events / 20

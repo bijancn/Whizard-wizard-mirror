@@ -4,6 +4,7 @@
 # (adding statistics etc.)
 
 yodafiles=nlo_powheg_500K.yoda lo_pythia_1emission_500k.yoda
+hepfile=nlo_powheg_500K.hepmc
 yodafile=Rivet.yoda
 ANALYSIS=WHIZARD_2015_SINGLEEMISSION
 
@@ -18,7 +19,7 @@ $(yodafiles): RivetAnalysis.so
 	rivet --pwd -a $(ANALYSIS) -H $@ $< -q
 
 debug: RivetAnalysis.so
-	rivet --analysis $(ANALYSIS) $(hepfile) -l Rivet.Analysis=DEBUG -n 5
+	rivet --pwd -a $(ANALYSIS) $(hepfile) -l Rivet.Analysis=DEBUG --nevts=5
 
 plots/index.html: $(yodafiles)
 	rivet-mkhtml $(yodafiles)

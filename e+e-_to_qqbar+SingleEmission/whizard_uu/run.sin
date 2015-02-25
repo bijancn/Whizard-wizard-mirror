@@ -1,0 +1,13 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+alpha_power = 2
+alphas_power = 0
+
+#Powheg options
+?combined_nlo_integration = false
+?powheg_matching = false
+
+process uu = E1, e1 =>  u, U
+
+simulate (uu)
