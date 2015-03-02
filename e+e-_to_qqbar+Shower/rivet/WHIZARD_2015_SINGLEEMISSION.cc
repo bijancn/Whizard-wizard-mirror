@@ -2,6 +2,8 @@
 #include "Rivet/Analysis.hh"
 #include "Rivet/Projections/FinalState.hh"
 #include "Rivet/Projections/ChargedFinalState.hh"
+#include "Rivet/Projections/Sphericity.hh"
+#include "Rivet/Projections/Thrust.hh"
 /// @todo Include more projections as required, e.g. ChargedFinalState, FastJets, ZFinder...
 
 namespace Rivet {
@@ -22,6 +24,9 @@ namespace Rivet {
       addProjection(ChargedFinalState(), "CFS");
       const FinalState fs;
       addProjection(fs, "FS");
+      const Thrust thrust(fs);
+      addProjection(thrust, "Thrust");
+      addProjection(Sphericity(fs), "Sphericity");
 
       _h_Quark_Pt = bookHisto1D("q-pT", 30, 0., 260.);
       _h_Aquark_Pt = bookHisto1D("qbar-pT", 30, 0., 260.);
@@ -39,6 +44,13 @@ namespace Rivet {
       _h_Aquark_Rapidity = bookHisto1D("qbar-Rapidity", 50, -5, 5);
       _h_Gluon_Rapidity = bookHisto1D("gluon-Rapidity", 50, -5, 5);
 
+      _h_Thrust = bookHisto1D("Thrust", 50, 0, 0.5);
+      _h_ThrustMajor = bookHisto1D("ThrustMajor", 50, 0, 1);
+      _h_ThrustMinor = bookHisto1D("ThrustMinor", 50, 0, 1);
+      _h_Oblateness = bookHisto1D("Oblateness", 50, 0, 0.5);
+      _h_Sphericity = bookHisto1D("Sphericity", 50, 0, 0.8);
+      _h_Aplanarity = bookHisto1D("Aplanarity", 50, 0, 0.3);
+      _h_Planarity = bookHisto1D("Planarity", 50, 0, 0.5);
 //      _h_xy = bookScatter2D("xy");
 
       n_events = 0;
@@ -58,6 +70,19 @@ namespace Rivet {
         cout << "Less than two final state particles in the event";
         vetoEvent;
       }
+
+      const Thrust& thrust = applyProjection<Thrust>(event, "Thrust");
+      _h_Thrust->fill(1-thrust.thrust(), weight);
+      _h_ThrustMajor->fill(thrust.thrustMajor(), weight);
+      _h_ThrustMinor->fill(thrust.thrustMinor(), weight);
+      _h_Oblateness->fill(thrust.oblateness(), weight);
+      const Sphericity& sphericity = applyProjection<Sphericity>(event, "Sphericity");
+      const double sph = sphericity.sphericity();
+      const double apl = sphericity.aplanarity();
+      const double pl = sphericity.planarity();
+      _h_Sphericity->fill(sph, weight);
+      _h_Aplanarity->fill(apl, weight);
+      _h_Planarity->fill(pl, weight);
 
       n_events++;
 
@@ -113,6 +138,15 @@ namespace Rivet {
       cout << "\nNumber of events: " << n_events << "\n";
       cout << "\nPhotons/Events: " << (1.0*n_photons) / n_events << "\n";
 
+      scale(_h_Thrust, 1./sumOfWeights());
+      scale(_h_ThrustMajor, 1./sumOfWeights());
+      scale(_h_ThrustMinor, 1./sumOfWeights());
+      scale(_h_Oblateness, 1./sumOfWeights());
+      scale(_h_Sphericity, 1./sumOfWeights());
+      scale(_h_Aplanarity, 1./sumOfWeights());
+      scale(_h_Planarity, 1./sumOfWeights());
+      
+
       scale(_h_Quark_Pt, 1./sumOfWeights());
       scale(_h_Aquark_Pt, 1./sumOfWeights());
       scale(_h_Gluon_Pt, 1./sumOfWeights());
@@ -135,6 +169,15 @@ namespace Rivet {
   private:
 
     // Data members like post-cuts event weight counters go here
+
+    Histo1DPtr _h_Thrust;
+    Histo1DPtr _h_ThrustMajor;
+    Histo1DPtr _h_ThrustMinor;
+    Histo1DPtr _h_Oblateness;
+    Histo1DPtr _h_Sphericity;
+    Histo1DPtr _h_Aplanarity;
+    Histo1DPtr _h_Planarity;
+
     Histo1DPtr _h_Quark_Pt;
     Histo1DPtr _h_Aquark_Pt;
     Histo1DPtr _h_Gluon_Pt;

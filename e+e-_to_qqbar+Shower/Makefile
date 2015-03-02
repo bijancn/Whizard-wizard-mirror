@@ -3,7 +3,7 @@ WHIZARD_OPTIONS=--rebuild-events
 HEPMC_FILES=whizard_uu_lo.hepmc whizard_uu_powheg.hepmc
 
 all: $(HEPMC_FILES)
-	mv pythia/*.hepmc rivet && cd rivet && make
+	rsync pythia/*.hepmc rivet && cd rivet && make
 
 %.lhe: %
 	cd $< && $(WHIZARD_BIN) $(WHIZARD_OPTIONS) run.sin
