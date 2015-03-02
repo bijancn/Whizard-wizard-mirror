@@ -30,3 +30,5 @@ alpha_s_order = 0
 int K = 1000
 checkpoint = K
 sample_format = lhef
+
+seed = 8885
