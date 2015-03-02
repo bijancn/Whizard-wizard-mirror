@@ -4,8 +4,11 @@
 # (adding statistics etc.)
 
 #yodafiles=nlo_powheg_500K.yoda lo_pythia_1emission_500k.yoda
-yodafiles=whizard_uu_lo.yoda whizard_uu_powheg.yoda
-hepfile=whizard_uu_lo.hepmc whizard_uu_powheg.hepmc
+#yodafiles=whizard_uu_lo.yoda whizard_uu_powheg.yoda
+#hepfile=whizard_uu_lo.hepmc whizard_uu_powheg.hepmc
+yodafiles = LO+Pythia8.yoda NLO+Powheg+Pythia8.yoda whizard_analytic.yoda
+hepmcfiles = LO+Pythia8.hepmc NLO+Powheg+Pythia8.hepmc whizard_analytic.hepmc
+
 yodafile=Rivet.yoda
 ANALYSIS=WHIZARD_2015_SINGLEEMISSION
 
