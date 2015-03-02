@@ -11,4 +11,5 @@ all: $(HEPMC_FILES)
 %.hepmc: %.lhe
 	cd pythia; ./$(<:.lhe=)
 
-
+clean:
+	rm */*.mod */*.f90 */*.o */*.lo *.lhe *.hepmc -f
