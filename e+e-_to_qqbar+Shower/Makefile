@@ -12,4 +12,6 @@ all: $(HEPMC_FILES)
 	cd pythia; ./$(<:.lhe=)
 
 clean:
-	rm */*.mod */*.f90 */*.o */*.lo *.lhe *.hepmc -f
+	rm -rf */*.mod */*.f90 */*.o */*.lo */*.vg */*.evx */*.phs */*.log */*.lhe */*.hepmc
+	rm -rf */*.olp */*.olc */*.la */Generated_Loops */*olp_modules */*.so */lib
+	rm -rf */include */.libs */fort.7 */golem.in */Gosam_Makefile */*makefile
