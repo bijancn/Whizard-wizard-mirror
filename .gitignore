@@ -23,6 +23,8 @@ plots/
 Generated_Loops/
 *olp_modules/
 golem.in
+Gosam_Makefile
+include/
 *.la
 *.makefile
 *.dat
