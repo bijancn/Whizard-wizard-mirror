@@ -1,17 +1,23 @@
+SHELL:=/bin/bash -O extglob
 #WHIZARD_BIN=/scratch/whizard_git/whizard_run_gfortran/bin/whizard
 WHIZARD_OPTIONS=--rebuild-events 
-HEPMC_FILES=whizard_uu_lo.hepmc whizard_uu_powheg.hepmc
+HEPMCS=pythia/whizard_uu_lo.hepmc \
+	pythia/whizard_uu_powheg.hepmc \
+	whizard/whizard_analytic.hepmc
 
-all: $(HEPMC_FILES)
-	rsync pythia/*.hepmc rivet && cd rivet && make
+all : $(HEPMCS)
+	rsync -v !(rivet)/*.hepmc rivet && cd rivet && make
 
-%.lhe: %
-	cd $< && $(WHIZARD_BIN) $(WHIZARD_OPTIONS) run.sin
+whizard/%.lhe : whizard/%.sin
+	cd whizard && $(WHIZARD_BIN) $(WHIZARD_OPTIONS) $(notdir $<)
 
-%.hepmc: %.lhe
-	cd pythia; ./$(<:.lhe=)
+whizard/%.hepmc : whizard/%.sin
+	cd whizard && $(WHIZARD_BIN) $(WHIZARD_OPTIONS) $(notdir $<)
 
-clean:
+pythia/%.hepmc : whizard/%.lhe
+	cd pythia && ./$(basename $(notdir $@))
+
+clean :
 	rm -rf */*.mod */*.f90 */*.o */*.lo */*.vg */*.evx */*.phs */*.log */*.lhe */*.hepmc
 	rm -rf */*.olp */*.olc */*.la */Generated_Loops */*olp_modules */*.so */lib
 	rm -rf */include */.libs/ */fort.7 */golem.in */Gosam_Makefile */*makefile
