@@ -3,16 +3,21 @@
 # yodamerge -o Rivet.yoda $(YODAFILES) combines multiple yoda files to one
 # (adding statistics etc.)
 
-#yodafiles=nlo_powheg_500K.yoda lo_pythia_1emission_500k.yoda
-#yodafiles=whizard_uu_lo.yoda whizard_uu_powheg.yoda
-#hepfile=whizard_uu_lo.hepmc whizard_uu_powheg.hepmc
-yodafiles = LO+Pythia8.yoda NLO+Powheg+Pythia8.yoda whizard_analytic.yoda
-hepmcfiles = LO+Pythia8.hepmc NLO+Powheg+Pythia8.hepmc whizard_analytic.hepmc
+hepmcfiles = whizard_uu_lo.hepmc whizard_analytic.hepmc whizard_uu_powheg.hepmc
+yodafiles = $(hepmcfiles:.hepmc=.yoda)
+labeledyodafiles = \
+	whizard_uu_lo.yoda:'Title=\textsc{LO+Pythia8}' \
+	whizard_uu_powheg.yoda:'Title=\textsc{Powheg+Pythia8}' \
+	whizard_analytic.yoda:'Title=\textsc{LO+AnalyticShower}'
+
+labeledyodafiles_noanalytic = \
+	whizard_uu_lo.yoda:'Title=\textsc{LO+Pythia8}' \
+	whizard_uu_powheg.yoda:'Title=\textsc{Powheg+Pythia8}'
 
 yodafile=Rivet.yoda
 ANALYSIS=WHIZARD_2015_SINGLEEMISSION
 
-all: plots/index.html
+all: plots/index.html noanalytic/index.html
 
 RivetAnalysis.so: *.cc
 	rivet-buildplugin *.cc
@@ -25,8 +30,11 @@ $(yodafiles): RivetAnalysis.so
 debug: RivetAnalysis.so
 	rivet --pwd -a $(ANALYSIS) $(hepfile) -l Rivet.Analysis=DEBUG --nevts=5
 
-plots/index.html: $(yodafiles)
-	rivet-mkhtml $(yodafiles)
+plots/index.html : $(yodafiles) $(ANALYSIS).info $(ANALYSIS).plot
+	rivet-mkhtml --pdf --cm --mc-errs -s -o $(dir $@) $(labeledyodafiles)
+
+noanalytic/index.html : $(yodafiles) $(ANALYSIS).info $(ANALYSIS).plot
+	rivet-mkhtml --pdf --cm --mc-errs -s -o $(dir $@) $(labeledyodafiles_noanalytic)
 
 clean:
 	rm *.so *.yoda plots -rf

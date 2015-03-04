@@ -44,10 +44,10 @@ namespace Rivet {
       _h_Aquark_Rapidity = bookHisto1D("qbar-Rapidity", 50, -5, 5);
       _h_Gluon_Rapidity = bookHisto1D("gluon-Rapidity", 50, -5, 5);
 
-      _h_Thrust = bookHisto1D("Thrust", 50, 0, 0.5);
-      _h_ThrustMajor = bookHisto1D("ThrustMajor", 50, 0, 1);
-      _h_ThrustMinor = bookHisto1D("ThrustMinor", 50, 0, 1);
-      _h_Oblateness = bookHisto1D("Oblateness", 50, 0, 0.5);
+      _h_Thrust = bookHisto1D("Thrust", 50, 0, 0.45);
+      _h_ThrustMajor = bookHisto1D("ThrustMajor", 50, 0, 0.7);
+      _h_ThrustMinor = bookHisto1D("ThrustMinor", 50, 0, 0.6);
+      _h_Oblateness = bookHisto1D("Oblateness", 50, 0, 0.6);
       _h_Sphericity = bookHisto1D("Sphericity", 50, 0, 0.8);
       _h_Aplanarity = bookHisto1D("Aplanarity", 50, 0, 0.3);
       _h_Planarity = bookHisto1D("Planarity", 50, 0, 0.5);
