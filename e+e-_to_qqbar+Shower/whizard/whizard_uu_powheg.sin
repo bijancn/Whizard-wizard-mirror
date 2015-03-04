@@ -6,9 +6,8 @@ include("../process_settings.sin")
 ?powheg_matching = true
 powheg_grid_size_xi = 5
 powheg_grid_size_y = 5
-powheg_grid_sampling_points = 500000
-powheg_pt_min = 1.0
-?rebuild_powheg_grids = false
+powheg_grid_sampling_points = 6000000
+powheg_pt_min = 1
 
 process whizard_uu_powheg = E1, e1 =>  u, U {nlo_calculation="Full"}
 

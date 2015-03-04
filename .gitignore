@@ -1,6 +1,7 @@
 *.yoda
 *.hepmc
 plots/
+noanalytic/
 
 *.lo
 *.f90
@@ -31,3 +32,5 @@ include/
 
 main02
 Makefile.inc
+whizard_uu_lo
+whizard_uu_powheg
