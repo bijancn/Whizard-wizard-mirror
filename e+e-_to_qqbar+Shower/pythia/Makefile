@@ -15,7 +15,7 @@
 ################################################################################
 
 # Include the configuration.
--include /scratch/pythia8205/Makefile.inc
+-include Makefile.inc
 
 # Handle GZIP support.
 ifeq ($(GZIP_USE),true)
@@ -58,8 +58,7 @@ main% : main%.cc $(PREFIX_LIB)/libpythia8.a
 	$(CXX) $^ -o $@ $(CXX_COMMON)
 
 # HEPMC2.
-whizard_uu_lo whizard_uu_powheg: $$@.cc\
-	$(PREFIX_LIB)/libpythia8.a
+whizard_uu_lo whizard_uu_powheg: $$@.cc $(PREFIX_LIB)/libpythia8.a
 ifeq ($(HEPMC2_USE),true)
 	$(CXX) $^ -o $@ -I$(HEPMC2_INCLUDE) $(CXX_COMMON)\
 	 -L$(HEPMC2_LIB) -Wl,-rpath $(HEPMC2_LIB) -lHepMC

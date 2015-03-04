@@ -8,7 +8,7 @@
 ! as reasonable measures of uncertainties in the matching process.
 
 ! Number of events - use 0 for all LHEF events in the input file.
-Main:numberOfEvents = 100000
+Main:numberOfEvents = 0
 
 ! Number of events to list and number of errors to allow.
 Next:numberShowLHA = 1
@@ -26,7 +26,7 @@ Beams:frameType = 4
 ! t tbar pair production.
 #Beams:LHEF = powheg-hvq.lhe
 ! QCD 2- and 3-jet events.
-Beams:LHEF = ../whizard_uu_lo/whizard_uu_lo.lhe
+Beams:LHEF = ../whizard/whizard_uu_lo.lhe
 
 ! Number of outgoing particles of POWHEG Born level process
 ! (i.e. not counting additional POWHEG radiation)
