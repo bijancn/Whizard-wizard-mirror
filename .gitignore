@@ -23,6 +23,7 @@ noanalytic/
 .libs/
 Generated_Loops/
 *olp_modules/
+*.olp_parameters
 golem.in
 Gosam_Makefile
 include/

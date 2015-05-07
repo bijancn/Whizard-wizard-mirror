@@ -1,0 +1,28 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+#Powheg options
+?combined_nlo_integration = false
+?powheg_matching = false
+
+process ttbar = E1, e1 =>  t, T {nlo_calculation="Full"}
+process ttbar_lo = E1, e1 =>  t, T
+
+show (model)
+open_out ("ttbar_onshell_lo.dat")
+open_out ("ttbar_onshell_nlo.dat")
+scan sqrts = ((2 * mtop + 1 => 350 /+ 0.5),
+              (351. => 360 /+ 1.0 ),
+              (362. => 440 /+ 2.0 )){
+  scale = sqrts
+
+  integrate (ttbar)
+  $out_file = "ttbar_onshell_nlo.dat"
+  printf "%g %g %g" (sqrts, integral(ttbar), error(ttbar))
+
+  $out_file = "ttbar_onshell_nlo.dat"
+  integrate (ttbar_lo)
+  printf "%g %g %g" (sqrts, integral(ttbar_lo), error(ttbar_lo))
+}
+close_out ("ttbar_onshell_lo.dat")
+close_out ("ttbar_onshell_nlo.dat")

@@ -37,7 +37,7 @@ POWHEG:nFinal = 2
 !  1 - Showers are started at the kinematical limit.
 !      Emissions are vetoed if pTemt > pThard.
 !      See also POWHEG:vetoCount below
-POWHEG:veto = 1
+POWHEG:veto = 0
 
 ! After 'vetoCount' accepted emissions in a row, no more emissions
 ! are checked. 'vetoCount = 0' means all emissions are checked.
@@ -81,12 +81,17 @@ POWHEG:pTdef = 1
 !      else MPIs with a scale above (pT_1 + pT_2 + pT_3) / 2 are vetoed
 POWHEG:MPIveto = 0
 
-! Further options (optional, for tryout)
-!PartonLevel:MPI = off
+! Further options
+PartonLevel:MPI = off
+PartonLevel:ISR = off
 HadronLevel:All = off
-
 SpaceShower:pTmaxMatch = 0
 TimeShower:pTmaxMatch = 0
 TimeShower:pTmin = 0.5
 TimeShower:alphaSvalue = 0.1178
-
+TimeShower:alphaSorder = 1
+TimeShower:alphaSuseCMW = false
+TimeShower:QEDshowerByL = off
+TimeShower:QEDshowerByQ = off
+TimeShower:MEcorrections = off
+TimeShower:MEafterFirst = off

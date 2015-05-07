@@ -36,27 +36,27 @@ namespace Rivet {
       _h_Aquark_E = bookHisto1D("qbar-E", 30, 0., 260.);
       _h_Gluon_E = bookHisto1D("gluon-E", 30, 0., 260.);
 
-      _h_Quark_Phi = bookHisto1D("q-Phi", 50, 0, TWOPI);
-      _h_Aquark_Phi = bookHisto1D("qbar-Phi", 50, 0, TWOPI);
-      _h_Gluon_Phi = bookHisto1D("gluon-Phi", 50, 0, TWOPI);
+      _h_Quark_Phi = bookHisto1D("q-Phi", 30, 0, TWOPI);
+      _h_Aquark_Phi = bookHisto1D("qbar-Phi", 30, 0, TWOPI);
+      _h_Gluon_Phi = bookHisto1D("gluon-Phi", 30, 0, TWOPI);
 
-      _h_Quark_Rapidity = bookHisto1D("q-Rapidity", 50, -5, 5);
-      _h_Aquark_Rapidity = bookHisto1D("qbar-Rapidity", 50, -5, 5);
-      _h_Gluon_Rapidity = bookHisto1D("gluon-Rapidity", 50, -5, 5);
+      _h_Quark_Rapidity = bookHisto1D("q-Rapidity", 30, -5, 5);
+      _h_Aquark_Rapidity = bookHisto1D("qbar-Rapidity", 30, -5, 5);
+      _h_Gluon_Rapidity = bookHisto1D("gluon-Rapidity", 30, -5, 5);
 
-      _h_Thrust = bookHisto1D("Thrust", 50, 0, 0.45);
-      _h_ThrustMajor = bookHisto1D("ThrustMajor", 50, 0, 0.7);
-      _h_ThrustMinor = bookHisto1D("ThrustMinor", 50, 0, 0.6);
-      _h_Oblateness = bookHisto1D("Oblateness", 50, 0, 0.6);
-      _h_Sphericity = bookHisto1D("Sphericity", 50, 0, 0.8);
-      _h_Aplanarity = bookHisto1D("Aplanarity", 50, 0, 0.3);
-      _h_Planarity = bookHisto1D("Planarity", 50, 0, 0.5);
+      _h_Thrust = bookHisto1D("Thrust", 30, 0, 0.45);
+      _h_ThrustMajor = bookHisto1D("ThrustMajor", 30, 0, 0.7);
+      _h_ThrustMinor = bookHisto1D("ThrustMinor", 30, 0, 0.6);
+      _h_Oblateness = bookHisto1D("Oblateness", 30, 0, 0.6);
+      _h_Sphericity = bookHisto1D("Sphericity", 30, 0, 0.8);
+      _h_Aplanarity = bookHisto1D("Aplanarity", 30, 0, 0.3);
+      _h_Planarity = bookHisto1D("Planarity", 30, 0, 0.5);
 //      _h_xy = bookScatter2D("xy");
 
       n_events = 0;
       n_photons = 0;
 
-      //_histEta    = bookHisto1D("Eta", 50, -5, 5);
+      //_histEta    = bookHisto1D("Eta", 30, -5, 5);
     }
 
     /// Perform the per-event analysis

@@ -1,0 +1,676 @@
+|=============================================================================|
+|                                                                             |
+|    WW             WW  WW   WW  WW  WWWWWW      WW      WWWWW    WWWW        |
+|     WW    WW     WW   WW   WW  WW     WW      WWWW     WW  WW   WW  WW      |
+|      WW  WW WW  WW    WWWWWWW  WW    WW      WW  WW    WWWWW    WW   WW     |
+|       WWWW   WWWW     WW   WW  WW   WW      WWWWWWWW   WW  WW   WW  WW      |
+|        WW     WW      WW   WW  WW  WWWWWW  WW      WW  WW   WW  WWWW        |
+|                                                                             |
+|                                                                             |
+|                                        W                                    |
+|                                       sW                                    |
+|                                       WW                                    |
+|                                      sWW                                    |
+|                                      WWW                                    |
+|                                     wWWW                                    |
+|                                    wWWWW                                    |
+|                                    WW WW                                    |
+|                                    WW WW                                    |
+|                                   wWW WW                                    |
+|                                  wWW  WW                                    |
+|                                  WW   WW                                    |
+|                                  WW   WW                                    |
+|                                 WW    WW                                    |
+|                                 WW    WW                                    |
+|                                WW     WW                                    |
+|                                WW     WW                                    |
+|           wwwwww              WW      WW                                    |
+|              WWWWWww          WW      WW                                    |
+|                 WWWWWwwwww   WW       WW                                    |
+|                     wWWWwwwwwWW       WW                                    |
+|                 wWWWWWWWWWWwWWW       WW                                    |
+|                wWWWWW       wW        WWWWWWW                               |
+|                  WWWW       wW        WW  wWWWWWWWwww                       |
+|                   WWWW                      wWWWWWWWwwww                    |
+|                     WWWW                      WWWW     WWw                  |
+|                       WWWWww                   WWWW                         |
+|                           WWWwwww              WWWW                         |
+|                               wWWWWwww       wWWWWW                         |
+|                                     WwwwwwwwwWWW                            |
+|                                                                             |
+|                                                                             |
+|                                                                             |
+|  by:   Wolfgang Kilian, Thorsten Ohl, Juergen Reuter                        |
+|        with contributions from Christian Speckner                           |
+|        Contact: <whizard@desy.de>                                           |
+|                                                                             |
+|  if you use WHIZARD please cite:                                            |
+|        W. Kilian, T. Ohl, J. Reuter,  Eur.Phys.J.C71 (2011) 1742            |
+|                                          [arXiv: 0708.4233 [hep-ph]]        |
+|        M. Moretti, T. Ohl, J. Reuter, arXiv: hep-ph/0102195                 |
+|                                                                             |
+|=============================================================================|
+|                               WHIZARD 2.2.6
+|=============================================================================|
+| Reading model file '/home/fbach/whizard-2.x/_inst_trunk/share/whizard/models/SM.mdl'
+| Preloaded model: SM
+| Process library 'default_lib': initialized
+| Preloaded library: default_lib
+| Reading model file '/home/fbach/whizard-2.x/_inst_trunk/share/whizard/models/SM_hadrons.mdl'
+| Reading model file '/home/fbach/whizard-2.x/_inst_trunk/share/whizard/models/SM_rad.mdl'
+| Reading commands from file 'SM_tt_threshold_test.sin'
+| Reading model file '/home/fbach/whizard-2.x/_inst_trunk/share/whizard/models/SM_tt_threshold.mdl'
+| [No compiled library '/home/fbach/.whizard/lib/whizard/models/external.SM_tt_threshold']
+| Loading model auxiliary library '/home/fbach/whizard-2.x/_inst_trunk/lib/whizard/models/external.SM_tt_threshold.so.0'
+| Switching to model 'SM_tt_threshold'
+seed = 42
+$restrictions = "3+5~t && 4+6~tbar"
+| Process library 'default_lib': recorded process 'ttbar'
+| Process library 'default_lib': compiling ...
+| Process library 'default_lib': writing makefile
+| Process library 'default_lib': writing driver
+| Process library 'default_lib': creating source code
+| Process library 'default_lib': compiling sources
+| Process library 'default_lib': linking
+| Process library 'default_lib': loading
+| Process library 'default_lib': ... success.
+SM_tt_threshold.nloop =>  1.000000000000E+00
+SM_tt_threshold.sf =>  1.000000000000E+00
+SM_tt_threshold.Vtb =>  1.000000000000E+00
+SM_tt_threshold.m1S =>  1.720000000000E+02
+SM_tt_threshold.sh =>  5.000000000000E-01
+SM_tt_threshold.FF =>  0.000000000000E+00
+mtpole = 173.173
+wtop   = 1.53864
+sqrts =  3.440000000000E+02
+| RNG: Initializing TAO random-number generator
+| RNG: Setting seed for random-number generator to 42
+| Initializing integration for process ttbar:
+| 
+| %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+|  Initialize e+e- => ttbar threshold resummation:
+|  Use analytic (LL) or TOPPIK (NLL) form factors for ttA/ttZ vector
+|  and axial vector couplings (S/P-wave) in the threshold region.
+|  Cf. threshold shapes from A. Hoang et al.: [arXiv:hep-ph/0107144],
+|  [arXiv:1309.6323].
+|  Numerical NLL solutions calculated with TOPPIK [arXiv:hep-ph/9904468]
+|  by M. Jezabek, T. Teubner.
+| %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+| 
+| ------------------------------------------------------------------------
+| Process [scattering]: 'ttbar'
+|   Library name  = 'default_lib'
+|   Process index = 1
+|   Process components:
+|     1: 'ttbar_i1':   e-, e+ => W+, W-, b, bbar [omega]
+| ------------------------------------------------------------------------
+| Beam structure: e-, e+
+| Beam data (collision):
+|   e-  (mass = 5.1099700E-04 GeV)
+|   e+  (mass = 5.1099700E-04 GeV)
+|   sqrts = 3.440000000000E+02 GeV
+| Phase space: generating configuration ...
+| Phase space: ... success.
+| Phase space: writing configuration file 'ttbar_i1.phs'
+| Phase space: 60 channels, 8 dimensions
+| Phase space: found 60 channels, collected in 21 groves.
+| Phase space: Using 70 equivalences between channels.
+| Phase space: wood
+| Applying user-defined cuts.
+| OpenMP: Using 4 threads
+| Starting integration for process 'ttbar'
+| Integrate: iterations = 10:20000:"gw", 5:50000
+| Integrator: 21 chains, 60 channels, 8 dimensions
+| Integrator: Using VAMP channel equivalences
+| Integrator: 20000 initial calls, 20 bins, stratified = T
+| Integrator: VAMP
+|=============================================================================|
+| It      Calls  Integral[fb]  Error[fb]   Err[%]    Acc  Eff[%]   Chi2 N[It] |
+|=============================================================================|
+   1      19980  6.8872540E+02  9.51E+01   13.81   19.52*   0.72
+   2      19956  5.7689324E+02  1.20E+01    2.08    2.94*   3.29
+   3      19927  5.7837561E+02  4.96E+00    0.86    1.21*  10.05
+   4      19902  5.8147851E+02  3.79E+00    0.65    0.92*  12.56
+   5      19864  5.6980328E+02  3.25E+00    0.57    0.80*  17.26
+   6      19833  5.7264722E+02  2.98E+00    0.52    0.73*  18.31
+   7      19800  5.7726460E+02  2.93E+00    0.51    0.72*  19.37
+   8      19768  5.6836881E+02  2.89E+00    0.51    0.71*  21.01
+   9      19738  5.7107835E+02  2.82E+00    0.49    0.69*  20.30
+  10      19703  5.7643394E+02  2.83E+00    0.49    0.69*  22.69
+|-----------------------------------------------------------------------------|
+  10     198471  5.7378066E+02  1.11E+00    0.19    0.86   22.69    1.65  10
+|-----------------------------------------------------------------------------|
+  11      49975  5.7057766E+02  1.75E+00    0.31    0.69*  17.13
+  12      49975  5.7514460E+02  1.76E+00    0.31    0.68*  15.75
+  13      49975  5.7327702E+02  1.76E+00    0.31    0.69   14.65
+  14      49975  5.7312403E+02  1.76E+00    0.31    0.69*  13.92
+  15      49975  5.7337109E+02  1.75E+00    0.31    0.68*  13.60
+|-----------------------------------------------------------------------------|
+  15     249875  5.7309476E+02  7.86E-01    0.14    0.69   13.60    0.86   5
+|=============================================================================|
+| Time estimate for generating 10000 events: 0d:00h:01m:19s
+| Creating integration history display ttbar-history.ps and ttbar-history.pdf
+SM_tt_threshold.FF =>  1.000000000000E+00
+mtpole = 173.173
+wtop   = 1.53864
+sqrts =  3.440000000000E+02
+| RNG: Initializing TAO random-number generator
+| RNG: Setting seed for random-number generator to 43
+| Initializing integration for process ttbar:
+| 
+| %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+|  Initialize e+e- => ttbar threshold resummation:
+|  Use analytic (LL) or TOPPIK (NLL) form factors for ttA/ttZ vector
+|  and axial vector couplings (S/P-wave) in the threshold region.
+|  Cf. threshold shapes from A. Hoang et al.: [arXiv:hep-ph/0107144],
+|  [arXiv:1309.6323].
+|  Numerical NLL solutions calculated with TOPPIK [arXiv:hep-ph/9904468]
+|  by M. Jezabek, T. Teubner.
+| %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+| 
+| Threshold setup has changed: recalculate threshold grid.
+| ------------------------------------------------------------------------
+| Process [scattering]: 'ttbar'
+|   Library name  = 'default_lib'
+|   Process index = 1
+|   Process components:
+|     1: 'ttbar_i1':   e-, e+ => W+, W-, b, bbar [omega]
+| ------------------------------------------------------------------------
+| Beam structure: e-, e+
+| Beam data (collision):
+|   e-  (mass = 5.1099700E-04 GeV)
+|   e+  (mass = 5.1099700E-04 GeV)
+|   sqrts = 3.440000000000E+02 GeV
+| Phase space: discarding old configuration (model parameters changed)
+| Phase space: generating configuration ...
+| Phase space: ... success.
+| Phase space: writing configuration file 'ttbar_i1.phs'
+| Phase space: 60 channels, 8 dimensions
+| Phase space: found 60 channels, collected in 21 groves.
+| Phase space: Using 70 equivalences between channels.
+| Phase space: wood
+| Applying user-defined cuts.
+| OpenMP: Using 4 threads
+| Starting integration for process 'ttbar'
+| Integrate: iterations = 10:20000:"gw", 5:50000
+| Integrator: 21 chains, 60 channels, 8 dimensions
+| Integrator: Using VAMP channel equivalences
+| Integrator: 20000 initial calls, 20 bins, stratified = T
+| Integrator: VAMP
+|=============================================================================|
+| It      Calls  Integral[fb]  Error[fb]   Err[%]    Acc  Eff[%]   Chi2 N[It] |
+|=============================================================================|
+| VAMP: parameter mismatch, discarding grid file 'ttbar_m1.vg'
+   1      19980  7.5803028E+02  1.26E+02   16.57   23.42*   0.78
+   2      19942  7.0650455E+02  1.66E+01    2.35    3.32*   2.71
+   3      19913  6.6380777E+02  5.25E+00    0.79    1.12*  11.85
+   4      19883  6.5782719E+02  4.01E+00    0.61    0.86*  13.35
+   5      19850  6.6010826E+02  3.59E+00    0.54    0.77*  17.78
+   6      19816  6.5760214E+02  3.45E+00    0.52    0.74*  17.14
+   7      19781  6.6132630E+02  3.46E+00    0.52    0.74*  18.67
+   8      19756  6.6474752E+02  3.36E+00    0.51    0.71*  18.64
+   9      19718  6.6111633E+02  3.35E+00    0.51    0.71*  18.12
+  10      19686  6.6751408E+02  3.29E+00    0.49    0.69*  23.17
+|-----------------------------------------------------------------------------|
+  10     198325  6.6211971E+02  1.27E+00    0.19    0.86   23.17    1.60  10
+|-----------------------------------------------------------------------------|
+  11      49975  6.6156021E+02  2.05E+00    0.31    0.69   21.09
+  12      49975  6.6188976E+02  2.07E+00    0.31    0.70   15.91
+  13      49975  6.6395016E+02  2.04E+00    0.31    0.69*  15.20
+  14      49975  6.6329481E+02  2.06E+00    0.31    0.70   14.01
+  15      49975  6.6211273E+02  2.05E+00    0.31    0.69*  13.68
+|-----------------------------------------------------------------------------|
+  15     249875  6.6256583E+02  9.19E-01    0.14    0.69   13.68    0.25   5
+|=============================================================================|
+| Time estimate for generating 10000 events: 0d:00h:01m:15s
+| Creating integration history display ttbar-history.ps and ttbar-history.pdf
+SM_tt_threshold.sh =>  1.000000000000E+00
+SM_tt_threshold.FF =>  0.000000000000E+00
+mtpole = 173.122
+wtop   = 1.53864
+sqrts =  3.440000000000E+02
+| RNG: Initializing TAO random-number generator
+| RNG: Setting seed for random-number generator to 44
+| Initializing integration for process ttbar:
+| 
+| %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+|  Initialize e+e- => ttbar threshold resummation:
+|  Use analytic (LL) or TOPPIK (NLL) form factors for ttA/ttZ vector
+|  and axial vector couplings (S/P-wave) in the threshold region.
+|  Cf. threshold shapes from A. Hoang et al.: [arXiv:hep-ph/0107144],
+|  [arXiv:1309.6323].
+|  Numerical NLL solutions calculated with TOPPIK [arXiv:hep-ph/9904468]
+|  by M. Jezabek, T. Teubner.
+| %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+| 
+| Threshold setup has changed: recalculate threshold grid.
+| ------------------------------------------------------------------------
+| Process [scattering]: 'ttbar'
+|   Library name  = 'default_lib'
+|   Process index = 1
+|   Process components:
+|     1: 'ttbar_i1':   e-, e+ => W+, W-, b, bbar [omega]
+| ------------------------------------------------------------------------
+| Beam structure: e-, e+
+| Beam data (collision):
+|   e-  (mass = 5.1099700E-04 GeV)
+|   e+  (mass = 5.1099700E-04 GeV)
+|   sqrts = 3.440000000000E+02 GeV
+| Phase space: discarding old configuration (model parameters changed)
+| Phase space: generating configuration ...
+| Phase space: ... success.
+| Phase space: writing configuration file 'ttbar_i1.phs'
+| Phase space: 60 channels, 8 dimensions
+| Phase space: found 60 channels, collected in 21 groves.
+| Phase space: Using 70 equivalences between channels.
+| Phase space: wood
+| Applying user-defined cuts.
+| OpenMP: Using 4 threads
+| Starting integration for process 'ttbar'
+| Integrate: iterations = 10:20000:"gw", 5:50000
+| Integrator: 21 chains, 60 channels, 8 dimensions
+| Integrator: Using VAMP channel equivalences
+| Integrator: 20000 initial calls, 20 bins, stratified = T
+| Integrator: VAMP
+|=============================================================================|
+| It      Calls  Integral[fb]  Error[fb]   Err[%]    Acc  Eff[%]   Chi2 N[It] |
+|=============================================================================|
+| VAMP: parameter mismatch, discarding grid file 'ttbar_m1.vg'
+   1      19980  5.7338712E+02  9.76E+01   17.02   24.05*   0.76
+   2      19953  6.4817726E+02  1.41E+01    2.18    3.08*   2.89
+   3      19916  6.5609903E+02  5.18E+00    0.79    1.11*  13.75
+   4      19886  6.5414029E+02  4.12E+00    0.63    0.89*  14.83
+   5      19852  6.5473531E+02  3.66E+00    0.56    0.79*  14.62
+   6      19820  6.5392425E+02  3.33E+00    0.51    0.72*  22.25
+   7      19783  6.4868351E+02  3.19E+00    0.49    0.69*  23.53
+   8      19748  6.5735346E+02  3.14E+00    0.48    0.67*  25.01
+   9      19715  6.4806449E+02  3.12E+00    0.48    0.68   23.11
+  10      19684  6.5468547E+02  3.12E+00    0.48    0.67*  23.48
+|-----------------------------------------------------------------------------|
+  10     198337  6.5306789E+02  1.22E+00    0.19    0.83   23.48    0.89  10
+|-----------------------------------------------------------------------------|
+  11      49977  6.5249973E+02  1.98E+00    0.30    0.68   18.38
+  12      49977  6.5122831E+02  1.97E+00    0.30    0.68*  16.07
+  13      49977  6.5064800E+02  1.98E+00    0.30    0.68   14.28
+  14      49977  6.5504174E+02  1.98E+00    0.30    0.67*  12.87
+  15      49977  6.5206162E+02  1.99E+00    0.31    0.68   11.45
+|-----------------------------------------------------------------------------|
+  15     249885  6.5229381E+02  8.84E-01    0.14    0.68   11.45    0.74   5
+|=============================================================================|
+| Time estimate for generating 10000 events: 0d:00h:01m:33s
+| Creating integration history display ttbar-history.ps and ttbar-history.pdf
+SM_tt_threshold.FF =>  1.000000000000E+00
+mtpole = 173.122
+wtop   = 1.53864
+sqrts =  3.440000000000E+02
+| RNG: Initializing TAO random-number generator
+| RNG: Setting seed for random-number generator to 45
+| Initializing integration for process ttbar:
+| 
+| %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+|  Initialize e+e- => ttbar threshold resummation:
+|  Use analytic (LL) or TOPPIK (NLL) form factors for ttA/ttZ vector
+|  and axial vector couplings (S/P-wave) in the threshold region.
+|  Cf. threshold shapes from A. Hoang et al.: [arXiv:hep-ph/0107144],
+|  [arXiv:1309.6323].
+|  Numerical NLL solutions calculated with TOPPIK [arXiv:hep-ph/9904468]
+|  by M. Jezabek, T. Teubner.
+| %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+| 
+| Threshold setup has changed: recalculate threshold grid.
+| ------------------------------------------------------------------------
+| Process [scattering]: 'ttbar'
+|   Library name  = 'default_lib'
+|   Process index = 1
+|   Process components:
+|     1: 'ttbar_i1':   e-, e+ => W+, W-, b, bbar [omega]
+| ------------------------------------------------------------------------
+| Beam structure: e-, e+
+| Beam data (collision):
+|   e-  (mass = 5.1099700E-04 GeV)
+|   e+  (mass = 5.1099700E-04 GeV)
+|   sqrts = 3.440000000000E+02 GeV
+| Phase space: discarding old configuration (model parameters changed)
+| Phase space: generating configuration ...
+| Phase space: ... success.
+| Phase space: writing configuration file 'ttbar_i1.phs'
+| Phase space: 60 channels, 8 dimensions
+| Phase space: found 60 channels, collected in 21 groves.
+| Phase space: Using 70 equivalences between channels.
+| Phase space: wood
+| Applying user-defined cuts.
+| OpenMP: Using 4 threads
+| Starting integration for process 'ttbar'
+| Integrate: iterations = 10:20000:"gw", 5:50000
+| Integrator: 21 chains, 60 channels, 8 dimensions
+| Integrator: Using VAMP channel equivalences
+| Integrator: 20000 initial calls, 20 bins, stratified = T
+| Integrator: VAMP
+|=============================================================================|
+| It      Calls  Integral[fb]  Error[fb]   Err[%]    Acc  Eff[%]   Chi2 N[It] |
+|=============================================================================|
+| VAMP: parameter mismatch, discarding grid file 'ttbar_m1.vg'
+   1      19980  7.6096688E+02  1.19E+02   15.65   22.13*   0.77
+   2      19953  7.6302921E+02  1.82E+01    2.39    3.38*   2.21
+   3      19918  7.4396062E+02  6.13E+00    0.82    1.16*  11.61
+   4      19890  7.4154080E+02  4.62E+00    0.62    0.88*  14.37
+   5      19861  7.3834196E+02  4.25E+00    0.57    0.81*  15.33
+   6      19834  7.4176511E+02  4.12E+00    0.56    0.78*  15.04
+   7      19796  7.3176935E+02  3.94E+00    0.54    0.76*  18.71
+   8      19767  7.4571620E+02  3.93E+00    0.53    0.74*  16.76
+   9      19735  7.3900437E+02  3.78E+00    0.51    0.72*  19.88
+  10      19707  7.4152385E+02  3.73E+00    0.50    0.71*  22.72
+|-----------------------------------------------------------------------------|
+  10     198441  7.4030244E+02  1.47E+00    0.20    0.89   22.72    1.02  10
+|-----------------------------------------------------------------------------|
+  11      49973  7.4013409E+02  2.33E+00    0.31    0.70*  18.29
+  12      49973  7.4244066E+02  2.35E+00    0.32    0.71   15.46
+  13      49973  7.4154973E+02  2.36E+00    0.32    0.71   13.31
+  14      49973  7.4358272E+02  2.33E+00    0.31    0.70*  13.07
+  15      49973  7.3669424E+02  2.35E+00    0.32    0.71   12.64
+|-----------------------------------------------------------------------------|
+  15     249865  7.4088123E+02  1.05E+00    0.14    0.71   12.64    1.29   5
+|=============================================================================|
+| Time estimate for generating 10000 events: 0d:00h:01m:23s
+| Creating integration history display ttbar-history.ps and ttbar-history.pdf
+SM_tt_threshold.m1S =>  1.725000000000E+02
+SM_tt_threshold.sh =>  5.000000000000E-01
+SM_tt_threshold.FF =>  0.000000000000E+00
+mtpole = 173.675
+wtop   = 1.55442
+sqrts =  3.450000000000E+02
+| RNG: Initializing TAO random-number generator
+| RNG: Setting seed for random-number generator to 46
+| Initializing integration for process ttbar:
+| 
+| %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+|  Initialize e+e- => ttbar threshold resummation:
+|  Use analytic (LL) or TOPPIK (NLL) form factors for ttA/ttZ vector
+|  and axial vector couplings (S/P-wave) in the threshold region.
+|  Cf. threshold shapes from A. Hoang et al.: [arXiv:hep-ph/0107144],
+|  [arXiv:1309.6323].
+|  Numerical NLL solutions calculated with TOPPIK [arXiv:hep-ph/9904468]
+|  by M. Jezabek, T. Teubner.
+| %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+| 
+| Threshold setup has changed: recalculate threshold grid.
+| ------------------------------------------------------------------------
+| Process [scattering]: 'ttbar'
+|   Library name  = 'default_lib'
+|   Process index = 1
+|   Process components:
+|     1: 'ttbar_i1':   e-, e+ => W+, W-, b, bbar [omega]
+| ------------------------------------------------------------------------
+| Beam structure: e-, e+
+| Beam data (collision):
+|   e-  (mass = 5.1099700E-04 GeV)
+|   e+  (mass = 5.1099700E-04 GeV)
+|   sqrts = 3.450000000000E+02 GeV
+| Phase space: discarding old configuration (model parameters changed)
+| Phase space: generating configuration ...
+| Phase space: ... success.
+| Phase space: writing configuration file 'ttbar_i1.phs'
+| Phase space: 60 channels, 8 dimensions
+| Phase space: found 60 channels, collected in 21 groves.
+| Phase space: Using 70 equivalences between channels.
+| Phase space: wood
+| Applying user-defined cuts.
+| OpenMP: Using 4 threads
+| Starting integration for process 'ttbar'
+| Integrate: iterations = 10:20000:"gw", 5:50000
+| Integrator: 21 chains, 60 channels, 8 dimensions
+| Integrator: Using VAMP channel equivalences
+| Integrator: 20000 initial calls, 20 bins, stratified = T
+| Integrator: VAMP
+|=============================================================================|
+| It      Calls  Integral[fb]  Error[fb]   Err[%]    Acc  Eff[%]   Chi2 N[It] |
+|=============================================================================|
+| VAMP: parameter mismatch, discarding grid file 'ttbar_m1.vg'
+   1      19980  5.8702955E+02  8.48E+01   14.45   20.42*   0.72
+   2      19950  5.7027582E+02  1.25E+01    2.20    3.10*   2.72
+   3      19919  5.6543981E+02  4.87E+00    0.86    1.21*  11.01
+   4      19890  5.6724783E+02  3.82E+00    0.67    0.95*  11.59
+   5      19857  5.7075863E+02  3.33E+00    0.58    0.82*  15.79
+   6      19816  5.7475624E+02  3.12E+00    0.54    0.76*  17.89
+   7      19780  5.6472925E+02  2.97E+00    0.53    0.74*  18.28
+   8      19748  5.6506133E+02  2.87E+00    0.51    0.71*  21.03
+   9      19711  5.6322508E+02  2.78E+00    0.49    0.69*  22.95
+  10      19679  5.6906209E+02  2.73E+00    0.48    0.67*  25.52
+|-----------------------------------------------------------------------------|
+  10     198330  5.6750326E+02  1.11E+00    0.20    0.87   25.52    1.22  10
+|-----------------------------------------------------------------------------|
+  11      49978  5.7178730E+02  1.74E+00    0.30    0.68   18.24
+  12      49978  5.6896888E+02  1.71E+00    0.30    0.67*  17.00
+  13      49978  5.6196423E+02  1.71E+00    0.30    0.68   15.88
+  14      49978  5.6491744E+02  1.72E+00    0.31    0.68   15.48
+  15      49978  5.6566843E+02  1.71E+00    0.30    0.68*  15.11
+|-----------------------------------------------------------------------------|
+  15     249890  5.6662517E+02  7.69E-01    0.14    0.68   15.11    4.86   5
+|=============================================================================|
+| Time estimate for generating 10000 events: 0d:00h:01m:10s
+| Creating integration history display ttbar-history.ps and ttbar-history.pdf
+SM_tt_threshold.FF =>  1.000000000000E+00
+mtpole = 173.675
+wtop   = 1.55442
+sqrts =  3.450000000000E+02
+| RNG: Initializing TAO random-number generator
+| RNG: Setting seed for random-number generator to 47
+| Initializing integration for process ttbar:
+| 
+| %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+|  Initialize e+e- => ttbar threshold resummation:
+|  Use analytic (LL) or TOPPIK (NLL) form factors for ttA/ttZ vector
+|  and axial vector couplings (S/P-wave) in the threshold region.
+|  Cf. threshold shapes from A. Hoang et al.: [arXiv:hep-ph/0107144],
+|  [arXiv:1309.6323].
+|  Numerical NLL solutions calculated with TOPPIK [arXiv:hep-ph/9904468]
+|  by M. Jezabek, T. Teubner.
+| %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+| 
+| Threshold setup has changed: recalculate threshold grid.
+| ------------------------------------------------------------------------
+| Process [scattering]: 'ttbar'
+|   Library name  = 'default_lib'
+|   Process index = 1
+|   Process components:
+|     1: 'ttbar_i1':   e-, e+ => W+, W-, b, bbar [omega]
+| ------------------------------------------------------------------------
+| Beam structure: e-, e+
+| Beam data (collision):
+|   e-  (mass = 5.1099700E-04 GeV)
+|   e+  (mass = 5.1099700E-04 GeV)
+|   sqrts = 3.450000000000E+02 GeV
+| Phase space: discarding old configuration (model parameters changed)
+| Phase space: generating configuration ...
+| Phase space: ... success.
+| Phase space: writing configuration file 'ttbar_i1.phs'
+| Phase space: 60 channels, 8 dimensions
+| Phase space: found 60 channels, collected in 21 groves.
+| Phase space: Using 70 equivalences between channels.
+| Phase space: wood
+| Applying user-defined cuts.
+| OpenMP: Using 4 threads
+| Starting integration for process 'ttbar'
+| Integrate: iterations = 10:20000:"gw", 5:50000
+| Integrator: 21 chains, 60 channels, 8 dimensions
+| Integrator: Using VAMP channel equivalences
+| Integrator: 20000 initial calls, 20 bins, stratified = T
+| Integrator: VAMP
+|=============================================================================|
+| It      Calls  Integral[fb]  Error[fb]   Err[%]    Acc  Eff[%]   Chi2 N[It] |
+|=============================================================================|
+| VAMP: parameter mismatch, discarding grid file 'ttbar_m1.vg'
+   1      19980  6.2010388E+02  9.21E+01   14.85   20.99*   0.82
+   2      19951  6.5555776E+02  1.57E+01    2.40    3.39*   2.55
+   3      19919  6.5307115E+02  5.03E+00    0.77    1.09*  12.53
+   4      19888  6.5610943E+02  4.09E+00    0.62    0.88*  12.90
+   5      19855  6.5581867E+02  3.58E+00    0.55    0.77*  17.68
+   6      19824  6.5487435E+02  3.38E+00    0.52    0.73*  19.51
+   7      19787  6.5397721E+02  3.27E+00    0.50    0.70*  19.28
+   8      19747  6.5162816E+02  3.18E+00    0.49    0.69*  23.16
+   9      19713  6.5578831E+02  3.16E+00    0.48    0.68*  19.53
+  10      19668  6.5711300E+02  3.19E+00    0.49    0.68   19.97
+|-----------------------------------------------------------------------------|
+  10     198332  6.5484682E+02  1.23E+00    0.19    0.84   19.97    0.24  10
+|-----------------------------------------------------------------------------|
+  11      49974  6.5481275E+02  2.01E+00    0.31    0.69   14.43
+  12      49974  6.5448464E+02  1.99E+00    0.30    0.68*  13.15
+  13      49974  6.5621947E+02  1.97E+00    0.30    0.67*  12.41
+  14      49974  6.5634945E+02  1.97E+00    0.30    0.67   12.00
+  15      49974  6.5344218E+02  1.97E+00    0.30    0.68   11.79
+|-----------------------------------------------------------------------------|
+  15     249870  6.5506607E+02  8.87E-01    0.14    0.68   11.79    0.39   5
+|=============================================================================|
+| Time estimate for generating 10000 events: 0d:00h:01m:31s
+| Creating integration history display ttbar-history.ps and ttbar-history.pdf
+SM_tt_threshold.sh =>  1.000000000000E+00
+SM_tt_threshold.FF =>  0.000000000000E+00
+mtpole = 173.624
+wtop   = 1.55442
+sqrts =  3.450000000000E+02
+| RNG: Initializing TAO random-number generator
+| RNG: Setting seed for random-number generator to 48
+| Initializing integration for process ttbar:
+| 
+| %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+|  Initialize e+e- => ttbar threshold resummation:
+|  Use analytic (LL) or TOPPIK (NLL) form factors for ttA/ttZ vector
+|  and axial vector couplings (S/P-wave) in the threshold region.
+|  Cf. threshold shapes from A. Hoang et al.: [arXiv:hep-ph/0107144],
+|  [arXiv:1309.6323].
+|  Numerical NLL solutions calculated with TOPPIK [arXiv:hep-ph/9904468]
+|  by M. Jezabek, T. Teubner.
+| %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+| 
+| Threshold setup has changed: recalculate threshold grid.
+| ------------------------------------------------------------------------
+| Process [scattering]: 'ttbar'
+|   Library name  = 'default_lib'
+|   Process index = 1
+|   Process components:
+|     1: 'ttbar_i1':   e-, e+ => W+, W-, b, bbar [omega]
+| ------------------------------------------------------------------------
+| Beam structure: e-, e+
+| Beam data (collision):
+|   e-  (mass = 5.1099700E-04 GeV)
+|   e+  (mass = 5.1099700E-04 GeV)
+|   sqrts = 3.450000000000E+02 GeV
+| Phase space: discarding old configuration (model parameters changed)
+| Phase space: generating configuration ...
+| Phase space: ... success.
+| Phase space: writing configuration file 'ttbar_i1.phs'
+| Phase space: 60 channels, 8 dimensions
+| Phase space: found 60 channels, collected in 21 groves.
+| Phase space: Using 70 equivalences between channels.
+| Phase space: wood
+| Applying user-defined cuts.
+| OpenMP: Using 4 threads
+| Starting integration for process 'ttbar'
+| Integrate: iterations = 10:20000:"gw", 5:50000
+| Integrator: 21 chains, 60 channels, 8 dimensions
+| Integrator: Using VAMP channel equivalences
+| Integrator: 20000 initial calls, 20 bins, stratified = T
+| Integrator: VAMP
+|=============================================================================|
+| It      Calls  Integral[fb]  Error[fb]   Err[%]    Acc  Eff[%]   Chi2 N[It] |
+|=============================================================================|
+| VAMP: parameter mismatch, discarding grid file 'ttbar_m1.vg'
+   1      19980  7.1837786E+02  1.04E+02   14.52   20.52*   0.94
+   2      19951  6.4323121E+02  1.42E+01    2.22    3.13*   2.76
+   3      19921  6.3921287E+02  5.14E+00    0.80    1.13*  12.77
+   4      19890  6.4730488E+02  3.99E+00    0.62    0.87*  13.44
+   5      19855  6.4951309E+02  3.51E+00    0.54    0.76*  16.78
+   6      19823  6.4344906E+02  3.32E+00    0.52    0.73*  17.71
+   7      19788  6.4379167E+02  3.20E+00    0.50    0.70*  19.84
+   8      19753  6.5051653E+02  3.10E+00    0.48    0.67*  22.80
+   9      19720  6.4743165E+02  3.07E+00    0.47    0.67*  21.69
+  10      19693  6.4354597E+02  3.06E+00    0.48    0.67   23.42
+|-----------------------------------------------------------------------------|
+  10     198374  6.4602162E+02  1.20E+00    0.19    0.83   23.42    0.82  10
+|-----------------------------------------------------------------------------|
+  11      49980  6.4489318E+02  1.94E+00    0.30    0.67   17.70
+  12      49980  6.4581027E+02  1.94E+00    0.30    0.67*  15.45
+  13      49980  6.4400581E+02  1.91E+00    0.30    0.66*  14.86
+  14      49980  6.4584460E+02  1.94E+00    0.30    0.67   14.39
+  15      49980  6.4563032E+02  1.93E+00    0.30    0.67*  13.81
+|-----------------------------------------------------------------------------|
+  15     249900  6.4523031E+02  8.65E-01    0.13    0.67   13.81    0.17   5
+|=============================================================================|
+| Time estimate for generating 10000 events: 0d:00h:01m:14s
+| Creating integration history display ttbar-history.ps and ttbar-history.pdf
+SM_tt_threshold.FF =>  1.000000000000E+00
+mtpole = 173.624
+wtop   = 1.55442
+sqrts =  3.450000000000E+02
+| RNG: Initializing TAO random-number generator
+| RNG: Setting seed for random-number generator to 49
+| Initializing integration for process ttbar:
+| 
+| %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+|  Initialize e+e- => ttbar threshold resummation:
+|  Use analytic (LL) or TOPPIK (NLL) form factors for ttA/ttZ vector
+|  and axial vector couplings (S/P-wave) in the threshold region.
+|  Cf. threshold shapes from A. Hoang et al.: [arXiv:hep-ph/0107144],
+|  [arXiv:1309.6323].
+|  Numerical NLL solutions calculated with TOPPIK [arXiv:hep-ph/9904468]
+|  by M. Jezabek, T. Teubner.
+| %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+| 
+| Threshold setup has changed: recalculate threshold grid.
+| ------------------------------------------------------------------------
+| Process [scattering]: 'ttbar'
+|   Library name  = 'default_lib'
+|   Process index = 1
+|   Process components:
+|     1: 'ttbar_i1':   e-, e+ => W+, W-, b, bbar [omega]
+| ------------------------------------------------------------------------
+| Beam structure: e-, e+
+| Beam data (collision):
+|   e-  (mass = 5.1099700E-04 GeV)
+|   e+  (mass = 5.1099700E-04 GeV)
+|   sqrts = 3.450000000000E+02 GeV
+| Phase space: discarding old configuration (model parameters changed)
+| Phase space: generating configuration ...
+| Phase space: ... success.
+| Phase space: writing configuration file 'ttbar_i1.phs'
+| Phase space: 60 channels, 8 dimensions
+| Phase space: found 60 channels, collected in 21 groves.
+| Phase space: Using 70 equivalences between channels.
+| Phase space: wood
+| Applying user-defined cuts.
+| OpenMP: Using 4 threads
+| Starting integration for process 'ttbar'
+| Integrate: iterations = 10:20000:"gw", 5:50000
+| Integrator: 21 chains, 60 channels, 8 dimensions
+| Integrator: Using VAMP channel equivalences
+| Integrator: 20000 initial calls, 20 bins, stratified = T
+| Integrator: VAMP
+|=============================================================================|
+| It      Calls  Integral[fb]  Error[fb]   Err[%]    Acc  Eff[%]   Chi2 N[It] |
+|=============================================================================|
+| VAMP: parameter mismatch, discarding grid file 'ttbar_m1.vg'
+   1      19980  6.9673252E+02  1.11E+02   15.96   22.56*   0.83
+   2      19952  7.5040917E+02  1.72E+01    2.29    3.23*   2.91
+   3      19920  7.3124647E+02  5.85E+00    0.80    1.13*  12.86
+   4      19889  7.3963389E+02  4.57E+00    0.62    0.87*  13.76
+   5      19856  7.3266667E+02  3.93E+00    0.54    0.76*  19.93
+   6      19823  7.2829474E+02  3.77E+00    0.52    0.73*  17.43
+   7      19791  7.3626764E+02  3.70E+00    0.50    0.71*  17.67
+   8      19752  7.4005323E+02  3.61E+00    0.49    0.69*  20.55
+   9      19716  7.3179739E+02  3.56E+00    0.49    0.68*  20.97
+  10      19683  7.3474801E+02  3.57E+00    0.49    0.68*  21.59
+|-----------------------------------------------------------------------------|
+  10     198362  7.3451728E+02  1.38E+00    0.19    0.84   21.59    0.96  10
+|-----------------------------------------------------------------------------|
+  11      49969  7.3289754E+02  2.23E+00    0.30    0.68*  18.15
+  12      49969  7.3116883E+02  2.21E+00    0.30    0.68*  17.20
+  13      49969  7.2819827E+02  2.22E+00    0.30    0.68   15.99
+  14      49969  7.2955622E+02  2.23E+00    0.31    0.68   14.77
+  15      49969  7.3122262E+02  2.20E+00    0.30    0.67*  13.84
+|-----------------------------------------------------------------------------|
+  15     249845  7.3060846E+02  9.91E-01    0.14    0.68   13.84    0.65   5
+|=============================================================================|
+| Time estimate for generating 10000 events: 0d:00h:01m:15s
+| Creating integration history display ttbar-history.ps and ttbar-history.pdf
+| WHIZARD run finished.
+|=============================================================================|

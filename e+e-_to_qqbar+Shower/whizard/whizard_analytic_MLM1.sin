@@ -1,0 +1,37 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+#Powheg options
+?combined_nlo_integration = false
+?powheg_matching = false
+
+#Shower options
+?ps_fsr_active = true
+?ps_isr_active = false
+?ps_use_PYTHIA_shower = false
+?hadronization_active = false
+real al_MZ = 0.1178 
+int nf = 5
+real b0 = 11.0 - 2.0 / 3.0 * nf
+# Corresponding to LO running and setting of al_MZ
+ps_fsr_lambda = mZ * exp (- 2 * pi / (b0 * al_MZ))
+
+ps_max_n_flavors = 5
+ps_mass_cutoff = 1
+
+?mlm_matching = true
+mlm_nmaxMEjets = 3
+mlm_Rmin = 1
+mlm_ETclusminE = 10 GeV
+real ycut = mlm_ETclusminE**2
+
+ms = 0
+mc = 0
+alias j = u:d:s:c:U:D:S:C:g
+cuts = all kT > ycut [j, j]
+
+process whizard_analytic_MLM1 = e1, E1 => u, U
+process whizard_analytic_MLM1j = e1, E1 => u, U, j
+
+sample_format = hepmc
+simulate (whizard_analytic_MLM1, whizard_analytic_MLM1j)

@@ -35,11 +35,6 @@ int main() {
   if (loadHooks) {
 
 
-    // Set MPI to start at the kinematical limit
-    if (MPIvetoMode > 0) {
-      pythia.readString("MultipartonInteractions:pTmaxMatch = 2");
-    }
-
     powhegHooks = new PowhegHooks();
     pythia.setUserHooksPtr((UserHooks *) powhegHooks);
   }

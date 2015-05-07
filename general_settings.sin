@@ -1,15 +1,16 @@
-#Gosam parameters
 mW = 80.376
 mZ = 91.1876
 GF = 1.16637E-005
 wZ = 2.4952
 wW = 2.124
 wtop = 0
-mb = 4.8
+# mb = 4.8
 # => alpha = 132.16066
 
 mmu = 0
 me = 0
+ms = 0
+mc = 0
 
 ?vis_channels = false
 ?use_vamp_equivalences = false
@@ -22,10 +23,6 @@ me = 0
 ?alpha_s_from_lambda_qcd = false
 alpha_s_order = 0
 
-#GoSam options
-?use_gosam_loops = true
-?use_gosam_correlations = false
-?use_gosam_real_trees = false
 
 int K = 1000
 checkpoint = K

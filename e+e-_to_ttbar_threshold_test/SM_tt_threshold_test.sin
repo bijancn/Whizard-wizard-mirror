@@ -1,0 +1,24 @@
+model = SM_tt_threshold
+
+seed = 42
+
+process ttbar = e1, E1 => Wp, Wm, b, B { $restrictions = "3+5~t && 4+6~tbar" }
+
+compile
+
+nloop  = 1
+sf     = 1.
+Vtb    = 1.
+
+cuts = all abs (M-mtpole) < 30 GeV [Wp,b]
+   and all abs (M-mtpole) < 30 GeV [Wm,B]
+
+scan m1S = (172.0 => 172.5 /+ 0.5) {
+scan sh = (0.5 => 1. /+ 0.5) {
+scan FF = (0 => 1 /+ 1) {
+  printf "mtpole = %g" (mtpole)
+  printf "wtop   = %g" (wtop)
+  sqrts = 2.*m1S
+  beams = e1, E1
+  integrate (ttbar) { iterations = 10:20000:"gw", 5:50000 }
+}}}
