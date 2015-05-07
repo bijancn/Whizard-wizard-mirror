@@ -7,9 +7,6 @@ include("../process_settings.sin")
 
 #Shower options
 ?ps_fsr_active = true
-?ps_isr_active = false
-?ps_use_PYTHIA_shower = false
-?hadronization_active = false
 real al_MZ = 0.1178 
 int nf = 5
 real b0 = 11.0 - 2.0 / 3.0 * nf

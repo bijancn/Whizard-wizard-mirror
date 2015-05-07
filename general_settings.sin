@@ -23,7 +23,6 @@ mc = 0
 ?alpha_s_from_lambda_qcd = false
 alpha_s_order = 0
 
-
 int K = 1000
 checkpoint = K
 sample_format = lhef

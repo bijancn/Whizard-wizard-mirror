@@ -1,11 +1,12 @@
 # Tip: export RIVET_ANALYSIS_PATH=$PWD or use --pwd
 # For new template: rivet-mkanalysis WHIZARD_*
+#
 # yodamerge -o Rivet.yoda $(YODAFILES) combines multiple yoda files to one
 # (adding statistics etc.)
+# yodafile=Rivet.yoda
 
 yodafiles=nlo_powheg_500K.yoda lo_pythia_1emission_500k.yoda
 hepfile=nlo_powheg_500K.hepmc
-yodafile=Rivet.yoda
 ANALYSIS=WHIZARD_2015_SINGLEEMISSION
 
 all: plots/index.html
