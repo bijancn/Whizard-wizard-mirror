@@ -21,6 +21,7 @@ noanalytic/
 *.evx
 *.lhe
 .libs/
+*diags-fmf.t*
 Generated_Loops/
 *olp_modules/
 *.olp_parameters
