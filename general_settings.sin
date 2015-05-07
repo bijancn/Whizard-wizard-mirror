@@ -22,11 +22,6 @@ me = 0
 ?alpha_s_from_lambda_qcd = false
 alpha_s_order = 0
 
-#GoSam options
-?use_gosam_loops = true
-?use_gosam_correlations = false
-?use_gosam_real_trees = false
-
 int K = 1000
 checkpoint = K
 sample_format = lhef

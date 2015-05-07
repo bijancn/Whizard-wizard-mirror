@@ -1,0 +1,15 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+#Powheg options
+?combined_nlo_integration = true
+?powheg_matching = true
+powheg_grid_size_xi = 5
+powheg_grid_size_y = 5
+powheg_grid_sampling_points = 6000000
+powheg_pt_min = 1
+$loop_me_method = "openloops"
+
+process whizard_uu_powheg = E1, e1 =>  u, U {nlo_calculation="Full"}
+
+simulate (whizard_uu_powheg)
