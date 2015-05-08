@@ -5,14 +5,11 @@ include("../process_settings.sin")
 ?combined_nlo_integration = false
 ?powheg_matching = false
 
-#process ttbar = E1, e1 =>  t, T {nlo_calculation="Full"}
 ?diags = true
-process ttbar_lo_restr = E1, e1 =>  Wp, Wm, b, B {$restrictions = "3+5~t && 4+6~tbar"}
-process ttbar_lo = E1, e1 =>  Wp, Wm, b, B
+process WWbB_lo_restr = E1, e1 =>  Wp, Wm, b, B {$restrictions = "3+5~t && 4+6~tbar"}
+process WWbB_lo = E1, e1 =>  Wp, Wm, b, B
 
-printf "MODEL START"
 show (model)
-printf "MODEL END"
 open_out ("ttbar_lo.dat")
 open_out ("ttbar_lo_restr.dat")
 scan sqrts = ((340. => 350 /+ 0.5),
