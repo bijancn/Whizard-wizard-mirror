@@ -32,6 +32,7 @@ include/
 *.makefile
 *.dat
 
+core
 main02
 Makefile.inc
 whizard_uu_lo
