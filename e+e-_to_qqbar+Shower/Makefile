@@ -24,6 +24,6 @@ pythia/%.hepmc : whizard/%.lhe
 
 clean :
 	rm -rf */*.mod */*.f90 */*.o */*.lo */*.vg */*.evx */*.phs */*.log */*.lhe */*.hepmc
-	rm -rf */*.olp_parameters
+	rm -rf */*.olp_parameters */fort.* */stability_log */test_sudakov_data
 	rm -rf */*.olp */*.olc */*.la */Generated_Loops */*olp_modules */*.so */lib
 	rm -rf */include */.libs/ */fort.7 */golem.in */Gosam_Makefile */*makefile
