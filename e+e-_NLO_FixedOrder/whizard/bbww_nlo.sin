@@ -1,18 +1,18 @@
 include("../../general_settings.sin")
 include("../process_settings.sin")
 
-mb = 4.7 GeV
-
-sample_format = hepmc
-
 ?unweighted = false
 ?nlo_fixed_order = true
+?combined_nlo_integration = true
+$loop_me_method = "openloops"
 
-process top_decay = E1, e1 => Wp, Wm, b, B {nlo_calculation="Full"}
+process bbww_nlo = E1, e1 => Wp, Wm, b, B {nlo_calculation="Full"}
 
 #Default parameters for FKS mapping
 fks_dij_exp1 = 1.0
 fks_mapping_type = 1
 
-simulate (top_decay)
+n_events = 10 * K
+checkpoint = n_events / 20
 
+simulate (bbww_nlo)

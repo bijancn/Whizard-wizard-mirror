@@ -6,4 +6,4 @@ clean :
 	rm -rf */*.olp_parameters */fort.* */stability_log */test_sudakov_data
 	rm -rf */*.olp */*.olc */*.la */Generated_Loops */*olp_modules */*.so */lib
 	rm -rf */include */.libs/ */fort.7 */golem.in */Gosam_Makefile */*makefile
-	rm -rf */gmon.out */*.dat */*.yoda */plots
+	rm -rf */gmon.out */*.dat */*.yoda */plots */gosam.crashed
