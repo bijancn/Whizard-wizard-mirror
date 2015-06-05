@@ -2,6 +2,7 @@
 #include "Rivet/Analysis.hh"
 #include "Rivet/Projections/FinalState.hh"
 #include "Rivet/Projections/FastJets.hh"
+#include "Rivet/Projections/VetoedFinalState.hh"
 
 namespace Rivet {
 
@@ -20,20 +21,24 @@ namespace Rivet {
       const FinalState fs;
       const int stdbin = 50;
       addProjection(fs, "FS");
-      addProjection(FastJets(fs, FastJets::ANTIKT, 0.7), "Jets");
+
+      VetoedFinalState veto;
+      veto.addVetoPairId(PID::WPLUSBOSON);
+      FastJets jets(veto, FastJets::ANTIKT, 0.4);
+      addProjection(jets, "Jets");
 
       _h_Wp_Pt = bookHisto1D("W_plus-pT", stdbin, 0., 210. );
       _h_B_Pt = bookHisto1D("B-pT", stdbin, 0., 170.);
 
       _h_BB_invMass = bookHisto1D("BB-inv", stdbin, 0., 350.);
       _h_WW_invMass = bookHisto1D("WW-inv", stdbin, 150, 450.);
-      _h_jets_invMass = bookHisto1D("jets-inv", stdbin, 100., 500.);
+      _h_jets_invMass = bookHisto1D("jets-inv", stdbin, 10., 350.);
 
-      _h_jetcount = bookHisto1D("jet-count", 5, 1.5, 6.5);
-      _h_jetpt = bookHisto1D("jet-pT", stdbin, 0., 250.);
+      _h_jetcount = bookHisto1D("jet-count", 3, 0.5, 3.5);
+      _h_jetpt = bookHisto1D("jet-pT", stdbin, 0., 200.);
       _h_jetptlog = bookHisto1D("jet-pT-log", stdbin, 1., 6.);
-      _h_leadingjetpt = bookHisto1D("leading-jet-pT", stdbin, 50., 225.);
-      _h_secondleadingjetpt = bookHisto1D("second-leading-jet-pT", stdbin, 30., 200.);
+      _h_leadingjetpt = bookHisto1D("leading-jet-pT", stdbin, 25., 200.);
+      _h_secondleadingjetpt = bookHisto1D("second-leading-jet-pT", stdbin, 0., 175.);
     }
 
     void analyze(const Event& event) {
@@ -49,7 +54,11 @@ namespace Rivet {
       }
       _h_jetcount->fill(jets.size(), weight);
       _h_leadingjetpt->fill(jets[0].pT(), weight);
-      _h_secondleadingjetpt->fill(jets[1].pT(), weight);
+      if (jets.size() > 1) {
+        _h_secondleadingjetpt->fill(jets[1].pT(), weight);
+        FourMomentum p_sum = jets[0].momentum() + jets[1].momentum();
+        _h_jets_invMass->fill(p_sum.mass(), weight);
+      }
 
       foreach(Jet j, jets) {
         _h_jetpt->fill(j.pT(), weight);
@@ -79,8 +88,6 @@ namespace Rivet {
           }
         }
       }
-      FourMomentum p_sum = jets[0].momentum() + jets[1].momentum();
-      _h_jets_invMass->fill(p_sum.mass(), weight);
     }
 
 
