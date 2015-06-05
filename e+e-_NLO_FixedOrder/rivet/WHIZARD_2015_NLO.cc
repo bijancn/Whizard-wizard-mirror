@@ -18,26 +18,28 @@ namespace Rivet {
     /// Book histograms and initialise projections before the run
     void init() {
       const FinalState fs;
+      const int stdbin = 50;
       addProjection(fs, "FS");
       addProjection(FastJets(fs, FastJets::ANTIKT, 0.7), "Jets");
 
-      _h_Wp_Pt = bookHisto1D("W_plus-pT", 50, 0., 210. );
-      _h_B_Pt = bookHisto1D("B-pT", 50, 0., 170.);
+      _h_Wp_Pt = bookHisto1D("W_plus-pT", stdbin, 0., 210. );
+      _h_B_Pt = bookHisto1D("B-pT", stdbin, 0., 170.);
 
-      _h_BB_invMass = bookHisto1D("BB-inv", 50, 0., 350.);
-      _h_WW_invMass = bookHisto1D("WW-inv", 50, 150, 450.);
-      _h_jets_invMass = bookHisto1D("jets-inv", 50, 0., 350.);
+      _h_BB_invMass = bookHisto1D("BB-inv", stdbin, 0., 350.);
+      _h_WW_invMass = bookHisto1D("WW-inv", stdbin, 150, 450.);
+      _h_jets_invMass = bookHisto1D("jets-inv", stdbin, 100., 500.);
 
-      _h_jetcount = bookHisto1D("jet-count", 5, 0., 10.);
-      _h_jetpt = bookHisto1D("jet-pT", 30, 30.,100.);
-      _h_jetptlog = bookHisto1D("jet-pT-log", 20, 0.,8.);
-      _h_leadingjetpt = bookHisto1D("leading-jet-pT", 25, 30.,100.);
-      _h_secondleadingjetpt = bookHisto1D("second-leading-jet-pT", 25, 30.,100.);
+      _h_jetcount = bookHisto1D("jet-count", 5, 1.5, 6.5);
+      _h_jetpt = bookHisto1D("jet-pT", stdbin, 0., 250.);
+      _h_jetptlog = bookHisto1D("jet-pT-log", stdbin, 1., 6.);
+      _h_leadingjetpt = bookHisto1D("leading-jet-pT", stdbin, 50., 225.);
+      _h_secondleadingjetpt = bookHisto1D("second-leading-jet-pT", stdbin, 30., 200.);
     }
 
     void analyze(const Event& event) {
       const FastJets& fastjets = applyProjection<FastJets>(event, "Jets");
-      const Jets jets = fastjets.jetsByPt(2.*GeV);
+      double minjetpt = 0.0 * GeV;
+      const Jets jets = fastjets.jetsByPt(minjetpt);
       double weight = event.weight();
 
       const FinalState& fs = applyProjection<FinalState>(event, "FS");
@@ -49,7 +51,7 @@ namespace Rivet {
       _h_leadingjetpt->fill(jets[0].pT(), weight);
       _h_secondleadingjetpt->fill(jets[1].pT(), weight);
 
-      foreach(Jet j, fastjets.jetsByPt(2.*GeV)) {
+      foreach(Jet j, jets) {
         _h_jetpt->fill(j.pT(), weight);
         _h_jetptlog->fill(log(j.pT()), weight);
       }
