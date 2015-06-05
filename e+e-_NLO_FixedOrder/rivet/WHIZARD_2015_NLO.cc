@@ -26,6 +26,7 @@ namespace Rivet {
 
       _h_BB_invMass = bookHisto1D("BB-inv", 50, 0., 350.);
       _h_WW_invMass = bookHisto1D("WW-inv", 50, 150, 450.);
+      _h_jets_invMass = bookHisto1D("jets-inv", 50, 0., 350.);
 
       _h_jetcount = bookHisto1D("jet-count", 5, 0., 10.);
       _h_jetpt = bookHisto1D("jet-pT", 30, 30.,100.);
@@ -76,6 +77,8 @@ namespace Rivet {
           }
         }
       }
+      FourMomentum p_sum = jets[0].momentum() + jets[1].momentum();
+      _h_jets_invMass->fill(p_sum.mass(), weight);
     }
 
 
@@ -89,6 +92,7 @@ namespace Rivet {
 
       scale(_h_BB_invMass, crossSection()/sumOfWeights());
       scale(_h_WW_invMass, crossSection()/sumOfWeights());
+      scale(_h_jets_invMass, crossSection()/sumOfWeights());
 
       scale(_h_jetpt, crossSection()/sumOfWeights());
       scale(_h_jetptlog, crossSection()/sumOfWeights());
@@ -105,6 +109,7 @@ namespace Rivet {
 
     Histo1DPtr _h_BB_invMass;
     Histo1DPtr _h_WW_invMass;
+    Histo1DPtr _h_jets_invMass;
 
     Histo1DPtr _h_jetcount;
     Histo1DPtr _h_jetpt;
