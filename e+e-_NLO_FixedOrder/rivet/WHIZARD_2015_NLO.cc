@@ -1,7 +1,6 @@
 // -*- C++ -*-
 #include "Rivet/Analysis.hh"
 #include "Rivet/Projections/FinalState.hh"
-#include "Rivet/Projections/ChargedFinalState.hh"
 #include "Rivet/Projections/FastJets.hh"
 
 namespace Rivet {
@@ -20,7 +19,6 @@ namespace Rivet {
     void init() {
       const FinalState fs;
       addProjection(fs, "FS");
-      addProjection(ChargedFinalState(), "CFS");
       addProjection(FastJets(fs, FastJets::ANTIKT, 0.7), "Jets");
 
       _h_Wp_Pt = bookHisto1D("W_plus-pT", 50, 0., 210. );
