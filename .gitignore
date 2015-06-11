@@ -37,3 +37,5 @@ main02
 Makefile.inc
 whizard_uu_lo
 whizard_uu_powheg
+*/whizard/*-[0-9]*/
+.sconsign.dblite

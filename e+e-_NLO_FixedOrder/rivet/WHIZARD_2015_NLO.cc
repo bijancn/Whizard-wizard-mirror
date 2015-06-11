@@ -48,8 +48,8 @@ namespace Rivet {
       double weight = event.weight();
 
       const FinalState& fs = applyProjection<FinalState>(event, "FS");
-      if (fs.particles().size() < 2) {
-        cout << "Less than two final state particles in the event";
+      if (fs.particles().size() < 2 or jets.size() <= 1) {
+        //cout << "Less than two final state particles in the event";
         vetoEvent;
       }
       _h_jetcount->fill(jets.size(), weight);
@@ -92,21 +92,22 @@ namespace Rivet {
 
 
     void finalize() {
-      // scale(_h_YYYY, crossSection()/sumOfWeights()); // norm to cross section
       // normalize(_h_YYYY); // normalize to unity
+      const double fb_per_pb = 1000.0;
 
       cout << "Sum of weights: " << sumOfWeights () << endl;
-      scale(_h_Wp_Pt, crossSection()/sumOfWeights());
-      scale(_h_B_Pt, crossSection()/sumOfWeights());
+      scale(_h_Wp_Pt, crossSection()/sumOfWeights()*fb_per_pb);
+      scale(_h_B_Pt, crossSection()/sumOfWeights()*fb_per_pb);
 
-      scale(_h_BB_invMass, crossSection()/sumOfWeights());
-      scale(_h_WW_invMass, crossSection()/sumOfWeights());
-      scale(_h_jets_invMass, crossSection()/sumOfWeights());
+      scale(_h_BB_invMass, crossSection()/sumOfWeights()*fb_per_pb);
+      scale(_h_WW_invMass, crossSection()/sumOfWeights()*fb_per_pb);
+      scale(_h_jets_invMass, crossSection()/sumOfWeights()*fb_per_pb);
 
-      scale(_h_jetpt, crossSection()/sumOfWeights());
-      scale(_h_jetptlog, crossSection()/sumOfWeights());
-      scale(_h_leadingjetpt, crossSection()/sumOfWeights());
-      scale(_h_secondleadingjetpt, crossSection()/sumOfWeights());
+      scale(_h_jetcount, crossSection()/sumOfWeights()*fb_per_pb);
+      scale(_h_jetpt, crossSection()/sumOfWeights()*fb_per_pb);
+      scale(_h_jetptlog, crossSection()/sumOfWeights()*fb_per_pb);
+      scale(_h_leadingjetpt, crossSection()/sumOfWeights()*fb_per_pb);
+      scale(_h_secondleadingjetpt, crossSection()/sumOfWeights()*fb_per_pb);
 
     }
 

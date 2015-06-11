@@ -27,4 +27,4 @@ int K = 1000
 checkpoint = K
 sample_format = lhef
 
-seed = 8885
+?hepmc_output_cross_section = true

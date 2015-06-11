@@ -31,7 +31,7 @@ yodafile=Rivet.yoda
 ANALYSIS=WHIZARD_2015_NLO
 
 all: plots/index.html
-	echo $(yodafiles)
+	echo $(pythia_files) $(yodafiles)
 
 RivetAnalysis.so: *.cc
 	rivet-buildplugin *.cc
@@ -39,14 +39,17 @@ RivetAnalysis.so: *.cc
 $(yodafiles): RivetAnalysis.so
 
 %.yoda: %.hepmc
-	rivet --pwd -a $(ANALYSIS) -H bbww_lo.yoda bbww_lo.hepmc -q --cross-section=564.89068
-	rivet --pwd -a $(ANALYSIS) -H bbww_nlo.yoda bbww_nlo.hepmc -q --cross-section=478.70303
+	echo $(pythia_files) $(yodafiles)
+	rivet --pwd -a $(ANALYSIS) -H $@ $(basename $<).*.hepmc
+	#rivet --pwd -a $(ANALYSIS) -H bbww_lo.yoda bbww_lo.hepmc -q --cross-section=564.89068
+	#rivet --pwd -a $(ANALYSIS) -H bbww_nlo.yoda bbww_nlo.hepmc -q --cross-section=478.70303
 
 debug: RivetAnalysis.so
 	rivet --pwd -a $(ANALYSIS) $(hepfile) -l Rivet.Analysis=DEBUG --nevts=5
 
-plots/index.html : $(yodafiles) $(ANALYSIS).info $(ANALYSIS).plot
-	rivet-mkhtml --mc-errs --pdf --cm -n $N -s -o $(dir $@) $(all)
+plots/index.html: $(yodafiles) $(ANALYSIS).info $(ANALYSIS).plot
+	echo $(pythia_files) $(yodafiles)
+	rivet-mkhtml --mc-errs --pdf --cm -s -o $(dir $@) $(all)
 
 dist:
 	rsync -avz @(analytic|plots|pythia) /data/bcho/BitPocketMaster/

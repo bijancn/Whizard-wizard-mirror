@@ -1,0 +1,55 @@
+#!/usr/bin/env python
+
+import re
+import os
+
+env = Environment(ENV = os.environ)
+
+build_yoda = Builder(action = 'rivet --pwd -H $TARGET -a $ANALYSIS $SOURCES',
+                    suffix = '.yoda', src_suffix = '.hepmc')
+
+build_analysis = Builder(action = 'rivet-buildplugin $SOURCES',
+                    suffix = '.so', src_suffix = '.cc')
+
+merge_yodas = Builder(action = 'yodamerge --assume-normalized -o $TARGET $SOURCES',
+    suffix = '.yoda', src_suffix = '.yoda')
+
+plot_cmd = 'rivet-mkhtml --mc-errs --pdf --cm --single --no-ratio ' + \
+      '--ignore-unvalidated --num-threads=$NUMTHREADS --config=$CONFIG '
+build_plot = Builder(action = plot_cmd + '-o ${TARGET.dir} $SOURCES',
+                    suffix = '.html',
+                    src_suffix = '.yoda')
+
+env.Append(BUILDERS = {'Yoda' : build_yoda, 'Analysis' : build_analysis,
+  'MergeYodas': merge_yodas, 'Plot' : build_plot})
+
+analysis = 'WHIZARD_2015_NLO'
+env['ANALYSIS'] = analysis
+env['NUMTHREADS'] = '4'
+env['CONFIG'] = analysis + '.plot'
+# This is a list of processes consisting of lists of hepmcs
+hepmcs = ['bbww_lo', 'bbww_nlo']
+globify = lambda h : Glob(h + '-*.hepmc')
+hepmcs = map (globify, hepmcs)
+descriptions = [r"\textsc{LO}", r"\textsc{NLO}"]
+default_plot = 'plots/index.html'
+
+final_yoda_name = lambda s : re.sub('-[0-9]+.hepmc', '.yoda', str(s[0]))
+small_yoda_name = lambda s : re.sub('.hepmc', '.yoda', str(s))
+final_yoda_names = map (final_yoda_name, hepmcs)
+small_yoda_names = []
+for proc in hepmcs:
+  small_yoda_names.append(map (small_yoda_name, proc))
+print 'Want to build the following yodas: ', final_yoda_names, '\n'
+print 'Out of these small yodas: ', small_yoda_names, '\n'
+
+env.Analysis('RivetAnalysis.so', analysis)
+merged_yodas = []
+for hepmc_lst, desc, yoda, yodas in \
+    zip(hepmcs, descriptions, final_yoda_names, small_yoda_names):
+  make_yoda = lambda h : env.Yoda(source = h, DESCRIPTION=desc)
+  build_yodas = map(make_yoda, hepmc_lst)
+  print 'want to merge', [str(b) for b in build_yodas]
+  merged_yodas.append(env.MergeYodas(target = yoda, source = build_yodas))
+
+plot = env.Plot(target = default_plot, source = merged_yodas)

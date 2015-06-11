@@ -1,7 +1,6 @@
 include("../../general_settings.sin")
 include("../process_settings.sin")
 
-?unweighted = false
 ?nlo_fixed_order = true
 ?combined_nlo_integration = true
 $loop_me_method = "openloops"
@@ -12,7 +11,4 @@ process bbww_nlo = E1, e1 => Wp, Wm, b, B {nlo_calculation="Full"}
 fks_dij_exp1 = 1.0
 fks_mapping_type = 1
 
-n_events = 5000 * K
-checkpoint = n_events / 20
-
-simulate (bbww_nlo)
+integrate (bbww_nlo)
