@@ -8,12 +8,12 @@ namespace Rivet {
 
   using namespace Cuts;
 
-  class WHIZARD_2015_NLO : public Analysis {
+  class WHIZARD_2015_NLO_ttbarcuts : public Analysis {
   public:
 
     /// Constructor
-    WHIZARD_2015_NLO()
-      : Analysis("WHIZARD_2015_NLO")
+    WHIZARD_2015_NLO_ttbarcuts()
+      : Analysis("WHIZARD_2015_NLO_ttbarcuts")
     {    }
 
     /// Book histograms and initialise projections before the run
@@ -147,6 +147,6 @@ namespace Rivet {
 
 
   // The hook for the plugin system
-  DECLARE_RIVET_PLUGIN(WHIZARD_2015_NLO);
+  DECLARE_RIVET_PLUGIN(WHIZARD_2015_NLO_ttbarcuts);
 
 }

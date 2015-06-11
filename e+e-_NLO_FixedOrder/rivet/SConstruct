@@ -5,7 +5,7 @@ import os
 
 env = Environment(ENV = os.environ)
 
-build_yoda = Builder(action = 'rivet --pwd -H $TARGET -a $ANALYSIS $SOURCES',
+build_yoda = Builder(action = 'rivet --pwd -H $TARGET $ANALYSIS $SOURCES',
                     suffix = '.yoda', src_suffix = '.hepmc')
 
 build_analysis = Builder(action = 'rivet-buildplugin $SOURCES',
@@ -36,10 +36,11 @@ build_plot = Builder(generator = generate_plot,
 env.Append(BUILDERS = {'Yoda' : build_yoda, 'Analysis' : build_analysis,
   'MergeYodas': merge_yodas, 'Plot' : build_plot})
 
+
 # We use timestamps instead of MD5s since hepmc's are big
 Decider('timestamp-match')
-analysis = 'WHIZARD_2015_NLO'
-env['ANALYSIS'] = analysis
+base_analysis = 'WHIZARD_2015_NLO'
+analysiss = [base_analysis, base_analysis + '_ttbarcuts']
 env['NUMTHREADS'] = '4'
 
 dirify = lambda d : d + '/index.html'
@@ -47,13 +48,13 @@ dirify = lambda d : d + '/index.html'
 processes = ['bbww_lo', 'bbww_nlo']
 # This is a list of processes consisting of lists of hepmcs
 hepmcs = [Glob(p + '-*.hepmc') for p in processes]
-descriptions = [r"\textsc{LO}", r"\textsc{NLO}"]
 control_plots = map(dirify, processes)
+descriptions = [r"\textsc{LO}", r"\textsc{NLO}"]
 
 # This is a list of plots corresponding to a list of configs
 plots = ['plots', 'show-MCerrors']
 plots = map(dirify, plots)
-configs = [analysis, analysis + '-show-MCerrors']
+configs = [base_analysis, base_analysis + '-show-MCerrors']
 configs = [c + '.plot' for c in configs]
 
 final_yoda_name = lambda s : re.sub('-[0-9]+.hepmc', '.yoda', str(s[0]))
@@ -65,13 +66,14 @@ for proc in hepmcs:
 print 'Want to build the following yodas: ', final_yoda_names, '\n'
 print 'Out of these small yodas: ', small_yoda_names, '\n'
 
-env.Analysis('RivetAnalysis.so', analysis)
+# Actual building starts here
+env.Analysis('RivetAnalysis', analysiss)
 merged_yodas = []
 for hepmc_lst, yoda, yodas in \
     zip(hepmcs, final_yoda_names, small_yoda_names):
-  make_yoda = lambda h : env.Yoda(source = h)
+  ana = ' '.join(['-a ' + a for a in analysiss])
+  make_yoda = lambda h : env.Yoda(source = h, ANALYSIS=ana)
   build_yodas = map(make_yoda, hepmc_lst)
-  print 'want to merge', [str(b) for b in build_yodas]
   merged_yodas.append(env.MergeYodas(target = yoda, source = build_yodas))
 
 for (plot, config) in zip(plots, configs):
