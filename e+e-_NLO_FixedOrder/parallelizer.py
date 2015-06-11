@@ -42,7 +42,7 @@ if __name__ == '__main__':
         integration_grids=integration_grids)
     pool = mp.Pool(processes=jobs)
     #results = pool.map_async(this_run, range(batches)) #.get(9999999)
-    results = pool.map(this_run, range(batches)) #.get(9999999)
+    results = pool.map(this_run, range(batches))
 
   logger.info("""
 #==============================================================================#

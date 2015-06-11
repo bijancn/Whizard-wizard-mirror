@@ -37,11 +37,11 @@ def whizard_run(whizard, sindarin, core=None):
   logger.info('Running ' + cmd + num)
   try:
     process = subprocess.call(cmd, shell=True)
-  except:
-    logger.error('Exception occured: ' + str(exception))
+  except Exception as e:
+    logger.error('Exception occured: ' + str(e))
     logger.error('Whizard failed')
   else:
-    logger.info('Whizard finished')
+    logger.info('Whizard finished' + num)
 
 def run(i, whizard, sindarin, integration_grids):
   process = sindarin.replace('.sin', '')
