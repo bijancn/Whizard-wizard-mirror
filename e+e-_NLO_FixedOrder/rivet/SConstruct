@@ -5,7 +5,7 @@ import os
 
 env = Environment(ENV = os.environ)
 
-build_yoda = Builder(action = 'rivet --pwd -H $TARGET $ANALYSIS $SOURCES',
+build_yoda = Builder(action = 'rivet --quiet --pwd -H $TARGET $ANALYSIS $SOURCES',
                     suffix = '.yoda', src_suffix = '.hepmc')
 
 build_analysis = Builder(action = 'rivet-buildplugin $SOURCES',
@@ -20,15 +20,18 @@ merge_yodas = Builder(action = 'yodamerge --assume-normalized -o $TARGET $SOURCE
 plot_cmd = 'rivet-mkhtml --mc-errs --pdf --cm --single ' + \
       '--ignore-unvalidated --num-threads=$NUMTHREADS --config=$CONFIG '
 
-def generate_plot(source, target, env, for_signature, descriptions=None):
+def generate_plot(source, target, env, for_signature):
   target_dir = target[0].dir
+  try:
+    descriptions = env['DESCRIPTIONS'].split('::')
+  except KeyError:
+    descriptions = None
   if descriptions is not None:
-    sources = ' '.join([str(s) + ':' + d for (s,d) in zip(source, descriptions)])
+    sources = ' '.join([str(s) + ':' + "'" + d + "'" for (s,d) in zip(source, descriptions)])
   else:
     sources = ' '.join([str(s) for s in source])
   return plot_cmd + '-o %s %s' % (target_dir, sources)
 
-#build_plot = Builder(action = plot_cmd + '-o ${TARGET.dir} $SOURCE:$SOURCE',
 build_plot = Builder(generator = generate_plot,
                     suffix = '.html',
                     src_suffix = '.yoda')
@@ -67,18 +70,21 @@ print 'Want to build the following yodas: ', final_yoda_names, '\n'
 print 'Out of these small yodas: ', small_yoda_names, '\n'
 
 # Actual building starts here
-env.Analysis('RivetAnalysis', analysiss)
+Analysis = env.Analysis('RivetAnalysis', analysiss)
 merged_yodas = []
 for hepmc_lst, yoda, yodas in \
     zip(hepmcs, final_yoda_names, small_yoda_names):
   ana = ' '.join(['-a ' + a for a in analysiss])
   make_yoda = lambda h : env.Yoda(source = h, ANALYSIS=ana)
   build_yodas = map(make_yoda, hepmc_lst)
+  Depends(build_yodas, Analysis)
   merged_yodas.append(env.MergeYodas(target = yoda, source = build_yodas))
 
 for (plot, config) in zip(plots, configs):
-  env.Plot(target = plot, source = merged_yodas, descriptions = descriptions,
+  plot = env.Plot(target = plot, source = merged_yodas, DESCRIPTIONS = '::'.join(descriptions),
       CONFIG=config)
+  Depends(plot, config)
 
 for (small_yodas, control_plot) in zip(small_yoda_names, control_plots):
-  env.Plot(target = control_plot, source = small_yodas, CONFIG=configs[0])
+  plot = env.Plot(target = control_plot, source = small_yodas, CONFIG=configs[0])
+  Depends(plot, configs[0])
