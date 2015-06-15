@@ -3,11 +3,19 @@ import logging.config
 import sys
 import os
 import multiprocessing as mp
-import yaml
+import imp
 from functools import partial
 
 from utils import cd
 from subproc import batches, whizard_run, run
+
+try:
+  imp.find_module('yaml')
+  have_yaml = True
+except ImportError:
+  have_yaml = False
+if have_yaml:
+  import yaml
 
 logger = logging.getLogger(__name__)
 jobs = 10
