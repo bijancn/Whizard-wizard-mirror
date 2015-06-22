@@ -2,13 +2,14 @@ include("../../general_settings.sin")
 include("../process_settings.sin")
 alpha_power = 6
 alphas_power = 0
+iterations = 8:250*K:"gw", 3:100*K
 
 ?unweighted = false
 ?nlo_fixed_order = true
 ?combined_nlo_integration = true
 $loop_me_method = "openloops"
 
-process bbllnn_nlo  = E1, e1 => b, B, E1, n1, e2, N2 {nlo_calculation="Full"}
+process bbllnn_nlo = E1, e1 => b, B, E2, n2, e1, N1 {nlo_calculation="Full"}
 
 #Default parameters for FKS mapping
 fks_dij_exp1 = 1.0

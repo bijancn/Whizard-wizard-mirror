@@ -51,7 +51,7 @@ XLabel=$m_{WW}[\text{GeV}]$
 
  BEGIN PLOT /WHIZARD_.*/BW-inv
 LogY=1
-XLabel=$m_{WW}[\text{GeV}]$
+XLabel=$m_{BW}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BB-inv

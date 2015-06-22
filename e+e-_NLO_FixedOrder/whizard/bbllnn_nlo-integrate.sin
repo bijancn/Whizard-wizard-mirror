@@ -2,6 +2,7 @@ include("../../general_settings.sin")
 include("../process_settings.sin")
 alpha_power = 6
 alphas_power = 0
+iterations = 8:250*K:"gw", 3:100*K
 
 ?nlo_fixed_order = true
 ?combined_nlo_integration = true

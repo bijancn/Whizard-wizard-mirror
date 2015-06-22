@@ -75,12 +75,12 @@ namespace Rivet {
               m_top - m_delta > p_sum.mass() or
               p_sum.mass() > m_top + m_delta;
           }
-          //else if (id1 == - PID::BQUARK && id2 == PID::WMINUSBOSON) {
-            //FourMomentum p_sum = p1.momentum() + p2.momentum();
-            //vetoCondition = vetoCondition or
-              //m_top - m_delta > p_sum.mass() or
-              //p_sum.mass() > m_top + m_delta;
-          //}
+          else if (id1 == - PID::BQUARK && id2 == PID::WMINUSBOSON) {
+            FourMomentum p_sum = p1.momentum() + p2.momentum();
+            vetoCondition = vetoCondition or
+              m_top - m_delta > p_sum.mass() or
+              p_sum.mass() > m_top + m_delta;
+          }
         }
       }
       totalWeights += weight;
