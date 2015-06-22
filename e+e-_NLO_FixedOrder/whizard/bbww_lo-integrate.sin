@@ -3,7 +3,4 @@ include("../process_settings.sin")
 
 process bbww_lo = E1, e1 => Wp, Wm, b, B
 
-n_events = 500 * K
-checkpoint = n_events / 20
-
-simulate (bbww_lo)
+integrate (bbww_lo)

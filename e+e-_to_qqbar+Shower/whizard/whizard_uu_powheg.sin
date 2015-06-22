@@ -7,6 +7,7 @@ include("../process_settings.sin")
 powheg_grid_size_xi = 5
 powheg_grid_size_y = 5
 powheg_grid_sampling_points = 6000000
+powheg_grid_sampling_points = 1000
 powheg_pt_min = 1
 ?powheg_use_singular_jacobian = true
 ?powheg_use_singular_jacobian = false

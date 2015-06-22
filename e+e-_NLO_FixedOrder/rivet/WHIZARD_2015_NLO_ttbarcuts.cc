@@ -3,17 +3,20 @@
 #include "Rivet/Projections/FinalState.hh"
 #include "Rivet/Projections/FastJets.hh"
 #include "Rivet/Projections/VetoedFinalState.hh"
+#include <iostream>
+#include <fstream>
+using namespace std;
 
 namespace Rivet {
 
   using namespace Cuts;
 
-  class WHIZARD_2015_NLO : public Analysis {
+  class WHIZARD_2015_NLO_ttbarcuts : public Analysis {
   public:
 
     /// Constructor
-    WHIZARD_2015_NLO()
-      : Analysis("WHIZARD_2015_NLO")
+    WHIZARD_2015_NLO_ttbarcuts()
+      : Analysis("WHIZARD_2015_NLO_ttbarcuts")
     {    }
 
     /// Book histograms and initialise projections before the run
@@ -63,6 +66,23 @@ namespace Rivet {
 
       eventCounter++;
       bool vetoCondition = fs.particles().size() < 2 or jets.size() <= 1;
+      foreach (const Particle& p1, fs.particles()) {
+        foreach (const Particle& p2, fs.particles()) {
+          int id1 = p1.pid(); int id2 = p2.pid();
+          if (id1 == PID::BQUARK && id2 == PID::WPLUSBOSON) {
+            FourMomentum p_sum = p1.momentum() + p2.momentum();
+            vetoCondition = vetoCondition or
+              m_top - m_delta > p_sum.mass() or
+              p_sum.mass() > m_top + m_delta;
+          }
+          else if (id1 == - PID::BQUARK && id2 == PID::WMINUSBOSON) {
+            FourMomentum p_sum = p1.momentum() + p2.momentum();
+            vetoCondition = vetoCondition or
+              m_top - m_delta > p_sum.mass() or
+              p_sum.mass() > m_top + m_delta;
+          }
+        }
+      }
       totalWeights += weight;
       if (vetoCondition) {
         vetoCounter++;
@@ -74,9 +94,9 @@ namespace Rivet {
 
       _h_jetcount->fill(jets.size(), weight);
       _h_leadingjetpt->fill(jets[0].pT(), weight);
-        _h_secondleadingjetpt->fill(jets[1].pT(), weight);
-        FourMomentum p_sum = jets[0].momentum() + jets[1].momentum();
-        _h_jets_invMass->fill(p_sum.mass(), weight);
+      _h_secondleadingjetpt->fill(jets[1].pT(), weight);
+      FourMomentum p_sum = jets[0].momentum() + jets[1].momentum();
+      _h_jets_invMass->fill(p_sum.mass(), weight);
       foreach(Jet j, jets) {
         _h_jetpt->fill(j.pT(), weight / jets.size());
         _h_jetptlog->fill(log(j.pT()), weight / jets.size());
@@ -120,16 +140,19 @@ namespace Rivet {
     void finalize() {
       // normalize(_h_YYYY); // normalize to unity
       const double fb_per_pb = 1000.0;
-      double fiducial_xsection = crossSection() * fb_per_pb * (eventCounter -
-          vetoCounter) / eventCounter;
+      int accepted = eventCounter - vetoCounter;
+      double fiducial_xsection = crossSection() * fb_per_pb * acceptedWeights / totalWeights;
       double scale_factor = crossSection() * fb_per_pb / sumOfWeights();
 
-      cout << "Sum of weights: " << sumOfWeights () << endl;
-      cout << "Original cross section (pb): " << crossSection () << endl;
-      cout << "Numer of total events: " << eventCounter << endl;
-      cout << "Numer of vetoed events: " << vetoCounter << endl;
-      cout << "Final (fiducial) cross section (fb): " << fiducial_xsection << endl;
-      cout << "Scale factor: " << scale_factor << endl;
+      ofstream log;
+      log.open("ttbarcuts.log", ios::out | ios::app);
+      log << "Sum of weights: " << sumOfWeights () << endl;
+      log << "Original cross section (pb): " << crossSection () << endl;
+      log << "Numer of total events: " << eventCounter << endl;
+      log << "Numer of vetoed events: " << vetoCounter << endl;
+      //log << "Final (fiducial) cross section (fb): " << fiducial_xsection << endl;
+      log << "Scale factor: " << scale_factor << endl << endl;
+      log.close();
 
       scale(_h_Wp_Pt, scale_factor);
       scale(_h_B_Pt, scale_factor);
@@ -178,6 +201,6 @@ namespace Rivet {
 
 
   // The hook for the plugin system
-  DECLARE_RIVET_PLUGIN(WHIZARD_2015_NLO);
+  DECLARE_RIVET_PLUGIN(WHIZARD_2015_NLO_ttbarcuts);
 
 }
