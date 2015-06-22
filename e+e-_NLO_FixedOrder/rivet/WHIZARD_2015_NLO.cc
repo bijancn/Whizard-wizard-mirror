@@ -74,9 +74,9 @@ namespace Rivet {
 
       _h_jetcount->fill(jets.size(), weight);
       _h_leadingjetpt->fill(jets[0].pT(), weight);
-        _h_secondleadingjetpt->fill(jets[1].pT(), weight);
-        FourMomentum p_sum = jets[0].momentum() + jets[1].momentum();
-        _h_jets_invMass->fill(p_sum.mass(), weight);
+      _h_secondleadingjetpt->fill(jets[1].pT(), weight);
+      FourMomentum p_sum = jets[0].momentum() + jets[1].momentum();
+      _h_jets_invMass->fill(p_sum.mass(), weight);
       foreach(Jet j, jets) {
         _h_jetpt->fill(j.pT(), weight / jets.size());
         _h_jetptlog->fill(log(j.pT()), weight / jets.size());
