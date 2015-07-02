@@ -2,7 +2,7 @@ whizard/%.lhe : whizard/%.sin
 	cd whizard && $(WHIZARD_BIN) $(WHIZARD_OPTIONS) $(notdir $<)
 
 whizard/%.hepmc : whizard/%.sin
-	python parallelizer.py $(WHIZARD_BIN) $<
+	python ../parallelizer.py $(WHIZARD_BIN) $<
 	#cd whizard && $(WHIZARD_BIN) $(WHIZARD_OPTIONS) $(notdir $<)
 	rsync -avz --progress --update $(basename $@)-*/*.hepmc rivet/
 

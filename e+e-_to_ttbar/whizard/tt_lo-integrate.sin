@@ -1,0 +1,6 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+process tt_lo = E1, e1 => t, T
+
+integrate (tt_lo)

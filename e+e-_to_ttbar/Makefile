@@ -1,14 +1,11 @@
 SHELL:=/bin/bash -O extglob
 #WHIZARD_BIN=/scratch/whizard_git/whizard_run_gfortran/bin/whizard
 WHIZARD_OPTIONS=--rebuild-events 
-SCAN=whizard/integrate.log
+HEPMCS=whizard/tt_lo.hepmc \
+	whizard/tt_nlo.hepmc
 
-all : $(SCAN)
+all : $(HEPMCS)
+	cd rivet && make
 
-whizard/%.log : whizard/%.sin
-	cd whizard && $(WHIZARD_BIN) $(WHIZARD_OPTIONS) $(notdir $<)
-
-clean :
-	rm -rf */*.mod */*.f90 */*.o */*.lo */*.vg */*.evx */*.phs */*.log */*.lhe */*.hepmc
-	rm -rf */*.olp */*.olc */*.la */Generated_Loops */*olp_modules */*.so */lib
-	rm -rf */include */.libs/ */fort.7 */golem.in */Gosam_Makefile */*makefile
+include ../buildrules.mk
+include ../cleanrules.mk

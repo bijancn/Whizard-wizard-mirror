@@ -1,0 +1,9 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+process tt_lo = E1, e1 => t, T
+
+n_events = 500 * K
+checkpoint = n_events / 20
+
+simulate (tt_lo)

@@ -22,7 +22,7 @@ jobs = 10
 
 if __name__ == '__main__':
   path = 'logging.yaml'
-  if os.path.exists(path):
+  if os.path.exists(path) and have_yaml:
     with open(path, 'rt') as f:
       config = yaml.load(f.read())
       logging.config.dictConfig(config)

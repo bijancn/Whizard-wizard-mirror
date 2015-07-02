@@ -3,10 +3,13 @@ alphas_power = 0
 
 real m1S = 172.
 scale = 2 * m1S
+mtop = 173.122
+mb = 4.7 GeV
 
 real alpha_em = 1. / 125.924
 GF = pi * alpha_em / (sw**2 * mW**2 * sqrt(2.))
 
-mtop = 173.122
+sqrts = 500 GeV
+iterations = 5:150*K:"gw", 2:100*K
+sample_format = hepmc
 
-iterations = 2:30000:"gw"
