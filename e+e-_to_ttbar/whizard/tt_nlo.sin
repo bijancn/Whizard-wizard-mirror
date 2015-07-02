@@ -4,8 +4,9 @@ include("../process_settings.sin")
 ?nlo_fixed_order = true
 ?combined_nlo_integration = true
 $loop_me_method = "openloops"
+?unweighted = false
 
-process bbww_nlo = E1, e1 => t, T {nlo_calculation="Full"}
+process tt_nlo = E1, e1 => t, T {nlo_calculation="Full"}
 
 #Default parameters for FKS mapping
 fks_dij_exp1 = 1.0
