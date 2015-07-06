@@ -27,17 +27,13 @@ namespace Rivet {
       FastJets jets(veto, FastJets::ANTIKT, 0.4);
       addProjection(jets, "Jets");
 
-      _h_Wp_Pt = bookHisto1D("W_plus-pT", stdbin, 0., 210. );
-      _h_B_Pt = bookHisto1D("b-quark-pT", stdbin, 0., 170.);
+      _h_T_Pt = bookHisto1D("t-quark-pT", stdbin, 0., 170.);
       _h_g_Pt = bookHisto1D("gluon-pT", stdbin, 0., 20.);
 
-      _h_Wp_E = bookHisto1D("W_plus-E", stdbin, 50., 260.);
-      _h_B_E = bookHisto1D("b-quark-E", stdbin, 0., 210.);
+      _h_T_E = bookHisto1D("t-quark-E", stdbin, 0., 210.);
       _h_g_E = bookHisto1D("gluon-E", stdbin, 0., 20.);
 
-      _h_BB_invMass = bookHisto1D("BB-inv", stdbin, 0., 350.);
-      _h_WW_invMass = bookHisto1D("WW-inv", stdbin, 150, 450.);
-      _h_BW_invMass = bookHisto1D("BW-inv", stdbin, 165., 180.);
+      _h_TT_invMass = bookHisto1D("TT-inv", stdbin, 0., 350.);
       _h_jets_invMass = bookHisto1D("jets-inv", stdbin, 10., 350.);
 
       _h_jetcount = bookHisto1D("jet-count", 4, 0.5, 4.5);
@@ -83,12 +79,9 @@ namespace Rivet {
       // Register single particle properties
       foreach (const Particle& p, fs.particles()) {
         int id = p.pid();
-        if (id == PID::WPLUSBOSON) {
-          _h_Wp_Pt->fill(p.pT()/GeV, weight);
-          _h_Wp_E->fill(p.E()/GeV, weight);
-        } else if(id == PID::BQUARK) {
-          _h_B_Pt->fill(p.pT()/GeV, weight);
-          _h_B_E->fill(p.E()/GeV, weight);
+        if(id == PID::TQUARK) {
+          _h_T_Pt->fill(p.pT()/GeV, weight);
+          _h_T_E->fill(p.E()/GeV, weight);
         } else if(id == PID::GLUON) {
           _h_g_Pt->fill(p.pT()/GeV, weight);
           _h_g_E->fill(p.E()/GeV, weight);
@@ -99,16 +92,9 @@ namespace Rivet {
       foreach (const Particle& p1, fs.particles()) {
         foreach (const Particle& p2, fs.particles()) {
           int id1 = p1.pid(); int id2 = p2.pid();
-          if (id1 == PID::BQUARK && id2 == -PID::BQUARK) {
+          if (id1 == PID::TQUARK && id2 == -PID::TQUARK) {
             FourMomentum p_sum = p1.momentum() + p2.momentum();
-            _h_BB_invMass->fill(p_sum.mass(), weight);
-          } else if (id1 == PID::WPLUSBOSON && id2 == PID::WMINUSBOSON) {
-            FourMomentum p_sum = p1.momentum() + p2.momentum();
-            _h_WW_invMass->fill(p_sum.mass(), weight);
-          }
-          else if (id1 == PID::BQUARK && id2 == PID::WPLUSBOSON) {
-            FourMomentum p_sum = p1.momentum() + p2.momentum();
-            _h_BW_invMass->fill(p_sum.mass(), weight);
+            _h_TT_invMass->fill(p_sum.mass(), weight);
           }
         }
       }
@@ -129,16 +115,12 @@ namespace Rivet {
       cout << "Final (fiducial) cross section (fb): " << fiducial_xsection << endl;
       cout << "Scale factor: " << scale_factor << endl;
 
-      scale(_h_Wp_Pt, scale_factor);
-      scale(_h_B_Pt, scale_factor);
+      scale(_h_T_Pt, scale_factor);
       scale(_h_g_Pt, scale_factor);
-      scale(_h_Wp_E, scale_factor);
-      scale(_h_B_E, scale_factor);
+      scale(_h_T_E, scale_factor);
       scale(_h_g_E, scale_factor);
 
-      scale(_h_WW_invMass, scale_factor);
-      scale(_h_BW_invMass, scale_factor);
-      scale(_h_BB_invMass, scale_factor);
+      scale(_h_TT_invMass, scale_factor);
       scale(_h_jets_invMass, scale_factor);
 
       scale(_h_jetcount, scale_factor);
@@ -151,16 +133,12 @@ namespace Rivet {
 
   private:
 
-    Histo1DPtr _h_Wp_Pt;
-    Histo1DPtr _h_B_Pt;
+    Histo1DPtr _h_T_Pt;
     Histo1DPtr _h_g_Pt;
-    Histo1DPtr _h_Wp_E;
-    Histo1DPtr _h_B_E;
+    Histo1DPtr _h_T_E;
     Histo1DPtr _h_g_E;
 
-    Histo1DPtr _h_WW_invMass;
-    Histo1DPtr _h_BW_invMass;
-    Histo1DPtr _h_BB_invMass;
+    Histo1DPtr _h_TT_invMass;
     Histo1DPtr _h_jets_invMass;
 
     Histo1DPtr _h_jetcount;
