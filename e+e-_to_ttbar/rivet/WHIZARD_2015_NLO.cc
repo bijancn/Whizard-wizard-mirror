@@ -49,7 +49,6 @@ namespace Rivet {
       vetoCounter = 0;
       eventCounter = 0;
       acceptedWeights = 0.0;
-      totalWeights = 0.0;
     }
 
     void analyze(const Event& event) {
@@ -63,7 +62,6 @@ namespace Rivet {
 
       eventCounter++;
       bool vetoCondition = fs.particles().size() < 2 or jets.size() <= 1;
-      totalWeights += weight;
       if (vetoCondition) {
         vetoCounter++;
         vetoEvent;
@@ -120,11 +118,11 @@ namespace Rivet {
     void finalize() {
       // normalize(_h_YYYY); // normalize to unity
       const double fb_per_pb = 1000.0;
-      double fiducial_xsection = crossSection() * fb_per_pb * (eventCounter -
-          vetoCounter) / eventCounter;
+      double fiducial_xsection = crossSection() * fb_per_pb * acceptedWeights / sumOfWeights();
       double scale_factor = crossSection() * fb_per_pb / sumOfWeights();
 
       cout << "Sum of weights: " << sumOfWeights () << endl;
+      cout << "Sum of weights / N: " << sumOfWeights () / eventCounter << endl;
       cout << "Original cross section (pb): " << crossSection () << endl;
       cout << "Numer of total events: " << eventCounter << endl;
       cout << "Numer of vetoed events: " << vetoCounter << endl;
@@ -172,7 +170,7 @@ namespace Rivet {
     Histo1DPtr _h_secondleadingjetpt;
 
     int vetoCounter, eventCounter;
-    double acceptedWeights, totalWeights;
+    double acceptedWeights;
   };
 
 

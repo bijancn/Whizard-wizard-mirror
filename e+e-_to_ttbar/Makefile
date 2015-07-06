@@ -5,7 +5,7 @@ HEPMCS=whizard/tt_lo.hepmc \
 	whizard/tt_nlo.hepmc
 
 all : $(HEPMCS)
-	cd rivet && make
+	cd rivet && scons -j
 
 include ../buildrules.mk
 include ../cleanrules.mk
