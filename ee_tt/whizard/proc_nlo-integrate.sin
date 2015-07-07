@@ -5,10 +5,10 @@ include("../process_settings.sin")
 ?combined_nlo_integration = true
 $loop_me_method = "openloops"
 
-process tt_nlo = E1, e1 => t, T {nlo_calculation="Full"}
+process proc_nlo = E1, e1 => t, T {nlo_calculation="Full"}
 
 #Default parameters for FKS mapping
 fks_dij_exp1 = 1.0
 fks_mapping_type = 1
 
-integrate (tt_nlo)
+integrate (proc_nlo)

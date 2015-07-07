@@ -1,0 +1,91 @@
+#!/usr/bin/env python
+
+import re
+import os
+
+env = Environment(ENV = os.environ)
+
+build_yoda = Builder(action = 'rivet --quiet --pwd -H $TARGET $ANALYSIS $SOURCES',
+                    suffix = '.yoda', src_suffix = '.hepmc')
+
+build_analysis = Builder(action = 'rivet-buildplugin $SOURCES',
+                    suffix = '.so', src_suffix = '.cc')
+
+# It seems that --assume-normalized keeps the cross section fixed while the
+# unnormalized mode just adds the values of the histograms
+merge_yodas = Builder(action = 'yodamerge --assume-normalized -o $TARGET $SOURCES',
+    suffix = '.yoda', src_suffix = '.yoda')
+
+# Add --no-ratio to disable the ratio plots
+plot_cmd = 'rivet-mkhtml --mc-errs --pdf --cm --single ' + \
+      '--ignore-unvalidated --num-threads=$NUMTHREADS --config=$CONFIG '
+
+def generate_plot(source, target, env, for_signature):
+  target_dir = target[0].dir
+  try:
+    descriptions = env['DESCRIPTIONS'].split('::')
+  except KeyError:
+    descriptions = None
+  if descriptions is not None:
+    sources = ' '.join([str(s) + ':' + "'" + d + "'" for (s,d) in zip(source, descriptions)])
+  else:
+    sources = ' '.join([str(s) for s in source])
+  return plot_cmd + '-o %s %s' % (target_dir, sources)
+
+build_plot = Builder(generator = generate_plot,
+                    suffix = '.html',
+                    src_suffix = '.yoda')
+
+env.Append(BUILDERS = {'Yoda' : build_yoda, 'Analysis' : build_analysis,
+  'MergeYodas': merge_yodas, 'Plot' : build_plot})
+
+
+# We use timestamps instead of MD5s since hepmc's are big
+Decider('timestamp-match')
+base_analysis = 'WHIZARD_2015_NLO'
+analysiss = [base_analysis]
+env['NUMTHREADS'] = '4'
+
+dirify = lambda d : d + '/index.html'
+
+processes = ['proc_lo', 'proc_nlo']
+
+# This is a list of processes consisting of lists of hepmcs
+hepmcs = [Glob(p + '-*.hepmc') for p in processes]
+control_plots = map(dirify, processes)
+descriptions = [r"\textsc{LO}", r"\textsc{NLO}"]
+
+# This is a list of plots corresponding to a list of configs
+plots = ['plots', 'show-MCerrors']
+plots = map(dirify, plots)
+configs = [base_analysis, base_analysis + '-show-MCerrors']
+configs = [c + '.plot' for c in configs]
+
+final_yoda_name = lambda s : re.sub('-[0-9]+.hepmc', '.yoda', str(s[0]))
+small_yoda_name = lambda s : re.sub('.hepmc', '.yoda', str(s))
+final_yoda_names = map (final_yoda_name, hepmcs)
+small_yoda_names = []
+for proc in hepmcs:
+  small_yoda_names.append(map (small_yoda_name, proc))
+print 'Want to build the following yodas: ', final_yoda_names, '\n'
+print 'Out of these small yodas: ', small_yoda_names, '\n'
+
+# Actual building starts here
+Analysis = env.Analysis('RivetAnalysis', analysiss)
+merged_yodas = []
+for hepmc_lst, yoda, yodas in \
+    zip(hepmcs, final_yoda_names, small_yoda_names):
+  ana = ' '.join(['-a ' + a for a in analysiss])
+  make_yoda = lambda h : env.Yoda(source = h, ANALYSIS=ana)
+  build_yodas = map(make_yoda, hepmc_lst)
+  Depends(build_yodas, Analysis)
+  merged_yodas.append(env.MergeYodas(target = yoda, source = build_yodas))
+
+for (plot, config) in zip(plots, configs):
+  plot = env.Plot(target = plot, source = merged_yodas, DESCRIPTIONS = '::'.join(descriptions),
+      CONFIG=config)
+  Depends(plot, config)
+
+for (small_yodas, control_plot) in zip(small_yoda_names, control_plots):
+  plot = env.Plot(target = control_plot, source = small_yodas, CONFIG=configs[0])
+  Depends(plot, configs[0])

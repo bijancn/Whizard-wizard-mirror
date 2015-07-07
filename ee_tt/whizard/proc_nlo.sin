@@ -6,7 +6,7 @@ include("../process_settings.sin")
 $loop_me_method = "openloops"
 ?unweighted = false
 
-process tt_nlo = E1, e1 => t, T {nlo_calculation="Full"}
+process proc_nlo = E1, e1 => t, T {nlo_calculation="Full"}
 
 #Default parameters for FKS mapping
 fks_dij_exp1 = 1.0
@@ -15,4 +15,4 @@ fks_mapping_type = 1
 n_events = 500 * K
 checkpoint = n_events / 20
 
-simulate (tt_nlo)
+simulate (proc_nlo)

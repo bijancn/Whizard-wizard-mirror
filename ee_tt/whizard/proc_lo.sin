@@ -3,9 +3,9 @@ include("../process_settings.sin")
 
 ?unweighted = false
 
-process tt_lo = E1, e1 => t, T
+process proc_lo = E1, e1 => t, T
 
 n_events = 500 * K
 checkpoint = n_events / 20
 
-simulate (tt_lo)
+simulate (proc_lo)

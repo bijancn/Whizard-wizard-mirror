@@ -1,9 +1,8 @@
 alpha_power = 4
 alphas_power = 0
 
-sqrts = 500 GeV
-iterations = 5:150*K:"gw", 2:100*K
-
 mb = 4.7 GeV
 
+sqrts = 500 GeV
+iterations = 5:150*K:"gw", 2:100*K
 sample_format = hepmc

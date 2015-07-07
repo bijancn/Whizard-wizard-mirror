@@ -1,0 +1,14 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+?nlo_fixed_order = true
+?combined_nlo_integration = true
+$loop_me_method = "openloops"
+
+process proc_nlo = E1, e1 => u, U {nlo_calculation="Full"}
+
+#Default parameters for FKS mapping
+fks_dij_exp1 = 1.0
+fks_mapping_type = 1
+
+integrate (proc_nlo)

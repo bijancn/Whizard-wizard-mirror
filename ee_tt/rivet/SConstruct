@@ -48,7 +48,7 @@ env['NUMTHREADS'] = '4'
 
 dirify = lambda d : d + '/index.html'
 
-processes = ['tt_lo', 'tt_nlo']
+processes = ['proc_lo', 'proc_nlo']
 
 # This is a list of processes consisting of lists of hepmcs
 hepmcs = [Glob(p + '-*.hepmc') for p in processes]
