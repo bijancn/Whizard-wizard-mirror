@@ -3,6 +3,8 @@
 #include "Rivet/Projections/FinalState.hh"
 #include "Rivet/Projections/FastJets.hh"
 #include "Rivet/Projections/VetoedFinalState.hh"
+#include "Rivet/Projections/Sphericity.hh"
+#include "Rivet/Projections/Thrust.hh"
 
 namespace Rivet {
 
@@ -21,20 +23,29 @@ namespace Rivet {
       const FinalState fs;
       const int stdbin = 50;
       addProjection(fs, "FS");
+      const Thrust thrust(fs);
+      addProjection(thrust, "Thrust");
+      addProjection(Sphericity(fs), "Sphericity");
 
-      VetoedFinalState veto;
-      veto.addVetoPairId(PID::WPLUSBOSON);
-      FastJets jets(veto, FastJets::ANTIKT, 0.4);
+      _h_Thrust = bookHisto1D("Thrust", 30, 0, 0.45);
+      _h_ThrustMajor = bookHisto1D("ThrustMajor", 30, 0, 0.7);
+      _h_ThrustMinor = bookHisto1D("ThrustMinor", 30, 0, 0.6);
+      _h_Oblateness = bookHisto1D("Oblateness", 30, 0, 0.6);
+      _h_Sphericity = bookHisto1D("Sphericity", 30, 0, 0.8);
+      _h_Aplanarity = bookHisto1D("Aplanarity", 30, 0, 0.3);
+      _h_Planarity = bookHisto1D("Planarity", 30, 0, 0.5);
+
+      FastJets jets(fs, FastJets::ANTIKT, 1.0);
       addProjection(jets, "Jets");
 
-      _h_T_Pt = bookHisto1D("t-quark-pT", stdbin, 0., 170.);
-      _h_g_Pt = bookHisto1D("gluon-pT", stdbin, 0., 20.);
+      _h_q_Pt = bookHisto1D("quark-pT", stdbin, 0., 260.);
+      _h_g_Pt = bookHisto1D("gluon-pT", stdbin, 0., 260.);
 
-      _h_T_E = bookHisto1D("t-quark-E", stdbin, 0., 210.);
-      _h_g_E = bookHisto1D("gluon-E", stdbin, 0., 20.);
+      _h_q_E = bookHisto1D("quark-E", stdbin, 0., 260.);
+      _h_g_E = bookHisto1D("gluon-E", stdbin, 0., 260.);
 
-      _h_TT_invMass = bookHisto1D("TT-inv", stdbin, 0., 350.);
-      _h_jets_invMass = bookHisto1D("jets-inv", stdbin, 10., 350.);
+      _h_qq_invMass = bookHisto1D("qq-inv", stdbin, 0., 500.);
+      _h_jets_invMass = bookHisto1D("jets-inv", stdbin, 10., 500.);
 
       _h_jetcount = bookHisto1D("jet-count", 4, 0.5, 4.5);
       _h_jetpt = bookHisto1D("jet-pT", stdbin, 0., 200.);
@@ -66,6 +77,19 @@ namespace Rivet {
         acceptedWeights += weight;
       }
 
+      const Thrust& thrust = applyProjection<Thrust>(event, "Thrust");
+      _h_Thrust->fill(1-thrust.thrust(), weight);
+      _h_ThrustMajor->fill(thrust.thrustMajor(), weight);
+      _h_ThrustMinor->fill(thrust.thrustMinor(), weight);
+      _h_Oblateness->fill(thrust.oblateness(), weight);
+      const Sphericity& sphericity = applyProjection<Sphericity>(event, "Sphericity");
+      const double sph = sphericity.sphericity();
+      const double apl = sphericity.aplanarity();
+      const double pl = sphericity.planarity();
+      _h_Sphericity->fill(sph, weight);
+      _h_Aplanarity->fill(apl, weight);
+      _h_Planarity->fill(pl, weight);
+
       _h_jetcount->fill(jets.size(), weight);
       _h_leadingjetpt->fill(jets[0].pT(), weight);
       _h_secondleadingjetpt->fill(jets[1].pT(), weight);
@@ -79,9 +103,9 @@ namespace Rivet {
       // Register single particle properties
       foreach (const Particle& p, fs.particles()) {
         int id = p.pid();
-        if(id == PID::TQUARK) {
-          _h_T_Pt->fill(p.pT()/GeV, weight);
-          _h_T_E->fill(p.E()/GeV, weight);
+        if(id == PID::UQUARK) {
+          _h_q_Pt->fill(p.pT()/GeV, weight);
+          _h_q_E->fill(p.E()/GeV, weight);
         } else if(id == PID::GLUON) {
           _h_g_Pt->fill(p.pT()/GeV, weight);
           _h_g_E->fill(p.E()/GeV, weight);
@@ -92,9 +116,9 @@ namespace Rivet {
       foreach (const Particle& p1, fs.particles()) {
         foreach (const Particle& p2, fs.particles()) {
           int id1 = p1.pid(); int id2 = p2.pid();
-          if (id1 == PID::TQUARK && id2 == -PID::TQUARK) {
+          if (id1 == PID::UQUARK && id2 == -PID::UQUARK) {
             FourMomentum p_sum = p1.momentum() + p2.momentum();
-            _h_TT_invMass->fill(p_sum.mass(), weight);
+            _h_qq_invMass->fill(p_sum.mass(), weight);
           }
         }
       }
@@ -115,12 +139,20 @@ namespace Rivet {
       cout << "Final (fiducial) cross section (fb): " << fiducial_xsection << endl;
       cout << "Scale factor: " << scale_factor << endl;
 
-      scale(_h_T_Pt, scale_factor);
+      scale(_h_Thrust, scale_factor);
+      scale(_h_ThrustMajor, scale_factor);
+      scale(_h_ThrustMinor, scale_factor);
+      scale(_h_Oblateness, scale_factor);
+      scale(_h_Sphericity, scale_factor);
+      scale(_h_Aplanarity, scale_factor);
+      scale(_h_Planarity, scale_factor);
+
+      scale(_h_q_Pt, scale_factor);
       scale(_h_g_Pt, scale_factor);
-      scale(_h_T_E, scale_factor);
+      scale(_h_q_E, scale_factor);
       scale(_h_g_E, scale_factor);
 
-      scale(_h_TT_invMass, scale_factor);
+      scale(_h_qq_invMass, scale_factor);
       scale(_h_jets_invMass, scale_factor);
 
       scale(_h_jetcount, scale_factor);
@@ -133,12 +165,20 @@ namespace Rivet {
 
   private:
 
-    Histo1DPtr _h_T_Pt;
+    Histo1DPtr _h_Thrust;
+    Histo1DPtr _h_ThrustMajor;
+    Histo1DPtr _h_ThrustMinor;
+    Histo1DPtr _h_Oblateness;
+    Histo1DPtr _h_Sphericity;
+    Histo1DPtr _h_Aplanarity;
+    Histo1DPtr _h_Planarity;
+
+    Histo1DPtr _h_q_Pt;
     Histo1DPtr _h_g_Pt;
-    Histo1DPtr _h_T_E;
+    Histo1DPtr _h_q_E;
     Histo1DPtr _h_g_E;
 
-    Histo1DPtr _h_TT_invMass;
+    Histo1DPtr _h_qq_invMass;
     Histo1DPtr _h_jets_invMass;
 
     Histo1DPtr _h_jetcount;

@@ -9,3 +9,4 @@ clean :
 	rm -rf */gmon.out */*.dat */*.yoda */plots */gosam.crashed
 	rm whizard/*_lo-[0-9] -rf
 	rm whizard/*_nlo-[0-9] -rf
+	rm whizard/*_powheg-[0-9] -rf

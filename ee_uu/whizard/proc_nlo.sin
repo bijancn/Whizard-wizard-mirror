@@ -12,7 +12,7 @@ process proc_nlo = E1, e1 => u, U {nlo_calculation="Full"}
 fks_dij_exp1 = 1.0
 fks_mapping_type = 1
 
-n_events = 500 * K
+n_events = 5000 * K
 checkpoint = n_events / 20
 
 simulate (proc_nlo)
