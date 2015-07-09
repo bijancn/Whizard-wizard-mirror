@@ -7,6 +7,6 @@ sqrts = 500 GeV
 iterations = 5:150*K:"gw", 2:100*K
 sample_format = hepmc
 
-scale = 2 * mT
+scale = 2 * mtop
 cuts = all abs (M-mtop) < 30 GeV [Wp,b]
    and all abs (M-mtop) < 30 GeV [Wm,B]
