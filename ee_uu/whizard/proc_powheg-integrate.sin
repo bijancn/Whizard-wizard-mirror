@@ -19,10 +19,3 @@ fks_dij_exp1 = 1.0
 fks_mapping_type = 1
 
 integrate (proc_powheg)
-
-!!!!!
-
-n_events = 500 * K
-checkpoint = n_events / 20
-
-simulate (proc_powheg)
