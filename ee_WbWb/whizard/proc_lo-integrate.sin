@@ -1,6 +1,6 @@
 include("../../general_settings.sin")
 include("../process_settings.sin")
 
-process bbww_lo = E1, e1 => Wp, Wm, b, B
+process proc_lo = E1, e1 => Wp, Wm, b, B
 
-integrate (bbww_lo)
+integrate (proc_lo)
