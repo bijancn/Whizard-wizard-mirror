@@ -48,11 +48,13 @@ env['NUMTHREADS'] = '4'
 
 dirify = lambda d : d + '/index.html'
 
-processes = ['bbww_lo', 'bbww_nlo']
+processes = ['proc_lo', 'proc_nlo', 'proc_powheg']
+processes = filter(lambda p: os.path.isfile(p + '-0.hepmc'), processes)
+
 # This is a list of processes consisting of lists of hepmcs
 hepmcs = [Glob(p + '-*.hepmc') for p in processes]
 control_plots = map(dirify, processes)
-descriptions = [r"\textsc{LO}", r"\textsc{NLO}"]
+descriptions = [r"\textsc{LO}", r"\textsc{NLO}", r"\textsc{POWHEG}"]
 
 # This is a list of plots corresponding to a list of configs
 plots = ['plots', 'show-MCerrors']
