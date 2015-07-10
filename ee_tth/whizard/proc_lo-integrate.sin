@@ -1,0 +1,7 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+library = "proc_lo_lib"
+process proc_lo = E1, e1 => t, T, h
+
+integrate (proc_lo)

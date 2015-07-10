@@ -1,0 +1,11 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+?unweighted = false
+
+process proc_lo = E1, e1 => t, T, h
+
+n_events = 500 * K
+checkpoint = n_events / 20
+
+simulate (proc_lo)
