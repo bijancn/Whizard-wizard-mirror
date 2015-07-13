@@ -127,6 +127,7 @@ namespace Rivet {
       cout << "Sum of weights: " << sumOfWeights () << endl;
       cout << "Original cross section (pb): " << crossSection () << endl;
       cout << "Numer of total events: " << eventCounter << endl;
+      cout << "Sum of weights / n_events: " << sumOfWeights () / eventCounter << endl;
       cout << "Numer of vetoed events: " << vetoCounter << endl;
       cout << "Final (fiducial) cross section (fb): " << fiducial_xsection << endl;
       cout << "Scale factor: " << scale_factor << endl;
