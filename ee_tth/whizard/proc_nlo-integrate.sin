@@ -1,18 +1,16 @@
 include("../../general_settings.sin")
 include("../process_settings.sin")
 
-?unweighted = false
 ?nlo_fixed_order = true
 ?combined_nlo_integration = true
 $loop_me_method = "openloops"
+openloops_verbosity = 3
 
-process bbww_nlo = E1, e1 => Wp, Wm, b, B {nlo_calculation="Full"}
+library = "proc_nlo_lib"
+process proc_nlo = E1, e1 => t, T, h {nlo_calculation="Full"}
 
 #Default parameters for FKS mapping
 fks_dij_exp1 = 1.0
 fks_mapping_type = 1
 
-n_events = 5000 * K
-checkpoint = n_events / 20
-
-simulate (bbww_nlo)
+integrate (proc_nlo)

@@ -1,4 +1,4 @@
-alpha_power = 2
+alpha_power = 3
 alphas_power = 0
 
 real m1S = 172.
@@ -6,6 +6,8 @@ scale = 2 * m1S
 mtop = 173.122
 mb = 4.7 GeV
 wtop = 0.0
+wH = 0.0
+mH = 125
 
 real alpha_em = 1. / 125.924
 GF = pi * alpha_em / (sw**2 * mW**2 * sqrt(2.))

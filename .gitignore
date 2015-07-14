@@ -39,6 +39,7 @@ whizard_uu_lo
 whizard_uu_powheg
 */whizard/*-[0-9]*/
 .sconsign.dblite
+*/rivet/*_powheg/
 */rivet/*_nlo/
 */rivet/*_lo/
 */rivet/show-MCerrors/

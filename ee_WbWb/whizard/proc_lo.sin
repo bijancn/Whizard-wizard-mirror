@@ -1,9 +1,9 @@
 include("../../general_settings.sin")
 include("../process_settings.sin")
 
-process bbww_lo = E1, e1 => Wp, Wm, b, B
+process proc_lo = E1, e1 => Wp, Wm, b, B
 
 n_events = 500 * K
 checkpoint = n_events / 20
 
-simulate (bbww_lo)
+simulate (proc_lo)

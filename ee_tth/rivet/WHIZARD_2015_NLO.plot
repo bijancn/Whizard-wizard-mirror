@@ -27,7 +27,7 @@ ErrorBands=0
 #  titles  #
 #==========#
  BEGIN PLOT /WHIZARD_2015_NLO
-Title=$\quad e^+e^-\to t\bar{t}$
+Title=$\quad e^+e^-\to W^+b W^-\bar{b}$, $\quad N_\text{jets}\geq 2$
  END PLOT
 
  BEGIN PLOT /WHIZARD_2015_NLO_ttbarcuts
@@ -79,19 +79,16 @@ LogY=1
 XLabel=$p_{T,g}[\text{GeV}]$
  END PLOT
 
- BEGIN PLOT /WHIZARD_.*/t-quark-pT
-LogY=1
-XLabel=$p_{T,t}[\text{GeV}]$
+ BEGIN PLOT /WHIZARD_.*/b-quark-pT
+XLabel=$p_{T,b}[\text{GeV}]$
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/leading-jet-pT
-LogY=1
 XLabel=$p_T^{j_1}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/second-leading-jet-pT
-LogY=1
 XLabel=$p_T^{j_2}[\text{GeV}]$
  END PLOT
 
@@ -114,11 +111,6 @@ XLabel=$E_{b}[\text{GeV}]$
  BEGIN PLOT /WHIZARD_.*/gluon-E
 LogY=1
 XLabel=$E_g[\text{GeV}]$
- END PLOT
-
- BEGIN PLOT /WHIZARD_.*/t-quark-E
-LogY=1
-XLabel=$E_t[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/W_plus-E

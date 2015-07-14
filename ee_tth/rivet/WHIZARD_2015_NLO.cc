@@ -27,20 +27,20 @@ namespace Rivet {
       FastJets jets(veto, FastJets::ANTIKT, 0.4);
       addProjection(jets, "Jets");
 
-      _h_T_Pt = bookHisto1D("t-quark-pT", stdbin, 0., 190.);
+      _h_T_Pt = bookHisto1D("t-quark-pT", stdbin, 0., 170.);
       _h_g_Pt = bookHisto1D("gluon-pT", stdbin, 0., 20.);
 
-      _h_T_E = bookHisto1D("t-quark-E", stdbin, 150., 260.);
+      _h_T_E = bookHisto1D("t-quark-E", stdbin, 0., 210.);
       _h_g_E = bookHisto1D("gluon-E", stdbin, 0., 20.);
 
-      _h_TT_invMass = bookHisto1D("TT-inv", stdbin, 0., 550.);
-      _h_jets_invMass = bookHisto1D("jets-inv", stdbin, 0., 550.);
+      _h_TT_invMass = bookHisto1D("TT-inv", stdbin, 0., 350.);
+      _h_jets_invMass = bookHisto1D("jets-inv", stdbin, 10., 350.);
 
       _h_jetcount = bookHisto1D("jet-count", 4, 0.5, 4.5);
       _h_jetpt = bookHisto1D("jet-pT", stdbin, 0., 200.);
       _h_jetptlog = bookHisto1D("jet-pT-log", stdbin, 1., 5.7);
-      _h_leadingjetpt = bookHisto1D("leading-jet-pT", stdbin, 25., 190.);
-      _h_secondleadingjetpt = bookHisto1D("second-leading-jet-pT", stdbin, 0., 190.);
+      _h_leadingjetpt = bookHisto1D("leading-jet-pT", stdbin, 25., 200.);
+      _h_secondleadingjetpt = bookHisto1D("second-leading-jet-pT", stdbin, 0., 175.);
 
       vetoCounter = 0;
       eventCounter = 0;
@@ -53,7 +53,7 @@ namespace Rivet {
       double minjetpt = 0.0 * GeV;
       const double m_delta = 1.0 * GeV;
       const double m_top = 173.0 * GeV;
-      const Jets jets = fastjets.jetsByE();
+      const Jets jets = fastjets.jetsByPt(minjetpt);
       double weight = event.weight();
 
       eventCounter++;
