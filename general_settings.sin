@@ -28,3 +28,5 @@ checkpoint = K
 sample_format = hepmc
 
 ?hepmc_output_cross_section = true
+
+?write_raw = false
