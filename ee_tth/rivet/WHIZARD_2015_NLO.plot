@@ -13,9 +13,12 @@
  BEGIN PLOT /WHIZARD_.*
 LogY=0
 RatioPlotYLabel=K-Factor
+RatioPlotYMax=1.6
+RatioPlotYMin=0.4
 RatioPlotSameStyle=1
-LegendXPos=0.70
+LegendXPos=0.65
 YLabel=$\frac{d\sigma}{d\mathcal{O}}[\text{fb}/[a.u.]]$
+XLabel=$d\mathcal{O}[a.u.]$
  END PLOT
 
  BEGIN HISTOGRAM /WHIZARD_.*
@@ -27,11 +30,7 @@ ErrorBands=0
 #  titles  #
 #==========#
  BEGIN PLOT /WHIZARD_2015_NLO
-Title=$\quad e^+e^-\to W^+b W^-\bar{b}$, $\quad N_\text{jets}\geq 2$
- END PLOT
-
- BEGIN PLOT /WHIZARD_2015_NLO_ttbarcuts
-Title=$\quad e^+e^-\to W^+b W^-\bar{b}$, $\quad N_\text{jets}\geq 2$, $\quad\lvert m_{Wb}-m_t\rvert\leq 1 \text{GeV}$
+Title=$\quad e^+e^-\to t\bar{t}h$, $\mu=2m_t + m_h$, $N_\text{jets}\geq 2$
  END PLOT
 
 #========================#
@@ -102,6 +101,7 @@ YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
 #===========#
  BEGIN PLOT /WHIZARD_.*/.*-E
 YLabel=$\frac{d\sigma}{dE}[\text{fb}/\text{GeV}]$
+XLabel=$E[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/b-quark-E
