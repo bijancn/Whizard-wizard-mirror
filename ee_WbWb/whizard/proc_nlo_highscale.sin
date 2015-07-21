@@ -1,0 +1,20 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+?unweighted = false
+?nlo_fixed_order = true
+?combined_nlo_integration = true
+$loop_me_method = "openloops"
+
+process proc_nlo_highscale = E1, e1 => Wp, Wm, b, B {nlo_calculation="Full"}
+
+#Default parameters for FKS mapping
+fks_dij_exp1 = 1.0
+fks_mapping_type = 1
+
+n_events = 15000 * K
+checkpoint = n_events / 20
+
+scale = 2 * (2 * mtop)
+
+simulate (proc_nlo_highscale)
