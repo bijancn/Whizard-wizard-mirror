@@ -3,7 +3,7 @@
 #===================#
  BEGIN SPECIAL /WHIZARD_.*
 \psclip{\psframe[linewidth=0,linestyle=none](0,0)(1,1)}
-\rput[bl](0.1,0.1){\color{gray}\textsc{Whizard+Omega}+\textsc{OpenLoops}}
+\rput[bl](0.1,0.1){\color{gray}\textsc{Whizard+Omega}+\textsc{Gosam}}
 \endpsclip
  END SPECIAL
 
@@ -14,7 +14,8 @@
 LogY=0
 RatioPlotYLabel=K-Factor
 RatioPlotSameStyle=1
-LegendXPos=0.70
+LegendYPos=0.90
+LegendXPos=0.65
 YLabel=$\frac{d\sigma}{d\mathcal{O}}[\text{fb}/[a.u.]]$
  END PLOT
 
@@ -63,6 +64,7 @@ XLabel=$m_{b\bar{b}}[\text{GeV}]$
 #============#
  BEGIN PLOT /WHIZARD_.*/.*-pT
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
+LogY=1
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/jet-pT
@@ -75,23 +77,19 @@ XLabel=$\sum_i\log{p_{T,j_i}}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/gluon-pT
-LogY=1
 XLabel=$p_{T,g}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/t-quark-pT
-LogY=1
 XLabel=$p_{T,t}[\text{GeV}]$
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/leading-jet-pT
-LogY=1
 XLabel=$p_T^{j_1}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/second-leading-jet-pT
-LogY=1
 XLabel=$p_T^{j_2}[\text{GeV}]$
  END PLOT
 
@@ -105,6 +103,8 @@ YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
 #===========#
  BEGIN PLOT /WHIZARD_.*/.*-E
 YLabel=$\frac{d\sigma}{dE}[\text{fb}/\text{GeV}]$
+LegendXPos=0.05
+LogY=1
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/b-quark-E
@@ -112,17 +112,24 @@ XLabel=$E_{b}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/gluon-E
-LogY=1
 XLabel=$E_g[\text{GeV}]$
+LegendXPos=0.65
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/t-quark-E
-LogY=1
 XLabel=$E_t[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/W_plus-E
 XLabel=$E_{W^+}[\text{GeV}]$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/leading-jet-E
+XLabel=$E^{j_1}[\text{GeV}]$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/second-leading-jet-E
+XLabel=$E^{j_2}[\text{GeV}]$
  END PLOT
 
 #===============#

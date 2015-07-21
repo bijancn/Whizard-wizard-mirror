@@ -18,7 +18,7 @@ merge_yodas = Builder(action = 'yodamerge --assume-normalized -o $TARGET $SOURCE
 
 # Add --no-ratio to disable the ratio plots
 plot_cmd = 'rivet-mkhtml --mc-errs --pdf --cm --single ' + \
-      '--ignore-unvalidated --num-threads=$NUMTHREADS --config=$CONFIG '
+      '--ignore-unvalidated --num-threads=$NUMTHREADS --config=$CONFIG --no-ratio '
 
 def generate_plot(source, target, env, for_signature):
   target_dir = target[0].dir

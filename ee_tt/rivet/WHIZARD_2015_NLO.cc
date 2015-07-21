@@ -24,14 +24,23 @@ namespace Rivet {
 
       VetoedFinalState veto;
       veto.addVetoPairId(PID::WPLUSBOSON);
-      FastJets jets(veto, FastJets::ANTIKT, 0.4);
+
+      //FastJets jets(veto, FastJets::ANTIKT, 0.4);
+      const double R = 0.1; const double p = -1.0;
+      fastjet::JetDefinition ee(fastjet::ee_genkt_algorithm,
+          R, p, fastjet::E_scheme, fastjet::Best);
+      FastJets jets(veto, ee);
       addProjection(jets, "Jets");
 
+      const double sqrts = 500.; const double mTop = 173.;
       _h_T_Pt = bookHisto1D("t-quark-pT", stdbin, 0., 190.);
       _h_g_Pt = bookHisto1D("gluon-pT", stdbin, 0., 20.);
 
       _h_T_E = bookHisto1D("t-quark-E", stdbin, 150., 260.);
       _h_g_E = bookHisto1D("gluon-E", stdbin, 0., 20.);
+      _h_alljet_E = bookHisto1D("all-jet-E", stdbin, 0., sqrts + 1.);
+      _h_leadingjet_E = bookHisto1D("leading-jet-E", stdbin, mTop + 9., sqrts/2.+20.);
+      _h_secondleadingjet_E = bookHisto1D("second-leading-jet-E", stdbin, mTop -1., sqrts/2.+10.);
 
       _h_TT_invMass = bookHisto1D("TT-inv", stdbin, 0., 550.);
       _h_jets_invMass = bookHisto1D("jets-inv", stdbin, 0., 550.);
@@ -50,14 +59,12 @@ namespace Rivet {
     void analyze(const Event& event) {
       const FastJets& fastjets = applyProjection<FastJets>(event, "Jets");
       const FinalState& fs = applyProjection<FinalState>(event, "FS");
-      double minjetpt = 0.0 * GeV;
-      const double m_delta = 1.0 * GeV;
-      const double m_top = 173.0 * GeV;
-      const Jets jets = fastjets.jetsByE();
+      double minjetE = 1. * GeV;
+      const PseudoJets jets = fastjets.pseudoJetsByE(minjetE);
       double weight = event.weight();
 
       eventCounter++;
-      bool vetoCondition = fs.particles().size() < 2 or jets.size() <= 1;
+      bool vetoCondition = jets.size() < 2;
       if (vetoCondition) {
         vetoCounter++;
         vetoEvent;
@@ -67,14 +74,23 @@ namespace Rivet {
       }
 
       _h_jetcount->fill(jets.size(), weight);
-      _h_leadingjetpt->fill(jets[0].pT(), weight);
-      _h_secondleadingjetpt->fill(jets[1].pT(), weight);
-      FourMomentum p_sum = jets[0].momentum() + jets[1].momentum();
-      _h_jets_invMass->fill(p_sum.mass(), weight);
-      foreach(Jet j, jets) {
-        _h_jetpt->fill(j.pT(), weight / jets.size());
-        _h_jetptlog->fill(log(j.pT()), weight / jets.size());
+
+      PseudoJet alljets;
+      foreach (const PseudoJet& j, jets){
+        alljets += j;
       }
+      _h_alljet_E->fill(alljets.E(), weight);
+      _h_leadingjet_E->fill(jets[0].E(), weight);
+      _h_secondleadingjet_E->fill(jets[1].E(), weight);
+      PseudoJet p_sum = jets[0] + jets[1];
+      _h_jets_invMass->fill(p_sum.m(), weight);
+      _h_leadingjetpt->fill(jets[0].pt(), weight);
+      _h_secondleadingjetpt->fill(jets[1].pt(), weight);
+      //FourMomentum p_sum = jets[0].momentum() + jets[1].momentum();
+      //foreach(Jet j, jets) {
+        //_h_jetpt->fill(j.pt(), weight / jets.size());
+        //_h_jetptlog->fill(log(j.pt()), weight / jets.size());
+      //}
 
       // Register single particle properties
       foreach (const Particle& p, fs.particles()) {
@@ -111,7 +127,8 @@ namespace Rivet {
       cout << "Sum of weights / N: " << sumOfWeights () / eventCounter << endl;
       cout << "Original cross section (pb): " << crossSection () << endl;
       cout << "Number of total events: " << eventCounter << endl;
-      cout << "Number of vetoed events: " << vetoCounter << endl;
+      cout << "Sum of weights / n_events: " << sumOfWeights () / eventCounter << endl;
+      cout << "Numer of vetoed events: " << vetoCounter << endl;
       cout << "Final (fiducial) cross section (fb): " << fiducial_xsection << endl;
       cout << "Scale factor: " << scale_factor << endl;
 
@@ -119,6 +136,9 @@ namespace Rivet {
       scale(_h_g_Pt, scale_factor);
       scale(_h_T_E, scale_factor);
       scale(_h_g_E, scale_factor);
+      scale(_h_alljet_E, scale_factor);
+      scale(_h_leadingjet_E, scale_factor);
+      scale(_h_secondleadingjet_E, scale_factor);
 
       scale(_h_TT_invMass, scale_factor);
       scale(_h_jets_invMass, scale_factor);
@@ -137,6 +157,9 @@ namespace Rivet {
     Histo1DPtr _h_g_Pt;
     Histo1DPtr _h_T_E;
     Histo1DPtr _h_g_E;
+    Histo1DPtr _h_alljet_E;
+    Histo1DPtr _h_leadingjet_E;
+    Histo1DPtr _h_secondleadingjet_E;
 
     Histo1DPtr _h_TT_invMass;
     Histo1DPtr _h_jets_invMass;
