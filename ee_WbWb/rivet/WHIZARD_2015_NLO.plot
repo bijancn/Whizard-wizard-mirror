@@ -27,11 +27,11 @@ ErrorBands=0
 #  titles  #
 #==========#
  BEGIN PLOT /WHIZARD_2015_NLO
-Title=$\quad e^+e^-\to W^+b W^-\bar{b}$, $\quad N_\text{jets}\geq 2$
+Title=$\quad e^+e^-\to W^+b W^-\bar{b}$, $N_\text{jets}\geq 2$
  END PLOT
 
  BEGIN PLOT /WHIZARD_2015_NLO_ttbarcuts
-Title=$\quad e^+e^-\to W^+b W^-\bar{b}$, $\quad N_\text{jets}\geq 2$, $\quad\lvert m_{Wb}-m_t\rvert\leq 1 \text{GeV}$
+Title=$\quad e^+e^-\to W^+b W^-\bar{b}$, $N_\text{jets}\geq 2$, $\lvert m_{Wj_b}-m_t\rvert\leq 5 \text{GeV}$
  END PLOT
 
 #========================#
@@ -52,10 +52,8 @@ XLabel=$m_{WW}[\text{GeV}]$
  BEGIN PLOT /WHIZARD_.*/BW-inv
 LogY=1
 XLabel=$m_{BW}[\text{GeV}]$
- END PLOT
-
- BEGIN PLOT /WHIZARD_.*/BB-inv
-XLabel=$m_{b\bar{b}}[\text{GeV}]$
+RatioPlotYMax=2.5
+RatioPlotYMin=0.65
  END PLOT
 
 #============#
@@ -67,6 +65,8 @@ YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
 
  BEGIN PLOT /WHIZARD_.*/jet-pT
 XLabel=$\sum_i p_T^{j_i}[\text{GeV}]$
+LogX=1
+LogY=1
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/jet-pT-log
