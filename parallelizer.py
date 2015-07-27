@@ -7,7 +7,7 @@ import imp
 from functools import partial
 
 from utils import cd
-from subproc import batches, whizard_run, run
+from subproc import jobs, batches, whizard_run, run
 
 try:
   imp.find_module('yaml')
@@ -18,7 +18,6 @@ if have_yaml:
   import yaml
 
 logger = logging.getLogger(__name__)
-jobs = 10
 
 if __name__ == '__main__':
   path = 'logging.yaml'

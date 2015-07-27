@@ -10,7 +10,8 @@ from time import sleep
 from utils import cd, mkdirs
 
 logger = logging.getLogger(__name__)
-batches = 10
+jobs = int(os.getenv('WHIZARD_THREADS', 8))
+batches = int(os.getenv('WHIZARD_BATCHES', 8))
 events_re = re.compile(r"(n_events = )([0-9]*)")
 
 def divider(matchobj):

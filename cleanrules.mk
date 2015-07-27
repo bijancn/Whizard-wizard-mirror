@@ -12,6 +12,6 @@ clean :
 	rm rivet/*_nlo/ -rf
 	rm rivet/*_powheg/ -rf
 	rm rivet/show-MCerrors/ -rf
-	rm whizard/*_lo-[0-9] -rf
-	rm whizard/*_nlo-[0-9] -rf
-	rm whizard/*_powheg-[0-9] -rf
+	rm whizard/*_lo-[0-9]* -rf
+	rm whizard/*_nlo-[0-9]* -rf
+	rm whizard/*_powheg-[0-9]* -rf
