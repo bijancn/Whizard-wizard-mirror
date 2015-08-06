@@ -1,0 +1,45 @@
+model = SM_tt_threshold
+
+seed = 42
+
+process ttbar = e1, E1 => Wp, Wm, b, B
+
+compile
+
+mZ = 91.188
+mW = 80.419
+mb = 4.2
+alphas = 0.118 ! (Z pole, NLL running to mu_h)
+alpha_em_i = 125.924 ! (not running)
+m1S = 172.0
+!wtop = 1.53864 ! is locked
+!ee = 0.315901 ! is locked
+!cw = 0.881903 ! is locked
+!sw = 0.47143 ! is locked
+!v = 240.024  ! is locked
+
+printf "mtpole = %g" (mtpole)
+printf "wtop   = %g" (wtop)
+printf "ee   = %g" (ee)
+printf "cw   = %g" (cw)
+printf "sw   = %g" (sw)
+printf "v   = %g" (v)
+
+nloop  = 1    # LL
+sh     = 1.
+sf     = 1.
+Vtb    = 1.
+FF     = 1 # NRQCD resummed
+
+cuts = all abs (M-mtpole) < 30 GeV [Wp,b]
+   and all abs (M-mtpole) < 30 GeV [Wm,B]
+
+plot lineshape_1 { x_min = 339 GeV  x_max = 361 GeV }
+
+scan sqrts = (340. => 350. /+ 0.5) {
+  printf ">>>> SQRTS   = %g" (sqrts)
+  integrate (ttbar) { iterations = 4:20000:"gw" }
+  record lineshape_1 (sqrts, integral(ttbar), error(ttbar))
+  printf "RES %g %g %g" (sqrts, integral(ttbar), error(ttbar))
+}
+compile_analysis { $out_file = "ttbar_threshold_scan_dm_nloop_0_dm_30_sh_1._sf_1..dat" }
