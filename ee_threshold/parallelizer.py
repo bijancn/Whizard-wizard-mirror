@@ -6,14 +6,14 @@ import multiprocessing as mp
 import imp
 from functools import partial
 
-from utils import cd
-from subproc import jobs, batches, whizard_run, run
+from subproc import run, parser, jobs
 
 if __name__ == '__main__':
-  folder = sys.argv[1]
-  start = int(sys.argv[2])
-  end = int(sys.argv[3])
-  this_run = partial(run, folder=folder)
+  args = parser.parse_args()
+  start = int(args.start)
+  end = int(args.end)
+  this_run = partial(run, args=args)
   pool = mp.Pool(processes=jobs)
-  print range(start,end)
-  results = pool.map(this_run, range(start,end))
+  print range(start, end)
+  print args
+  results = pool.map(this_run, range(start, end))

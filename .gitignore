@@ -43,3 +43,4 @@ whizard_uu_powheg
 */rivet/*_nlo/
 */rivet/*_lo/
 */rivet/show-MCerrors/
+*-[0-9]*/
