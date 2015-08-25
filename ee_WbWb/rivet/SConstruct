@@ -51,7 +51,11 @@ dirify = lambda d : d + '/index.html'
 processes = ['proc_lo', 'proc_nlo', 'proc_nlo_highscale', 'proc_nlo_lowscale', 'proc_powheg']
 processes = filter(lambda p: os.path.isfile(p + '-0.hepmc'), processes)
 
+processes_lo = ['proc_lo', 'proc_lo_polarized', 'proc_lo_beamstrahlung']
+processes_lo = filter(lambda p: os.path.isfile(p + '-0.hepmc'), processes)
+
 # This is a list of processes consisting of lists of hepmcs
+#hepmcs = [Glob(p + '-*.hepmc') for p in processes + processes_lo]
 hepmcs = [Glob(p + '-*.hepmc') for p in processes]
 control_plots = map(dirify, processes)
 descriptions = [r"\textsc{LO}", r"\textsc{NLO} $\mu_r=\mu$", r"\textsc{NLO} $\mu_r=2\mu$",

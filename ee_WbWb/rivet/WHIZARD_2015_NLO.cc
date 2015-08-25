@@ -50,7 +50,9 @@ namespace Rivet {
 
       vetoCounter = 0;
       eventCounter = 0;
-      acceptedWeights = 0.0;
+      acceptedWeights = 0.;
+      low_energy_counts = 0;
+      low_energy_weights = 0.;
     }
 
     void analyze(const Event& event) {
@@ -102,6 +104,10 @@ namespace Rivet {
         } else if(id == PID::GLUON) {
           _h_g_E->fill(E, weight);
           _h_g_Theta->fill(costheta, weight);
+          if (E < 5.) {
+             low_energy_weights += weight;
+             low_energy_counts++;
+          }
         }
       }
 
@@ -144,6 +150,8 @@ namespace Rivet {
       cout << "Numer of vetoed events: " << vetoCounter << endl;
       cout << "Final (fiducial) cross section (fb): " << fiducial_xsection << endl;
       cout << "Scale factor: " << scale_factor << endl;
+      cout << "Gluon weights below 5 GeV: " << low_energy_weights << endl;
+      cout << "Number of gluon emissions below 5 GeV: " << low_energy_counts << endl;
 
       scale(_h_Wp_E, scale_factor);
       scale(_h_B_E, scale_factor);
@@ -187,6 +195,8 @@ namespace Rivet {
     Histo1DPtr _h_jetcount;
 
     int vetoCounter, eventCounter;
+    int low_energy_counts;
+    double low_energy_weights;
     double acceptedWeights;
   };
 
