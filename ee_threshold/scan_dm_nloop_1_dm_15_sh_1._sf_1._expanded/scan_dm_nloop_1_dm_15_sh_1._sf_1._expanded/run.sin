@@ -1,0 +1,62 @@
+model = SM_tt_threshold
+
+seed = 42
+?vis_history = false
+
+process ttbar = e1, E1 => Wp, Wm, b, B { $born_me_method = "threshold" $restrictions = "3+5~t && 4+6~tbar" }
+
+compile
+
+mZ = 91.188
+mW = 80.419
+mb = 4.2
+mH =  1.250000000000E+02
+me =  0.0
+wZ =  2.443                   ! should be recomputed
+wW =  2.049000000000E+00      ! should be recomputed
+wH =  4.143000000000E-03      ! should be recomputed
+!GF = 1.2273E-005
+!alpha_em_i =  1.259307555060E+02
+?alpha_s_is_fixed = false
+?alpha_s_from_mz = true
+?alpha_s_from_lambda_qcd = false
+alpha_s_order = 1
+alpha_s_nf = 5
+alphas = 0.118 ! (Z pole, NLL running to mu_h)
+alpha_em_i = 125.924 ! (not running)
+m1S = 172.0
+!ee = 0.315901 ! is locked
+!cw = 0.881903 ! is locked
+!sw = 0.47143 ! is locked
+!v = 240.024  ! is locked
+
+printf "mtpole = %g" (mtpole)
+printf "wtop   = %g" (wtop)
+printf "ee   = %g" (ee)
+printf "cw   = %g" (cw)
+printf "sw   = %g" (sw)
+printf "v   = %g" (v)
+!?phs_keep_nonresonant = false
+!phs_off_shell = 0
+phs_t_channel = 0
+
+nloop  = 1 # NLL
+sh     = 1.
+sf     = 1.
+Vtb    = 1.
+FF     = 4 # expanded p0constant
+
+cuts = all abs (M-mtpole) < 15 GeV [Wp,b]
+   and all abs (M-mtpole) < 15 GeV [Wm,B]
+
+plot lineshape_1 { x_min = 339 GeV  x_max = 361 GeV }
+
+sqrts = 340.
+!sqrts = 2 * m1S
+!scan sqrts = (340. => 400. /+ 0.5) {
+  printf ">>>> SQRTS   = %g" (sqrts)
+  integrate (ttbar) { iterations = 5:20000:"gw", 3:50000 }
+  record lineshape_1 (sqrts, integral(ttbar), error(ttbar))
+  printf "RES %g %g %g" (sqrts, integral(ttbar), error(ttbar))
+!}
+compile_analysis {$out_file = "result.dat"}

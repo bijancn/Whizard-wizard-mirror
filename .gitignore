@@ -44,3 +44,5 @@ whizard_uu_powheg
 */rivet/*_lo/
 */rivet/show-MCerrors/
 *-[0-9]*/
+*.grid
+*.f90.in

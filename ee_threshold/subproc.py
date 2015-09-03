@@ -10,8 +10,8 @@ import argparse
 from utils import cd, mkdirs
 
 logger = logging.getLogger(__name__)
-jobs = int(os.getenv('WHIZARD_THREADS', 32))
-batches = int(os.getenv('WHIZARD_BATCHES', 32))
+jobs = int(os.getenv('WHIZARD_THREADS', 24))
+batches = int(os.getenv('WHIZARD_BATCHES', 24))
 
 parser = argparse.ArgumentParser(description='Parallel Whizard scanner')
 parser.add_argument('folder', help='The name of the folder with the run.sin')

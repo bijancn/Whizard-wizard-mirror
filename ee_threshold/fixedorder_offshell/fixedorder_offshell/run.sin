@@ -2,13 +2,13 @@ model = SM
 
 ?combined_nlo_integration = false
 $loop_me_method = "openloops"
-alpha_power = 2
+alpha_power = 4
 alphas_power = 0
 ?use_vamp_equivalences = false
 ?vis_history = false
 
-process ttbar = e1, E1 => t, T
-process ttbar_NLO = e1, E1 => t, T {nlo_calculation="Full"}
+process ttbar = e1, E1 => Wp, Wm, b, B
+process ttbar_NLO = e1, E1 => Wp, Wm, b, B {nlo_calculation="Full"}
 
 mZ = 91.188
 mW = 80.419
@@ -25,7 +25,7 @@ GF = 1.2273E-005
 ?alpha_s_from_mz = true
 ?alpha_s_from_lambda_qcd = false
 alpha_s_order = 1
-alpha_s_nf = 4
+alpha_s_nf = 5
 alphas = 0.118 ! (Z pole, NLL running to mu_h)
 scale = mtop
 !ee =  3.158922910135E-01
@@ -33,7 +33,6 @@ scale = mtop
 !sw =  4.714303056581E-01
 !v =  2.400308891938E+02
 
-wtop = 0
 printf "alpha_em_i = %g" (alpha_em_i)
 printf "ee   = %g" (ee)
 printf "cw   = %g" (cw)
@@ -45,8 +44,14 @@ plot lineshape_2 { x_min = 339 GeV  x_max = 400 GeV }
 
 sqrts = 340.
 printf ">>>> SQRTS   = %g" (sqrts)
-integrate (ttbar) { iterations = 5:20000:"gw", 3:50000 }
-integrate (ttbar_NLO) { iterations = 6:20000:"gw", 4:50000 }
+wtop = 1.5386446
+int K = 1000
+iterations = 6:20*K:"gw", 6:20*K
+integrate (ttbar)
+wtop = 1.4089709
+mult_call_real = 15.0
+mult_call_virt = 0.5
+integrate (ttbar_NLO)
 record lineshape_1 (sqrts, integral(ttbar), error(ttbar))
 printf "RES_LO %g %g %g" (sqrts, integral(ttbar), error(ttbar))
 record lineshape_2 (sqrts, integral(ttbar_NLO), error(ttbar_NLO))
