@@ -1,0 +1,48 @@
+model = SM_tt_threshold
+
+process ttbar = e1, E1 => Wp, Wm, b, B { $born_me_method = "threshold" $restrictions = "3+5~t && 4+6~tbar" }
+
+compile
+
+mZ = 91.188
+mW = 80.419
+mb = 4.2
+mH =  1.250000000000E+02
+me =  0.0
+wZ =  2.443                   ! should be recomputed
+wW =  2.049000000000E+00      ! should be recomputed
+wH =  4.143000000000E-03      ! should be recomputed
+?alpha_s_is_fixed = false
+?alpha_s_from_mz = true
+?alpha_s_from_lambda_qcd = false
+alpha_s_order = 1
+alpha_s_nf = 5
+alphas = 0.118 ! (Z pole, NLL running to mu_h)
+alpha_em_i = 125.924 ! (not running)
+m1S = 172.0
+seed = 42
+?vis_history = false
+phs_t_channel = 0
+
+printf "mtpole = %g" (mtpole)
+printf "wtop   = %g" (wtop)
+printf "ee   = %g" (ee)
+printf "cw   = %g" (cw)
+printf "sw   = %g" (sw)
+printf "v   = %g" (v)
+
+#nloop
+#sh
+#sf
+FF = 10
+mpole_fixed = 1
+no_pwave = 1
+Vtb    = 1.
+
+cuts = all abs (M-mtpole) < 15 GeV [Wp,b] and all abs (M-mtpole) < 15 GeV [Wm,B]
+
+sqrts = 340.
+sqrtsmin = sqrts
+sqrtsmax = sqrts
+integrate (ttbar) { iterations = 5:20000:"gw", 3:50000 }
+printf "RES %g %g %g" (sqrts, integral(ttbar), error(ttbar))
