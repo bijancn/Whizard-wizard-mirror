@@ -39,9 +39,6 @@ printf "cw   = %g" (cw)
 printf "sw   = %g" (sw)
 printf "v   = %g" (v)
 
-plot lineshape_1 { x_min = 339 GeV  x_max = 400 GeV }
-plot lineshape_2 { x_min = 339 GeV  x_max = 400 GeV }
-
 sqrts = 340.
 printf ">>>> SQRTS   = %g" (sqrts)
 wtop = 1.5386446
@@ -52,9 +49,5 @@ wtop = 1.4089709
 mult_call_real = 15.0
 mult_call_virt = 0.5
 integrate (ttbar_NLO)
-record lineshape_1 (sqrts, integral(ttbar), error(ttbar))
 printf "RES_LO %g %g %g" (sqrts, integral(ttbar), error(ttbar))
-record lineshape_2 (sqrts, integral(ttbar_NLO), error(ttbar_NLO))
 printf "RES_NLO %g %g %g" (sqrts, integral(ttbar_NLO), error(ttbar_NLO))
-
-compile_analysis { $out_file = "result.dat" }

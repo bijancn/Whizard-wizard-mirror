@@ -18,6 +18,7 @@ parser.add_argument('folder', help='The name of the folder with the run.sin')
 parser.add_argument('scan_object', help='The sindarin object that should be scanned')
 parser.add_argument('start', help='The start of the scan range')
 parser.add_argument('end', help='The end of the scan range')
+parser.add_argument('--stepsize', type=float, help='The stepsize of the scan')
 parser.add_argument("-d", '--dryrun', action='store_true',
     help='Only create sindarins, dont run the whizard')
 
