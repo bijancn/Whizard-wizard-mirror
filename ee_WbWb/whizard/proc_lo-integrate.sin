@@ -2,5 +2,6 @@ include("../../general_settings.sin")
 include("../process_settings.sin")
 
 process proc_lo = E1, e1 => Wp, Wm, b, B
+wtop = 1.5386446
 
 integrate (proc_lo)

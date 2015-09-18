@@ -15,6 +15,6 @@ fks_mapping_type = 1
 n_events = 15000 * K
 checkpoint = n_events / 20
 
-scale = 0.5 * (2 * mtop)
+scale = 0.5 * (mtop)
 
 simulate (proc_nlo_lowscale)

@@ -5,5 +5,6 @@ process proc_lo = E1, e1 => Wp, Wm, b, B
 
 n_events = 500 * K
 checkpoint = n_events / 20
+wtop = 1.5386446
 
 simulate (proc_lo)

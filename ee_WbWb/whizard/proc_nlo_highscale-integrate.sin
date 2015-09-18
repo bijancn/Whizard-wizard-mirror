@@ -12,6 +12,6 @@ process proc_nlo_highscale = E1, e1 => Wp, Wm, b, B {nlo_calculation="Full"}
 fks_dij_exp1 = 1.0
 fks_mapping_type = 1
 
-scale = 2 * (2 * mtop)
+scale = 2 * (mtop)
 
 integrate (proc_nlo_highscale)

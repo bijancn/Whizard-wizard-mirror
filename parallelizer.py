@@ -36,10 +36,15 @@ if __name__ == '__main__':
   sindarin = sys.argv[2]
   directory = 'whizard/'
   sindarin = sindarin.replace(directory, '')
+  if not os.path.exists(whizard):
+    print 'No valid whizard binary'
+    print 'whizard = ', whizard
+    sys.exit(1)
 
   with cd(directory):
     integration_sindarin = str(sindarin).replace('.sin', '-integrate.sin')
     integration_grids = str(sindarin).replace('.sin', '_m1.vg')
+    print 'integration_sindarin = ', integration_sindarin
     if not os.path.exists(integration_grids):
       logger.info('Didnt find integration grids')
       whizard_run(whizard, integration_sindarin)
