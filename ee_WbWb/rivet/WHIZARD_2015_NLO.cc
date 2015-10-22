@@ -19,7 +19,7 @@ namespace Rivet {
     /// Book histograms and initialise projections before the run
     void init() {
       const FinalState fs;
-      const int stdbin = 50;
+      const int stdbin = 30;
       addProjection(fs, "FS");
 
       VetoedFinalState veto;
@@ -58,7 +58,7 @@ namespace Rivet {
     void analyze(const Event& event) {
       const FastJets& fastjets = applyProjection<FastJets>(event, "Jets");
       const FinalState& fs = applyProjection<FinalState>(event, "FS");
-      double minjetE = 1.0 * GeV;
+      double minjetE = 1. * GeV;
       const PseudoJets jets = fastjets.pseudoJetsByE(minjetE);
       double weight = event.weight();
 

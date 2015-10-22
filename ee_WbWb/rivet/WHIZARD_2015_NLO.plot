@@ -104,6 +104,14 @@ YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
 YLabel=$\frac{d\sigma}{dE}[\text{fb}/\text{GeV}]$
  END PLOT
 
+ BEGIN PLOT /WHIZARD_.*/leading-jet-E
+XLabel=$E^{j_1}[\text{GeV}]$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/second-leading-jet-E
+XLabel=$E^{j_2}[\text{GeV}]$
+ END PLOT
+
  BEGIN PLOT /WHIZARD_.*/b-quark-E
 XLabel=$E_{b}[\text{GeV}]$
  END PLOT

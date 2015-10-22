@@ -1,0 +1,22 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+?nlo_fixed_order = true
+?combined_nlo_integration = true
+$loop_me_method = "openloops"
+
+process #PROCESS = #PROC_DEF
+
+#Default parameters for FKS mapping
+fks_dij_exp1 = 1.0
+fks_mapping_type = 1
+
+jet_algorithm = antikt_algorithm
+jet_r = 1.0
+#cuts
+#integrate (#PROCESS)
+
+n_events = 15000 * K
+checkpoint = n_events / 20
+?unweighted = false
+#simulate (#PROCESS)
