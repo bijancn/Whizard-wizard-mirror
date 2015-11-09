@@ -4,7 +4,6 @@ include("../process_settings.sin")
 ?nlo_fixed_order = true
 ?combined_nlo_integration = true
 $loop_me_method = "openloops"
-openloops_verbosity = 3
 
 library = "proc_nlo_lib"
 process proc_nlo = E1, e1 => t, T, h {nlo_calculation="Full"}

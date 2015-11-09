@@ -19,17 +19,19 @@ namespace Rivet {
     /// Book histograms and initialise projections before the run
     void init() {
       const FinalState fs;
-      const int stdbin = 50;
+      const int stdbin = 30;
       addProjection(fs, "FS");
 
       VetoedFinalState veto;
       veto.addVetoPairId(PID::WPLUSBOSON);
 
-      //FastJets jets(veto, FastJets::ANTIKT, 0.4);
-      const double R = 0.1; const double p = -1.0;
-      fastjet::JetDefinition ee(fastjet::ee_genkt_algorithm,
-          R, p, fastjet::E_scheme, fastjet::Best);
-      FastJets jets(veto, ee);
+      const double R = 1.0; const double p = -1.0;
+      fastjet::JetDefinition ee(fastjet::ee_genkt_algorithm, R, p,
+          fastjet::E_scheme, fastjet::Best);
+      //fastjet::JetDefinition ee(fastjet::ee_kt_algorithm,
+          //fastjet::E_scheme, fastjet::Best);
+      //FastJets jets(veto, ee);
+      FastJets jets(veto, FastJets::ANTIKT, R);
       addProjection(jets, "Jets");
 
       const double sqrts = 500.; const double mTop = 173.;
@@ -37,7 +39,7 @@ namespace Rivet {
       _h_g_Pt = bookHisto1D("gluon-pT", stdbin, 0., 20.);
 
       _h_T_E = bookHisto1D("t-quark-E", stdbin, 150., 260.);
-      _h_g_E = bookHisto1D("gluon-E", stdbin, 0., 20.);
+      _h_g_E = bookHisto1D("gluon-E", stdbin, 0., 200.);
       _h_alljet_E = bookHisto1D("all-jet-E", stdbin, 0., sqrts + 1.);
       _h_leadingjet_E = bookHisto1D("leading-jet-E", stdbin, mTop + 9., sqrts/2.+20.);
       _h_secondleadingjet_E = bookHisto1D("second-leading-jet-E", stdbin, mTop -1., sqrts/2.+10.);
@@ -59,11 +61,15 @@ namespace Rivet {
     void analyze(const Event& event) {
       const FastJets& fastjets = applyProjection<FastJets>(event, "Jets");
       const FinalState& fs = applyProjection<FinalState>(event, "FS");
-      double minjetE = 1. * GeV;
-      const PseudoJets jets = fastjets.pseudoJetsByE(minjetE);
+      double minjetE = 0. * GeV;
+      const PseudoJets jets = fastjets.pseudoJetsByE();
+      //const Jets& jjets = fastjets.jetsByE(Cuts::pT > minjetE);
+      //const Jets& jjets = fastjets.jetsByPt(1.0);
+      //const Jets& jjets = fastjets.jetsByE(minjetE);
       double weight = event.weight();
 
       eventCounter++;
+      //bool vetoCondition = false ; // jets.size() < 2;
       bool vetoCondition = jets.size() < 2;
       if (vetoCondition) {
         vetoCounter++;
@@ -76,10 +82,29 @@ namespace Rivet {
       _h_jetcount->fill(jets.size(), weight);
 
       PseudoJet alljets;
-      foreach (const PseudoJet& j, jets){
+      //foreach (const PseudoJet& j, jets){
+      foreach (Jet j, jets) {
         alljets += j;
       }
       _h_alljet_E->fill(alljets.E(), weight);
+      double all_energy = 0.0;
+      foreach (const Particle& p, fs.particles()) {
+         all_energy += p.energy();
+      }
+      //if (jets.size() > 1) {
+         if (abs(alljets.E() - all_energy) > 10.0) {
+           cout << "alljet_E = " << alljets.E() << "   all_energy = " << all_energy << endl;
+           foreach (const Particle& p, fs.particles()) {
+              cout << "particle " << p.momentum() << endl;
+           }
+           //foreach (const PseudoJet& j, jets){
+           foreach (Jet j, jets) {
+              cout << "jet " << j.E() << endl;
+           }
+           cout << "done" << endl;
+           exit(1);
+         }
+      //}
       _h_leadingjet_E->fill(jets[0].E(), weight);
       _h_secondleadingjet_E->fill(jets[1].E(), weight);
       PseudoJet p_sum = jets[0] + jets[1];

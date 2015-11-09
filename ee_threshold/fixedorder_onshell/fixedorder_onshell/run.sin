@@ -1,14 +1,13 @@
 model = SM
-
 ?combined_nlo_integration = false
 $loop_me_method = "openloops"
 alpha_power = 2
 alphas_power = 0
 ?use_vamp_equivalences = false
-?vis_history = false
 
-process ttbar = e1, E1 => t, T
-process ttbar_NLO = e1, E1 => t, T {nlo_calculation="Full"}
+process ttbar = e1, E1 => t, T {nlo_calculation="Full"}
+
+compile
 
 mZ = 91.188
 mW = 80.419
@@ -19,8 +18,6 @@ wZ =  2.443                   ! should be recomputed
 wW =  2.049000000000E+00      ! should be recomputed
 wH =  4.143000000000E-03      ! should be recomputed
 mtop = 172.0
-GF = 1.2273E-005
-!alpha_em_i =  1.259307555060E+02
 ?alpha_s_is_fixed = false
 ?alpha_s_from_mz = true
 ?alpha_s_from_lambda_qcd = false
@@ -28,31 +25,31 @@ alpha_s_order = 1
 alpha_s_nf = 5
 alphas = 0.118 ! (Z pole, NLL running to mu_h)
 scale = mtop
-!ee =  3.158922910135E-01
-!cw =  8.819033206124E-01
-!sw =  4.714303056581E-01
-!v =  2.400308891938E+02
+GF = 1.2273E-005
+seed = 42
+?vis_history = false
+!phs_t_channel = 0
 
-wtop = 0
-printf "alpha_em_i = %g" (alpha_em_i)
+printf "wtop   = %g" (wtop)
 printf "ee   = %g" (ee)
 printf "cw   = %g" (cw)
 printf "sw   = %g" (sw)
 printf "v   = %g" (v)
 
-plot lineshape_1 { x_min = 339 GeV  x_max = 400 GeV }
-plot lineshape_2 { x_min = 339 GeV  x_max = 400 GeV }
+#nloop
+#sh
+#sf
+#FF
+#MPOLEFIXED
+#NOPWAVE
+!Vtb    = 1.
+
+printf "alpha_em_i = %g" (alpha_em_i)
+
+#CUTS
 
 sqrts = 340.
-printf ">>>> SQRTS   = %g" (sqrts)
-int K = 1000
-integrate (ttbar) { iterations = 5:20*K:"gw", 4:25*K }
-mult_call_real = 5.0
-mult_call_virt = 0.25
-integrate (ttbar_NLO) { iterations = 5:20*K:"gw", 4:25*K }
-record lineshape_1 (sqrts, integral(ttbar), error(ttbar))
-printf "RES_LO %g %g %g" (sqrts, integral(ttbar), error(ttbar))
-record lineshape_2 (sqrts, integral(ttbar_NLO), error(ttbar_NLO))
-printf "RES_NLO %g %g %g" (sqrts, integral(ttbar_NLO), error(ttbar_NLO))
-
-compile_analysis { $out_file = "result.dat" }
+mult_call_real = 10.0
+mult_call_virt = 0.5
+integrate (ttbar) { iterations = 5:20000:"gw", 3:50000 }
+printf "RES %g %g %g" (sqrts, integral(ttbar), error(ttbar))

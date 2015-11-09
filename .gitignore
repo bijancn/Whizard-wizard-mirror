@@ -43,3 +43,9 @@ whizard_uu_powheg
 *-[0-9]*/
 *.grid
 *.f90.in
+
+ee_threshold/expanded_*
+ee_threshold/fixedorder_*
+ee_threshold/matched_*
+ee_threshold/nloop_*
+ee_threshold/resum_*

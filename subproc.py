@@ -10,9 +10,11 @@ from time import sleep
 from utils import cd, mkdirs
 
 logger = logging.getLogger(__name__)
-jobs = int(os.getenv('WHIZARD_THREADS', 8))
-batches = int(os.getenv('WHIZARD_BATCHES', 8))
+jobs = int(os.getenv('WHIZARD_THREADS', 16))
+batches = int(os.getenv('WHIZARD_BATCHES', 64))
 events_re = re.compile(r"(n_events = )([0-9]*)")
+print 'WHIZARD_THREADS =', jobs
+print 'WHIZARD_BATCHES =', batches
 
 def divider(matchobj):
   nevents = matchobj.group(2)
