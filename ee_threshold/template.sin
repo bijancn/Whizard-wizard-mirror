@@ -12,6 +12,9 @@ me =  0.0
 wZ =  2.443                   ! should be recomputed
 wW =  2.049000000000E+00      ! should be recomputed
 wH =  4.143000000000E-03      ! should be recomputed
+jet_algorithm = antikt_algorithm
+jet_r = 0.7
+?keep_flavors_when_clustering = true
 #mass = 172.0
 #wtop
 ?alpha_s_is_fixed = false
@@ -36,7 +39,9 @@ printf "v   = %g" (v)
 #nloop
 #sh
 #sf
+#v2
 #FF
+#offshell_strategy
 #MPOLEFIXED
 #NOPWAVE
 !Vtb    = 1.
@@ -47,5 +52,5 @@ printf "v   = %g" (v)
 
 sqrts = 340.
 #GRIDS
-integrate (ttbar) { iterations = 5:20000:"gw", 3:50000 }
+integrate (ttbar) { iterations = 5:30000:"gw", 5:50000 }
 printf "RES %8f %8f %8f" (sqrts, integral(ttbar), error(ttbar))

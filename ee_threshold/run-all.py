@@ -30,8 +30,8 @@ def run_curve(curve):
     call('rm -f *grid', shell=True)
     if (not dryrun and not os.path.isfile('done')):
       print 'Running ' + runfolder
-      # whizard_run('whizard -r', 'run.sin')
-      ret = whizard_run('whizard', 'run.sin')
+      ret = whizard_run('whizard -r', 'run.sin')
+      # ret = whizard_run('whizard', 'run.sin')
       if ret != 0:
         print runfolder + ' Whizard return code ' + str(ret)
         return runfolder + ' Whizard return code ' + str(ret)
@@ -42,7 +42,7 @@ def run_curve(curve):
           print 'done with ' + runfolder
           return 'done with ' + runfolder
     else:
-      print 'Skipping ' + runfolder
+      # print 'Skipping ' + runfolder
       return 'skipping ' + runfolder
 
 def final(curve):
@@ -76,8 +76,14 @@ for nloop in range(2):
 curves += ['fixedorder_offshell_LO']
 curves += [c + '_unrestricted' for c in curves]
 curves += ['fixedorder_offshell_NLO_unrestricted', 'fixedorder_offshell_NLO',
-           'fixedorder_onshell_NLO', 'fixedorder_onshell_LO']
-# curves = ['fixedorder_offshell_NLO']
+           'fixedorder_onshell_NLO', 'fixedorder_onshell_LO',
+           'fixedorder_offshell_LO_unrestricted_w_nlo']
+for v2 in ['2', '3', '4', '5', '6', '7', '8', '9']:
+  curves += ['matched_minus_NLO_nloop_1_sh_1._sf_1._mpole172_unrestricted_v2_0.' + v2]
+curves += ['tree_pole_approx_LO_mpole172']
+curves += ['resum_nloop_1_sh_1._sf_1._mpole172_pole_approx_LO']
+curves += ['resum_nloop_1_sh_1._sf_1._mpole172_width_LO']
+curves += ['resum_nloop_1_sh_1._sf_1._mpole172_width_LO_unrestricted']
 
 curves_ulo = [(curve, 'sqrts', 300, 340, 1.0) for curve in curves]
 curves_lo = [(curve, 'sqrts', 340, 350, 0.25) for curve in curves]
@@ -92,6 +98,7 @@ if comm.Get_rank() == 0:
   print 'Setting up folders'
   map(do_all, [(0, c) for c in curves])
 comm.Barrier()
-mpi_map(do_all, [(1, c) for c in runs], debug=True)
-print 'Im all done and I export results now'
-map(do_all, [(2, c) for c in curves])
+mpi_map(do_all, [(1, c) for c in runs])
+if comm.Get_rank() == 0:
+  print 'Im all done and I export results now'
+  map(do_all, [(2, c) for c in curves])
