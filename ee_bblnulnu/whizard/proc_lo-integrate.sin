@@ -1,0 +1,9 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+process proc_lo = E1, e1 => b, B, e1, N1, E2, n2
+
+iterations = 5:50000:"gw", 3:40000
+cuts = all abs (M) > 20 GeV [incoming e1, e1]
+
+integrate (proc_lo)

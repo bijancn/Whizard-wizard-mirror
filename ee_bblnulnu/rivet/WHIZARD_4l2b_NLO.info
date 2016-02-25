@@ -1,0 +1,23 @@
+Name: WHIZARD_4l2b_NLO
+Year: 2015
+Summary: Fixed-order NLO plots
+Experiment: WHIZARD
+Collider: ILC
+SpiresID: 1234
+Status: UNVALIDATED
+Authors:
+ - Your Name <your@email.address>
+RunInfo:
+  $\sqrt{s}=500\;\GeV$
+NumEvents: 500000
+NeedCrossSection: no
+
+# This is apparently incompatible with the provided hepmc's
+# Beams: [e+, e-]
+# Energies: [250, 250]
+
+NeedCrossSection: True
+
+Description:
+BibKey: 
+BibTeX: ''
