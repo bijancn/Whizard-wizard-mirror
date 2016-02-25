@@ -15,7 +15,7 @@ mc = 0
 ?vis_channels = false
 ?use_vamp_equivalences = false
 ?vis_history = false
-?diags = false
+?vis_diags = false
 
 #alpha_s options
 ?alpha_s_is_fixed = false

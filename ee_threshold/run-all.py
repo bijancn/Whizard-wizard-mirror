@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from time import sleep
 from mpi4py_map import mpi_map, comm
 from subprocess import call

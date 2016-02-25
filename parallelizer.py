@@ -7,7 +7,8 @@ import imp
 from functools import partial
 
 from utils import cd
-from subproc import jobs, batches, whizard_run, run
+from subproc import batches, whizard_run, run
+jobs = int(os.getenv('WHIZARD_THREADS', 16))
 
 try:
   imp.find_module('yaml')

@@ -96,8 +96,7 @@ def _mpi_controller(sequence, *args, **kwargs):
 
             except StopIteration:
                 # Send kill signal
-                if debug:
-                    print "Controller: Task queue is empty"
+                if debug: print "Controller: Task queue is empty"
                 workers_done.append(status.source)
                 comm.send([], dest=status.source, tag=EXIT)
 
@@ -111,9 +110,9 @@ def _mpi_controller(sequence, *args, **kwargs):
                 # send us the item number he has been working on
                 results[recv[0]] = recv[1] # save back
 
-            print 'Process %i exited, removing.' % status.source
+            # print 'Process %i exited, removing.' % status.source
             process_list.remove(status.source)
-            print 'Processes left over: ' + str(process_list)
+            # print 'Processes left over: ' + str(process_list)
             # Task queue is empty
             if len(process_list) == 0:
                 break
@@ -160,17 +159,13 @@ def _mpi_worker(function, sequence, *args, **kwargs):
     # Start main data loop
     while True:
         # Wait for element
-        print "Worker %i on %s: waiting for data" % (rank, proc_name)
+        if debug: print "Worker %i on %s: waiting for data" % (rank, proc_name)
         recv = comm.recv(source=0, tag=MPI.ANY_TAG, status=status)
-        print "Worker %i on %s: received data, tag: %i" % (rank, proc_name, status.tag)
+        if debug: print "Worker %i on %s: received data, tag: %i" % (rank, proc_name, status.tag)
         if status.tag == EXIT:
-            print "Worker %i on %s: received kill signal" % (rank, proc_name)
+            if debug: print "Worker %i on %s: received kill signal" % (rank, proc_name)
             comm.send([], dest=0, tag=EXIT)
-            print 'now we exit'
-            # sys.exit(0)
-            # os._exit(0)
-            print 'this is after sys.exit'
-            return
+            sys.exit(0)
 
         if status.tag == BARRIER:
             if debug: print "Worker %i on %s: received barrier signal" % (rank, proc_name)
@@ -186,9 +181,7 @@ def _mpi_worker(function, sequence, *args, **kwargs):
                 # Send to master that we are quitting
                 print(e)
                 comm.send((recv, None), dest=0, tag=EXIT)
-                # sys.exit(0)
-                # os._exit(0)
-                return
+                sys.exit(0)
 
             if debug: print("Worker %i on %s: finished job %i" % (rank, proc_name, recv))
             # Return sequence number and result to controller

@@ -1,11 +1,8 @@
 #!/usr/bin/env python
 
-import logging
-import logging.config
 import sys
 import os
 import multiprocessing as mp
-import imp
 from functools import partial
 from numpy import arange
 
