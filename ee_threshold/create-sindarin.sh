@@ -27,6 +27,18 @@ elif [[ $curve == *tree* ]]; then
   sed -i 's/#FF/FF = 10/' $target
 fi
 
+if [[ $curve == *pole_approx_NLO* ]]; then
+  sed -i 's/#offshell_strategy/offshell_strategy = -2/' $target
+elif [[ $curve == *pole_approx_LO* ]]; then
+  sed -i 's/#offshell_strategy/offshell_strategy = -1/' $target
+elif [[ $curve == *width_LO* ]]; then
+  sed -i 's/#offshell_strategy/offshell_strategy = 0/' $target
+elif [[ $curve == *width_LO_NLO* ]]; then
+  sed -i 's/#offshell_strategy/offshell_strategy = 1/' $target
+elif [[ $curve == *width_NLO* ]]; then
+  sed -i 's/#offshell_strategy/offshell_strategy = 2/' $target
+fi
+
 if [[ $curve == *sh_* ]]; then
   var=sh
   factor=`sed "s/.*sh_\([0-9]\.[0-9]*\).*/\1/" <<<$curve`
@@ -37,6 +49,11 @@ if [[ $curve == *sf_* ]]; then
   factor=`sed "s/.*sf_\([0-9]\.[0-9]*\).*/\1/" <<<$curve`
   sed -i "s/#$var/$var = $factor/" $target
 fi
+if [[ $curve == *v2_* ]]; then
+  var="v2"
+  factor=`sed "s/.*v2_\([0-9]\.[0-9]*\).*/\1/" <<<$curve`
+  sed -i "s/#$var/$var = $factor/" $target
+fi
 
 if [[ $curve == *nloop_* ]]; then
   var="nloop"
@@ -44,12 +61,25 @@ if [[ $curve == *nloop_* ]]; then
   sed -i "s/#$var/$var = $factor/" $target
 fi
 
+
+if [[ $curve == *dm_* ]]; then
+  factor=`sed "s/.*dm_\([0-9]*\).*/\1/" <<<$curve`
+  cuts="cuts = let subevt @jets = cluster [b:B:g] in\n"
+  cuts+="       let subevt @bjet = select if PDG == 5 [@jets] in\n"
+  cuts+="       let subevt @bbarjet = select if PDG == -5 [@jets] in\n"
+  cuts+="       count [@jets] == 2 and\n"
+  cuts+="       all abs (M - #mass) < $factor [@bjet, Wp] and\n"
+  cuts+="       all abs (M - #mass) < $factor [@bbarjet, Wm]\n"
+  #cuts="cuts = all abs (M - #mass) < $factor GeV [Wp,b]\n"
+  #cuts+=" and all abs (M - #mass) < $factor GeV [Wm,B]"
+  sed -i "s/#CUTS/$cuts/" $target
+fi
+
 if [[ $curve == *unrestricted* ]]; then
   restricted=''
   filter=''
 else
   restricted='$restrictions = "3+5~t \&\& 4+6~tbar"'
-
   filter='\n$gosam_filter_nlo = "lambda d: d.vertices(T,Tbar,A) > 0 or d.vertices(T,Tbar,Z) > 0"\n'
   filter+='$gosam_filter_lo = "lambda d: d.vertices(T,Tbar,A) > 0 or d.vertices(T,Tbar,Z) > 0"\n'
   filter+='$gosam_symmetries="family,generation"\n'
@@ -129,20 +159,13 @@ else
   fi
   if [[ $curve == *onshell* ]]; then
     sed -i "s/#wtop/wtop = 0.0/" $target
-  else if [[ $curve == *NLO* ]]; then
+  else if [[ $curve == *NLO* ]] || [[ $curve == *w_nlo* ]]; then
     sed -i "s/#wtop/wtop = 1.4089709/" $target
   else
-    sed -i "s/#wtop/wtop = 1.5386446/" $target
+    sed -i "s/#wtop/wtop = 1.5385601/" $target
   fi
   fi
 fi
 sed -i "s/#PROCESS/$proc/" $target
-
-if [[ $curve == *dm_* ]]; then
-  factor=`sed "s/.*dm_\([0-9]*\).*/\1/" <<<$curve`
-  cuts="cuts = all abs (M-mtpole) < $factor GeV [Wp,b]"
-  cuts+=" and all abs (M-mtpole) < $factor GeV [Wm,B]"
-  sed -i "s/#CUTS/$cuts/" $target
-fi
 
 cat $target

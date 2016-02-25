@@ -12,7 +12,7 @@ mpirun -n 4 mpi_square.py
 """
 
 import sys
-
+import os
 from mpi4py import MPI
 comm = MPI.COMM_WORLD
 BARRIER = 123
@@ -122,9 +122,9 @@ def _mpi_controller(sequence, *args, **kwargs):
                 # send us the item number he has been working on
                 results[recv[0]] = recv[1] # save back
 
-            if debug: print 'Process %i exited, removing.' % status.source
+            print 'Process %i exited, removing.' % status.source
             process_list.remove(status.source)
-            if debug: print 'Processes left over: ' + str(process_list)
+            print 'Processes left over: ' + str(process_list)
             # Task queue is empty
             if len(process_list) == 0:
                 break
@@ -171,14 +171,17 @@ def _mpi_worker(function, sequence, *args, **kwargs):
     # Start main data loop
     while True:
         # Wait for element
-        if debug: print "Worker %i on %s: waiting for data" % (rank, proc_name)
+        print "Worker %i on %s: waiting for data" % (rank, proc_name)
         recv = comm.recv(source=0, tag=MPI.ANY_TAG, status=status)
-        if debug: print "Worker %i on %s: received data, tag: %i" % (rank, proc_name, status.tag)
-
+        print "Worker %i on %s: received data, tag: %i" % (rank, proc_name, status.tag)
         if status.tag == EXIT:
-            if debug: print "Worker %i on %s: received kill signal" % (rank, proc_name)
+            print "Worker %i on %s: received kill signal" % (rank, proc_name)
             comm.send([], dest=0, tag=EXIT)
-            sys.exit(0)
+            print 'now we exit'
+            # sys.exit(0)
+            # os._exit(0)
+            print 'this is after sys.exit'
+            return
 
         if status.tag == BARRIER:
             if debug: print "Worker %i on %s: received barrier signal" % (rank, proc_name)
@@ -194,8 +197,11 @@ def _mpi_worker(function, sequence, *args, **kwargs):
                 # Send to master that we are quitting
                 print(e)
                 comm.send((recv, None), dest=0, tag=EXIT)
-                sys.exit(0)
+                # sys.exit(0)
+                # os._exit(0)
+                return
 
             if debug: print("Worker %i on %s: finished job %i" % (rank, proc_name, recv))
             # Return sequence number and result to controller
             comm.send((recv, result), dest=0, tag=WORK)
+
