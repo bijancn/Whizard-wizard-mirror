@@ -97,24 +97,24 @@ namespace Rivet {
       _h["Wp_Pt"] = bookNLOHisto1D("Wp-pT", stdbin, 0., 400.);
       _h["Wp_invMass"] = bookNLOHisto1D("Wp-inv", stdbin, 70., 90.);
 
-      _h["BWm_E"] = bookNLOHisto1D("BWm-E", stdbin, 250., 425.);
+      _h["BWm_E"] = bookNLOHisto1D("BWm-E", stdbin, 360., 407.5);
       _h["BWm_Theta"] = bookNLOHisto1D("BWm-Theta", stdbin, -1.1, 1.1);
       _h["BWm_Pt"] = bookNLOHisto1D("BWm-pT", stdbin, 0., 400.);
-      _h["BWm_invMass"] = bookNLOHisto1D("BWm-inv", stdbin, 75., 225.);
+      _h["BWm_invMass"] = bookNLOHisto1D("BWm-inv", stdbin, 160., 180.);
       _h["BWm_Phi"] = bookNLOHisto1D("Phi(b,Wm)", stdbin, 0., M_PI);
       _h["BWm_R"] = bookNLOHisto1D("R(b,Wm)", stdbin, 0., 5.);
 
-      _h["BWp_E"] = bookNLOHisto1D("BWp-E", stdbin, 300., 425.);
+      _h["BWp_E"] = bookNLOHisto1D("BWp-E", stdbin, 385., 405.);
       _h["BWp_Theta"] = bookNLOHisto1D("BWp-Theta", stdbin, -1.1, 1.1);
       _h["BWp_Pt"] = bookNLOHisto1D("BWp-pT", stdbin, 0., 400.);
-      _h["BWp_invMass"] = bookNLOHisto1D("BWp-inv", stdbin, 75., 225.);
+      _h["BWp_invMass"] = bookNLOHisto1D("BWp-inv", stdbin, 160., 180.);
       _h["BWp_Phi"] = bookNLOHisto1D("Phi(b,Wp)", stdbin, 0., M_PI);
       _h["BWp_R"] = bookNLOHisto1D("R(b,Wp)", stdbin, 0., 5.);
 
       _h["Blm_E"] = bookNLOHisto1D("Blm-E", stdbin, 0., 425.);
       _h["Blm_Theta"] = bookNLOHisto1D("Blm-Theta", stdbin, -1.1, 1.1);
       _h["Blm_Pt"] = bookNLOHisto1D("Blm-pT", stdbin, 0., 400.);
-      _h["Blm_invMass"] = bookNLOHisto1D("Blm-inv", stdbin, 0., 800.);
+      _h["Blm_invMass"] = bookNLOHisto1D("Blm-inv", stdbin, 0., 200.);
       _h["Blm_Phi"] = bookNLOHisto1D("Phi(b,lm)", stdbin, 0., M_PI);
       _h["Blm_R"] = bookNLOHisto1D("R(b,lm)", stdbin, 0., 5.);
 
@@ -133,7 +133,7 @@ namespace Rivet {
       _h["BB_R"] = bookNLOHisto1D("R(b,b)", stdbin, 0., 5.);
 
       _h["W_invMass"] = bookNLOHisto1D("W-inv", stdbin, 70., 90.);
-      _h["BW_invMass"] = bookNLOHisto1D("BW-inv", stdbin, 0., 300.);
+      _h["BW_invMass"] = bookNLOHisto1D("BW-inv", stdbin, 0., 600.);
       _h["Bl_invMass"] = bookNLOHisto1D("Bl-inv", stdbin, 0., 300.);
 
       _h["hardest_lepton_E"] = bookNLOHisto1D("hardest-lepton-E", stdbin, 0., 300.);
@@ -299,8 +299,20 @@ namespace Rivet {
       double missingET = pTmiss.Et();
       double missingPT = pTmiss.pt();  // "missingET" = missingPT?
 
+      bool cutHiggs = true;
+
       eventCounter++;
       bool vetoCondition = jets.size() < 2;
+      ///if (cutHiggs and not vetoCondition) { 
+      ///   FourMomentum BB;
+      ///   if (bjets.size() > 0 && bbarjets.size() > 0) {
+      ///      BB = bjets[0].momentum()+bbarjets[0].momentum();
+      ///      double mH = 125.;
+      ///      int nGammaH = 200;
+      ///      double GammaH = 0.004;
+      ///      vetoCondition = abs (mH - BB.mass()) < nGammaH * GammaH;
+      ///   } 
+      ///}
       if (vetoCondition) {
         vetoCounter++;
         vetoEvent;
