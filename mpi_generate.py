@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from mpi4py_map import mpi_map, comm
-from subproc import replace_file, whizard_run, fatal, run
+from subproc import replace_file, whizard_run, fatal, run, create_integration_sindarin
 from utils import cd, mkdirs
 from numpy import arange
 from mpi4py import MPI
@@ -60,34 +60,34 @@ def log(action, batch, process):
       str(process) + ' on ' + MPI.Get_processor_name()))
 
 def setup_sindarins(process, batch=None):
-  logger.info('Setting up sindarins of ', str(process))
-  sindarin = process['process'] + '.sin'
-  template_sindarin = sindarin.replace('.sin', '-template.sin')
-  integration_sindarin = sindarin.replace('.sin', '-integrate.sin')
-  template_present = os.path.isfile(template_sindarin)
-  scan = process['purpose'] == 'scan'
-  if scan and not template_present:
-    logger.error('You have to give a template for a scan')
-    sys.exit(1)
-  elif not scan and not template_present:
-    fallback = integration_sindarin + ' and ' + integration
-    if os.path.isfile(integration_sindarin) and os.path.isfile(sindarin):
-      logger.info('Didnt find a template, will use ' + fallback)
-      return
-    else:
-      logger.error('Didnt find a template nor ' + fallback)
+  logger.info('Setting up sindarins of ' + str(process))
+  with cd('whizard/'):
+    sindarin = process['process'] + '.sin'
+    template_sindarin = sindarin.replace('.sin', '-template.sin')
+    integration_sindarin = sindarin.replace('.sin', '-integrate.sin')
+    template_present = os.path.isfile(template_sindarin)
+    scan = process['purpose'] == 'scan'
+    if scan and not template_present:
+      logger.error('You have to supply ' + template_sindarin + ' for a scan')
       sys.exit(1)
-  if template_present:
-    create_integration_sindarin(integration_sindarin, template_sindarin,
-        process['adaption_iterations'], process['integration_iterations'])
+    elif not scan and not template_present:
+      fallback = integration_sindarin + ' and ' + sindarin
+      if os.path.isfile(integration_sindarin) and os.path.isfile(sindarin):
+        logger.info('Didnt find ' + template_sindarin + ', will use ' + fallback)
+        return
+      else:
+        logger.error('Didnt find ' + template_sindarin + ' nor ' + fallback)
+        sys.exit(1)
+    if template_present:
+      create_integration_sindarin(integration_sindarin, template_sindarin,
+          process['adaption_iterations'], process['integration_iterations'])
 
 def run_process((proc_id, process)):
   log('Running', proc_id, process)
   sindarin = process['process'] + '.sin'
   integration_sindarin = str(sindarin).replace('.sin', '-integrate.sin')
   integration_grids = str(sindarin).replace('.sin', '_m1.vg')
-  directory = 'whizard/'
-  with cd(directory):
+  with cd('whizard/'):
     if not os.path.exists(integration_grids) and \
         (process['purpose'] == 'events' or process['purpose'] == 'histograms'):
       logger.error('Didnt find integration grids but you wanted events! ' + \

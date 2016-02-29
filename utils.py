@@ -12,6 +12,9 @@ class cd:
   def __exit__(self, etype, value, traceback):
     os.chdir(self.savedPath)
 
+def remove(filename):
+  if (os.path.isfile (filename)):
+    os.remove (filename)
 
 def mkdirs(directory):
   if not os.path.exists(directory):
