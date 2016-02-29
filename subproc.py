@@ -22,22 +22,38 @@ def divider(matchobj, batches):
   divided = str(int(float(matchobj.group(2)) / batches))
   return matchobj.group(1) + divided + matchobj.group(3)
 
-def replace_file(filename, samplename, i, batches, events_per_batch):
+def create_integration_sindarin(integration_sindarin, template_sindarin,
+    adaption_iterations, integration_iterations):
+  iterations = adaption_iterations + ':"gw",' + integration_iterations
+  replace_line = lambda line: line.replace('#ITERATIONS', iterations)
+  sed(template_sindarin, replace_line, new_file=integration_sindarin)
+
+def sed(original, replace_line, new_file=None, write_to_top=''):
+  overwrite = new_file == None
   tmp_fh, tmp_file = tempfile.mkstemp()
+  with open(tmp_file,'w') as new_f:
+    with open(original) as old_f:
+      new_f.write(write_to_top)
+      for line in old_f:
+        new_f.write(replace_line)
+  os.close(tmp_fh)
+  if overwrite:
+    target = original
+  else:
+    target = new_file
+  os.remove(target)
+  shutil.move(tmp_file, target)
+
+def replace_file(filename, samplename, i, batches, events_per_batch):
   sample = '$sample = "' + samplename + '"\n'
   seed = 'seed = ' + str(abs(hash(samplename)) % (10 ** 8)) + '\n'
   if events_per_batch == None:
     replace_func = partial(divider, batches=batches)
   else:
     replace_func = lambda x : x.group(1) + str(events_per_batch)
-  with open(tmp_file,'w') as new_file:
-    with open(filename) as old_file:
-      new_file.write(sample + seed)
-      for line in old_file:
-        new_file.write(events_re.sub(replace_func, line).replace('include("', 'include("../'))
-  os.close(tmp_fh)
-  os.remove(filename)
-  shutil.move(tmp_file, filename)
+  replace_line = lambda line : events_re.sub(replace_func,
+      line).replace('include("', 'include("../')
+  sed(write_to_top = sample + seed)
 
 def whizard_run(whizard, sindarin, core=None, options=''):
   print ('in whizard_run') ### Debugging

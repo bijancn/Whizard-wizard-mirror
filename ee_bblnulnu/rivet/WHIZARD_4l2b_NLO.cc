@@ -164,7 +164,7 @@ namespace Rivet {
 
       _h["lepton_lepton_phi"] = bookNLOHisto1D("Phi(l+,l-)", stdbin, 0., M_PI+0.5);
       _h["lepton_lepton_R"] = bookNLOHisto1D("R(l+,l-)", stdbin, 0., 5.);
-      _h["lepton_lepton_E"] = bookNLOHisto1D("lepton-lepton-E", stdbin, 0., 450.);
+      _h["lepton_lepton_E"] = bookNLOHisto1D("lepton-lepton-E", stdbin, 0., 600.);
       _h["lepton_lepton_Pt"] = bookNLOHisto1D("lepton-lepton-Pt", stdbin, 0., 350.);
       _h["lepton_lepton_Theta"] = bookNLOHisto1D("lepton-lepton-Theta", stdbin, -1.1, 1.1);
 

@@ -55,17 +55,34 @@ def load_json():
     logger.info(p['process'] + '\t[' + p['purpose'] + ']')
   return json_info
 
-# TODO: (bcn 2016-02-25) should be generated automagically
-# TODO: (bcn 2016-02-25) use adaption_iterations
-# TODO: (bcn 2016-02-25) use integration_iterations
-def setup_sindarins(p):
-  logger.info( 'Setting up sindarins for ' + p['process'])
-  return
+def log(action, batch, process):
+  logger.info(textwrap.fill(action + ' batch ' + str(batch) + ' of '+ \
+      str(process) + ' on ' + MPI.Get_processor_name()))
+
+def setup_sindarins(process, batch=None):
+  logger.info('Setting up sindarins of ', str(process))
+  sindarin = process['process'] + '.sin'
+  template_sindarin = sindarin.replace('.sin', '-template.sin')
+  integration_sindarin = sindarin.replace('.sin', '-integrate.sin')
+  template_present = os.path.isfile(template_sindarin)
+  scan = process['purpose'] == 'scan'
+  if scan and not template_present:
+    logger.error('You have to give a template for a scan')
+    sys.exit(1)
+  elif not scan and not template_present:
+    fallback = integration_sindarin + ' and ' + integration
+    if os.path.isfile(integration_sindarin) and os.path.isfile(sindarin):
+      logger.info('Didnt find a template, will use ' + fallback)
+      return
+    else:
+      logger.error('Didnt find a template nor ' + fallback)
+      sys.exit(1)
+  if template_present:
+    create_integration_sindarin(integration_sindarin, template_sindarin,
+        process['adaption_iterations'], process['integration_iterations'])
 
 def run_process((batch, process)):
-  print ('in run process') ### Debugging
-  logger.info(textwrap.fill('Running batch ' + str(batch) + ' of '+ \
-      str(process) + ' on ' + MPI.Get_processor_name()))
+  log('Running', batch, process)
   sindarin = process['process'] + '.sin'
   integration_sindarin = str(sindarin).replace('.sin', '-integrate.sin')
   integration_grids = str(sindarin).replace('.sin', '_m1.vg')
@@ -102,6 +119,8 @@ def run_process((batch, process)):
 logger = setup_logger ()
 if comm.Get_rank() == 0:
   json_info = load_json()
+  for p in json_info['processes']:
+    setup_sindarins(p)
 else:
   json_info = None
 json_info = comm.bcast(json_info, root=0)
