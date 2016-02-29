@@ -28,7 +28,7 @@ namespace Rivet {
 
     /// Book histograms and initialise projections before the run
     void init() {
-      const int stdbin = 30;
+      const int stdbin = 20;
 
       //leptons
       const IdentifiedFinalState em(PID::ELECTRON);
@@ -69,15 +69,15 @@ namespace Rivet {
       FastJets jets(veto, ee);
       addProjection(jets, "Jets");
 
-      _h["leadingjet_E"] = bookNLOHisto1D("leading-jet-E", stdbin, 0., 425.);
+      _h["leadingjet_E"] = bookNLOHisto1D("leading-jet-E", stdbin, 0., 400.);
       _h["leadingjet_Theta"] = bookNLOHisto1D("leading-jet-Theta", stdbin, -1.1, 1.1);
       _h["leadingjet_Pt"] = bookNLOHisto1D("leading-jet-pT", stdbin, 0., 400.);
 
       _h["secondleadingjet_E"] = bookNLOHisto1D("second-leading-jet-E", stdbin, 0., 300.);
       _h["secondleadingjet_Theta"] = bookNLOHisto1D("second-leading-jet-Theta", stdbin, -1.1, 1.1);
-      _h["secondleadingjet_Pt"] = bookNLOHisto1D("second-leading-jet-pT", stdbin, 0., 250.);
+      _h["secondleadingjet_Pt"] = bookNLOHisto1D("second-leading-jet-pT", stdbin, 0., 300.);
 
-      _h["jets_invMass"] = bookNLOHisto1D("jets-inv", stdbin, 0., 150.);
+      _h["jets_invMass"] = bookNLOHisto1D("jets-inv", stdbin, 0., 250.);
 
       _h["bjet_E"] = bookNLOHisto1D("b-jet-E", stdbin, 0., 425.);
       _h["bjet_Theta"] = bookNLOHisto1D("b-jet-Theta", stdbin, -1.1, 1.1);
@@ -136,21 +136,21 @@ namespace Rivet {
       _h["BW_invMass"] = bookNLOHisto1D("BW-inv", stdbin, 0., 600.);
       _h["Bl_invMass"] = bookNLOHisto1D("Bl-inv", stdbin, 0., 300.);
 
-      _h["hardest_lepton_E"] = bookNLOHisto1D("hardest-lepton-E", stdbin, 0., 300.);
+      _h["hardest_lepton_E"] = bookNLOHisto1D("hardest-lepton-E", stdbin, 0., 400.);
       _h["hardest_lepton_Pt"] = bookNLOHisto1D("hardest-lepton-pT", stdbin, 0., 400.);
-      _h["hardest_lepton_Eta"] = bookNLOHisto1D("hardest-lepton-eta", stdbin, -2., 2.);
+      _h["hardest_lepton_Eta"] = bookNLOHisto1D("hardest-lepton-eta", stdbin, -3., 3.);
 
       _h["second_hardest_lepton_E"] = bookNLOHisto1D("2nd-hardest-lepton-E", stdbin, 0., 300.);
       _h["second_hardest_lepton_Pt"] = bookNLOHisto1D("2nd-hardest-lepton-pT", stdbin, 0., 200.);
-      _h["second_hardest_lepton_Eta"] = bookNLOHisto1D("2nd-hardest-lepton-Eta", stdbin, -2., 2.);
+      _h["second_hardest_lepton_Eta"] = bookNLOHisto1D("2nd-hardest-lepton-Eta", stdbin, -3., 3.);
 
       _h["electron_E"] = bookNLOHisto1D("electron-E", stdbin, 0., 400.);
       _h["electron_Pt"] = bookNLOHisto1D("electron-Pt", stdbin, 0., 350.);
-      _h["electron_Eta"] = bookNLOHisto1D("electron-Eta", stdbin, -2., 2.);
+      _h["electron_Eta"] = bookNLOHisto1D("electron-Eta", stdbin, -3., 3.);
 
       _h["muon_E"] = bookNLOHisto1D("muon-E", stdbin, 0., 350.);
       _h["muon_Pt"] = bookNLOHisto1D("muon-Pt", stdbin, 0., 350.);
-      _h["muon_Eta"] = bookNLOHisto1D("muon-Eta", stdbin, -2., 2.);
+      _h["muon_Eta"] = bookNLOHisto1D("muon-Eta", stdbin, -3., 3.);
 
       _h["lepton_lepton_phi"] = bookNLOHisto1D("Phi(l+,l-)", stdbin, 0., M_PI+0.5);
       _h["lepton_lepton_R"] = bookNLOHisto1D("R(l+,l-)", stdbin, 0., 5.);
@@ -303,7 +303,7 @@ namespace Rivet {
 
       eventCounter++;
       bool vetoCondition = jets.size() < 2;
-      ///if (cutHiggs and not vetoCondition) { 
+      ///if (cutHiggs and not vetoCondition) {
       ///   FourMomentum BB;
       ///   if (bjets.size() > 0 && bbarjets.size() > 0) {
       ///      BB = bjets[0].momentum()+bbarjets[0].momentum();
@@ -311,7 +311,7 @@ namespace Rivet {
       ///      int nGammaH = 200;
       ///      double GammaH = 0.004;
       ///      vetoCondition = abs (mH - BB.mass()) < nGammaH * GammaH;
-      ///   } 
+      ///   }
       ///}
       if (vetoCondition) {
         vetoCounter++;
@@ -323,7 +323,6 @@ namespace Rivet {
 
       //fill jet distributions
       _h["jetcount"]->fill(jets.size(), event);
-
       for (unsigned int i=0; i < jets.size(); i++) {
         _h["jetcount_incl"]->fill(i+1, event);
       }
@@ -384,7 +383,6 @@ namespace Rivet {
       _h["MET"]->fill(missingET, event);
       _h["MPT"]->fill(missingPT, event);
 
-
       if(e.size() > 0) _h["electron_MET_phi"]->fill(Rivet::deltaPhi(e[0].momentum(),pTmiss), event);
       if(e.size() > 0) _h["electron_MET_R"]->fill(Rivet::deltaR(e[0].momentum(),pTmiss), event);
       if(m.size() > 0) _h["muon_MET_phi"]->fill(Rivet::deltaPhi(m[0].momentum(),pTmiss), event);
@@ -411,8 +409,9 @@ namespace Rivet {
         Wp = lp[0].momentum()+n[0].momentum();
         _h["Wp_invMass"]->fill(Wp.mass(), event);
         _h["W_invMass"]->fill(Wp.mass(), event);
+        _h["Wp_E"]->fill(Wp.E(), event);
+        _h["Wp_Pt"]->fill(Wp.pt(), event);
         _h["Wp_Theta"]->fill(std::cos(Wp.theta()), event);
-        _h["Wp_invMass"]->fill(Wp.mass(), event);
       }
 
       FourMomentum Topbar;

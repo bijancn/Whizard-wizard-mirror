@@ -11,7 +11,7 @@
 #  general settings  #
 #====================#
  BEGIN PLOT /WHIZARD_.*
-LogY=0
+LogY=1
 RatioPlotYLabel=K-Factor
 RatioPlotSameStyle=1
 LegendXPos=0.70
@@ -26,12 +26,8 @@ ErrorBands=0
 #==========#
 #  titles  #
 #==========#
- BEGIN PLOT /WHIZARD_2015_NLO
-Title=$\quad e^+e^-\to W^+b W^-\bar{b}$, $N_\text{jets}\geq 2$
- END PLOT
-
- BEGIN PLOT /WHIZARD_2015_NLO_ttbarcuts
-Title=$\quad e^+e^-\to W^+b W^-\bar{b}$, $N_\text{jets}\geq 2$, $\lvert m_{Wj_b}-m_t\rvert\leq 5 \text{GeV}$
+ BEGIN PLOT /WHIZARD_.*
+Title=$\quad e^+e^-\to l^+\nu_l b l^-\bar{\nu_l} \bar{b}$, $N_\text{jets}\geq 2$
  END PLOT
 
 #========================#
@@ -49,10 +45,9 @@ XLabel=$m(p^{j_1}+p^{j_2})$
 XLabel=$m_{WW}[\text{GeV}]$
  END PLOT
 
- BEGIN PLOT /WHIZARD_.*/BW-inv
-LogY=1
+ BEGIN PLOT /WHIZARD_.*/BW.*-inv
 XLabel=$m_{BW}[\text{GeV}]$
-RatioPlotYMax=2.5
+RatioPlotYMax=3.0
 RatioPlotYMin=0.65
  END PLOT
 
@@ -65,17 +60,9 @@ YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
 
  BEGIN PLOT /WHIZARD_.*/jet-pT
 XLabel=$\sum_i p_T^{j_i}[\text{GeV}]$
-LogX=1
-LogY=1
- END PLOT
-
- BEGIN PLOT /WHIZARD_.*/jet-pT-log
-YLabel=$\frac{d\sigma}{d\sum_i\log{p_{T,j_i}}}[\text{fb}/\text{GeV}]$
-XLabel=$\sum_i\log{p_{T,j_i}}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/gluon-pT
-LogY=1
 XLabel=$p_{T,g}[\text{GeV}]$
  END PLOT
 
@@ -117,7 +104,6 @@ XLabel=$E_{b}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/gluon-E
-LogY=1
 XLabel=$E_g[\text{GeV}]$
  END PLOT
 
@@ -126,9 +112,23 @@ XLabel=$E_{W^+}[\text{GeV}]$
  END PLOT
 
 #===============#
+#  angle plots  #
+#===============#
+ BEGIN PLOT /WHIZARD_.*-Theta
+LogY=0
+YLabel=$\frac{d\sigma}{d{\cos{\theta}}}$[fb]
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*-Phi
+LogY=0
+YLabel=$\frac{d\sigma}{d{\cos{\theta}}}$[fb]
+ END PLOT
+
+#===============#
 #  other plots  #
 #===============#
  BEGIN PLOT /WHIZARD_.*/jet-count
+LogY=0
 YLabel=$\frac{d\sigma}{dN_\text{jets}}[\text{fb}]$
 XLabel=$N_\text{jets}$
  END PLOT

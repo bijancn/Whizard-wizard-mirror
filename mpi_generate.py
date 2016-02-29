@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 from mpi4py_map import mpi_map, comm
-from subprocess import call
 from subproc import replace_file, whizard_run, fatal, run
 from utils import cd, mkdirs
 from numpy import arange
 from mpi4py import MPI
+import subprocess
 import textwrap
 import logging
 import time
@@ -71,7 +71,8 @@ def run_process((batch, process)):
   integration_grids = str(sindarin).replace('.sin', '_m1.vg')
   directory = 'whizard/'
   with cd(directory):
-    if not os.path.exists(integration_grids) and process['purpose'] == 'events':
+    if not os.path.exists(integration_grids) and \
+        (process['purpose'] == 'events' or process['purpose'] == 'histograms'):
       logger.error('Didnt find integration grids but you wanted events! ' + \
           'Aborting! Please use "integrate" first')
       return
@@ -93,7 +94,7 @@ def run_process((batch, process)):
             options=process['whizard_options'],
             events_per_batch=process['events_per_batch'])
         if (os.path.isfile(os.path.join(runfolder, 'done'))):
-          os.rename(os.path.join(runfolder, runfolder) + '.hepmc', 
+          os.rename(os.path.join(runfolder, runfolder) + '.hepmc',
               os.path.join("../rivet", runfolder + '.hepmc'))
       else:
         logger.info('Skipping ' + runfolder)
