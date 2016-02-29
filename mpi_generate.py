@@ -62,9 +62,9 @@ def setup_sindarins(p):
   logger.info( 'Setting up sindarins for ' + p['process'])
   return
 
-def run_process((batch, process)):
+def run_process((proc_id, process)):
   print ('in run process') ### Debugging
-  logger.info(textwrap.fill('Running batch ' + str(batch) + ' of '+ \
+  logger.info(textwrap.fill('Running batch ' + str(proc_id) + ' of '+ \
       str(process) + ' on ' + MPI.Get_processor_name()))
   sindarin = process['process'] + '.sin'
   integration_sindarin = str(sindarin).replace('.sin', '-integrate.sin')
@@ -84,16 +84,19 @@ def run_process((batch, process)):
           options=process['whizard_options'])
     else:
       logger.info('Using the following integration grids: ' + integration_grids)
-      runfolder = process['process'] + '-' + str(batch)
+      runfolder = process['process'] + '-' + str(proc_id)
       if (not os.path.isfile(os.path.join(runfolder, 'done'))):
-        run(batch,
+        run(proc_id,
+            purpose=process['purpose'],
             whizard=whizard,
             sindarin=sindarin,
             integration_grids=integration_grids,
             batches=process['batches'],
             options=process['whizard_options'],
-            events_per_batch=process['events_per_batch'])
-        if (os.path.isfile(os.path.join(runfolder, 'done'))):
+            events_per_batch=process['events_per_batch'],
+            analysis=json_info['analysis'])
+        if (os.path.isfile(os.path.join(runfolder, 'done') and \
+            process['purpose'] == 'events')):
           os.rename(os.path.join(runfolder, runfolder) + '.hepmc',
               os.path.join("../rivet", runfolder + '.hepmc'))
       else:
