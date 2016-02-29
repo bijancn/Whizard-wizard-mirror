@@ -1,0 +1,21 @@
+alpha_power = 1
+alphas_power = 0
+
+wtop = 0.0
+mtop = 172.0
+wW = 0.0
+mb = 4.2
+mZ = 91.188
+mW = 80.419
+real alpha = 1.0 / 125.924
+GF = pi * alpha / sqrt(2.0) / mW**2 / sw**2
+alpha_s_order = 1
+alpha_s_nf = 5
+alphas = 0.118
+scale = mtop
+wtop = 0
+
+show (model)
+
+mult_call_real = 1000
+?combined_nlo_integration = false

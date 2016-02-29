@@ -3,10 +3,6 @@ include("../process_settings.sin")
 
 ?nlo_fixed_order = true
 ?combined_nlo_integration = true
-$loop_me_method = "openloops"
-
-fks_dij_exp1 = 1.0
-$fks_mapping_type = "resonances"
 
 process proc_nlo = E1, e1 => b, B, e1, N1, E2, n2 {nlo_calculation="Full"}
 
@@ -14,7 +10,6 @@ process proc_nlo = E1, e1 => b, B, e1, N1, E2, n2 {nlo_calculation="Full"}
 wtop = 1.3376
 
 iterations = 10:200000:"gw", 7:180000
-mult_call_real = 10
 
 cuts = all abs(M) > 20 GeV [incoming e1, e1]
 integrate (proc_nlo)
