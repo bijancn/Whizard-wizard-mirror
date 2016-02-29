@@ -2,7 +2,7 @@
   "processes": [
   {"process": "proc_lo",
     "purpose": "events",
-    "batches": 10,
+    "batches": 50,
     "events_per_batch": 50000,
     "whizard_options": "--rebuild-events",
     "adaption_iterations": "3:10000",

@@ -119,7 +119,7 @@ LogY=0
 YLabel=$\frac{d\sigma}{d{\cos{\theta}}}$[fb]
  END PLOT
 
- BEGIN PLOT /WHIZARD_.*-Phi
+ BEGIN PLOT /WHIZARD_.*-Phi.*
 LogY=0
 YLabel=$\frac{d\sigma}{d{\cos{\theta}}}$[fb]
  END PLOT

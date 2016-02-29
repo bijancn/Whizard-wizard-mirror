@@ -70,58 +70,64 @@ namespace Rivet {
       addProjection(jets, "Jets");
 
       _h["leadingjet_E"] = bookNLOHisto1D("leading-jet-E", stdbin, 0., 400.);
-      _h["leadingjet_Theta"] = bookNLOHisto1D("leading-jet-Theta", stdbin, -1.1, 1.1);
       _h["leadingjet_Pt"] = bookNLOHisto1D("leading-jet-pT", stdbin, 0., 400.);
+      _h["leadingjet_Theta"] = bookNLOHisto1D("leading-jet-Theta", stdbin, -1.1, 1.1);
 
-      _h["secondleadingjet_E"] = bookNLOHisto1D("second-leading-jet-E", stdbin, 0., 300.);
-      _h["secondleadingjet_Theta"] = bookNLOHisto1D("second-leading-jet-Theta", stdbin, -1.1, 1.1);
-      _h["secondleadingjet_Pt"] = bookNLOHisto1D("second-leading-jet-pT", stdbin, 0., 300.);
+      _h["2ndleadingjet_E"] = bookNLOHisto1D("2nd-leading-jet-E", stdbin, 0., 300.);
+      _h["2ndleadingjet_Pt"] = bookNLOHisto1D("2nd-leading-jet-pT", stdbin, 0., 300.);
+      _h["2ndleadingjet_Theta"] = bookNLOHisto1D("2nd-leading-jet-Theta", stdbin, -1.1, 1.1);
 
-      _h["jets_invMass"] = bookNLOHisto1D("jets-inv", stdbin, 0., 250.);
+      _h["jets_invMass"] = bookNLOHisto1D("jets-inv", stdbin, 0., 400.);
+      _h["jets_invMass_Zpeak"] = bookNLOHisto1D("jets-inv-Zpeak", stdbin, 80., 100.);
+      _h["jets_invMass_Hpeak"] = bookNLOHisto1D("jets-inv-Hpeak", stdbin, 115., 135.);
 
       _h["bjet_E"] = bookNLOHisto1D("b-jet-E", stdbin, 0., 425.);
-      _h["bjet_Theta"] = bookNLOHisto1D("b-jet-Theta", stdbin, -1.1, 1.1);
       _h["bjet_Pt"] = bookNLOHisto1D("b-jet-pT", stdbin, 0., 400.);
+      _h["bjet_Theta"] = bookNLOHisto1D("b-jet-Theta", stdbin, -1.1, 1.1);
 
       _h["bbarjet_E"] = bookNLOHisto1D("bbar-jet-E", stdbin, 0., 425.);
-      _h["bbarjet_Theta"] = bookNLOHisto1D("bbar-jet-Theta", stdbin, -1.1, 1.1);
       _h["bbarjet_Pt"] = bookNLOHisto1D("bbar-jet-pT", stdbin, 0., 400.);
+      _h["bbarjet_Theta"] = bookNLOHisto1D("bbar-jet-Theta", stdbin, -1.1, 1.1);
 
       _h["Wm_E"] = bookNLOHisto1D("Wm-E", stdbin, 0., 425.);
-      _h["Wm_Theta"] = bookNLOHisto1D("Wm-Theta", stdbin, -1.1, 1.1);
       _h["Wm_Pt"] = bookNLOHisto1D("Wm-pT", stdbin, 0., 400.);
-      _h["Wm_invMass"] = bookNLOHisto1D("Wm-inv", stdbin, 70., 90.);
+      _h["Wm_Theta"] = bookNLOHisto1D("Wm-Theta", stdbin, -1.1, 1.1);
+      _h["Wm_invMass"] = bookNLOHisto1D("Wm-inv", stdbin, 0., 400.);
+      _h["Wm_invMass_peak"] = bookNLOHisto1D("Wm-inv-peak", stdbin, 70., 90.);
 
       _h["Wp_E"] = bookNLOHisto1D("Wp-E", stdbin, 0., 425.);
-      _h["Wp_Theta"] = bookNLOHisto1D("Wp-Theta", stdbin, -1.1, 1.1);
       _h["Wp_Pt"] = bookNLOHisto1D("Wp-pT", stdbin, 0., 400.);
-      _h["Wp_invMass"] = bookNLOHisto1D("Wp-inv", stdbin, 70., 90.);
+      _h["Wp_Theta"] = bookNLOHisto1D("Wp-Theta", stdbin, -1.1, 1.1);
+      _h["Wp_invMass"] = bookNLOHisto1D("Wp-inv", stdbin, 0., 400.);
+      _h["Wp_invMass_peak"] = bookNLOHisto1D("Wp-inv-peak", stdbin, 70., 90.);
 
-      _h["BWm_E"] = bookNLOHisto1D("BWm-E", stdbin, 360., 407.5);
-      _h["BWm_Theta"] = bookNLOHisto1D("BWm-Theta", stdbin, -1.1, 1.1);
+      _h["BWm_E"] = bookNLOHisto1D("BWm-E", stdbin, 0., 425.);
       _h["BWm_Pt"] = bookNLOHisto1D("BWm-pT", stdbin, 0., 400.);
-      _h["BWm_invMass"] = bookNLOHisto1D("BWm-inv", stdbin, 160., 180.);
+      _h["BWm_Theta"] = bookNLOHisto1D("BWm-Theta", stdbin, -1.1, 1.1);
       _h["BWm_Phi"] = bookNLOHisto1D("Phi(b,Wm)", stdbin, 0., M_PI);
       _h["BWm_R"] = bookNLOHisto1D("R(b,Wm)", stdbin, 0., 5.);
+      _h["BWm_invMass"] = bookNLOHisto1D("BWm-inv", stdbin, 0., 400.);
+      _h["BWm_invMass_peak"] = bookNLOHisto1D("BWm-inv-peak", stdbin, 160., 180.);
 
-      _h["BWp_E"] = bookNLOHisto1D("BWp-E", stdbin, 385., 405.);
-      _h["BWp_Theta"] = bookNLOHisto1D("BWp-Theta", stdbin, -1.1, 1.1);
+      _h["BWp_E"] = bookNLOHisto1D("BWp-E", stdbin, 0., 425.);
       _h["BWp_Pt"] = bookNLOHisto1D("BWp-pT", stdbin, 0., 400.);
-      _h["BWp_invMass"] = bookNLOHisto1D("BWp-inv", stdbin, 160., 180.);
+      _h["BWp_Theta"] = bookNLOHisto1D("BWp-Theta", stdbin, -1.1, 1.1);
       _h["BWp_Phi"] = bookNLOHisto1D("Phi(b,Wp)", stdbin, 0., M_PI);
       _h["BWp_R"] = bookNLOHisto1D("R(b,Wp)", stdbin, 0., 5.);
+      _h["BWp_invMass"] = bookNLOHisto1D("BWp-inv", stdbin, 0., 400.);
+      _h["BWp_invMass_peak"] = bookNLOHisto1D("BWp-inv-peak", stdbin, 160., 180.);
 
-      _h["Blm_E"] = bookNLOHisto1D("Blm-E", stdbin, 0., 425.);
+      _h["Blm_E"] = bookNLOHisto1D("Blm-E", stdbin, 0., 525.);
       _h["Blm_Theta"] = bookNLOHisto1D("Blm-Theta", stdbin, -1.1, 1.1);
       _h["Blm_Pt"] = bookNLOHisto1D("Blm-pT", stdbin, 0., 400.);
-      _h["Blm_invMass"] = bookNLOHisto1D("Blm-inv", stdbin, 0., 200.);
+      _h["Blm_invMass"] = bookNLOHisto1D("Blm-inv", stdbin, 0., 300.);
       _h["Blm_Phi"] = bookNLOHisto1D("Phi(b,lm)", stdbin, 0., M_PI);
       _h["Blm_R"] = bookNLOHisto1D("R(b,lm)", stdbin, 0., 5.);
 
-      _h["Blp_E"] = bookNLOHisto1D("Blp-E", stdbin, 0., 425.);
+      _h["Blp_E"] = bookNLOHisto1D("Blp-E", stdbin, 0., 525.);
       _h["Blp_Theta"] = bookNLOHisto1D("Blp-Theta", stdbin, -1.1, 1.1);
       _h["Blp_Pt"] = bookNLOHisto1D("Blp-pT", stdbin, 0., 400.);
-      _h["Blp_invMass"] = bookNLOHisto1D("Blp-inv", stdbin, 0., 225.);
+      _h["Blp_invMass"] = bookNLOHisto1D("Blp-inv", stdbin, 0., 300.);
       _h["Blp_Phi"] = bookNLOHisto1D("Phi(b,lp)", stdbin, 0, M_PI);
       _h["Blp_R"] = bookNLOHisto1D("R(b,lp)", stdbin, 0., 5.);
 
@@ -129,20 +135,24 @@ namespace Rivet {
       _h["BB_Theta"] = bookNLOHisto1D("BB-Theta", stdbin, -1.1, 1.1);
       _h["BB_Pt"] = bookNLOHisto1D("BB-pT", stdbin, 0., 400.);
       _h["BB_invMass"] = bookNLOHisto1D("BB-inv", stdbin, 0., 600.);
+      _h["BB_invMass_Zpeak"] = bookNLOHisto1D("BB-inv-Zpeak", stdbin, 80., 100.);
+      _h["BB_invMass_Hpeak"] = bookNLOHisto1D("BB-inv-peak", stdbin, 115., 135.);
       _h["BB_Phi"] = bookNLOHisto1D("Phi(b,b)", stdbin, 0, M_PI);
       _h["BB_R"] = bookNLOHisto1D("R(b,b)", stdbin, 0., 5.);
 
-      _h["W_invMass"] = bookNLOHisto1D("W-inv", stdbin, 70., 90.);
-      _h["BW_invMass"] = bookNLOHisto1D("BW-inv", stdbin, 0., 600.);
+      _h["W_invMass"] = bookNLOHisto1D("W-inv", stdbin, 0., 400.);
+      _h["W_invMass_peak"] = bookNLOHisto1D("W-inv-peak", stdbin, 70., 90.);
+      _h["BW_invMass"] = bookNLOHisto1D("BW-inv", stdbin, 0., 700.);
+      _h["BW_invMass_peak"] = bookNLOHisto1D("BW-inv-peak", stdbin, 160., 180.);
       _h["Bl_invMass"] = bookNLOHisto1D("Bl-inv", stdbin, 0., 300.);
 
       _h["hardest_lepton_E"] = bookNLOHisto1D("hardest-lepton-E", stdbin, 0., 400.);
       _h["hardest_lepton_Pt"] = bookNLOHisto1D("hardest-lepton-pT", stdbin, 0., 400.);
       _h["hardest_lepton_Eta"] = bookNLOHisto1D("hardest-lepton-eta", stdbin, -3., 3.);
 
-      _h["second_hardest_lepton_E"] = bookNLOHisto1D("2nd-hardest-lepton-E", stdbin, 0., 300.);
-      _h["second_hardest_lepton_Pt"] = bookNLOHisto1D("2nd-hardest-lepton-pT", stdbin, 0., 200.);
-      _h["second_hardest_lepton_Eta"] = bookNLOHisto1D("2nd-hardest-lepton-Eta", stdbin, -3., 3.);
+      _h["2nd_hardest_lepton_E"] = bookNLOHisto1D("2nd-hardest-lepton-E", stdbin, 0., 300.);
+      _h["2nd_hardest_lepton_Pt"] = bookNLOHisto1D("2nd-hardest-lepton-pT", stdbin, 0., 200.);
+      _h["2nd_hardest_lepton_Eta"] = bookNLOHisto1D("2nd-hardest-lepton-Eta", stdbin, -3., 3.);
 
       _h["electron_E"] = bookNLOHisto1D("electron-E", stdbin, 0., 400.);
       _h["electron_Pt"] = bookNLOHisto1D("electron-Pt", stdbin, 0., 350.);
@@ -331,9 +341,9 @@ namespace Rivet {
       _h["leadingjet_Theta"]->fill(cos(jets[0].theta()), event);
       _h["leadingjet_Pt"]->fill(jets[0].pt(), event);
 
-      _h["secondleadingjet_E"]->fill(jets[1].E(), event);
-      _h["secondleadingjet_Theta"]->fill(std::cos(jets[1].momentum().theta()), event);
-      _h["secondleadingjet_Pt"]->fill(jets[1].pt(), event);
+      _h["2ndleadingjet_E"]->fill(jets[1].E(), event);
+      _h["2ndleadingjet_Theta"]->fill(std::cos(jets[1].momentum().theta()), event);
+      _h["2ndleadingjet_Pt"]->fill(jets[1].pt(), event);
 
       if (bjets.size() > 0) _h["bjet_E"]->fill(bjets[0].E(), event);
       if (bjets.size() > 0) _h["bjet_Theta"]->fill(std::cos(bjets[0].theta()), event);
@@ -343,7 +353,10 @@ namespace Rivet {
       if (bbarjets.size() > 0) _h["bbarjet_Theta"]->fill(std::cos(bbarjets[0].theta()), event);
       if (bbarjets.size() > 0) _h["bbarjet_Pt"]->fill(bbarjets[0].pt(), event);
 
-      _h["jets_invMass"]->fill((jets[0].momentum() + jets[1].momentum()).mass(), event);
+      double jetsMass = (jets[0].momentum() + jets[1].momentum()).mass();
+      _h["jets_invMass"]->fill(jetsMass, event);
+      _h["jets_invMass_Zpeak"]->fill(jetsMass, event);
+      _h["jets_invMass_Hpeak"]->fill(jetsMass, event);
 
       FourMomentum BB;
       if (bjets.size() > 0 && bbarjets.size() > 0) {
@@ -351,6 +364,8 @@ namespace Rivet {
         _h["BB_Phi"]->fill(Rivet::deltaPhi(bjets[0].momentum(),bbarjets[0].momentum()), event);
         _h["BB_R"]->fill(Rivet::deltaR(bjets[0].momentum(),bbarjets[0].momentum()), event);
         _h["BB_invMass"]->fill(BB.mass(), event);
+        _h["BB_invMass_Zpeak"]->fill(BB.mass(), event);
+        _h["BB_invMass_Hpeak"]->fill(BB.mass(), event);
         _h["BB_E"]->fill(BB.E(), event);
         _h["BB_Pt"]->fill(BB.pt(), event);
         _h["BB_Theta"]->fill(std::cos(BB.theta()), event);
@@ -361,9 +376,9 @@ namespace Rivet {
       if(l.size() > 0) _h["hardest_lepton_Eta"]->fill(l[0].momentum().eta(), event);
       if(l.size() > 0) _h["hardest_lepton_E"]->fill(l[0].momentum().E(), event);
 
-      if(l.size() > 1) _h["second_hardest_lepton_Pt"]->fill(l[1].momentum().pt(), event);
-      if(l.size() > 1) _h["second_hardest_lepton_Eta"]->fill(l[1].momentum().eta(), event);
-      if(l.size() > 1) _h["second_hardest_lepton_E"]->fill(l[1].momentum().E(), event);
+      if(l.size() > 1) _h["2nd_hardest_lepton_Pt"]->fill(l[1].momentum().pt(), event);
+      if(l.size() > 1) _h["2nd_hardest_lepton_Eta"]->fill(l[1].momentum().eta(), event);
+      if(l.size() > 1) _h["2nd_hardest_lepton_E"]->fill(l[1].momentum().E(), event);
 
       if(e.size() > 0) _h["electron_E"]->fill(e[0].momentum().E(), event);
       if(e.size() > 0) _h["electron_Pt"]->fill(e[0].momentum().pt(), event);
@@ -398,7 +413,9 @@ namespace Rivet {
       if(lm.size() > 0 && nb.size() > 0) {
         Wm = lm[0].momentum()+nb[0].momentum();
         _h["Wm_invMass"]->fill(Wm.mass(), event);
+        _h["Wm_invMass_peak"]->fill(Wm.mass(), event);
         _h["W_invMass"]->fill(Wm.mass(), event);
+        _h["W_invMass_peak"]->fill(Wm.mass(), event);
         _h["Wm_E"]->fill(Wm.E(), event);
         _h["Wm_Pt"]->fill(Wm.pt(), event);
         _h["Wm_Theta"]->fill(std::cos(Wm.theta()), event);
@@ -408,7 +425,9 @@ namespace Rivet {
       if(lp.size() > 0 && n.size()  > 0) {
         Wp = lp[0].momentum()+n[0].momentum();
         _h["Wp_invMass"]->fill(Wp.mass(), event);
+        _h["Wp_invMass_peak"]->fill(Wp.mass(), event);
         _h["W_invMass"]->fill(Wp.mass(), event);
+        _h["W_invMass_peak"]->fill(Wp.mass(), event);
         _h["Wp_E"]->fill(Wp.E(), event);
         _h["Wp_Pt"]->fill(Wp.pt(), event);
         _h["Wp_Theta"]->fill(std::cos(Wp.theta()), event);
@@ -417,25 +436,29 @@ namespace Rivet {
       FourMomentum Topbar;
       if(lm.size() > 0 && nb.size() > 0 && bbarjets.size() > 0) {
         Topbar = Wm+bbarjets[0].momentum();
-        _h["BWm_Phi"]->fill(Rivet::deltaPhi(bbarjets[0].momentum(),Wm), event);
-        _h["BWm_R"]->fill(Rivet::deltaR(bbarjets[0].momentum(),Wm), event);
         _h["BWm_invMass"]->fill(Topbar.mass(), event);
+        _h["BWm_invMass_peak"]->fill(Topbar.mass(), event);
         _h["BW_invMass"]->fill(Topbar.mass(), event);
+        _h["BW_invMass_peak"]->fill(Topbar.mass(), event);
         _h["BWm_E"]->fill(Topbar.E(), event);
         _h["BWm_Pt"]->fill(Topbar.pt(), event);
         _h["BWm_Theta"]->fill(std::cos(Topbar.theta()), event);
+        _h["BWm_Phi"]->fill(Rivet::deltaPhi(bbarjets[0].momentum(),Wm), event);
+        _h["BWm_R"]->fill(Rivet::deltaR(bbarjets[0].momentum(),Wm), event);
       }
 
       FourMomentum Top;
       if(lp.size() > 0 && n.size() > 0  && bjets.size() > 0) {
         Top = Wp+bjets[0].momentum();
-        _h["BWp_Phi"]->fill(Rivet::deltaPhi(bjets[0].momentum(),Wp), event);
-        _h["BWp_R"]->fill(Rivet::deltaR(bjets[0].momentum(),Wp), event);
         _h["BWp_invMass"]->fill(Top.mass(), event);
+        _h["BWp_invMass_peak"]->fill(Top.mass(), event);
         _h["BW_invMass"]->fill(Top.mass(), event);
+        _h["BW_invMass_peak"]->fill(Top.mass(), event);
         _h["BWp_E"]->fill(Top.E(), event);
         _h["BWp_Pt"]->fill(Top.pt(), event);
         _h["BWp_Theta"]->fill(std::cos(Top.theta()), event);
+        _h["BWp_Phi"]->fill(Rivet::deltaPhi(bjets[0].momentum(),Wp), event);
+        _h["BWp_R"]->fill(Rivet::deltaR(bjets[0].momentum(),Wp), event);
       }
 
       FourMomentum Blm;
