@@ -77,9 +77,9 @@ namespace Rivet {
       _h["2ndleadingjet_Pt"] = bookNLOHisto1D("2nd-leading-jet-pT", stdbin, 0., 300.);
       _h["2ndleadingjet_Theta"] = bookNLOHisto1D("2nd-leading-jet-Theta", stdbin, -1.1, 1.1);
 
-      _h["jets_invMass"] = bookNLOHisto1D("jets-inv", stdbin, 0., 400.);
+      _h["jets_invMass"] = bookNLOHisto1D("jets-inv", stdbin, 0., 600.);
       _h["jets_invMass_Zpeak"] = bookNLOHisto1D("jets-inv-Zpeak", stdbin, 80., 100.);
-      _h["jets_invMass_Hpeak"] = bookNLOHisto1D("jets-inv-Hpeak", stdbin, 115., 135.);
+      _h["jets_invMass_Hpeak"] = bookNLOHisto1D("jets-inv-Hpeak", stdbin, 115.1, 135.1);
 
       _h["bjet_E"] = bookNLOHisto1D("b-jet-E", stdbin, 0., 425.);
       _h["bjet_Pt"] = bookNLOHisto1D("b-jet-pT", stdbin, 0., 400.);
@@ -92,13 +92,13 @@ namespace Rivet {
       _h["Wm_E"] = bookNLOHisto1D("Wm-E", stdbin, 0., 425.);
       _h["Wm_Pt"] = bookNLOHisto1D("Wm-pT", stdbin, 0., 400.);
       _h["Wm_Theta"] = bookNLOHisto1D("Wm-Theta", stdbin, -1.1, 1.1);
-      _h["Wm_invMass"] = bookNLOHisto1D("Wm-inv", stdbin, 0., 400.);
+      _h["Wm_invMass"] = bookNLOHisto1D("Wm-inv", stdbin, 0., 600.);
       _h["Wm_invMass_peak"] = bookNLOHisto1D("Wm-inv-peak", stdbin, 70., 90.);
 
       _h["Wp_E"] = bookNLOHisto1D("Wp-E", stdbin, 0., 425.);
       _h["Wp_Pt"] = bookNLOHisto1D("Wp-pT", stdbin, 0., 400.);
       _h["Wp_Theta"] = bookNLOHisto1D("Wp-Theta", stdbin, -1.1, 1.1);
-      _h["Wp_invMass"] = bookNLOHisto1D("Wp-inv", stdbin, 0., 400.);
+      _h["Wp_invMass"] = bookNLOHisto1D("Wp-inv", stdbin, 0., 600.);
       _h["Wp_invMass_peak"] = bookNLOHisto1D("Wp-inv-peak", stdbin, 70., 90.);
 
       _h["BWm_E"] = bookNLOHisto1D("BWm-E", stdbin, 0., 425.);
@@ -106,7 +106,7 @@ namespace Rivet {
       _h["BWm_Theta"] = bookNLOHisto1D("BWm-Theta", stdbin, -1.1, 1.1);
       _h["BWm_Phi"] = bookNLOHisto1D("Phi(b,Wm)", stdbin, 0., M_PI);
       _h["BWm_R"] = bookNLOHisto1D("R(b,Wm)", stdbin, 0., 5.);
-      _h["BWm_invMass"] = bookNLOHisto1D("BWm-inv", stdbin, 0., 400.);
+      _h["BWm_invMass"] = bookNLOHisto1D("BWm-inv", stdbin, 0., 600.);
       _h["BWm_invMass_peak"] = bookNLOHisto1D("BWm-inv-peak", stdbin, 160., 180.);
 
       _h["BWp_E"] = bookNLOHisto1D("BWp-E", stdbin, 0., 425.);
@@ -114,7 +114,7 @@ namespace Rivet {
       _h["BWp_Theta"] = bookNLOHisto1D("BWp-Theta", stdbin, -1.1, 1.1);
       _h["BWp_Phi"] = bookNLOHisto1D("Phi(b,Wp)", stdbin, 0., M_PI);
       _h["BWp_R"] = bookNLOHisto1D("R(b,Wp)", stdbin, 0., 5.);
-      _h["BWp_invMass"] = bookNLOHisto1D("BWp-inv", stdbin, 0., 400.);
+      _h["BWp_invMass"] = bookNLOHisto1D("BWp-inv", stdbin, 0., 600.);
       _h["BWp_invMass_peak"] = bookNLOHisto1D("BWp-inv-peak", stdbin, 160., 180.);
 
       _h["Blm_E"] = bookNLOHisto1D("Blm-E", stdbin, 0., 525.);
@@ -136,11 +136,11 @@ namespace Rivet {
       _h["BB_Pt"] = bookNLOHisto1D("BB-pT", stdbin, 0., 400.);
       _h["BB_invMass"] = bookNLOHisto1D("BB-inv", stdbin, 0., 600.);
       _h["BB_invMass_Zpeak"] = bookNLOHisto1D("BB-inv-Zpeak", stdbin, 80., 100.);
-      _h["BB_invMass_Hpeak"] = bookNLOHisto1D("BB-inv-peak", stdbin, 115., 135.);
+      _h["BB_invMass_Hpeak"] = bookNLOHisto1D("BB-inv-Hpeak", stdbin, 115.1, 135.1);
       _h["BB_Phi"] = bookNLOHisto1D("Phi(b,b)", stdbin, 0, M_PI);
       _h["BB_R"] = bookNLOHisto1D("R(b,b)", stdbin, 0., 5.);
 
-      _h["W_invMass"] = bookNLOHisto1D("W-inv", stdbin, 0., 400.);
+      _h["W_invMass"] = bookNLOHisto1D("W-inv", stdbin, 0., 600.);
       _h["W_invMass_peak"] = bookNLOHisto1D("W-inv-peak", stdbin, 70., 90.);
       _h["BW_invMass"] = bookNLOHisto1D("BW-inv", stdbin, 0., 700.);
       _h["BW_invMass_peak"] = bookNLOHisto1D("BW-inv-peak", stdbin, 160., 180.);
@@ -150,8 +150,8 @@ namespace Rivet {
       _h["hardest_lepton_Pt"] = bookNLOHisto1D("hardest-lepton-pT", stdbin, 0., 400.);
       _h["hardest_lepton_Eta"] = bookNLOHisto1D("hardest-lepton-eta", stdbin, -3., 3.);
 
-      _h["2nd_hardest_lepton_E"] = bookNLOHisto1D("2nd-hardest-lepton-E", stdbin, 0., 300.);
-      _h["2nd_hardest_lepton_Pt"] = bookNLOHisto1D("2nd-hardest-lepton-pT", stdbin, 0., 200.);
+      _h["2nd_hardest_lepton_E"] = bookNLOHisto1D("2nd-hardest-lepton-E", stdbin, 0., 400.);
+      _h["2nd_hardest_lepton_Pt"] = bookNLOHisto1D("2nd-hardest-lepton-pT", stdbin, 0., 300.);
       _h["2nd_hardest_lepton_Eta"] = bookNLOHisto1D("2nd-hardest-lepton-Eta", stdbin, -3., 3.);
 
       _h["electron_E"] = bookNLOHisto1D("electron-E", stdbin, 0., 400.);

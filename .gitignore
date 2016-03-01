@@ -49,3 +49,5 @@ ee_threshold/fixedorder_*
 ee_threshold/matched_*
 ee_threshold/nloop_*
 ee_threshold/resum_*
+top_decay/whizard/proc_nlo-integrate.sin
+top_decay/whizard/proc_lo-integrate.sin
