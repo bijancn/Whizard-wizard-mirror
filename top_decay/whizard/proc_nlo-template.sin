@@ -5,4 +5,4 @@ include("../process_settings.sin")
 process proc_nlo = t => Wp, b { nlo_calculation = "Full" }
 #SETSCAN
 integrate (proc_nlo)
-printf "RES %8e %8e %8e" (sqrts, integral(proc_nlo), error(proc_nlo))
+printf "RES %8e %8e %8e" (mtop, integral(proc_nlo), error(proc_nlo))

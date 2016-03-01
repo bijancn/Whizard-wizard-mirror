@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from mpi4py_map import mpi_map, comm
-from subproc import replace_file, whizard_run, fatal, run, create_integration_sindarin
-from utils import cd, mkdirs
+import subproc
+from utils import cd, fatal
 from numpy import arange
 from mpi4py import MPI
 import subprocess
@@ -12,6 +12,7 @@ import shutil
 import os
 import sys
 import json
+import numpy as np
 
 def setup_logger():
   logPath = os.getcwd()
@@ -55,18 +56,18 @@ def load_json():
     logger.info(p['process'] + '\t[' + p['purpose'] + ']')
   return json_info
 
-def log(action, batch, process):
+def log(action, batch, proc_dict):
   logger.info(textwrap.fill(action + ' batch ' + str(batch) + ' of '+ \
-      str(process) + ' on ' + MPI.Get_processor_name()))
+      str(proc_dict) + ' on ' + MPI.Get_processor_name()))
 
-def setup_sindarins(process, batch=None):
-  logger.info('Setting up sindarins of ' + str(process))
+def setup_sindarins(proc_dict, batch=None):
+  logger.info('Setting up sindarins of ' + str(proc_dict))
   with cd('whizard/'):
-    sindarin = process['process'] + '.sin'
+    sindarin = proc_dict['process'] + '.sin'
     template_sindarin = sindarin.replace('.sin', '-template.sin')
     integration_sindarin = sindarin.replace('.sin', '-integrate.sin')
     template_present = os.path.isfile(template_sindarin)
-    scan = process['purpose'] == 'scan'
+    scan = proc_dict['purpose'] == 'scan'
     if scan and not template_present:
       logger.error('You have to supply ' + template_sindarin + ' for a scan')
       sys.exit(1)
@@ -79,43 +80,45 @@ def setup_sindarins(process, batch=None):
         logger.error('Didnt find ' + template_sindarin + ' nor ' + fallback)
         sys.exit(1)
     if template_present:
-      create_integration_sindarin(integration_sindarin, template_sindarin,
-          process['adaption_iterations'], process['integration_iterations'])
+      subproc.create_integration_sindarin(integration_sindarin, template_sindarin,
+          proc_dict['adaption_iterations'], proc_dict['integration_iterations'])
 
-def run_process((proc_id, process)):
-  log('Running', proc_id, process)
-  sindarin = process['process'] + '.sin'
-  integration_sindarin = str(sindarin).replace('.sin', '-integrate.sin')
-  integration_grids = str(sindarin).replace('.sin', '_m1.vg')
+def run_process((proc_id, proc_dict)):
+  log('Running', proc_id, proc_dict)
+  integration_sindarin = proc_dict['process'] + '-integrate.sin'
+  integration_grids = proc_dict['process'] + '_m1.vg'
+  purpose = proc_dict['purpose']
+  event_generation = purpose == 'events' or purpose == 'histograms'
   with cd('whizard/'):
-    if not os.path.exists(integration_grids) and \
-        (process['purpose'] == 'events' or process['purpose'] == 'histograms'):
+    if not os.path.exists(integration_grids) and event_generation:
       logger.error('Didnt find integration grids but you wanted events! ' + \
           'Aborting! Please use "integrate" first')
       return
-    elif process['purpose'] == 'integrate':
+    elif purpose == 'integrate':
       logger.info('Generating the following integration grids: ' + integration_grids)
-      whizard_run(whizard=whizard,
-          core=comm.Get_rank(),
+      subproc.whizard_run(purpose, whizard,
+          proc_id=comm.Get_rank(),
           sindarin=integration_sindarin,
-          options=process['whizard_options'])
+          options=proc_dict['whizard_options'])
     else:
-      logger.info('Using the following integration grids: ' + integration_grids)
-      runfolder = process['process'] + '-' + str(proc_id)
+      if event_generation:
+        logger.info('Using the following integration grids: ' + integration_grids)
+      runfolder = proc_dict['process'] + '-' + str(proc_id)
       if (not os.path.isfile(os.path.join(runfolder, 'done'))):
-        run(proc_id,
-            purpose=process['purpose'],
+        try:
+          analysis = json_info['analysis']
+        except KeyError:
+          analysis = ''
+        subproc.generate(proc_id,
+            proc_dict,
             whizard=whizard,
-            sindarin=sindarin,
             integration_grids=integration_grids,
-            batches=process['batches'],
-            options=process['whizard_options'],
-            events_per_batch=process['events_per_batch'],
-            analysis=json_info['analysis'])
-        if (os.path.isfile(os.path.join(runfolder, 'done') and \
-            process['purpose'] == 'events')):
+            analysis=analysis)
+        if (os.path.isfile(os.path.join(runfolder, 'done')) and \
+            purpose == 'events'):
           os.rename(os.path.join(runfolder, runfolder) + '.hepmc',
               os.path.join("../rivet", runfolder + '.hepmc'))
+        return
       else:
         logger.info('Skipping ' + runfolder)
 
@@ -128,18 +131,21 @@ else:
   json_info = None
 json_info = comm.bcast(json_info, root=0)
 whizard = json_info['whizard']
-  # TODO: (bcn 2016-02-25) make this check or search for the executable
-  # if not os.path.exists(whizard):
-    # print 'No valid whizard binary'
-    # print 'whizard = ', whizard
-    # sys.exit(1)
+# TODO: (bcn 2016-02-25) make this check or search for the executable
+# if not os.path.exists(whizard):
+  # print 'No valid whizard binary'
+  # print 'whizard = ', whizard
+  # sys.exit(1)
 
 comm.Barrier()
 
 runs = []
 for p in json_info['processes']:
-  if p['purpose'] == 'events':
+  if p['purpose'] == 'events' or p['purpose'] == 'histograms':
     runs += [(b, p) for b in range(p['batches'])]
+  elif p['purpose'] == 'scan':
+    runs += [(b, p) for b in np.arange(float(p['start']), float(p['stop']),
+      float(p['stepsize']))]
   elif p['purpose'] == 'integrate':
     runs += [(-1, p)]
 mpi_map(run_process, runs)

@@ -19,3 +19,5 @@ show (model)
 
 mult_call_real = 1000
 ?combined_nlo_integration = false
+$fks_mapping_type = "default"
+

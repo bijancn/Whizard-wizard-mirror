@@ -1,0 +1,8 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+#ITERATIONS
+process proc_lo = t => Wp, b
+#SETSCAN
+integrate (proc_lo)
+printf "RES %8e %8e %8e" (mtop, integral(proc_lo), error(proc_lo))
