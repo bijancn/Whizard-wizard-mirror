@@ -3,8 +3,28 @@ import os
 import sys
 import shutil
 import tempfile
+import json
 
-logger = logging.getLogger(__name__)
+def setup_logger():
+  logPath = os.getcwd()
+  logName = 'default'
+  logFormatter = logging.Formatter('%(asctime)s ' + \
+      '[%(levelname)-5.5s]  %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+  rootLogger = logging.getLogger()
+  fileHandler = logging.FileHandler('{0}/{1}.log'.format(logPath, logName))
+  fileHandler.setFormatter(logFormatter)
+  rootLogger.addHandler(fileHandler)
+  rootLogger.setLevel(logging.INFO)
+  consoleHandler = logging.StreamHandler()
+  consoleHandler.setFormatter(logFormatter)
+  rootLogger.addHandler(consoleHandler)
+  logger = logging.getLogger(__name__)
+  return logger
+
+# try:
+  # logger = logging.getLogger(__name__)
+# except:
+logger = setup_logger()
 
 class cd:
   """Context manager for changing the current working directory"""
@@ -45,3 +65,12 @@ def sed(original, replace_line, new_file=None, write_to_top=''):
     target = new_file
   remove(target)
   shutil.move(tmp_file, target)
+
+def load_json(json_file):
+  try:
+    with open(json_file) as f:
+      return json.load(f)
+  except IOError:
+    fatal('json not found: ' + json_file )
+  except ValueError:
+    fatal('json seems invalid. Check it on http://jsonlint.com/')

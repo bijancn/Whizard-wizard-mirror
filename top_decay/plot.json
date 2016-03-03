@@ -1,0 +1,7 @@
+{
+  "plots": [
+  {"title": "top width",
+   "lines": ["proc_lo"]
+  }
+  ]
+}

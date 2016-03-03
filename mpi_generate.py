@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from mpi4py_map import mpi_map, comm
 import subproc
-from utils import cd, fatal
+from utils import cd, fatal, load_json, setup_logger
 from numpy import arange
 from mpi4py import MPI
 import subprocess
@@ -11,26 +11,9 @@ import time
 import shutil
 import os
 import sys
-import json
 import numpy as np
 
-def setup_logger():
-  logPath = os.getcwd()
-  logName = 'default'
-  logFormatter = logging.Formatter('%(asctime)s ' + \
-      '[%(levelname)-5.5s]  %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-  rootLogger = logging.getLogger()
-  fileHandler = logging.FileHandler('{0}/{1}.log'.format(logPath, logName))
-  fileHandler.setFormatter(logFormatter)
-  rootLogger.addHandler(fileHandler)
-  rootLogger.setLevel(logging.INFO)
-  consoleHandler = logging.StreamHandler()
-  consoleHandler.setFormatter(logFormatter)
-  rootLogger.addHandler(consoleHandler)
-  logger = logging.getLogger(__name__)
-  return logger
-
-def load_json():
+def mpi_load_json():
   logger.info("""
 #==============================================================================#
 #                                   NEW RUN                                    #
@@ -42,19 +25,13 @@ def load_json():
     process_folder = sys.argv[1]
   except:
     fatal('You have to give me the process directory as argument')
-  json_file = os.path.join(process_folder, 'local.json')
+  json_file = os.path.join(process_folder, 'run.json')
   logger.info('Trying to read: ' + json_file)
-  try:
-    with open(json_file) as f:
-      json_info = json.load(f)
-  except IOError:
-    fatal('json not found. Either wrong process directory or missing local.json')
-  except ValueError:
-    fatal('json seems invalid. Check it on http://jsonlint.com/')
+  run_json = load_json(json_file)
   logger.info('Found the following processes:')
-  for p in json_info['processes']:
+  for p in run_json['processes']:
     logger.info(p['process'] + '\t[' + p['purpose'] + ']')
-  return json_info
+  return run_json
 
 def log(action, batch, proc_dict):
   logger.info(textwrap.fill(action + ' batch ' + str(batch) + ' of '+ \
@@ -106,7 +83,7 @@ def run_process((proc_id, proc_dict)):
       runfolder = proc_dict['process'] + '-' + str(proc_id)
       if (not os.path.isfile(os.path.join(runfolder, 'done'))):
         try:
-          analysis = json_info['analysis']
+          analysis = run_json['analysis']
         except KeyError:
           analysis = ''
         subproc.generate(proc_id,
@@ -124,13 +101,13 @@ def run_process((proc_id, proc_dict)):
 
 logger = setup_logger ()
 if comm.Get_rank() == 0:
-  json_info = load_json()
-  for p in json_info['processes']:
+  run_json = mpi_load_json()
+  for p in run_json['processes']:
     setup_sindarins(p)
 else:
-  json_info = None
-json_info = comm.bcast(json_info, root=0)
-whizard = json_info['whizard']
+  run_json = None
+run_json = comm.bcast(run_json, root=0)
+whizard = run_json['whizard']
 # TODO: (bcn 2016-02-25) make this check or search for the executable
 # if not os.path.exists(whizard):
   # print 'No valid whizard binary'
@@ -140,7 +117,7 @@ whizard = json_info['whizard']
 comm.Barrier()
 
 runs = []
-for p in json_info['processes']:
+for p in run_json['processes']:
   if p['purpose'] == 'events' or p['purpose'] == 'histograms':
     runs += [(b, p) for b in range(p['batches'])]
   elif p['purpose'] == 'scan':
