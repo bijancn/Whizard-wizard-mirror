@@ -1,7 +1,7 @@
 {
   "processes": [
   {"process": "proc_lo",
-    "purpose": "integrate",
+    "purpose": "scan",
     "whizard_options": "",
     "scan_object": "mtop",
     "start": "100",
@@ -11,7 +11,7 @@
     "integration_iterations": "3:500"
   },
   {"process": "proc_nlo",
-    "purpose": "integrate",
+    "purpose": "scan",
     "scan_object": "mtop",
     "start": "100",
     "stop": "250",
