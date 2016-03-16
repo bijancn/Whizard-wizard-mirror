@@ -146,7 +146,7 @@ def fill_runs(proc_name, proc_dict):
 runs = []
 for proc_dict in run_json['processes']:
   sindarin = proc_dict['process'] + '.sin'
-  if subproc.get_combined_integration(sindarin):
+  if not subproc.get_combined_integration(sindarin):
     for proc_name in subproc.create_component_sindarin_names (sindarin):
       runs += fill_runs(proc_name, proc_dict)
   else:
