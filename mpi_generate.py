@@ -45,11 +45,11 @@ def fks_method_is_resonance ():
   return True
 
 def create_component_sindarin_names (sindarin, include_mismatch=None):
-  new_sindarins = [sindarin.replace('.sin', '_born.sin'), 
-                    sindarin.replace('.sin', '_real.sin'),
-                    sindarin.replace('.sin', '_virt.sin')]
+  new_sindarins = [sindarin.replace('.sin', '_born'), 
+                    sindarin.replace('.sin', '_real'),
+                    sindarin.replace('.sin', '_virt')]
   if include_mismatch != None:
-    new_sindarins += [sindarin.replace('.sin', '_mism.sin')]
+    new_sindarins += [sindarin.replace('.sin', '_mism')]
   return new_sindarins
 
 def setup_sindarins(proc_dict, batch=None):
@@ -80,10 +80,9 @@ def setup_sindarins(proc_dict, batch=None):
           subproc.create_simulation_sindarin(sindarin, template_sindarin,
               proc_dict['process'])
         if not get_combined_integration ():
-          print 'New Sindarins:'
-          new_sindarins = create_component_sindarin_names (sindarin, 
-            include_mismatch="Honigkuchenpferd")
-          print new_sindarins
+          new_sindarins = create_component_sindarin_names (sindarin) 
+          for s in new_sindarins:
+            shutil.copyfile(sindarin, s + '.sin')  
           
   else:
     logger.info('Skipping ' + proc_dict['process'])
@@ -101,8 +100,8 @@ def run_process((proc_id, proc_name, proc_dict)):
   whizard_options = proc_dict.get('whizard_options', '--no-banner')
   with cd('whizard/'):
     if not os.path.exists(integration_grids) and event_generation:
-      logger.error('Didnt find integration grids but you wanted events! ' + \
-          'Aborting! Please use "integrate" first')
+      logger.error('Didnt find integration grids with name ' + integration_grids + \
+           ',but you wanted events! Aborting! Please use "integrate" first')
       return
     elif purpose == 'integrate':
       logger.info('Generating the following integration grids: ' + integration_grids)
