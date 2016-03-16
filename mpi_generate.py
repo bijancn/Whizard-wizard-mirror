@@ -30,8 +30,12 @@ def mpi_load_json():
   logger.info('Trying to read: ' + json_file)
   run_json = load_json(json_file)
   logger.info('Found the following processes:')
+  known_purposes = ['disabled', 'scan', 'integrate', 'histograms', 'events']
   for p in run_json['processes']:
     logger.info(p['process'] + '\t[' + p['purpose'] + ']')
+    if p['purpose'] not in known_purposes:
+      logger.fatal('Aborting: Unknown purpose. It should be one of these:\n' + \
+          '\n'.join(known_purposes))
   return run_json
 
 def log(action, batch, proc_dict):
