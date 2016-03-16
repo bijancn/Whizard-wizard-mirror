@@ -62,7 +62,7 @@ def setup_sindarins(proc_dict, batch=None):
         if proc_dict['purpose'] == 'integration' or scan:
           subproc.create_integration_sindarin(integration_sindarin, template_sindarin,
               proc_dict['adaption_iterations'], proc_dict['integration_iterations'])
-        elif proc_dict['purpose'] == 'histograms' or proc_dict['purpose'] == 'events'
+        elif proc_dict['purpose'] == 'histograms' or proc_dict['purpose'] == 'events':
           subproc.create_simulation_sindarin(sindarin, template_sindarin,
               proc_dict['process'])
   else:

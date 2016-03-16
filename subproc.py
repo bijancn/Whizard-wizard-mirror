@@ -17,7 +17,7 @@ def divider(matchobj, batches):
   divided = str(int(float(matchobj.group(2)) / batches))
   return matchobj.group(1) + divided + matchobj.group(3)
 
-def replace_iterations (adaption_iterations, integration_iterations)
+def replace_iterations (adaption_iterations, integration_iterations):
   iterations = 'iterations = ' + adaption_iterations + ':"gw",' + integration_iterations
   return lambda line: line.replace('#ITERATIONS', iterations)
 
