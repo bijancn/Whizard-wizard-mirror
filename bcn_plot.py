@@ -1,5 +1,6 @@
 import sys
 import os
+import math
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -68,26 +69,33 @@ class Plotter(object):
 
     # major ticks
     if xticks is None:
-      xticks = np.linspace(xmin, xmax, n_majors)
+      if xlog:
+        xticks = np.logspace(math.log10(xmin), math.log10(xmax), num=n_majors)
+      else:
+        xticks = np.linspace(xmin, xmax, n_majors)
     ax.set_xticks(xticks)
+    ax.set_xticklabels([str(xt) for xt in xticks])
     if yticks is None:
-      yticks = np.linspace(ymin, ymax, n_majors)
+      if ylog:
+        yticks = np.logspace(math.log10(ymin), math.log10(ymax), num=n_majors)
+      else:
+        yticks = np.linspace(ymin, ymax, n_majors)
     ax.set_yticks(yticks)
 
     # minor ticks are auto-set to n_minors if requested
     if xminors:
-      minorLocator = AutoMinorLocator(n_minors)
-      ax.xaxis.set_minor_locator(minorLocator)
+      if xlog:
+        ax.set_xscale('log', subsx=[2, 3, 4, 5, 6, 7, 8, 9])
+      else:
+        minorLocator = AutoMinorLocator(n_minors)
+        ax.xaxis.set_minor_locator(minorLocator)
     if yminors:
-      minorLocator = AutoMinorLocator(n_minors)
-      ax.yaxis.set_minor_locator(minorLocator)
-
-    # This should allow to use scientific format of logarithmic scale with 10^X
-    # above the axe.
-    #formatter = ScalarFormatter(useMathText=True)
-    #formatter.set_scientific(True)
-    #formatter.set_powerlimits((-1,1))
-    #ax.yaxis.set_major_formatter(formatter)
+      if ylog:
+        ax.set_yscale('log', subsy=[2, 3, 4, 5, 6, 7, 8, 9])
+      else:
+        minorLocator = AutoMinorLocator(n_minors)
+        ax.yaxis.set_minor_locator(minorLocator)
+    # TODO: (bcn 2016-03-16) minors are not disabled in log plot
 
     # legend
     if not legend_hide:
@@ -154,6 +162,8 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     xlabel, ylabel = label_decider (title)
   else:
     xlabel, ylabel = (plot_dict.get('xlabel', 'x'), plot_dict.get('ylabel', 'y'))
+  xlog, ylog = (plot_dict.get('xlog', False), plot_dict.get('ylog', False))
+  xminors, yminors = (plot_dict.get('xminors', False), plot_dict.get('yminors', False))
   # TODO: (bcn 2016-03-03) check that this works
   legend_location = set_if_not (legend_decider, 'legend_location', 'best', title)
   if legend_decider is not None:
@@ -192,9 +202,9 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
       i += 1
       pl.setfig(ax, title=None,
                 xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax,
-                xminors=True, yminors=True,
+                xminors=xminors, yminors=yminors,
                 xlabel=xlabel,
-                ylabel=ylabel, ylog=False, xlog=False,
+                ylabel=ylabel, ylog=ylog, xlog=xlog,
                 legend_outside=many_labels, height_shrinker=0.70,
                 legend_location=legend_location,
                 legend_hide=False)
@@ -202,9 +212,9 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
                   dpi=fig.dpi)
   pl.setfig(ax, title=title,
             xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax,
-            xminors=True, yminors=True,
+            xminors=xminors, yminors=yminors,
             xlabel=xlabel,
-            ylabel=ylabel, ylog=False, xlog=False,
+            ylabel=ylabel, ylog=ylog, xlog=xlog,
             legend_outside=many_labels, height_shrinker=0.70,
             legend_location=legend_location)
   fig.savefig(os.path.join(pic_path, title + '.pdf'),

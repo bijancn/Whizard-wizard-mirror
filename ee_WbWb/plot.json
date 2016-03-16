@@ -1,0 +1,13 @@
+{
+  "plots": [
+  {"title": "High energy scan",
+   "lines": ["signaldiagram_lo"],
+   "xlabel": "$\\sqrt{s}$",
+   "ylabel": "$\\sigma$",
+   "ylog": true,
+   "xlog": true,
+   "xminors": true,
+   "yminors": true
+  }
+  ]
+}
