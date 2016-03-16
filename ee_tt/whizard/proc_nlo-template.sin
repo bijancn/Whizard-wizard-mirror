@@ -1,9 +1,13 @@
 include("../../general_settings.sin")
 include("../process_settings.sin")
 
+wtop = 0.0
 real dummy = 0.0
+?nlo_fixed_order = true
+?unweighted = false
+?negative_weights = true
 #ITERATIONS
-process proc_nlo = t => Wp, b { nlo_calculation = "Full" }
+process proc_nlo = e1, E1 => t, T { nlo_calculation = "Full" }
 #SETSCAN
 integrate (proc_nlo)
 printf "RES %8e %8e %8e" (mtop, integral(proc_nlo), error(proc_nlo))

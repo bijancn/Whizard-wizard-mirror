@@ -13,6 +13,7 @@ import shutil
 import os
 import sys
 import numpy as np
+from termcolor import colored
 
 def mpi_load_json():
   logger.info("""
@@ -60,33 +61,25 @@ def setup_sindarins(proc_dict, batch=None):
           sys.exit(1)
       if template_present:
         if proc_dict['purpose'] == 'integrate' or scan:
-          print 'going to create'
           subproc.create_integration_sindarin(integration_sindarin, template_sindarin,
               proc_dict['adaption_iterations'], proc_dict['integration_iterations'])
+          if subproc.is_nlo_calculation (integration_sindarin) and \
+             not subproc.get_combined_integration (integration_sindarin):
+            subproc.create_nlo_component_sindarins(integration_sindarin)
         elif proc_dict['purpose'] == 'histograms' or proc_dict['purpose'] == 'events':
           subproc.create_simulation_sindarin(sindarin, template_sindarin,
               proc_dict['process'])
-        print 'Combined Integration? '
-        print subproc.get_combined_integration (sindarin)
         if subproc.is_nlo_calculation (sindarin) and \
            not subproc.get_combined_integration (sindarin):
-          for suffix in subproc.get_component_suffixes (sindarin):
-            new_sindarin = sindarin.replace('.sin', '_' + suffix + '.sin')
-            shutil.copyfile(sindarin, new_sindarin)
-            subproc.replace_nlo_calc (suffix, new_sindarin)
-            subproc.replace_proc_id (suffix, new_sindarin)
+          subproc.create_nlo_component_sindarins(sindarin)
 
   else:
     logger.info('Skipping ' + proc_dict['process'])
 
 def run_process((proc_id, proc_name, proc_dict)):
   log('Running', proc_id, proc_dict)
-  #process = proc_dict['process']
-  #integration_sindarin = process + '-integrate.sin'
   integration_sindarin = proc_name + '-integrate.sin'
-  #integration_grids = process + '_m1.vg'
   integration_grids = proc_name + '_m1.vg'
-  print 'Looking for ', integration_grids
   purpose = proc_dict['purpose']
   event_generation = purpose == 'events' or purpose == 'histograms'
   whizard_options = proc_dict.get('whizard_options', '--no-banner')

@@ -98,6 +98,14 @@ def create_simulation_sindarin (simulation_sindarin, template_sindarin, process)
   sed(template_sindarin, new_file=simulation_sindarin, 
      write_to_bottom=command)
 
+def create_nlo_component_sindarins (base_sindarin):
+  for suffix in get_component_suffixes (base_sindarin):
+    new_sindarin = base_sindarin.replace('.sin', '_' + suffix + '.sin')
+    shutil.copyfile(base_sindarin, new_sindarin)
+    replace_nlo_calc (suffix, new_sindarin)
+    replace_proc_id (suffix, new_sindarin)
+
+
 def change_sindarin_for_event_gen(filename, samplename, i, proc_dict):
   sample = '$sample = "' + samplename + '"\n'
   seed = 'seed = ' + str(abs(hash(samplename)) % (10 ** 8)) + '\n'
@@ -136,12 +144,8 @@ def whizard_run(purpose, whizard, sindarin, fifo=None, proc_id=None, options='',
 def generate(proc_name, proc_id, proc_dict, whizard, integration_grids, analysis=''):
   purpose = proc_dict['purpose']
   options = proc_dict.get('whizard_options', '--no-banner')
-  #process = proc_dict['process']
-  #sindarin = proc_dict['process'] + '.sin'
   sindarin = proc_name + '.sin'
-  #runfolder = process + '-' + str(proc_id)
   runfolder = proc_name + '-' + str(proc_id)
-  #fifo = process + '-' + str(proc_id) + '.hepmc'
   fifo = proc_name + '-' + str(proc_id) + '.hepmc'
   event_generation = purpose == 'events' or purpose == 'histograms'
   mkdirs(runfolder)
@@ -159,7 +163,6 @@ def generate(proc_name, proc_id, proc_dict, whizard, integration_grids, analysis
     scan_expression = proc_dict['scan_object'] + " = " + str(proc_id)
     replace_line = lambda line: line.replace('#SETSCAN',
       scan_expression).replace('include("', 'include("../')
-    #integration_sindarin = process + '-integrate.sin'
     integration_sindarin = proc_name + '-integrate.sin'
     sed(integration_sindarin, replace_line, new_file=os.path.join(runfolder, sindarin))
     with cd(runfolder):
