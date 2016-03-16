@@ -55,7 +55,7 @@ def replace_nlo_calc(part, filename):
 
 def replace_proc_id(part, filename):
   # Expects part  = 'Real', 'Born', etc as strings
-  proc_id = get_value("(process *)(\w*)", filename)
+  proc_id = get_value("(process +)(\w+)", filename)
   replace_func = lambda l : l.replace(proc_id, proc_id + '_' + part)
   sed(filename, replace_line=replace_func)
 
@@ -63,13 +63,15 @@ def test_replace_nlo_calc():
   from nose.tools import eq_
   filename = 'test_replace_nlo_calc'
   test = open(filename, "w")
+  test.write('include("process_settings.sin")\n')
   test.write("process proc_nlo = e1, E1 => e2, E2\n")
   test.write("integrate (proc_nlo)")
   test.close()
   replace_proc_id('Real', filename)
-  eq_(get_value("(process *)(\w*)", filename), 'proc_nlo_Real')
+  eq_(get_value("(process +)(\w+)", filename), 'proc_nlo_Real')
   test = open(filename, "r")
-  expectation = ["process proc_nlo_Real = e1, E1 => e2, E2\n",
+  expectation = ['include("process_settings.sin")\n',
+                 "process proc_nlo_Real = e1, E1 => e2, E2\n",
                  "integrate (proc_nlo_Real)"]
   for t, e in zip(test, expectation):
     eq_(t, e)
