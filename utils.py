@@ -1,5 +1,6 @@
 import logging
 import os
+import re
 import sys
 import shutil
 import tempfile
@@ -65,6 +66,16 @@ def sed(original, replace_line, new_file=None, write_to_top=''):
     target = new_file
   remove(target)
   shutil.move(tmp_file, target)
+
+def grep(pattern, filename):
+  try:
+   file = open(filename, "r")
+  except IOError:
+    return False
+  for line in file:
+    if re.search(pattern, line):
+      return True
+  return False
 
 def load_json(json_file):
   try:
