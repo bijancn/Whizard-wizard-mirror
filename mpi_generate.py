@@ -38,6 +38,20 @@ def log(action, batch, proc_dict):
   logger.info(textwrap.fill(action + ' batch ' + str(batch) + ' of '+ \
       str(proc_dict) + ' on ' + MPI.Get_processor_name()))
 
+def get_combined_integration ():
+  return False
+
+def fks_method_is_resonance ():
+  return True
+
+def create_component_sindarin_names (sindarin, include_mismatch=None):
+  new_sindarins = [sindarin.replace('.sin', '_born.sin'), 
+                    sindarin.replace('.sin', '_real.sin'),
+                    sindarin.replace('.sin', '_virt.sin')]
+  if include_mismatch != None:
+    new_sindarins += [sindarin.replace('.sin', '_mism.sin')]
+  return new_sindarins
+
 def setup_sindarins(proc_dict, batch=None):
   if proc_dict['purpose'] != 'disabled':
     logger.info('Setting up sindarins of ' + str(proc_dict))
@@ -65,14 +79,23 @@ def setup_sindarins(proc_dict, batch=None):
         elif proc_dict['purpose'] == 'histograms' or proc_dict['purpose'] == 'events':
           subproc.create_simulation_sindarin(sindarin, template_sindarin,
               proc_dict['process'])
+        if not get_combined_integration ():
+          print 'New Sindarins:'
+          new_sindarins = create_component_sindarin_names (sindarin, 
+            include_mismatch="Honigkuchenpferd")
+          print new_sindarins
+          
   else:
     logger.info('Skipping ' + proc_dict['process'])
 
-def run_process((proc_id, proc_dict)):
+def run_process((proc_id, proc_name, proc_dict)):
   log('Running', proc_id, proc_dict)
-  process = proc_dict['process']
-  integration_sindarin = process + '-integrate.sin'
-  integration_grids = process + '_m1.vg'
+  #process = proc_dict['process']
+  #integration_sindarin = process + '-integrate.sin'
+  integration_sindarin = proc_name + '-integrate.sin'
+  #integration_grids = process + '_m1.vg'
+  integration_grids = proc_name + '_m1.vg'
+  print 'Looking for ', integration_grids
   purpose = proc_dict['purpose']
   event_generation = purpose == 'events' or purpose == 'histograms'
   whizard_options = proc_dict.get('whizard_options', '--no-banner')
@@ -90,10 +113,11 @@ def run_process((proc_id, proc_dict)):
     else:
       if event_generation:
         logger.info('Using the following integration grids: ' + integration_grids)
-      runfolder = process + '-' + str(proc_id)
+      runfolder = proc_name + '-' + str(proc_id)
       if (not os.path.isfile(os.path.join(runfolder, 'done'))):
         analysis = run_json.get('analysis', '')
-        subproc.generate(proc_id,
+        subproc.generate(proc_name, 
+            proc_id,
             proc_dict,
             whizard=whizard,
             integration_grids=integration_grids,
@@ -126,13 +150,15 @@ comm.Barrier()
 
 runs = []
 for p in run_json['processes']:
-  if p['purpose'] == 'events' or p['purpose'] == 'histograms':
-    runs += [(b, p) for b in range(p['batches'])]
-  elif p['purpose'] == 'scan':
-    runs += [(b, p) for b in np.arange(float(p['start']), float(p['stop']),
-      float(p['stepsize']))]
-  elif p['purpose'] == 'integrate':
-    runs += [(-1, p)]
+  sindarin = p['process'] + '.sin'
+  for pp in create_component_sindarin_names (sindarin):
+    if p['purpose'] == 'events' or p['purpose'] == 'histograms':
+      runs += [(b, pp, p) for b in range(p['batches'])]
+    elif p['purpose'] == 'scan':
+      runs += [(b, pp, p) for b in np.arange(float(p['start']), float(p['stop']),
+        float(p['stepsize']))]
+    elif p['purpose'] == 'integrate':
+      runs += [(-1, pp, p)]
 mpi_map(run_process, runs)
 
 if comm.Get_rank() == 0:

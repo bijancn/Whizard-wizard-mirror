@@ -21,7 +21,6 @@ def replace_iterations (adaption_iterations, integration_iterations):
   iterations = 'iterations = ' + adaption_iterations + ':"gw",' + integration_iterations
   return lambda line: line.replace('#ITERATIONS', iterations)
 
-
 def create_integration_sindarin(integration_sindarin, template_sindarin,
     adaption_iterations, integration_iterations):
   replace_line = replace_iterations (adaption_iterations, integration_iterations)
@@ -67,13 +66,16 @@ def whizard_run(purpose, whizard, sindarin, fifo=None, proc_id=None, options='',
       logger.fatal('Whizard failed')
       sys.exit(1)
 
-def generate(proc_id, proc_dict, whizard, integration_grids, analysis=''):
+def generate(proc_name, proc_id, proc_dict, whizard, integration_grids, analysis=''):
   purpose = proc_dict['purpose']
   options = proc_dict.get('whizard_options', '--no-banner')
-  process = proc_dict['process']
-  sindarin = proc_dict['process'] + '.sin'
-  runfolder = process + '-' + str(proc_id)
-  fifo = process + '-' + str(proc_id) + '.hepmc'
+  #process = proc_dict['process']
+  #sindarin = proc_dict['process'] + '.sin'
+  sindarin = proc_name + '.sin'
+  #runfolder = process + '-' + str(proc_id)
+  runfolder = proc_name + '-' + str(proc_id)
+  #fifo = process + '-' + str(proc_id) + '.hepmc'
+  fifo = proc_name + '-' + str(proc_id) + '.hepmc'
   event_generation = purpose == 'events' or purpose == 'histograms'
   mkdirs(runfolder)
   if event_generation:
@@ -90,7 +92,8 @@ def generate(proc_id, proc_dict, whizard, integration_grids, analysis=''):
     scan_expression = proc_dict['scan_object'] + " = " + str(proc_id)
     replace_line = lambda line: line.replace('#SETSCAN',
       scan_expression).replace('include("', 'include("../')
-    integration_sindarin = process + '-integrate.sin'
+    #integration_sindarin = process + '-integrate.sin'
+    integration_sindarin = proc_name + '-integrate.sin'
     sed(integration_sindarin, replace_line, new_file=os.path.join(runfolder, sindarin))
     with cd(runfolder):
       whizard_run(purpose, whizard, sindarin, proc_id=proc_id, options=options)
