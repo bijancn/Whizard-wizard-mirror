@@ -66,10 +66,16 @@ def setup_sindarins(proc_dict, batch=None):
         elif proc_dict['purpose'] == 'histograms' or proc_dict['purpose'] == 'events':
           subproc.create_simulation_sindarin(sindarin, template_sindarin,
               proc_dict['process'])
+        print 'Combined Integration? '
+        print subproc.get_combined_integration (sindarin)
         if not subproc.get_combined_integration (sindarin):
-          new_sindarins = subproc.create_component_sindarin_names (sindarin)
-          for s in new_sindarins:
-            shutil.copyfile(sindarin, s + '.sin')
+          ##new_sindarins = subproc.create_component_sindarin_names (sindarin)
+          ##for s in new_sindarins:
+          for suffix in subproc.get_component_suffixes (sindarin):
+            new_sindarin = sindarin.replace('.sin', '_' + suffix + '.sin')
+            shutil.copyfile(sindarin, new_sindarin)
+            subproc.replace_nlo_calc (suffix, new_sindarin)
+            subproc.replace_proc_id (suffix, new_sindarin)
 
   else:
     logger.info('Skipping ' + proc_dict['process'])

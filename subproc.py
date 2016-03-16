@@ -12,13 +12,28 @@ logger = logging.getLogger(__name__)
 default_batches = int(os.getenv('WHIZARD_BATCHES', 64))
 events_re = re.compile(r"(n_events = )([0-9]*)( \* K)")
 
-def create_component_sindarin_names (sindarin, include_mismatch=False):
-  new_sindarins = [sindarin.replace('.sin', '_born'),
-                    sindarin.replace('.sin', '_real'),
-                    sindarin.replace('.sin', '_virt')]
+def get_component_suffixes (sindarin):
+  suffixes = ['Born', 'Real', 'Virtual']
   if fks_method_is_resonance(sindarin):
-    new_sindarins += [sindarin.replace('.sin', '_mism')]
-  return new_sindarins
+    suffixes += ['Mismatch']
+  return suffixes
+
+def create_component_sindarin_names (sindarin):
+  return [sindarin.replace('.sin', '_' + s) for s in get_component_suffixes (sindarin)]
+
+component_type = {'born': 'Born', 'real': 'Real'}
+
+def get_component_type (sindarin):
+  if 'born' in sindarin:
+    return 'Born'
+  elif 'real' in sindarin:
+    return 'Real'
+  elif 'virt' in sindarin:
+    return 'Virtual'
+  elif 'mism' in sindarin:
+    return 'Mismatch'
+  else:
+    return None
 
 def get_mandatory(proc_dict, key):
   try:
@@ -38,8 +53,9 @@ def replace_nlo_calc(part, filename):
   sed(filename, replace_line=replace_func)
 
 def replace_proc_id(part, filename):
-  # Expects part  = 'Real', 'Born', etc as strings
+  # Expects part  = 'real', 'born', etc as strings
   proc_id = get_value("(process *)(\w*)", filename)
+  print 'replace_proc_id: ', proc_id
   replace_func = lambda l : l.replace(proc_id, proc_id + '_' + part)
   sed(filename, replace_line=replace_func)
 
