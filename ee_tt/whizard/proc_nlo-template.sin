@@ -1,0 +1,9 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+real dummy = 0.0
+#ITERATIONS
+process proc_nlo = t => Wp, b { nlo_calculation = "Full" }
+#SETSCAN
+integrate (proc_nlo)
+printf "RES %8e %8e %8e" (mtop, integral(proc_nlo), error(proc_nlo))

@@ -51,14 +51,18 @@ def fatal(message):
   logger.fatal('>>> ' + message + ' <<<')
   sys.exit(1)
 
-def sed(original, replace_line, new_file=None, write_to_top=''):
+def sed(original, replace_line=None, new_file=None, write_to_top='', write_to_bottom=''):
   overwrite = new_file == None
   tmp_fh, tmp_file = tempfile.mkstemp()
   with open(tmp_file, 'w') as new_f:
     with open(original) as old_f:
       new_f.write(write_to_top)
       for line in old_f:
-        new_f.write(replace_line(line))
+        if replace_line is not None:
+          new_f.write(replace_line(line))
+        else:
+          new_f.write(line)
+      new_f.write(write_to_bottom)
   os.close(tmp_fh)
   if overwrite:
     target = original

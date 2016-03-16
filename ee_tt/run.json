@@ -1,0 +1,28 @@
+{
+  "processes": [
+  {"process": "proc_lo",
+    "purpose": "events",
+    "whizard_options": "",
+    "scan_object": "mtop",
+    "start": "100",
+    "stop": "250",
+    "stepsize": "1",
+    "adaption_iterations": "3:500",
+    "integration_iterations": "3:500",
+    "batches": 5
+  },
+  {"process": "proc_nlo",
+    "purpose": "events",
+    "scan_object": "dummy",
+    "start": "100",
+    "stop": "120",
+    "stepsize": "1",
+    "whizard_options": "",
+    "adaption_iterations": "3:5000",
+    "integration_iterations": "3:5000",
+    "batches": 5
+  }
+  ],
+  "whizard": "whizard",
+  "data_output": "./"
+}
