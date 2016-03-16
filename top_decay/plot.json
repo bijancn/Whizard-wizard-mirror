@@ -1,7 +1,9 @@
 {
   "plots": [
   {"title": "top width",
-   "lines": ["proc_lo", "proc_nlo"]
+   "lines": ["proc_lo", "proc_nlo"],
+   "xlabel": "$m_t$",
+   "ylabel": "$\\Gamma$"
   }
   ]
 }
