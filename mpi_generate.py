@@ -68,9 +68,8 @@ def setup_sindarins(proc_dict, batch=None):
               proc_dict['process'])
         print 'Combined Integration? '
         print subproc.get_combined_integration (sindarin)
-        if not subproc.get_combined_integration (sindarin):
-          ##new_sindarins = subproc.create_component_sindarin_names (sindarin)
-          ##for s in new_sindarins:
+        if subproc.is_nlo_calculation (sindarin) and \
+           not subproc.get_combined_integration (sindarin):
           for suffix in subproc.get_component_suffixes (sindarin):
             new_sindarin = sindarin.replace('.sin', '_' + suffix + '.sin')
             shutil.copyfile(sindarin, new_sindarin)
@@ -152,7 +151,8 @@ def fill_runs(proc_name, proc_dict):
 runs = []
 for proc_dict in run_json['processes']:
   sindarin = proc_dict['process'] + '.sin'
-  if not subproc.get_combined_integration(sindarin):
+  if subproc.is_nlo_calculation (sindarin) and \
+     not subproc.get_combined_integration(sindarin):
     for proc_name in subproc.create_component_sindarin_names (sindarin):
       runs += fill_runs(proc_name, proc_dict)
   else:

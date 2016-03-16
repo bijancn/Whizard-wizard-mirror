@@ -21,20 +21,6 @@ def get_component_suffixes (sindarin):
 def create_component_sindarin_names (sindarin):
   return [sindarin.replace('.sin', '_' + s) for s in get_component_suffixes (sindarin)]
 
-component_type = {'born': 'Born', 'real': 'Real'}
-
-def get_component_type (sindarin):
-  if 'born' in sindarin:
-    return 'Born'
-  elif 'real' in sindarin:
-    return 'Real'
-  elif 'virt' in sindarin:
-    return 'Virtual'
-  elif 'mism' in sindarin:
-    return 'Mismatch'
-  else:
-    return None
-
 def get_mandatory(proc_dict, key):
   try:
     return p[key]
