@@ -87,6 +87,9 @@ def get_number(keyword, filename):
 def get_logical(keyword, filename):
   return get_value("(" + keyword + " *= *)(true|false)", filename)
 
+def get_string(keyword, filename):
+  return get_value("(" + keyword + " *= *)(\w*)", filename)
+
 def test_get():
   from nose.tools import eq_
   filename = 'test'

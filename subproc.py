@@ -6,11 +6,19 @@ import shutil
 import subprocess
 from time import sleep
 from functools import partial
-from utils import cd, mkdirs, remove, sed, grep, get_value
+from utils import *
 
 logger = logging.getLogger(__name__)
 default_batches = int(os.getenv('WHIZARD_BATCHES', 64))
 events_re = re.compile(r"(n_events = )([0-9]*)( \* K)")
+
+def create_component_sindarin_names (sindarin, include_mismatch=False):
+  new_sindarins = [sindarin.replace('.sin', '_born'),
+                    sindarin.replace('.sin', '_real'),
+                    sindarin.replace('.sin', '_virt')]
+  if fks_method_is_resonance(sindarin):
+    new_sindarins += [sindarin.replace('.sin', '_mism')]
+  return new_sindarins
 
 def get_mandatory(proc_dict, key):
   try:
@@ -21,8 +29,8 @@ def get_mandatory(proc_dict, key):
 def get_combined_integration(filename):
   return get_logical('?combined_integration', filename)
 
-def get_fks_method(filename):
-  return get_string('$fks_method', filename)
+def fks_method_is_resonance(filename):
+  return get_string('$fks_method', filename) == 'resonances'
 
 def replace_nlo_calc(part, filename):
   # Expects part  = 'Real', 'Born', etc as strings

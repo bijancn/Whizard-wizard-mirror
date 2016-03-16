@@ -38,20 +38,6 @@ def log(action, batch, proc_dict):
   logger.info(textwrap.fill(action + ' batch ' + str(batch) + ' of '+ \
       str(proc_dict) + ' on ' + MPI.Get_processor_name()))
 
-def get_combined_integration ():
-  return False
-
-def fks_method_is_resonance ():
-  return True
-
-def create_component_sindarin_names (sindarin, include_mismatch=None):
-  new_sindarins = [sindarin.replace('.sin', '_born'), 
-                    sindarin.replace('.sin', '_real'),
-                    sindarin.replace('.sin', '_virt')]
-  if include_mismatch != None:
-    new_sindarins += [sindarin.replace('.sin', '_mism')]
-  return new_sindarins
-
 def setup_sindarins(proc_dict, batch=None):
   if proc_dict['purpose'] != 'disabled':
     logger.info('Setting up sindarins of ' + str(proc_dict))
@@ -74,16 +60,17 @@ def setup_sindarins(proc_dict, batch=None):
           sys.exit(1)
       if template_present:
         if proc_dict['purpose'] == 'integration' or scan:
+          print 'going to create'
           subproc.create_integration_sindarin(integration_sindarin, template_sindarin,
               proc_dict['adaption_iterations'], proc_dict['integration_iterations'])
         elif proc_dict['purpose'] == 'histograms' or proc_dict['purpose'] == 'events':
           subproc.create_simulation_sindarin(sindarin, template_sindarin,
               proc_dict['process'])
-        if not get_combined_integration ():
-          new_sindarins = create_component_sindarin_names (sindarin) 
+        if not subproc.get_combined_integration (sindarin):
+          new_sindarins = subproc.create_component_sindarin_names (sindarin)
           for s in new_sindarins:
-            shutil.copyfile(sindarin, s + '.sin')  
-          
+            shutil.copyfile(sindarin, s + '.sin')
+
   else:
     logger.info('Skipping ' + proc_dict['process'])
 
@@ -115,7 +102,7 @@ def run_process((proc_id, proc_name, proc_dict)):
       runfolder = proc_name + '-' + str(proc_id)
       if (not os.path.isfile(os.path.join(runfolder, 'done'))):
         analysis = run_json.get('analysis', '')
-        subproc.generate(proc_name, 
+        subproc.generate(proc_name,
             proc_id,
             proc_dict,
             whizard=whizard,
@@ -146,17 +133,26 @@ else:
 
 comm.Barrier()
 
+def fill_runs(proc_name, proc_dict):
+  if proc_dict['purpose'] == 'events' or proc_dict['purpose'] == 'histograms':
+    runs = [(b, proc_name, proc_dict) for b in range(proc_dict['batches'])]
+  elif proc_dict['purpose'] == 'scan':
+    runs = [(b, proc_name, proc_dict) for b in np.arange(float(proc_dict['start']), float(proc_dict['stop']),
+      float(proc_dict['stepsize']))]
+  elif proc_dict['purpose'] == 'integrate':
+    runs = [(-1, proc_name, proc_dict)]
+  return runs
+
 runs = []
-for p in run_json['processes']:
-  sindarin = p['process'] + '.sin'
-  for pp in create_component_sindarin_names (sindarin):
-    if p['purpose'] == 'events' or p['purpose'] == 'histograms':
-      runs += [(b, pp, p) for b in range(p['batches'])]
-    elif p['purpose'] == 'scan':
-      runs += [(b, pp, p) for b in np.arange(float(p['start']), float(p['stop']),
-        float(p['stepsize']))]
-    elif p['purpose'] == 'integrate':
-      runs += [(-1, pp, p)]
+for proc_dict in run_json['processes']:
+  sindarin = proc_dict['process'] + '.sin'
+  if subproc.get_combined_integration(sindarin):
+    for proc_name in subproc.create_component_sindarin_names (sindarin):
+      runs += fill_runs(proc_name, proc_dict)
+  else:
+    proc_name = proc_dict['process']
+    runs += fill_runs(proc_name, proc_dict)
+
 mpi_map(run_process, runs)
 
 if comm.Get_rank() == 0:
