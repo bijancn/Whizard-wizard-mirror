@@ -6,7 +6,7 @@ import shutil
 import subprocess
 from time import sleep
 from functools import partial
-from utils import cd, mkdirs, remove, sed
+from utils import cd, mkdirs, remove, sed, grep
 
 logger = logging.getLogger(__name__)
 default_batches = int(os.getenv('WHIZARD_BATCHES', 64))
@@ -44,16 +44,22 @@ def whizard_run(purpose, whizard, sindarin, fifo=None, proc_id=None, options='',
   try:
     process = subprocess.call(cmd, shell=True)
   except Exception as e:
-    logger.error('Exception occured: ' + str(e))
-    logger.error('Whizard failed')
+    logger.fatal('Exception occured: ' + str(e))
+    logger.fatal('Whizard failed')
+    sys.exit(1)
   else:
-    logger.info('Whizard finished' + num)
-    with open('done', 'a'):
-      os.utime('done', None)
+    if not grep('FATAL ERROR', 'whizard.log'):
+      logger.info('Whizard finished' + num)
+      with open('done', 'a'):
+        os.utime('done', None)
+    else:
+      logger.fatal('FATAL ERROR in whizard.log')
+      logger.fatal('Whizard failed')
+      sys.exit(1)
 
 def generate(proc_id, proc_dict, whizard, integration_grids, analysis=''):
   purpose = proc_dict['purpose']
-  options = proc_dict['whizard_options']
+  options = proc_dict.get('whizard_options', '--no-banner')
   process = proc_dict['process']
   sindarin = proc_dict['process'] + '.sin'
   runfolder = process + '-' + str(proc_id)
