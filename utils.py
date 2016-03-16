@@ -81,6 +81,36 @@ def grep(pattern, filename):
       return True
   return False
 
+def get_number(keyword, filename):
+  return int(get_value("(" + keyword + ") *= *([0-9]*)" , filename))
+
+def get_logical(keyword, filename):
+  return get_value("(" + keyword + " *= *)(true|false)", filename)
+
+def test_get():
+  from nose.tools import eq_
+  filename = 'test'
+  test = open(filename, "w")
+  test.write("?combined_integration  =   true ")
+  test.write("foo =  false ")
+  test.write(" int bar =  123 ")
+  test.close()
+  eq_(get_logical("\?combined_integration", filename), 'true')
+  eq_(get_logical("foo", filename), 'false')
+  eq_(get_number("bar", filename), 123)
+  os.remove(filename)
+
+def get_value(pattern, filename):
+  try:
+   file = open(filename, "r")
+  except IOError:
+    return None
+  for line in file:
+    m = re.search(pattern, line)
+    if m:
+      return m.group(2)
+  return None
+
 def load_json(json_file):
   try:
     with open(json_file) as f:

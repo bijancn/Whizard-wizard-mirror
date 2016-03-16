@@ -139,7 +139,6 @@ else:
   run_json = None
 run_json = comm.bcast(run_json, root=0)
 whizard = run_json['whizard']
-# if not os.path.exists(whizard):
 if not spawn.find_executable(whizard):
   logger.fatal('No valid whizard found. You gave whizard = ' + whizard)
   sys.exit(1)
