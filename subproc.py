@@ -6,11 +6,44 @@ import shutil
 import subprocess
 from time import sleep
 from functools import partial
-from utils import cd, mkdirs, remove, sed, grep
+from utils import cd, mkdirs, remove, sed, grep, get_value
 
 logger = logging.getLogger(__name__)
 default_batches = int(os.getenv('WHIZARD_BATCHES', 64))
 events_re = re.compile(r"(n_events = )([0-9]*)( \* K)")
+
+def get_mandatory(proc_dict, key):
+  try:
+    return p[key]
+  except KeyError:
+    logger.fatal('Aborting: ' + key + 'is mandatory')
+
+def get_combined_integration(filename):
+  return get_logical('?combined_integration', filename)
+
+def get_fks_method(filename):
+  return get_string('$fks_method', filename)
+
+def replace_nlo_calc(part, filename):
+  # Expects part  = 'Real', 'Born', etc as strings
+  replace_func = lambda l : l.replace('"Full"', '"' + part +'"')
+  sed(filename, replace_line=replace_func)
+
+def replace_proc_id(part, filename):
+  # Expects part  = 'Real', 'Born', etc as strings
+  proc_id = get_value("(process *)(\w*)", filename)
+  replace_func = lambda l : l.replace(proc_id, proc_id + '_' + part)
+  sed(filename, replaceline=replace_func)
+
+def test_replace_nlo_calc():
+  from nose.tools import eq_
+  filename = 'test_replace_nlo_calc'
+  test = open(filename, "w")
+  test.write("process proc_nlo = e1, E1 => e2, E2")
+  test.close()
+  replace_proc_id('Real', filename)
+  eq_(get_value("(process *)(\w*)", filename), 'proc_nlo_Real')
+  os.remove(filename)
 
 def divider(matchobj, batches):
   nevents = matchobj.group(2)
