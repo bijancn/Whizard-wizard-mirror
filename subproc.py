@@ -27,7 +27,7 @@ def get_mandatory(proc_dict, key):
     logger.fatal('Aborting: ' + key + 'is mandatory')
 
 def get_combined_integration(filename):
-  return get_logical('?combined_integration', filename)
+  return get_logical('\?combined_nlo_integration', filename)
 
 def fks_method_is_resonance(filename):
   return get_string('$fks_method', filename) == 'resonances'
