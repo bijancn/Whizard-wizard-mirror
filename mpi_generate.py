@@ -3,7 +3,6 @@ from mpi4py_map import mpi_map, comm
 import subproc
 from utils import cd, fatal, load_json, setup_logger
 from distutils import spawn
-from numpy import arange
 from mpi4py import MPI
 import subprocess
 import textwrap
@@ -35,7 +34,7 @@ def mpi_load_json():
   for p in run_json['processes']:
     logger.info(p['process'] + '\t[' + p['purpose'] + ']')
     if p['purpose'] not in known_purposes:
-      logger.fatal('Aborting: Unknown purpose. It should be one of these:\n' + \
+      fatal('Aborting: Unknown purpose. It should be one of these:\n' + \
           '\n'.join(known_purposes))
   return run_json
 
@@ -129,8 +128,7 @@ else:
 run_json = comm.bcast(run_json, root=0)
 whizard = run_json['whizard']
 if not spawn.find_executable(whizard):
-  logger.fatal('No valid whizard found. You gave whizard = ' + whizard)
-  sys.exit(1)
+  fatal('No valid whizard found. You gave whizard = ' + whizard)
 else:
   logger.info('Using ' + whizard)
 
@@ -140,8 +138,18 @@ def fill_runs(proc_name, proc_dict):
   if proc_dict['purpose'] == 'events' or proc_dict['purpose'] == 'histograms':
     runs = [(b, proc_name, proc_dict) for b in range(proc_dict['batches'])]
   elif proc_dict['purpose'] == 'scan':
-    runs = [(b, proc_name, proc_dict) for b in np.arange(float(proc_dict['start']), float(proc_dict['stop']),
-      float(proc_dict['stepsize']))]
+    try:
+      start = float(proc_dict['start'])
+      stop = float(proc_dict['stop'])
+      stepsize = proc_dict['stepsize']
+    except KeyError:
+      fatal('Aborting: You want a scan but have not set start, stop and stepsize')
+    if stepsize == 'logarithmic':
+      range = np.logspace(start, stop, num=proc_dict.get('steps', 10),
+          endpoint=True, base=10.0)
+    else:
+      range = np.arange(start, stop, float(stepsize))
+    runs = [(b, proc_name, proc_dict) for b in range]
   elif proc_dict['purpose'] == 'integrate':
     runs = [(-1, proc_name, proc_dict)]
   elif proc_dict['purpose'] == 'disabled':

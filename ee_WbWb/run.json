@@ -17,9 +17,10 @@
   {"process": "signaldiagram_lo",
     "purpose": "scan",
     "scan_object": "sqrts",
-    "start": "350",
-    "stop": "100000",
-    "stepsize": "1000",
+    "stepsize": "logarithmic",
+    "start": 2.5,
+    "stop": 10,
+    "steps": 50,
     "adaption_iterations": "3:20000",
     "integration_iterations": "3:20000"
   },
