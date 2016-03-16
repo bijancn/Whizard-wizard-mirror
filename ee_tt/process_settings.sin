@@ -1,27 +1,19 @@
 alpha_power = 2
 alphas_power = 0
 
-sqrts = 500 GeV
-iterations = 5:50*K:"gw", 5:50*K
+sqrts = 800 GeV
+iterations = 5:20*K:"gw", 3:15*K
 
-mZ = 91.188
-mW = 80.419
+mZ = 91.1876
+mW = 80.385
 mb = 4.2
 mH =  1.250000000000E+02
 me =  0.0
-wZ =  2.443                   ! should be recomputed
-wW =  2.049000000000E+00      ! should be recomputed
+mmu = 0.0
 wH =  4.143000000000E-03      ! should be recomputed
-mtop = 172.0
-GF = 1.2273E-005
-!alpha_em_i =  1.259307555060E+02
-?alpha_s_is_fixed = false
-?alpha_s_from_mz = true
-?alpha_s_from_lambda_qcd = false
-alpha_s_order = 1
-alpha_s_nf = 5
-alphas = 0.118 ! (Z pole, NLL running to mu_h)
-scale = mtop
+mtop = 173.2
+GF = 1.1663787E-005
+alphas = 0.1185
 
 printf "alpha_em_i = %g" (alpha_em_i)
 printf "ee   = %g" (ee)
@@ -29,4 +21,3 @@ printf "cw   = %g" (cw)
 printf "sw   = %g" (sw)
 printf "v   = %g" (v)
 
-wtop = 0.0

@@ -14,7 +14,11 @@ build_analysis = Builder(action = 'rivet-buildplugin $SOURCES',
 # It seems that --assume-normalized keeps the cross section fixed while the
 # unnormalized mode just adds the values of the histograms
 merge_yodas = Builder(action = 'yodamerge --assume-normalized -o $TARGET $SOURCES',
-    suffix = '.yoda', src_suffix = '.yoda')
+   suffix = '.yoda', src_suffix = '.yoda')
+
+merge_yodas_noscale = Builder(action = 'yodamerge_noscale --assume-normalized -o $TARGET $SOURCES',
+   suffix = '.yoda', src_suffix = '.yoda')
+
 
 # Add --no-ratio to disable the ratio plots
 plot_cmd = 'rivet-mkhtml --mc-errs --pdf --cm --single ' + \
@@ -37,7 +41,7 @@ build_plot = Builder(generator = generate_plot,
                     src_suffix = '.yoda')
 
 env.Append(BUILDERS = {'Yoda' : build_yoda, 'Analysis' : build_analysis,
-  'MergeYodas': merge_yodas, 'Plot' : build_plot})
+    'MergeYodas': merge_yodas, 'MergeYodasNoScale': merge_yodas_noscale, 'Plot' : build_plot})
 
 
 # We use timestamps instead of MD5s since hepmc's are big
@@ -48,7 +52,7 @@ env['NUMTHREADS'] = '4'
 
 dirify = lambda d : d + '/index.html'
 
-processes = ['proc_lo', 'proc_nlo', 'proc_powheg']
+processes = ['proc_lo', 'proc_nlo', 'proc_nlo_born', 'proc_nlo_virt', 'proc_nlo_real', 'proc_powheg']
 processes = filter(lambda p: os.path.isfile(p + '-0.hepmc'), processes)
 
 # This is a list of processes consisting of lists of hepmcs
@@ -74,17 +78,32 @@ print 'Out of these small yodas: ', small_yoda_names, '\n'
 # Actual building starts here
 Analysis = env.Analysis('RivetAnalysis', analysiss)
 merged_yodas = []
-for hepmc_lst, yoda, yodas in \
-    zip(hepmcs, final_yoda_names, small_yoda_names):
+for hepmc_lst, yoda in \
+    zip(hepmcs, final_yoda_names):
   ana = ' '.join(['-a ' + a for a in analysiss])
   make_yoda = lambda h : env.Yoda(source = h, ANALYSIS=ana)
   build_yodas = map(make_yoda, hepmc_lst)
   Depends(build_yodas, Analysis)
   merged_yodas.append(env.MergeYodas(target = yoda, source = build_yodas))
 
+nlo_yodas = []
+lo_yodas = []
+for yoda in merged_yodas:
+    if 'nlo' in str (yoda):
+        nlo_yodas.append(yoda)
+    elif 'lo' in str (yoda):
+        lo_yodas.append(yoda)
+
+print 'Merge NLO yodas (?)'
+env.MergeYodasNoScale (target = 'proc_nlo.yoda', source = nlo_yodas)
+final_yodas = [merged_yodas[0], 'proc_nlo.yoda']
+
+print 'Create plots: '
 for (plot, config) in zip(plots, configs):
-  plot = env.Plot(target = plot, source = merged_yodas, DESCRIPTIONS = '::'.join(descriptions),
-      CONFIG=config)
+  ### plot = env.Plot(target = plot, source = merged_yodas, DESCRIPTIONS = '::'.join(descriptions),
+  ###    CONFIG=config)
+  plot = env.Plot (target = plot, source = final_yodas, DESCRIPTIONS = '::'.join(descriptions),
+         CONFIG=config)
   Depends(plot, config)
 
 for (small_yodas, control_plot) in zip(small_yoda_names, control_plots):
