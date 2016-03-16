@@ -146,6 +146,10 @@ def fill_runs(proc_name, proc_dict):
       float(proc_dict['stepsize']))]
   elif proc_dict['purpose'] == 'integrate':
     runs = [(-1, proc_name, proc_dict)]
+  elif proc_dict['purpose'] == 'disabled':
+    runs = []
+  else:
+    raise Exception("Unknown purpose")
   return runs
 
 runs = []
