@@ -59,7 +59,7 @@ def setup_sindarins(proc_dict, batch=None):
           logger.error('Didnt find ' + template_sindarin + ' nor ' + fallback)
           sys.exit(1)
       if template_present:
-        if proc_dict['purpose'] == 'integration' or scan:
+        if proc_dict['purpose'] == 'integrate' or scan:
           print 'going to create'
           subproc.create_integration_sindarin(integration_sindarin, template_sindarin,
               proc_dict['adaption_iterations'], proc_dict['integration_iterations'])

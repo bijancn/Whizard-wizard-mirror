@@ -24,8 +24,8 @@ sample_format = hepmc
 ?write_raw = false
 
 $loop_me_method = "openloops"
-$real_tree_me_method = "openloops"
-$born_me_method = "openloops"
-$correlation_me_method = "openloops"
+#$real_tree_me_method = "openloops"
+#$born_me_method = "openloops"
+#$correlation_me_method = "openloops"
 
-?openloops_use_cms = true
+#?openloops_use_cms = true
