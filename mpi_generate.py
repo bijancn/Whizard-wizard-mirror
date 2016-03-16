@@ -73,16 +73,17 @@ def setup_sindarins(proc_dict, batch=None):
         elif proc_dict['purpose'] == 'histograms' or proc_dict['purpose'] == 'events':
           subproc.create_simulation_sindarin(sindarin, template_sindarin,
               proc_dict['process'])
-        if subproc.is_nlo_calculation (sindarin) and \
-           not subproc.get_combined_integration (sindarin):
-          subproc.create_nlo_component_sindarins(sindarin)
+          if subproc.is_nlo_calculation (sindarin) and \
+             not subproc.get_combined_integration (sindarin):
+            subproc.create_nlo_component_sindarins(sindarin)
 
   else:
     logger.info('Skipping ' + proc_dict['process'])
 
 def run_process((proc_id, proc_name, proc_dict)):
   log('Running', proc_id, proc_dict)
-  integration_sindarin = proc_name + '-integrate.sin'
+  #integration_sindarin = proc_name + '-integrate.sin'
+  integration_sindarin = proc_name + '.sin'
   integration_grids = proc_name + '_m1.vg'
   purpose = proc_dict['purpose']
   event_generation = purpose == 'events' or purpose == 'histograms'
@@ -90,7 +91,7 @@ def run_process((proc_id, proc_name, proc_dict)):
   with cd('whizard/'):
     if not os.path.exists(integration_grids) and event_generation:
       logger.error('Didnt find integration grids with name ' + integration_grids + \
-           ',but you wanted events! Aborting! Please use "integrate" first')
+           ', but you wanted events! Aborting! Please use "integrate" first')
       return
     elif purpose == 'integrate':
       logger.info('Generating the following integration grids: ' + integration_grids)
@@ -151,10 +152,15 @@ def fill_runs(proc_name, proc_dict):
 
 runs = []
 for proc_dict in run_json['processes']:
-  sindarin = proc_dict['process'] + '.sin'
-  if subproc.is_nlo_calculation (sindarin) and \
-     not subproc.get_combined_integration(sindarin):
-    for proc_name in subproc.create_component_sindarin_names (sindarin):
+  if proc_dict['purpose'] == 'events' or proc_dict['purpose'] == 'histograms':
+    base_sindarin = proc_dict['process'] + '.sin'
+  elif proc_dict['purpose'] == 'scan' or proc_dict['purpose'] == 'integrate':
+    base_sindarin = proc_dict['process'] + '-integrate.sin'
+  else:
+    raise Exception("Unknown purpose")
+  if subproc.is_nlo_calculation ('whizard/' + base_sindarin) and \
+     not subproc.get_combined_integration('whizard/' + base_sindarin):
+    for proc_name in subproc.create_component_sindarin_names (base_sindarin):
       runs += fill_runs(proc_name, proc_dict)
   else:
     proc_name = proc_dict['process']

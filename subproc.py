@@ -7,6 +7,7 @@ import subprocess
 from time import sleep
 from functools import partial
 from utils import *
+from termcolor import colored
 
 logger = logging.getLogger(__name__)
 default_batches = int(os.getenv('WHIZARD_BATCHES', 64))
@@ -19,7 +20,10 @@ def get_component_suffixes (sindarin):
   return suffixes
 
 def create_component_sindarin_names (sindarin):
-  return [sindarin.replace('.sin', '_' + s) for s in get_component_suffixes (sindarin)]
+  i = ''
+  if 'integrate' in sindarin:
+    i = '-integrate'
+  return [sindarin.replace(i + '.sin', '_' + s + i) for s in get_component_suffixes (sindarin)]
 
 def get_mandatory(proc_dict, key):
   try:
@@ -31,7 +35,7 @@ def get_combined_integration(filename):
   return get_logical('\?combined_nlo_integration', filename)
 
 def is_nlo_calculation(filename):
-  return grep("nlo_calculation =", filename)
+  return grep("nlo_calculation *=", filename)
 
 def test_is_nlo_calculation():
   from nose.tools import eq_
@@ -100,7 +104,10 @@ def create_simulation_sindarin (simulation_sindarin, template_sindarin, process)
 
 def create_nlo_component_sindarins (base_sindarin):
   for suffix in get_component_suffixes (base_sindarin):
-    new_sindarin = base_sindarin.replace('.sin', '_' + suffix + '.sin')
+    if 'integrate' in base_sindarin:
+      new_sindarin = base_sindarin.replace('-integrate.sin', '_' + suffix + '-integrate.sin')
+    else:
+      new_sindarin = base_sindarin.replace('.sin', '_' + suffix + '.sin')
     shutil.copyfile(base_sindarin, new_sindarin)
     replace_nlo_calc (suffix, new_sindarin)
     replace_proc_id (suffix, new_sindarin)
