@@ -59,8 +59,12 @@ def setup_sindarins(proc_dict, batch=None):
           logger.error('Didnt find ' + template_sindarin + ' nor ' + fallback)
           sys.exit(1)
       if template_present:
-        subproc.create_integration_sindarin(integration_sindarin, template_sindarin,
-            proc_dict['adaption_iterations'], proc_dict['integration_iterations'])
+        if proc_dict['purpose'] == 'integration' or scan:
+          subproc.create_integration_sindarin(integration_sindarin, template_sindarin,
+              proc_dict['adaption_iterations'], proc_dict['integration_iterations'])
+        elif proc_dict['purpose'] == 'histograms' or proc_dict['purpose'] == 'events'
+          subproc.create_simulation_sindarin(sindarin, template_sindarin,
+              proc_dict['process'])
   else:
     logger.info('Skipping ' + proc_dict['process'])
 

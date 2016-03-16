@@ -17,22 +17,32 @@ def divider(matchobj, batches):
   divided = str(int(float(matchobj.group(2)) / batches))
   return matchobj.group(1) + divided + matchobj.group(3)
 
+def replace_iterations (adaption_iterations, integration_iterations)
+  iterations = 'iterations = ' + adaption_iterations + ':"gw",' + integration_iterations
+  return lambda line: line.replace('#ITERATIONS', iterations)
+
+
 def create_integration_sindarin(integration_sindarin, template_sindarin,
     adaption_iterations, integration_iterations):
-  iterations = 'iterations = ' + adaption_iterations + ':"gw",' + integration_iterations
-  replace_line = lambda line: line.replace('#ITERATIONS', iterations)
+  replace_line = replace_iterations (adaption_iterations, integration_iterations)
   sed(template_sindarin, replace_line, new_file=integration_sindarin)
 
-def change_sindarin_for_event_gen(filename, samplename, i, batches, events_per_batch):
+def create_simulation_sindarin (simulation_sindarin, template_sindarin, process):
+  command = 'simulate(' + process + ')'
+  sed(template_sindarin, new_file=simulation_sindarin, 
+     write_to_bottom=command)
+
+def change_sindarin_for_event_gen(filename, samplename, i, proc_dict):
   sample = '$sample = "' + samplename + '"\n'
   seed = 'seed = ' + str(abs(hash(samplename)) % (10 ** 8)) + '\n'
+  events_per_batch = proc_dict ['events_per_batch']
   if events_per_batch == None:
-    replace_func = partial(divider, batches=batches)
+    replace_func = partial(divider, batches=proc_dict ['batches'])
   else:
     replace_func = lambda x : x.group(1) + str(events_per_batch)
   replace_line = lambda line : events_re.sub(replace_func,
       line).replace('include("', 'include("../')
-  sed(write_to_top = sample + seed)
+  sed(filename, replace_line, write_to_top = sample + seed)
 
 def whizard_run(purpose, whizard, sindarin, fifo=None, proc_id=None, options='', analysis=''):
   cmd = whizard + ' ' + sindarin + ' ' + options
@@ -73,8 +83,7 @@ def generate(proc_id, proc_dict, whizard, integration_grids, analysis=''):
       if (purpose == 'histograms'):
         remove(fifo)
         subprocess.call ("mkfifo " + fifo, shell=True)
-      change_sindarin_for_event_gen(sindarin, runfolder, proc_id, proc_dict['batches'],
-          proc_dict['events_per_batch'])
+      change_sindarin_for_event_gen(sindarin, runfolder, proc_id, proc_dict)
       whizard_run(purpose, whizard, sindarin, fifo=fifo, proc_id=proc_id, options=options,
           analysis=analysis)
   else:
