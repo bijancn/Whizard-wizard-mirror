@@ -29,6 +29,22 @@ def get_mandatory(proc_dict, key):
 def get_combined_integration(filename):
   return get_logical('\?combined_nlo_integration', filename)
 
+def is_nlo_calculation(filename):
+  return grep("nlo_calculation =", filename)
+
+def test_is_nlo_calculation():
+  from nose.tools import eq_
+  filename = 'test_is_nlo_calculation'
+  test = open(filename, "w")
+  test.write('foo bar')
+  test.close()
+  eq_(is_nlo_calculation(filename), False)
+  test = open(filename, "w")
+  test.write('nlo_calculation = "Full"')
+  test.close()
+  eq_(is_nlo_calculation(filename), True)
+  os.remove(filename)
+
 def fks_method_is_resonance(filename):
   return get_string('$fks_method', filename) == 'resonances'
 
