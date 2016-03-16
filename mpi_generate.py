@@ -2,6 +2,7 @@
 from mpi4py_map import mpi_map, comm
 import subproc
 from utils import cd, fatal, load_json, setup_logger
+import jsonschema
 from distutils import spawn
 from mpi4py import MPI
 import subprocess
@@ -13,6 +14,7 @@ import os
 import sys
 import numpy as np
 from termcolor import colored
+
 
 def mpi_load_json():
   logger.info("""
@@ -27,15 +29,24 @@ def mpi_load_json():
   except:
     fatal('You have to give me the process directory as argument')
   json_file = os.path.join(process_folder, 'run.json')
+  schema_file = os.path.join(process_folder, '../run-schema.json')
   logger.info('Trying to read: ' + json_file)
+  schema = load_json(schema_file)
   run_json = load_json(json_file)
+  try:
+    logger.error(jsonschema.exceptions.best_match(jsonschema.
+        Draft4Validator(schema).iter_errors(run_json)).message)
+  except:
+    pass
+  try:
+    jsonschema.validate(run_json, schema)
+  except jsonschema.exceptions.SchemaError as e:
+    fatal('Failed to validate schema:\n' + str(e))
+  except jsonschema.exceptions.ValidationError as e:
+    fatal('Failed to validate json:\n' + str(e))
   logger.info('Found the following processes:')
-  known_purposes = ['disabled', 'scan', 'integrate', 'histograms', 'events']
   for p in run_json['processes']:
     logger.info(p['process'] + '\t[' + p['purpose'] + ']')
-    if p['purpose'] not in known_purposes:
-      fatal('Aborting: Unknown purpose. It should be one of these:\n' + \
-          '\n'.join(known_purposes))
   return run_json
 
 def log(action, batch, proc_dict):
