@@ -34,5 +34,8 @@ show(model)
 
 #ITERATIONS
 #SETSCAN
+sqrtsstepsize = 0.1 GeV
+sqrtsmin = sqrts - sqrtsstepsize
+sqrtsmax = sqrts + sqrtsstepsize
 integrate (signaldiagram_lo)
 printf "RES %g %g %g" (sqrts, integral(signaldiagram_lo), error(signaldiagram_lo))
