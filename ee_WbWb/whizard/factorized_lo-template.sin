@@ -1,0 +1,88 @@
+model = SM_tt_threshold
+
+?vis_history = false
+
+library = factorized_lo
+process factorized_lo = e1, E1 => Wp, Wm, b, B {$restrictions = "3+5~t && 4+6~tbar"}
+
+compile
+
+mZ = 91.188
+mW = 80.419
+mb = 4.2
+mH =  1.250000000000E+02
+me =  0.0
+wZ =  2.443
+wW =  2.049000000000E+00
+wH =  4.143000000000E-03
+?alpha_s_is_fixed = false
+?alpha_s_from_mz = true
+?alpha_s_from_lambda_qcd = false
+alpha_s_order = 1
+alpha_s_nf = 5
+alphas = 0.118 ! (Z pole, NLL running to mu_h)
+alpha_em_i = 125.924 ! (not running)
+m1S = 172.0
+mpole_fixed = 1
+
+nloop  = 0
+sh     = 1.
+sf     = 1.
+Vtb    = 1.
+
+show(model)
+
+#ITERATIONS
+#SETSCAN
+sqrtsstepsize = 0.1 GeV
+sqrtsmin = sqrts - sqrtsstepsize
+sqrtsmax = sqrts + sqrtsstepsize
+
+$method = "threshold"
+$born_me_method = "threshold"
+$loop_me_method = "threshold"
+$correlation_me_method = "threshold"
+$real_tree_me_method = "threshold"
+alpha_power = 4
+alphas_power = 0
+
+FF = 9                 ! FF = 1
+offshell_strategy = -3 ! pole-approximation', LO decay, LO width in FF, no interference
+integrate (factorized_lo)
+printf "RES %g %g %g" (sqrts, integral(factorized_lo), error(factorized_lo))
+
+if (false) then
+  !!! Null check: Set formfactor to 0 and use only the signal part
+  iterations = 1:n_iter
+  FF = 10                ! FF = 0
+  offshell_strategy = -3 ! pole-approximation', LO decay, LO width in FF, no interference
+  process extra_nlo_threshold_p1 = e1, E1 => Wp, Wm, b, B {$restrictions = "3+5~t && 4+6~tbar"}
+  seed = 0
+  integrate (extra_nlo_threshold_p1)
+  expect (integral (extra_nlo_threshold_p1) == 0.0)
+
+  !!! tree level result from amp_blob, i.e. with factorized onshell LO decays
+  iterations = 5:n_iter:"gw", 5:n_iter
+  FF = 9                 ! FF = 1
+  offshell_strategy = -3 ! pole-approximation', LO decay, LO width in FF, no interference
+  seed = 0
+  integrate (extra_nlo_threshold_p1)
+
+  !!! and with the nlo command
+  process extra_nlo_threshold_p2 = e1, E1 => Wp, Wm, b, B {nlo_calculation = "Born"}
+  seed = 0
+  integrate (extra_nlo_threshold_p2)
+
+  !!! same numbers but different program flow
+  expect (integral (extra_nlo_threshold_p1) ==
+    integral (extra_nlo_threshold_p2)) {tolerance = 0.0001}
+
+  !!! Now we disable the FF and compare to the result directly from omega
+  FF = 10                ! FF = 0
+  offshell_strategy = -1 ! pole-approximation', LO decay, LO width in FF
+  seed = 0
+  integrate (extra_nlo_threshold_p1)
+  !!! Differences of O(Gamma/M) are ok
+  expect (integral (extra_nlo_threshold_p1) ==
+    integral (extra_nlo_threshold_p2)) {tolerance = 3 * wtop / mtpole * integral (extra_nlo_threshold_p1)}
+endif
