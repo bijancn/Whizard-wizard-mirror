@@ -6,6 +6,7 @@ real dummy = 0.0
 ?nlo_fixed_order = true
 ?unweighted = false
 ?negative_weights = true
+scale = mtop
 #ITERATIONS
 library = proc_nlo
 process proc_nlo = e1, E1 => t, T { nlo_calculation = "Full" }

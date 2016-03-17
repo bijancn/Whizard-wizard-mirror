@@ -29,8 +29,9 @@ def mpi_load_json():
     fatal('You have to give me the process directory as argument')
   json_file = os.path.join(process_folder, 'run.json')
   schema_file = os.path.join(process_folder, '../run-schema.json')
-  logger.info('Trying to read: ' + json_file)
+  logger.info('Trying to read: ' + schema_file)
   schema = load_json(schema_file)
+  logger.info('Trying to read: ' + json_file)
   run_json = load_json(json_file)
   try:
     logger.error(jsonschema.exceptions.best_match(jsonschema.
@@ -76,8 +77,15 @@ def setup_sindarins(proc_dict, batch=None):
         if proc_dict['purpose'] == 'integrate' or scan:
           subproc.create_integration_sindarin(integration_sindarin, template_sindarin,
               proc_dict['adaption_iterations'], proc_dict['integration_iterations'])
+          scaled_sindarins = None
+          if proc_dict.get('scale_variation', False):
+            scaled_sindarins = subproc.create_scale_sindarins (integration_sindarin)
           if proc_dict['nlo_type'] == 'nlo':
-            subproc.create_nlo_component_sindarins(integration_sindarin)
+            if scaled_sindarins != None:
+              for sindarin in scaled_sindarins:
+                subproc.create_nlo_component_sindarins(sindarin)
+            else:
+              subproc.create_nlo_component_sindarins(integration_sindarin)
         elif proc_dict['purpose'] == 'histograms' or proc_dict['purpose'] == 'events':
           subproc.create_simulation_sindarin(sindarin, template_sindarin,
               proc_dict['process'], proc_dict['adaption_iterations'], 
@@ -148,12 +156,16 @@ comm.Barrier()
 
 runs = []
 for proc_dict in run_json['processes']:
-  if proc_dict['nlo_type'] == 'nlo':
-    for proc_name in subproc.create_component_sindarin_names (proc_dict['process'] + '.sin'):
-      runs += subproc.fill_runs(proc_name, proc_dict)
+  if proc_dict.get ('scale_variation', False):
+    processes = subproc.append_scale_suffixes (proc_dict['process'])
   else:
-    proc_name = proc_dict['process']
-    runs += subproc.fill_runs(proc_name, proc_dict)
+    processes = [proc_dict['process']]
+  for proc_name in processes:
+    if proc_dict['nlo_type'] == 'nlo':
+      for nlo_proc_name in subproc.create_component_sindarin_names (proc_name):
+        runs += subproc.fill_runs(nlo_proc_name, proc_dict)
+    else:
+      runs += subproc.fill_runs(proc_name, proc_dict)
 
 mpi_map(run_process, runs)
 

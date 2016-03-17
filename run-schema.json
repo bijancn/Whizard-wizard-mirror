@@ -53,6 +53,10 @@
           "integration_iterations": {
             "id": "processes/integration_iterations",
             "type": "string"
+          },
+          "scale_variation": {
+             "id": "processes/scale_variation",
+             "type": "boolean"
           }
         },
         "required": [

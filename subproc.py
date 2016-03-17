@@ -50,8 +50,14 @@ def get_component_suffixes (sindarin):
     suffixes += ['Mismatch']
   return suffixes
 
+def get_scale_suffixes ():
+  return ['central', 'low', 'high']
+
+def append_scale_suffixes (proc_name):
+  return [proc_name + '_' + s for s in get_scale_suffixes()]
+
 def create_component_sindarin_names (sindarin):
-  return [sindarin.replace('.sin', '_' + s) for s in get_component_suffixes (sindarin)]
+  return [sindarin + '_' + s for s in get_component_suffixes (sindarin)]
 
 def get_mandatory(proc_dict, key):
   try:
@@ -80,6 +86,13 @@ def test_is_nlo_calculation():
 
 def fks_method_is_resonance(filename):
   return get_string('$fks_method', filename) == 'resonances'
+
+def replace_scale (factor, filename):
+  # Needs to be adapted for arbitrary number of spaces
+  original_scale = get_value("(scale = +)(\w+)", filename)
+  #Add brackets because scale expression can be a sum of variables
+  replace_func = lambda l: l.replace (original_scale, '(' + original_scale + ') * ' + str (factor))
+  sed(filename, replace_line=replace_func)
 
 def replace_nlo_calc(part, filename):
   # Expects part  = 'Real', 'Born', etc as strings
@@ -135,20 +148,38 @@ def create_simulation_sindarin (simulation_sindarin, template_sindarin, process,
           + 'simulate(' + process + ')'
   sed(simulation_sindarin, write_to_bottom=command)
 
+def insert_suffix (sindarin, suffix):
+  if 'integrate' in sindarin:
+    return sindarin.replace('-integrate.sin', '_' + suffix + '-integrate.sin')
+  else:
+    return sindarin.replace('.sin', '_' + suffix + '.sin')
+
+
+def create_scale_sindarins (base_sindarin):
+  new_sindarins = []
+  for suffix in get_scale_suffixes ():
+    new_sindarin = insert_suffix (base_sindarin, suffix)
+    new_sindarins.append(new_sindarin)
+    shutil.copyfile (base_sindarin, new_sindarin)
+    if suffix == 'low':
+      replace_scale (0.5, new_sindarin)
+    elif suffix == 'high':
+      replace_scale (2.0, new_sindarin)
+    replace_proc_id (suffix, new_sindarin)
+  return new_sindarins
+    
+
 def create_nlo_component_sindarins (base_sindarin):
   for suffix in get_component_suffixes (base_sindarin):
-    if 'integrate' in base_sindarin:
-      new_sindarin = base_sindarin.replace('-integrate.sin', '_' + suffix + '-integrate.sin')
-    else:
-      new_sindarin = base_sindarin.replace('.sin', '_' + suffix + '.sin')
+    new_sindarin = insert_suffix (base_sindarin, suffix)
     shutil.copyfile(base_sindarin, new_sindarin)
     replace_nlo_calc (suffix, new_sindarin)
     replace_proc_id (suffix, new_sindarin)
 
 def get_grid_index (proc_name):
+  words = proc_name.split ('_')
   grid_indices = {'Born': 1, 'Real': 2, 'Virtual': 3, 'Mismatch': 4}
-  nlo_type = proc_name.replace ('proc_nlo_', '')
-  return grid_indices[nlo_type]
+  return grid_indices[words[len(words)-1]]
 
 events_re = re.compile(r"(n_events = )([0-9]*)( \* K)")
 def change_sindarin_for_event_gen(filename, samplename, i, proc_dict):
