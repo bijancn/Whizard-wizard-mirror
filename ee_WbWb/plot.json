@@ -1,7 +1,7 @@
 {
   "plots": [
   {"title": "High energy scan",
-   "lines": ["signaldiagram_lo"],
+   "lines": ["signaldiagram_lo", "factorized_lo"],
    "xlabel": "$\\sqrt{s}$",
    "ylabel": "$\\sigma$",
    "ylog": true,

@@ -12,7 +12,6 @@ import time
 import shutil
 import os
 import sys
-import numpy as np
 from termcolor import colored
 
 
@@ -146,45 +145,14 @@ else:
 
 comm.Barrier()
 
-def fill_runs(proc_name, proc_dict):
-  if proc_dict['purpose'] == 'events' or proc_dict['purpose'] == 'histograms':
-    runs = [(b, proc_name, proc_dict) for b in range(proc_dict['batches'])]
-  elif proc_dict['purpose'] == 'scan':
-    try:
-      start = float(proc_dict['start'])
-      stop = float(proc_dict['stop'])
-      stepsize = proc_dict['stepsize']
-    except KeyError:
-      fatal('Aborting: You want a scan but have not set start, stop and stepsize')
-    if stepsize == 'logarithmic':
-      step_range = np.logspace(start, stop, num=proc_dict.get('steps', 10),
-          endpoint=True, base=10.0)
-    else:
-      step_range = np.arange(start, stop, float(stepsize))
-    runs = [(b, proc_name, proc_dict) for b in step_range]
-  elif proc_dict['purpose'] == 'integrate':
-    runs = [(-1, proc_name, proc_dict)]
-  elif proc_dict['purpose'] == 'disabled':
-    runs = []
-  else:
-    raise Exception("Unknown purpose")
-  return runs
-
 runs = []
 for proc_dict in run_json['processes']:
-   
-  if proc_dict['purpose'] == 'events' or proc_dict['purpose'] == 'histograms':
-    base_sindarin = 'whizard/' + proc_dict['process'] + '.sin'
-  elif proc_dict['purpose'] == 'scan' or proc_dict['purpose'] == 'integrate':
-    base_sindarin = 'whizard/' + proc_dict['process'] + '-integrate.sin'
-  else:
-    raise Exception("Unknown purpose")
   if proc_dict['nlo_type'] == 'nlo':
     for proc_name in subproc.create_component_sindarin_names (proc_dict['process'] + '.sin'):
-      runs += fill_runs(proc_name, proc_dict)
+      runs += subproc.fill_runs(proc_name, proc_dict)
   else:
     proc_name = proc_dict['process']
-    runs += fill_runs(proc_name, proc_dict)
+    runs += subproc.fill_runs(proc_name, proc_dict)
 
 mpi_map(run_process, runs)
 

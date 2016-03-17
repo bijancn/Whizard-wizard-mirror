@@ -4,14 +4,45 @@ import re
 import sys
 import shutil
 import subprocess
+import numpy as np
 from time import sleep
 from functools import partial
 from utils import *
 from termcolor import colored
 
 logger = logging.getLogger(__name__)
-default_batches = int(os.getenv('WHIZARD_BATCHES', 64))
-events_re = re.compile(r"(n_events = )([0-9]*)( \* K)")
+
+def fill_runs(proc_name, proc_dict):
+  if proc_dict['purpose'] == 'events' or proc_dict['purpose'] == 'histograms':
+    runs = [(b, proc_name, proc_dict) for b in range(proc_dict['batches'])]
+  elif proc_dict['purpose'] == 'scan':
+    try:
+      start = float(proc_dict['start'])
+      stop = float(proc_dict['stop'])
+      stepsize = proc_dict['stepsize']
+    except KeyError:
+      fatal('Aborting: You want a scan but have not set start, stop and stepsize')
+    if stepsize == 'logarithmic':
+      step_range = np.logspace(start, stop, num=proc_dict.get('steps', 10),
+          endpoint=True, base=10.0)
+    else:
+      step_range = np.arange(start, stop, float(stepsize))
+    runs = [(b, proc_name, proc_dict) for b in step_range]
+  elif proc_dict['purpose'] == 'integrate':
+    runs = [(-1, proc_name, proc_dict)]
+  elif proc_dict['purpose'] == 'disabled':
+    runs = []
+  else:
+    raise Exception("fill_runs: Unknown purpose")
+  return runs
+
+def test_fill_runs():
+  from nose.tools import eq_
+  proc_dict = {'purpose': 'events', 'batches': 2}
+  proc_name = 'test'
+  runs = fill_runs(proc_name, proc_dict)
+  eq_(runs, [(1, proc_name, proc_dict), (2, proc_name, proc_dict)])
+  proc_dict = {'purpose': 'scan', 'start': 0.1, 'stop': 0.2, 'stepsize': 0.05}
 
 def get_component_suffixes (sindarin):
   suffixes = ['Born', 'Real', 'Virtual']
@@ -117,7 +148,7 @@ def get_grid_index (proc_name):
   nlo_type = proc_name.replace ('proc_nlo_', '')
   return grid_indices[nlo_type]
 
-
+events_re = re.compile(r"(n_events = )([0-9]*)( \* K)")
 def change_sindarin_for_event_gen(filename, samplename, i, proc_dict):
   sample = '$sample = "' + samplename + '"\n'
   seed = 'seed = ' + str(abs(hash(samplename)) % (10 ** 8)) + '\n'

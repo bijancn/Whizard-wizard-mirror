@@ -22,6 +22,14 @@
              "id": "processes/nlo_type",
              "type": "string",
              "enum": ["lo", "nlo", "nlo_combined"]},
+          "batches": {
+            "id": "processes/batches",
+            "type": "number"
+          },
+          "events_per_batches": {
+            "id": "processes/batches",
+            "type": "number"
+          },
           "scan_object": {
             "id": "processes/scan_object",
             "type": "string"
