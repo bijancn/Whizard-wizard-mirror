@@ -19,17 +19,18 @@
     "scan_object": "sqrts",
     "stepsize": "logarithmic",
     "start": 2.5,
-    "stop": 10,
+    "stop": 6,
     "steps": 50,
     "adaption_iterations": "3:20000",
     "integration_iterations": "3:20000"
   },
   {"process": "factorized_lo",
-    "purpose": "disabled",
+    "purpose": "scan",
     "scan_object": "sqrts",
-    "start": 350,
-    "stop": 100000,
-    "stepsize": "1000",
+    "stepsize": "logarithmic",
+    "start": 2.5,
+    "stop": 6,
+    "steps": 50,
     "adaption_iterations": "3:20000",
     "integration_iterations": "3:20000"
   }
