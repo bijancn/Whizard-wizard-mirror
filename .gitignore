@@ -44,6 +44,8 @@ whizard_uu_powheg
 *.grid
 *.f90.in
 
+.coverage
+
 ee_threshold/expanded_*
 ee_threshold/fixedorder_*
 ee_threshold/matched_*

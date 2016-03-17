@@ -29,6 +29,8 @@ nloop  = 0
 sh     = 1.
 sf     = 1.
 Vtb    = 1.
+FF =  10
+offshell_strategy = 0
 
 show(model)
 
