@@ -29,6 +29,8 @@ nloop  = 0
 sh     = 1.
 sf     = 1.
 Vtb    = 1.
+FF = 9
+offshell_strategy = -3
 
 show(model)
 
@@ -46,8 +48,6 @@ $real_tree_me_method = "threshold"
 alpha_power = 4
 alphas_power = 0
 
-FF = 9                 ! FF = 1
-offshell_strategy = -3 ! pole-approximation', LO decay, LO width in FF, no interference
 integrate (factorized_lo)
 printf "RES %g %g %g" (sqrts, integral(factorized_lo), error(factorized_lo))
 

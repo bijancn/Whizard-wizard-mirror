@@ -4,11 +4,12 @@ import re
 import sys
 import shutil
 import subprocess
-import numpy as np
+from numpy import logspace, arange
 from time import sleep
 from functools import partial
 from utils import *
 from termcolor import colored
+from nose.tools import eq_, assert_almost_equal, raises
 
 logger = logging.getLogger(__name__)
 
@@ -23,10 +24,10 @@ def fill_runs(proc_name, proc_dict):
     except KeyError:
       fatal('Aborting: You want a scan but have not set start, stop and stepsize')
     if stepsize == 'logarithmic':
-      step_range = np.logspace(start, stop, num=proc_dict.get('steps', 10),
+      step_range = logspace(start, stop, num=proc_dict.get('steps', 10),
           endpoint=True, base=10.0)
     else:
-      step_range = np.arange(start, stop, float(stepsize))
+      step_range = arange(start, stop, float(stepsize))
     runs = [(b, proc_name, proc_dict) for b in step_range]
   elif proc_dict['purpose'] == 'integrate':
     runs = [(-1, proc_name, proc_dict)]
@@ -36,13 +37,39 @@ def fill_runs(proc_name, proc_dict):
     raise Exception("fill_runs: Unknown purpose")
   return runs
 
-def test_fill_runs():
-  from nose.tools import eq_
+def test_fill_runs_basic():
   proc_dict = {'purpose': 'events', 'batches': 2}
   proc_name = 'test'
   runs = fill_runs(proc_name, proc_dict)
-  eq_(runs, [(1, proc_name, proc_dict), (2, proc_name, proc_dict)])
+  eq_(runs, [(0, proc_name, proc_dict), (1, proc_name, proc_dict)])
+
   proc_dict = {'purpose': 'scan', 'start': 0.1, 'stop': 0.2, 'stepsize': 0.05}
+  runs = fill_runs(proc_name, proc_dict)
+  expectation = [(0.1, proc_name, proc_dict), (0.15, proc_name, proc_dict)]
+  for r, e in zip(runs, expectation):
+    assert_almost_equal (r[0], e[0], places=4)
+    eq_ (r[1:2], e[1:2])
+
+  proc_dict = {'purpose': 'integrate'}
+  runs = fill_runs(proc_name, proc_dict)
+  eq_(runs, [(-1, proc_name, proc_dict)])
+
+  proc_dict = {'purpose': 'disabled'}
+  runs = fill_runs(proc_name, proc_dict)
+  eq_(runs, [])
+
+  proc_dict = {'purpose': 'scan', 'start': 1, 'stop': 2, 'stepsize': 'logarithmic', 'steps': 1}
+  runs = fill_runs(proc_name, proc_dict)
+  expectation = [(10, proc_name, proc_dict)]
+  for r, e in zip(runs, expectation):
+    assert_almost_equal (r[0], e[0], places=4)
+    eq_ (r[1:2], e[1:2])
+
+@raises(SystemExit)
+def test_fill_runs_exception():
+  proc_name = 'test'
+  proc_dict = {'purpose': 'scan'}
+  runs = fill_runs(proc_name, proc_dict)
 
 def get_component_suffixes (sindarin):
   suffixes = ['Born', 'Real', 'Virtual']
