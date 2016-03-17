@@ -20,10 +20,7 @@ def get_component_suffixes (sindarin):
   return suffixes
 
 def create_component_sindarin_names (sindarin):
-  i = ''
-  if 'integrate' in sindarin:
-    i = '-integrate'
-  return [sindarin.replace(i + '.sin', '_' + s + i) for s in get_component_suffixes (sindarin)]
+  return [sindarin.replace('.sin', '_' + s) for s in get_component_suffixes (sindarin)]
 
 def get_mandatory(proc_dict, key):
   try:

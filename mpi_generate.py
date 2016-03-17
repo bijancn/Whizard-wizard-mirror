@@ -92,8 +92,7 @@ def setup_sindarins(proc_dict, batch=None):
 
 def run_process((proc_id, proc_name, proc_dict)):
   log('Running', proc_id, proc_dict)
-  #integration_sindarin = proc_name + '-integrate.sin'
-  integration_sindarin = proc_name + '.sin'
+  integration_sindarin = proc_name + '-integrate.sin'
   integration_grids = proc_name + '_m1.vg'
   purpose = proc_dict['purpose']
   event_generation = purpose == 'events' or purpose == 'histograms'
@@ -156,11 +155,11 @@ def fill_runs(proc_name, proc_dict):
     except KeyError:
       fatal('Aborting: You want a scan but have not set start, stop and stepsize')
     if stepsize == 'logarithmic':
-      range = np.logspace(start, stop, num=proc_dict.get('steps', 10),
+      step_range = np.logspace(start, stop, num=proc_dict.get('steps', 10),
           endpoint=True, base=10.0)
     else:
-      range = np.arange(start, stop, float(stepsize))
-    runs = [(b, proc_name, proc_dict) for b in range]
+      step_range = np.arange(start, stop, float(stepsize))
+    runs = [(b, proc_name, proc_dict) for b in step_range]
   elif proc_dict['purpose'] == 'integrate':
     runs = [(-1, proc_name, proc_dict)]
   elif proc_dict['purpose'] == 'disabled':
@@ -171,15 +170,17 @@ def fill_runs(proc_name, proc_dict):
 
 runs = []
 for proc_dict in run_json['processes']:
+   
   if proc_dict['purpose'] == 'events' or proc_dict['purpose'] == 'histograms':
-    base_sindarin = proc_dict['process'] + '.sin'
+    base_sindarin = 'whizard/' + proc_dict['process'] + '.sin'
   elif proc_dict['purpose'] == 'scan' or proc_dict['purpose'] == 'integrate':
-    base_sindarin = proc_dict['process'] + '-integrate.sin'
+    base_sindarin = 'whizard/' + proc_dict['process'] + '-integrate.sin'
   else:
     raise Exception("Unknown purpose")
-  if subproc.is_nlo_calculation ('whizard/' + base_sindarin) and \
-     not subproc.get_combined_integration('whizard/' + base_sindarin):
-    for proc_name in subproc.create_component_sindarin_names (base_sindarin):
+  check_nlo = subproc.is_nlo_calculation (base_sindarin) and \
+     not subproc.get_combined_integration (base_sindarin)
+  if check_nlo:
+    for proc_name in subproc.create_component_sindarin_names (proc_dict['process'] + '.sin'):
       runs += fill_runs(proc_name, proc_dict)
   else:
     proc_name = proc_dict['process']
