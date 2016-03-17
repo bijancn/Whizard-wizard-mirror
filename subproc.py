@@ -109,6 +109,12 @@ def create_nlo_component_sindarins (base_sindarin):
     replace_nlo_calc (suffix, new_sindarin)
     replace_proc_id (suffix, new_sindarin)
 
+def get_grid_index (proc_name):
+  grid_indices = {'Born': 1, 'Real': 2, 'Virtual': 3, 'Mismatch': 4}
+  nlo_type = proc_name.replace ('proc_nlo_', '')
+  print colored ('nlo_type: ', 'red'), nlo_type
+  return 0
+
 
 def change_sindarin_for_event_gen(filename, samplename, i, proc_dict):
   sample = '$sample = "' + samplename + '"\n'

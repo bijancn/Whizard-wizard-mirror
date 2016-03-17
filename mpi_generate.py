@@ -77,14 +77,12 @@ def setup_sindarins(proc_dict, batch=None):
         if proc_dict['purpose'] == 'integrate' or scan:
           subproc.create_integration_sindarin(integration_sindarin, template_sindarin,
               proc_dict['adaption_iterations'], proc_dict['integration_iterations'])
-          if subproc.is_nlo_calculation (integration_sindarin) and \
-             not subproc.get_combined_integration (integration_sindarin):
+          if proc_dict['nlo_type'] == 'nlo':
             subproc.create_nlo_component_sindarins(integration_sindarin)
         elif proc_dict['purpose'] == 'histograms' or proc_dict['purpose'] == 'events':
           subproc.create_simulation_sindarin(sindarin, template_sindarin,
-              proc_dict['process'])
-          if subproc.is_nlo_calculation (sindarin) and \
-             not subproc.get_combined_integration (sindarin):
+              proc_dict['process']) 
+          if proc_dict['nlo_type'] == 'nlo':
             subproc.create_nlo_component_sindarins(sindarin)
 
   else:
@@ -93,6 +91,7 @@ def setup_sindarins(proc_dict, batch=None):
 def run_process((proc_id, proc_name, proc_dict)):
   log('Running', proc_id, proc_dict)
   integration_sindarin = proc_name + '-integrate.sin'
+  grid_index = subproc.get_grid_index (proc_name)
   integration_grids = proc_name + '_m1.vg'
   purpose = proc_dict['purpose']
   event_generation = purpose == 'events' or purpose == 'histograms'
@@ -177,9 +176,7 @@ for proc_dict in run_json['processes']:
     base_sindarin = 'whizard/' + proc_dict['process'] + '-integrate.sin'
   else:
     raise Exception("Unknown purpose")
-  check_nlo = subproc.is_nlo_calculation (base_sindarin) and \
-     not subproc.get_combined_integration (base_sindarin)
-  if check_nlo:
+  if proc_dict['nlo_type'] == 'nlo':
     for proc_name in subproc.create_component_sindarin_names (proc_dict['process'] + '.sin'):
       runs += fill_runs(proc_name, proc_dict)
   else:
