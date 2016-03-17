@@ -140,7 +140,6 @@ def create_integration_sindarin(integration_sindarin, template_sindarin,
 
 def create_simulation_sindarin (simulation_sindarin, template_sindarin, process,
    adaption_iterations, integration_iterations, n_events):
-  print colored ('create simulation sindarin', 'red'), process
   replace_line = replace_iterations (adaption_iterations, integration_iterations)
   sed(template_sindarin, replace_line, new_file=simulation_sindarin)
   command = 'n_events = ' + str (n_events) + '\n' \
