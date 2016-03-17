@@ -7,6 +7,7 @@ real dummy = 0.0
 ?unweighted = false
 ?negative_weights = true
 #ITERATIONS
+library = proc_nlo
 process proc_nlo = e1, E1 => t, T { nlo_calculation = "Full" }
 #SETSCAN
 integrate (proc_nlo)
