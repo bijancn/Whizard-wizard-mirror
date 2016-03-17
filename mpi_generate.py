@@ -80,18 +80,22 @@ def setup_sindarins(proc_dict, batch=None):
             subproc.create_nlo_component_sindarins(integration_sindarin)
         elif proc_dict['purpose'] == 'histograms' or proc_dict['purpose'] == 'events':
           subproc.create_simulation_sindarin(sindarin, template_sindarin,
-              proc_dict['process']) 
+              proc_dict['process'], proc_dict['adaption_iterations'], 
+              proc_dict['integration_iterations'], 
+              proc_dict['events_per_batch']) 
           if proc_dict['nlo_type'] == 'nlo':
             subproc.create_nlo_component_sindarins(sindarin)
 
   else:
-    logger.info('Skipping ' + proc_dict['process'])
+    logger.info('Skipping ' + proc_dict['process'] + ' because it is disabled')
 
 def run_process((proc_id, proc_name, proc_dict)):
   log('Running', proc_id, proc_dict)
   integration_sindarin = proc_name + '-integrate.sin'
-  grid_index = subproc.get_grid_index (proc_name)
-  integration_grids = proc_name + '_m1.vg'
+  if proc_dict['nlo_type'] == 'nlo':
+    integration_grids = proc_name + '_m' + str (subproc.get_grid_index(proc_name)) + '.vg'
+  else:
+    integration_grids = proc_name + '_m1.vg'
   purpose = proc_dict['purpose']
   event_generation = purpose == 'events' or purpose == 'histograms'
   whizard_options = proc_dict.get('whizard_options', '--no-banner')
@@ -124,7 +128,7 @@ def run_process((proc_id, proc_name, proc_dict)):
               os.path.join("../rivet", runfolder + '.hepmc'))
         return
       else:
-        logger.info('Skipping ' + runfolder)
+        logger.info('Skipping ' + runfolder + ' because done is found')
 
 logger = setup_logger ()
 if comm.Get_rank() == 0:

@@ -152,10 +152,15 @@ def create_integration_sindarin(integration_sindarin, template_sindarin,
   replace_line = replace_iterations (adaption_iterations, integration_iterations)
   sed(template_sindarin, replace_line, new_file=integration_sindarin)
 
-def create_simulation_sindarin (simulation_sindarin, template_sindarin, process):
-  command = 'simulate(' + process + ')'
-  sed(template_sindarin, new_file=simulation_sindarin, 
-     write_to_bottom=command)
+def create_simulation_sindarin (simulation_sindarin, template_sindarin, process,
+   adaption_iterations, integration_iterations, n_events):
+  print colored ('create simulation sindarin', 'red'), process
+  replace_line = replace_iterations (adaption_iterations, integration_iterations)
+  sed(template_sindarin, replace_line, new_file=simulation_sindarin)
+  command = 'n_events = ' + str (n_events) + '\n' \
+          + 'checkpoint = n_events / 20' + '\n' \
+          + 'simulate(' + process + ')'
+  sed(simulation_sindarin, write_to_bottom=command)
 
 def create_nlo_component_sindarins (base_sindarin):
   for suffix in get_component_suffixes (base_sindarin):
@@ -170,8 +175,7 @@ def create_nlo_component_sindarins (base_sindarin):
 def get_grid_index (proc_name):
   grid_indices = {'Born': 1, 'Real': 2, 'Virtual': 3, 'Mismatch': 4}
   nlo_type = proc_name.replace ('proc_nlo_', '')
-  print colored ('nlo_type: ', 'red'), nlo_type
-  return 0
+  return grid_indices[nlo_type]
 
 events_re = re.compile(r"(n_events = )([0-9]*)( \* K)")
 def change_sindarin_for_event_gen(filename, samplename, i, proc_dict):
