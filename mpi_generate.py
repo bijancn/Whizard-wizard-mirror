@@ -57,17 +57,17 @@ def setup_sindarins(proc_dict, batch=None):
   if proc_dict['purpose'] != 'disabled':
     logger.info('Setting up sindarins of ' + str(proc_dict))
     with cd('whizard/'):
-      sindarin = proc_dict['process'] + '.sin'
-      template_sindarin = sindarin.replace('.sin', '-template.sin')
-      integration_sindarin = sindarin.replace('.sin', '-integrate.sin')
+      base_sindarin = proc_dict['process'] + '.sin'
+      template_sindarin = base_sindarin.replace('.sin', '-template.sin')
+      integration_sindarin = base_sindarin.replace('.sin', '-integrate.sin')
       template_present = os.path.isfile(template_sindarin)
       scan = proc_dict['purpose'] == 'scan'
       if scan and not template_present:
         logger.error('You have to supply ' + template_sindarin + ' for a scan')
         sys.exit(1)
       elif not scan and not template_present:
-        fallback = integration_sindarin + ' and ' + sindarin
-        if os.path.isfile(integration_sindarin) and os.path.isfile(sindarin):
+        fallback = integration_sindarin + ' and ' + base_sindarin
+        if os.path.isfile(integration_sindarin) and os.path.isfile(base_sindarin):
           logger.info('Didnt find ' + template_sindarin + ', will use ' + fallback)
           return
         else:
@@ -87,12 +87,20 @@ def setup_sindarins(proc_dict, batch=None):
             else:
               subproc.create_nlo_component_sindarins(integration_sindarin)
         elif proc_dict['purpose'] == 'histograms' or proc_dict['purpose'] == 'events':
-          subproc.create_simulation_sindarin(sindarin, template_sindarin,
+          subproc.create_simulation_sindarin(base_sindarin, template_sindarin,
               proc_dict['process'], proc_dict['adaption_iterations'], 
               proc_dict['integration_iterations'], 
               proc_dict['events_per_batch']) 
+          ### Evil code duplication
+          scaled_sindarins = None
+          if proc_dict.get('scale_variation', False):
+            scaled_sindarins = subproc.create_scale_sindarins (base_sindarin)
           if proc_dict['nlo_type'] == 'nlo':
-            subproc.create_nlo_component_sindarins(sindarin)
+            if scaled_sindarins != None:
+              for sindarin in scaled_sindarins:
+                subproc.create_nlo_component_sindarins(sindarin)
+            else:
+              subproc.create_nlo_component_sindarins(base_sindarin)
 
   else:
     logger.info('Skipping ' + proc_dict['process'] + ' because it is disabled')
