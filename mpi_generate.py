@@ -81,7 +81,8 @@ def setup_sindarins(proc_dict, batch=None):
         elif proc_dict['purpose'] == 'histograms' or proc_dict['purpose'] == 'events':
           subproc.create_simulation_sindarin(sindarin, template_sindarin,
               proc_dict['process'], proc_dict['adaption_iterations'], 
-              proc_dict['integration_iterations']) 
+              proc_dict['integration_iterations'], 
+              proc_dict['events_per_batch']) 
           if proc_dict['nlo_type'] == 'nlo':
             subproc.create_nlo_component_sindarins(sindarin)
 

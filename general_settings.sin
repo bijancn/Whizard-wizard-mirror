@@ -16,7 +16,6 @@ alpha_s_order = 1
 alpha_s_nf = 5
 
 int K = 1000
-checkpoint = K
 sample_format = hepmc
 
 ?hepmc_output_cross_section = true

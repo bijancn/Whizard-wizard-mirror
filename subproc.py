@@ -126,11 +126,13 @@ def create_integration_sindarin(integration_sindarin, template_sindarin,
   sed(template_sindarin, replace_line, new_file=integration_sindarin)
 
 def create_simulation_sindarin (simulation_sindarin, template_sindarin, process,
-   adaption_iterations, integration_iterations):
+   adaption_iterations, integration_iterations, n_events):
   print colored ('create simulation sindarin', 'red'), process
   replace_line = replace_iterations (adaption_iterations, integration_iterations)
   sed(template_sindarin, replace_line, new_file=simulation_sindarin)
-  command = 'simulate(' + process + ')'
+  command = 'n_events = ' + str (n_events) + '\n' \
+          + 'checkpoint = n_events / 20' + '\n' \
+          + 'simulate(' + process + ')'
   sed(simulation_sindarin, write_to_bottom=command)
 
 def create_nlo_component_sindarins (base_sindarin):
