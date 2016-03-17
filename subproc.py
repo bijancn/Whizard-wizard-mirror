@@ -138,11 +138,6 @@ def test_replace_nlo_calc():
   test.close()
   os.remove(filename)
 
-def divider(matchobj, batches):
-  nevents = matchobj.group(2)
-  divided = str(int(float(matchobj.group(2)) / batches))
-  return matchobj.group(1) + divided + matchobj.group(3)
-
 def replace_iterations (adaption_iterations, integration_iterations):
   iterations = 'iterations = ' + adaption_iterations + ':"gw",' + integration_iterations
   return lambda line: line.replace('#ITERATIONS', iterations)
@@ -176,6 +171,11 @@ def get_grid_index (proc_name):
   grid_indices = {'Born': 1, 'Real': 2, 'Virtual': 3, 'Mismatch': 4}
   nlo_type = proc_name.replace ('proc_nlo_', '')
   return grid_indices[nlo_type]
+
+def divider(matchobj, batches):
+  nevents = matchobj.group(2)
+  divided = str(int(float(matchobj.group(2)) / batches))
+  return matchobj.group(1) + divided + matchobj.group(3)
 
 events_re = re.compile(r"(n_events = )([0-9]*)( \* K)")
 def change_sindarin_for_event_gen(filename, samplename, i, proc_dict):
