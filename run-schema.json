@@ -1,0 +1,67 @@
+{
+  "$schema": "json-schema.org/draft-04/schema#",
+  "id": "run-schema",
+  "type": "object",
+  "properties": {
+    "processes": {
+      "id": "processes",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "process": {
+            "id": "processes/process",
+            "type": "string"
+          },
+          "purpose": {
+            "id": "processes/purpose",
+            "type": "string",
+            "enum": ["disabled", "scan", "integrate", "histograms", "events"]
+          },
+          "scan_object": {
+            "id": "processes/scan_object",
+            "type": "string"
+          },
+          "start": {
+            "id": "processes/start",
+            "type": "number"
+          },
+          "stop": {
+            "id": "processes/stop",
+            "type": "number"
+          },
+          "stepsize": {
+            "id": "processes/stepsize",
+            "type": "string"
+          },
+          "adaption_iterations": {
+            "id": "processes/adaption_iterations",
+            "type": "string"
+          },
+          "integration_iterations": {
+            "id": "processes/integration_iterations",
+            "type": "string"
+          }
+        },
+        "required": [
+          "process",
+          "purpose"
+        ]
+      },
+      "required": [
+        "1"
+      ]
+    },
+    "whizard": {
+      "id": "whizard",
+      "type": "string"
+    },
+    "data_output": {
+      "id": "data_output",
+      "type": "string"
+    }
+  },
+  "required": [
+    "processes"
+  ]
+}
