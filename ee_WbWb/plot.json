@@ -4,6 +4,7 @@
    "lines": [
      "proc_lo_thresholdparams",
      "factorized_lo",
+     "factorized_onshellprojected_lo",
      "signaldiagram_lo",
      "ttbar_lo_thresholdparams"
        ],
