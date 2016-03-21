@@ -25,12 +25,12 @@ alpha_em_i = 125.924 ! (not running)
 m1S = 172.0
 mpole_fixed = 1
 
-nloop  = 0
+nrqcd_order  = 0
 sh     = 1.
 sf     = 1.
 Vtb    = 1.
 FF = 9
-offshell_strategy = -3
+offshell_strategy = 0+2+0+0
 
 show(model)
 
