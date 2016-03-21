@@ -49,7 +49,7 @@ def mkdirs(directory):
 
 def fatal(message):
   logger.fatal('>>> ' + message + ' <<<')
-  sys.exit(1)
+  # sys.exit(1)
 
 def sed(original, replace_line=None, new_file=None, write_to_top='', write_to_bottom=''):
   overwrite = new_file == None

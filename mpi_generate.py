@@ -63,16 +63,14 @@ def setup_sindarins(proc_dict, batch=None):
       template_present = os.path.isfile(template_sindarin)
       scan = proc_dict['purpose'] == 'scan'
       if scan and not template_present:
-        logger.error('You have to supply ' + template_sindarin + ' for a scan')
-        sys.exit(1)
+        fatal('You have to supply ' + template_sindarin + ' for a scan')
       elif not scan and not template_present:
         fallback = integration_sindarin + ' and ' + base_sindarin
         if os.path.isfile(integration_sindarin) and os.path.isfile(base_sindarin):
           logger.info('Didnt find ' + template_sindarin + ', will use ' + fallback)
           return
         else:
-          logger.error('Didnt find ' + template_sindarin + ' nor ' + fallback)
-          sys.exit(1)
+          fatal('Didnt find ' + template_sindarin + ' nor ' + fallback)
       if template_present:
         if proc_dict['purpose'] == 'integrate' or scan:
           subproc.create_integration_sindarin(integration_sindarin, template_sindarin,
@@ -182,7 +180,7 @@ for proc_dict in run_json['processes']:
 mpi_map(run_process, runs)
 
 if comm.Get_rank() == 0:
-  logger.info('This is the MPI master: All processes returned sucessfully')
+  logger.info('This is the MPI master: All processes returned.')
   logger.info("""
 #==============================================================================#
 #                                     DONE                                     #

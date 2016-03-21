@@ -2,8 +2,8 @@ model = SM_tt_threshold
 
 ?vis_history = false
 
-library = ttbar_lo_thresholdparams
-process ttbar_lo_thresholdparams = e1, E1 => t, T
+library = factorized_onshellprojected_lo
+process factorized_onshellprojected_lo = e1, E1 => Wp, Wm, b, B {$restrictions = "3+5~t && 4+6~tbar"}
 
 compile
 
@@ -29,8 +29,8 @@ nrqcd_order  = 0
 sh     = 1.
 sf     = 1.
 Vtb    = 1.
-FF =  10
-offshell_strategy = 0
+FF = 9        # tree level from signal comp
+offshell_strategy = 0+2+0+8
 
 show(model)
 
@@ -39,5 +39,14 @@ show(model)
 sqrtsstepsize = 0.1 GeV
 sqrtsmin = sqrts - sqrtsstepsize
 sqrtsmax = sqrts + sqrtsstepsize
-integrate (ttbar_lo_thresholdparams)
-printf "RES %g %g %g" (sqrts, integral(ttbar_lo_thresholdparams), error(ttbar_lo_thresholdparams))
+
+$method = "threshold"
+$born_me_method = "threshold"
+$loop_me_method = "threshold"
+$correlation_me_method = "threshold"
+$real_tree_me_method = "threshold"
+alpha_power = 4
+alphas_power = 0
+
+integrate (factorized_onshellprojected_lo)
+printf "RES %g %g %g" (sqrts, integral(factorized_onshellprojected_lo), error(factorized_onshellprojected_lo))

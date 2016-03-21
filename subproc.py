@@ -244,18 +244,14 @@ def whizard_run(purpose, whizard, sindarin, fifo=None, proc_id=None, options='',
   try:
     process = subprocess.call(cmd, shell=True)
   except Exception as e:
-    logger.fatal('Exception occured: ' + str(e))
-    logger.fatal('Whizard failed')
-    sys.exit(1)
+    fatal('Exception occured: ' + str(e) + 'Whizard failed on executing ' + sindarin + num)
   else:
     if not grep('FATAL ERROR', 'whizard.log'):
       logger.info('Whizard finished' + num)
       with open('done', 'a'):
         os.utime('done', None)
     else:
-      logger.fatal('FATAL ERROR in whizard.log')
-      logger.fatal('Whizard failed')
-      sys.exit(1)
+      fatal('FATAL ERROR in whizard.log of ' + sindarin + num)
 
 def generate(proc_name, proc_id, proc_dict, whizard, integration_grids, analysis=''):
   purpose = proc_dict['purpose']
