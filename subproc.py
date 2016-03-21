@@ -132,6 +132,18 @@ def replace_proc_id(part, filename):
   replace_func = lambda l : l.replace(proc_id, proc_id + '_' + part)
   sed(filename, replace_line=replace_func)
 
+def multiply_sindarins (base_sindarin, scaled, nlo_type):
+  scaled_sindarins = None
+  if scaled:
+    scaled_sindarins = create_scale_sindarins (base_sindarin)
+  if nlo_type == 'nlo':
+    if scaled_sindarins != None:
+      for sindarin in scaled_sindarins:
+        create_nlo_component_sindarins (sindarin)
+    else:
+      create_nlo_component_sindarins (base_sindarin)
+
+
 def test_replace_nlo_calc():
   from nose.tools import eq_
   filename = 'test_replace_nlo_calc'

@@ -3,7 +3,7 @@
 #===================#
  BEGIN SPECIAL /WHIZARD_.*
 \psclip{\psframe[linewidth=0,linestyle=none](0,0)(1,1)}
-\rput[bl](0.1,0.1){\color{gray}\textsc{Whizard+Omega}+\textsc{Gosam}}
+\rput[bl](0.1,0.1){\color{gray}\textsc{Whizard+Omega}+\textsc{OpenLoops}}
 \endpsclip
  END SPECIAL
 
