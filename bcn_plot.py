@@ -154,10 +154,10 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   if range_decider is not None:
     ymin, ymax, xmin, xmax = range_decider(this_data, title)
   else:
-    ymin = min([np.amin(d[1][1]) for d in this_data])
-    ymax = max([np.amax(d[1][1]) for d in this_data])
-    xmin = min([np.amin(d[1][0]) for d in this_data])
-    xmax = min([np.amax(d[1][0]) for d in this_data])
+    ymin = plot_dict.get('ymin', min([np.amin(d[1][1]) for d in this_data]))
+    ymax = plot_dict.get('ymax', max([np.amax(d[1][1]) for d in this_data]))
+    xmin = plot_dict.get('xmin', min([np.amin(d[1][0]) for d in this_data]))
+    xmax = plot_dict.get('xmax', min([np.amax(d[1][0]) for d in this_data]))
   if label_decider is not None:
     xlabel, ylabel = label_decider (title)
   else:

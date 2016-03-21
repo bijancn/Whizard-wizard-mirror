@@ -1,11 +1,17 @@
 {
   "plots": [
   {"title": "High energy scan",
-   "lines": ["signaldiagram_lo", "factorized_lo"],
+   "lines": [
+     "proc_lo_thresholdparams",
+     "factorized_lo",
+     "signaldiagram_lo",
+     "ttbar_lo_thresholdparams"
+       ],
    "xlabel": "$\\sqrt{s}$",
    "ylabel": "$\\sigma$",
    "ylog": true,
    "xlog": true,
+   "ymin": 1,
    "xminors": true,
    "yminors": true
   }

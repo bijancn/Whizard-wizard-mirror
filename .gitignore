@@ -38,6 +38,7 @@ Makefile.inc
 whizard_uu_lo
 whizard_uu_powheg
 */whizard/*-[0-9]*/
+*/whizard/*-integrate.sin
 .sconsign.dblite
 */rivet/*/
 *-[0-9]*/

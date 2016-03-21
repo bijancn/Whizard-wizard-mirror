@@ -14,15 +14,14 @@ import bcn_plot
 from utils import load_json
 
 def ls_decider(lbl, title):
-  if 'proc_lo' in lbl:
-    return 'dashed'
-  else:
-    return None
+  return None
 
 def pretty_label(l, title):
   l = os.path.basename(l)
-  l = l.replace('proc_lo', 'LO')
-  l = l.replace('proc_nlo', 'NLO')
+  l = l.replace('proc_lo_thresholdparams', '$W^+b W^-\\bar b$')
+  l = l.replace('signaldiagram_lo', '$W^+b W^-\\bar b$ signal diagram only')
+  l = l.replace('factorized_lo', '$W^+b W^-\\bar b$ factorized')
+  l = l.replace('ttbar_lo_thresholdparams', '$t \\bar t$')
   l = l.replace('.dat', '')
   return l
 
