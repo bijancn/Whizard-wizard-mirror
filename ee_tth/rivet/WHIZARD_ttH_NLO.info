@@ -1,4 +1,4 @@
-Name: WHIZARD_2015_NLO
+Name: WHIZARD_ttH_NLO
 Year: 2015
 Summary: Fixed-order NLO plots
 Experiment: WHIZARD
@@ -8,7 +8,7 @@ Status: UNVALIDATED
 Authors:
  - Your Name <your@email.address>
 RunInfo:
-  $\sqrt{s}=500\;\GeV$
+  $\sqrt{s}=800\;\GeV$
 NumEvents: 500000
 NeedCrossSection: no
 

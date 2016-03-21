@@ -1,7 +1,7 @@
 include("../../general_settings.sin")
 include("../process_settings.sin")
 
-wtop = 1.3475
+wtop = 1.4757
 wZ = 2.5060
 wW = 2.0978
 
@@ -13,13 +13,13 @@ wW = 2.0978
 
 real dummy = 0.0
 scale = mtop
-iterations = 15:200000:"gw",3:10000
-library = proc_nlo
-process proc_nlo = E1, e1 => b, B, e1, N1, E2, n2 { nlo_calculation = "Full" }
+#ITERATIONS
+library = proc_lo
+process proc_lo = E1, e1 => b, B, e1, N1, E2, n2
 #SETSCAN
 
 mult_call_real = 5
 
 cuts = all abs(M) > 20 GeV [incoming e1, e1]
-integrate (proc_nlo)
-printf "RES %8e %8e %8e" (mtop, integral(proc_nlo), error(proc_nlo))
+integrate (proc_lo)
+printf "RES %8e %8e %8e" (mtop, integral(proc_lo), error(proc_lo))

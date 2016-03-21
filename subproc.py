@@ -112,11 +112,11 @@ def test_is_nlo_calculation():
   os.remove(filename)
 
 def fks_method_is_resonance(filename):
-  return get_string('$fks_method', filename) == 'resonances'
+  return get_string('\$fks_mapping_type', filename) == '"resonances"'
 
 def replace_scale (factor, filename):
   # Needs to be adapted for arbitrary number of spaces
-  original_scale = get_value("(scale = +)(\w+)", filename)
+  original_scale = get_value("(scale *= *)(.*$)", filename)
   #Add brackets because scale expression can be a sum of variables
   replace_func = lambda l: l.replace (original_scale, '(' + original_scale + ') * ' + str (factor))
   sed(filename, replace_line=replace_func)
@@ -132,16 +132,16 @@ def replace_proc_id(part, filename):
   replace_func = lambda l : l.replace(proc_id, proc_id + '_' + part)
   sed(filename, replace_line=replace_func)
 
-def multiply_sindarins (base_sindarin, scaled, nlo_type):
+def multiply_sindarins (base_sindarin, template_sindarin, scaled, nlo_type):
   scaled_sindarins = None
   if scaled:
     scaled_sindarins = create_scale_sindarins (base_sindarin)
   if nlo_type == 'nlo':
     if scaled_sindarins != None:
       for sindarin in scaled_sindarins:
-        create_nlo_component_sindarins (sindarin)
+        create_nlo_component_sindarins (template_sindarin, sindarin)
     else:
-      create_nlo_component_sindarins (base_sindarin)
+      create_nlo_component_sindarins (template_sindarin, base_sindarin)
 
 
 def test_replace_nlo_calc():
@@ -164,7 +164,9 @@ def test_replace_nlo_calc():
   os.remove(filename)
 
 def replace_iterations (adaption_iterations, integration_iterations):
-  iterations = 'iterations = ' + adaption_iterations + ':"gw",' + integration_iterations
+  iterations = 'iterations = ' + adaption_iterations + ':"gw"'
+  if (integration_iterations != ' '):
+    iterations += ',' + integration_iterations
   return lambda line: line.replace('#ITERATIONS', iterations)
 
 def create_integration_sindarin(integration_sindarin, template_sindarin,
@@ -202,8 +204,8 @@ def create_scale_sindarins (base_sindarin):
   return new_sindarins
     
 
-def create_nlo_component_sindarins (base_sindarin):
-  for suffix in get_component_suffixes (base_sindarin):
+def create_nlo_component_sindarins (template_sindarin, base_sindarin):
+  for suffix in get_component_suffixes (template_sindarin):
     new_sindarin = insert_suffix (base_sindarin, suffix)
     shutil.copyfile(base_sindarin, new_sindarin)
     replace_nlo_calc (suffix, new_sindarin)

@@ -3,7 +3,7 @@
 #===================#
  BEGIN SPECIAL /WHIZARD_.*
 \psclip{\psframe[linewidth=0,linestyle=none](0,0)(1,1)}
-\rput[bl](0.1,0.1){\color{gray}\textsc{Whizard+Omega}+\textsc{OpenLoops}}
+\rput[bl](0.1,0.1){\color{gray}\textsc{Whizard+OpenLoops}}
 \endpsclip
  END SPECIAL
 
@@ -27,12 +27,8 @@ ErrorBands=0
 #==========#
 #  titles  #
 #==========#
- BEGIN PLOT /WHIZARD_2015_NLO
+ BEGIN PLOT /WHIZARD_.*
 Title=$\quad e^+e^-\to t\bar{t}$
- END PLOT
-
- BEGIN PLOT /WHIZARD_2015_NLO_ttbarcuts
-Title=$\quad e^+e^-\to W^+b W^-\bar{b}$, $\quad N_\text{jets}\geq 2$, $\quad\lvert m_{Wb}-m_t\rvert\leq 1 \text{GeV}$
  END PLOT
 
 #========================#
@@ -43,11 +39,13 @@ YLabel=$\frac{d\sigma}{dm}[\text{fb}/\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/jets-inv
+LogY=1
 XLabel=$m(p^{j_1}+p^{j_2})$
  END PLOT
 
- BEGIN PLOT /WHIZARD_.*/WW-inv
-XLabel=$m_{WW}[\text{GeV}]$
+ BEGIN PLOT /WHIZARD_.*/.*-Theta
+YLabel=$\frac{d\sigma}{dm}[\text{fb}/\text{GeV}]$
+XLabel=$\cos{\theta_{jj}}$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BW-inv

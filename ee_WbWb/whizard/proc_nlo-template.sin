@@ -1,18 +1,23 @@
 include("../../general_settings.sin")
 include("../process_settings.sin")
 
-?unweighted = false
+wtop = 1.3475
+wZ = 2.5060
+wW = 2.0978
+
 ?nlo_fixed_order = true
-?combined_nlo_integration = true
-$loop_me_method = "openloops"
+?unweighted = false
+?negative_weights = true
 
+$fks_mapping_type = "resonances"
+
+real dummy = 0.0
+scale = mtop
+#ITERATIONS
+library = proc_nlo
 process proc_nlo = E1, e1 => Wp, Wm, b, B {nlo_calculation="Full"}
+#SETSCAN
 
-#Default parameters for FKS mapping
-fks_dij_exp1 = 1.0
-fks_mapping_type = 1
-
-n_events = 15000 * K
-checkpoint = n_events / 20
-
-simulate (proc_nlo)
+mult_call_real = 5
+integrate (proc_nlo)
+printf "RES %8e %8e %8e" (mtop, integral(proc_nlo), error(proc_nlo))

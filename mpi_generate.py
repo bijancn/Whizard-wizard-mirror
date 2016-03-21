@@ -76,8 +76,8 @@ def setup_sindarins(proc_dict, batch=None):
       if template_present:
         if proc_dict['purpose'] == 'integrate' or scan:
           subproc.create_integration_sindarin(integration_sindarin, template_sindarin,
-              proc_dict['adaption_iterations'], proc_dict['integration_iterations'])
-          subproc.multiply_sindarins (integration_sindarin, 
+              proc_dict['adaption_iterations'], proc_dict.get('integration_iterations', ' '))
+          subproc.multiply_sindarins (integration_sindarin, template_sindarin, 
              proc_dict.get('scale_variation', False), proc_dict['nlo_type'])
           #scaled_sindarins = None
           #if proc_dict.get('scale_variation', False):
@@ -91,7 +91,7 @@ def setup_sindarins(proc_dict, batch=None):
         elif proc_dict['purpose'] == 'histograms' or proc_dict['purpose'] == 'events':
           subproc.create_simulation_sindarin(base_sindarin, template_sindarin,
               proc_dict['process'], proc_dict['adaption_iterations'], 
-              proc_dict['integration_iterations'], 
+              proc_dict.get('integration_iterations', ' '), 
               proc_dict['events_per_batch']) 
           subproc.multiply_sindarins (base_sindarin, 
              proc_dict.get('scale_variation', False), proc_dict['nlo_type'])

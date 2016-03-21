@@ -44,7 +44,7 @@ def generate_plot(source, target, env, for_signature):
 
 def generate_plot_with_errors (source, target, env, for_signature):
   target_dir = target[0].dir
-  return 'rivet-mkhtml -c $CONFIG %s:"Title=NLO:ErrorBands=0" %s:"Title=:ErrorBands=1:ErrorBandColor=red:ErrorBandOpacity=0.3"' % (source[0], source[1]) 
+  return 'rivet-mkhtml -c $CONFIG %s:"Title=LO:ErrorBands=0:LineColor=black" %s:"Title=NLO:ErrorBands=0:LineColor=blue" %s:"Title=:ErrorBands=1:ErrorBandColor=red:ErrorBandOpacity=0.3"' % (source[0], source[1], source[2]) 
 
 build_plot_with_errors = Builder (generator = generate_plot_with_errors,
                                   suffix = '.html',
@@ -62,7 +62,7 @@ env.Append(BUILDERS = {'Yoda' : build_yoda, 'Analysis' : build_analysis,
 
 # We use timestamps instead of MD5s since hepmc's are big
 Decider('timestamp-match')
-base_analysis = 'WHIZARD_2015_NLO'
+base_analysis = 'WHIZARD_tt_NLO'
 analysiss = [base_analysis]
 env['NUMTHREADS'] = '4'
 
@@ -131,13 +131,14 @@ print 'Merge NLO yodas (?)'
 env.MergeYodasNoScale (target = 'proc_nlo_low.yoda', source = nlo_low_yodas)
 env.MergeYodasNoScale (target = 'proc_nlo_central.yoda', source = nlo_central_yodas)
 env.MergeYodasNoScale (target = 'proc_nlo_high.yoda', source = nlo_high_yodas)
-final_yodas = [merged_yodas[0], merged_yodas[1], merged_yodas[2]]
-final_nlo_yodas = ['proc_nlo_low.yoda', 'proc_nlo_central.yoda', 'proc_nlo_high.yoda']
+final_lo_yodas = [merged_yodas[1], merged_yodas[0], merged_yodas[2]]
+final_nlo_yodas = ['proc_nlo_central.yoda', 'proc_nlo_low.yoda', 'proc_nlo_high.yoda']
 small_yoda_names = small_yoda_names + final_nlo_yodas
 control_plots = control_plots + map(dirify, ['proc_nlo_low', 'proc_nlo_central', 'proc_nlo_high'])
 
 print 'Create envelope: '
-env.BuildEnvelope (target = 'envelope.yoda', source = final_nlo_yodas)
+env.BuildEnvelope (target = 'envelope_nlo.yoda', source = final_nlo_yodas)
+#env.BuildEnvelope (target = 'envelope_lo.yoda', source = final_lo_yodas)
 
 print 'Create plots: ', plots
 print 'configs: ', configs
@@ -153,5 +154,5 @@ for (small_yodas, control_plot) in zip(small_yoda_names, control_plots):
   plot = env.Plot(target = control_plot, source = small_yodas, CONFIG=configs[0])
   Depends(plot, configs[0])
 
-env.PlotWithErrorBand (target = plots[0], source = ['proc_nlo_central.yoda', 'envelope.yoda'], 
+env.PlotWithErrorBand (target = plots[0], source = ['proc_lo_central.yoda', 'proc_nlo_central.yoda', 'envelope_nlo.yoda'], 
    CONFIG=configs[0])
