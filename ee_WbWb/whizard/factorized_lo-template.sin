@@ -1,4 +1,4 @@
-include("../process_settings_treshold.sin")
+include("../process_settings_threshold.sin")
 
 library = factorized_lo
 process factorized_lo = e1, E1 => Wp, Wm, b, B {$restrictions = "3+5~t && 4+6~tbar"}

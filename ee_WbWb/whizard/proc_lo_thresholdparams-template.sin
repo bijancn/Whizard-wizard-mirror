@@ -1,4 +1,4 @@
-include("../process_settings_treshold.sin")
+include("../process_settings_threshold.sin")
 
 library = proc_lo_thresholdparams
 $method = "omega"
