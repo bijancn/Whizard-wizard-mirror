@@ -121,13 +121,11 @@ def check_for_all_sets(found_lines, wanted_lines):
   if len(found_lines) < len(wanted_lines):
     print 'Did not find all sets: But only ', len(found_lines), \
           ' out of ', len(wanted_lines)
-    labels = [lbl[0] for lbl in found_lines]
+    found_labels = [lbl[0] for lbl in found_lines]
     for l in wanted_lines:
-      if not any ([l in label for label in labels]):
-      #if not l in [lbl[0] for lbl in found_lines]:
+      if not any ([l == os.path.basename(label).replace('.dat', '') for label in found_labels]):
         print l, ' not found!'
-    #print 'The available data is ', data
-    print 'The available labels are: ', labels
+    print 'The available labels are: ', found_labels
     sys.exit(1)
 
 def set_if_not_none(plot_dict, decider, thing_to_set, default, *args):
@@ -145,7 +143,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   this_data = []
   lines = plot_dict.get('lines', [])
   for lbl in lines:
-    this_data += [d for d in data if lbl in d[0]]
+    this_data += [d for d in data if lbl == os.path.basename(d[0]).replace('.dat', '')]
   many_labels = len(this_data) > 6
   check_for_all_sets(this_data, lines)
   size = (9,9) if many_labels else (9,7.5)

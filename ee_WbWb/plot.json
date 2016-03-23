@@ -18,6 +18,45 @@
    "xminors": true,
    "yminors": true
   },
+  {"title": "Gauge-dependence of LO cross sections (influence of helicity approximation)",
+   "lines": [
+     "proc_lo_thresholdparams",
+     "factorized_lo",
+     "factorized_lo_helapprox",
+     "factorized_onshellprojected_lo",
+     "factorized_onshellprojected_lo_helapprox",
+     "ttbar_lo_thresholdparams"
+       ],
+   "xlabel": "$\\sqrt{s}$ [GeV]",
+   "ylabel": "$\\sigma$ [fb]",
+   "ylog": true,
+   "xlog": true,
+   "ymin": 1,
+   "ymax": 10000,
+   "xmax": 100000,
+   "xminors": true,
+   "yminors": true
+  },
+  {"title": "Gauge-dependence of LO cross sections (influence of helicity approximation, zoom)",
+   "lines": [
+     "proc_lo_thresholdparams",
+     "factorized_lo",
+     "factorized_lo_helapprox",
+     "factorized_onshellprojected_lo",
+     "factorized_onshellprojected_lo_helapprox",
+     "ttbar_lo_thresholdparams"
+       ],
+   "xlabel": "$\\sqrt{s}$ [GeV]",
+   "ylabel": "$\\sigma$ [fb]",
+   "ylog": false,
+   "xlog": false,
+   "ymin": 1,
+   "ymax": 1000,
+   "xmin": 343,
+   "xmax": 500,
+   "xminors": true,
+   "yminors": true
+  },
   {"title": "Gauge-dependence of LO cross sections (zoom)",
    "lines": [
      "proc_lo_thresholdparams",
