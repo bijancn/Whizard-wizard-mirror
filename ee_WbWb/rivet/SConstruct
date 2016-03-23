@@ -42,8 +42,8 @@ env.Append(BUILDERS = {'Yoda' : build_yoda, 'Analysis' : build_analysis,
 
 # We use timestamps instead of MD5s since hepmc's are big
 Decider('timestamp-match')
-base_analysis = 'WHIZARD_2015_NLO'
-analysiss = [base_analysis, base_analysis + '_ttbarcuts']
+base_analysis = 'WHIZARD_2W2b_NLO'
+analysiss = [base_analysis]
 env['NUMTHREADS'] = '4'
 
 dirify = lambda d : d + '/index.html'

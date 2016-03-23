@@ -117,14 +117,17 @@ class Plotter(object):
         ax.legend(handles, labels, loc=legend_location,
                   fancybox=False, ncol=legend_columns)
 
-def check_for_all_sets(found_lines, wanted_lines, data):
+def check_for_all_sets(found_lines, wanted_lines):
   if len(found_lines) < len(wanted_lines):
     print 'Did not find all sets: But only ', len(found_lines), \
           ' out of ', len(wanted_lines)
+    labels = [lbl[0] for lbl in found_lines]
     for l in wanted_lines:
-      if not l in [lbl[0] for lbl in found_lines]:
+      if not any ([l in label for label in labels]):
+      #if not l in [lbl[0] for lbl in found_lines]:
         print l, ' not found!'
-    print 'The available data is ', data
+    #print 'The available data is ', data
+    print 'The available labels are: ', labels
     sys.exit(1)
 
 def set_if_not_none(plot_dict, decider, thing_to_set, default, *args):
@@ -144,7 +147,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   for lbl in lines:
     this_data += [d for d in data if lbl in d[0]]
   many_labels = len(this_data) > 6
-  check_for_all_sets(this_data, lines, data)
+  check_for_all_sets(this_data, lines)
   size = (9,9) if many_labels else (9,7.5)
   fig = plt.figure(figsize = size)
   ax = fig.add_subplot(1,1,1)

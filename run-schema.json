@@ -21,7 +21,13 @@
           "nlo_type": {
              "id": "processes/nlo_type",
              "type": "string",
-             "enum": ["lo", "nlo", "nlo_combined"]},
+             "enum": ["lo", "nlo", "nlo_combined"]
+          },
+          "fks_method": {
+             "id": "processes/fks_method",
+             "type": "string",
+             "enum": ["default", "resonances"]
+          },
           "batches": {
             "id": "processes/batches",
             "type": "number"

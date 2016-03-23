@@ -75,7 +75,7 @@ def setup_sindarins(proc_dict, batch=None):
         if proc_dict['purpose'] == 'integrate' or scan:
           subproc.create_integration_sindarin(integration_sindarin, template_sindarin,
               proc_dict['adaption_iterations'], proc_dict.get('integration_iterations', ' '))
-          subproc.multiply_sindarins (integration_sindarin, template_sindarin, 
+          subproc.multiply_sindarins (integration_sindarin, proc_dict, 
              proc_dict.get('scale_variation', False), proc_dict['nlo_type'])
           #scaled_sindarins = None
           #if proc_dict.get('scale_variation', False):
@@ -91,7 +91,7 @@ def setup_sindarins(proc_dict, batch=None):
               proc_dict['process'], proc_dict['adaption_iterations'], 
               proc_dict.get('integration_iterations', ' '), 
               proc_dict['events_per_batch']) 
-          subproc.multiply_sindarins (base_sindarin, 
+          subproc.multiply_sindarins (base_sindarin, proc_dict,  
              proc_dict.get('scale_variation', False), proc_dict['nlo_type'])
           ### Evil code duplication
           #scaled_sindarins = None
@@ -133,7 +133,7 @@ def run_process((proc_id, proc_name, proc_dict)):
         logger.info('Using the following integration grids: ' + integration_grids)
       runfolder = proc_name + '-' + str(proc_id)
       if (not os.path.isfile(os.path.join(runfolder, 'done'))):
-        analysis = run_json.get('analysis', '')
+        analysis = proc_dict.get('analysis', '')
         subproc.generate(proc_name,
             proc_id,
             proc_dict,
@@ -166,13 +166,14 @@ comm.Barrier()
 
 runs = []
 for proc_dict in run_json['processes']:
+  template = proc_dict['process'] + '-template'
   if proc_dict.get ('scale_variation', False):
     processes = subproc.append_scale_suffixes (proc_dict['process'])
   else:
     processes = [proc_dict['process']]
   for proc_name in processes:
     if proc_dict['nlo_type'] == 'nlo':
-      for nlo_proc_name in subproc.create_component_sindarin_names (proc_name):
+      for nlo_proc_name in subproc.create_component_sindarin_names (proc_name, proc_dict):
         runs += subproc.fill_runs(nlo_proc_name, proc_dict)
     else:
       runs += subproc.fill_runs(proc_name, proc_dict)

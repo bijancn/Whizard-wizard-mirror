@@ -71,9 +71,9 @@ def test_fill_runs_exception():
   proc_dict = {'purpose': 'scan'}
   runs = fill_runs(proc_name, proc_dict)
 
-def get_component_suffixes (sindarin):
+def get_component_suffixes (proc_dict):
   suffixes = ['Born', 'Real', 'Virtual']
-  if fks_method_is_resonance(sindarin):
+  if proc_dict.get('fks_method', 'default') == 'resonances':
     suffixes += ['Mismatch']
   return suffixes
 
@@ -83,8 +83,8 @@ def get_scale_suffixes ():
 def append_scale_suffixes (proc_name):
   return [proc_name + '_' + s for s in get_scale_suffixes()]
 
-def create_component_sindarin_names (sindarin):
-  return [sindarin + '_' + s for s in get_component_suffixes (sindarin)]
+def create_component_sindarin_names (sindarin, proc_dict):
+  return [sindarin + '_' + s for s in get_component_suffixes (proc_dict)]
 
 def get_mandatory(proc_dict, key):
   try:
@@ -111,11 +111,7 @@ def test_is_nlo_calculation():
   eq_(is_nlo_calculation(filename), True)
   os.remove(filename)
 
-def fks_method_is_resonance(filename):
-  return get_string('\$fks_mapping_type', filename) == '"resonances"'
-
 def replace_scale (factor, filename):
-  # Needs to be adapted for arbitrary number of spaces
   original_scale = get_value("(scale *= *)(.*$)", filename)
   #Add brackets because scale expression can be a sum of variables
   replace_func = lambda l: l.replace (original_scale, '(' + original_scale + ') * ' + str (factor))
@@ -132,16 +128,36 @@ def replace_proc_id(part, filename):
   replace_func = lambda l : l.replace(proc_id, proc_id + '_' + part)
   sed(filename, replace_line=replace_func)
 
-def multiply_sindarins (base_sindarin, template_sindarin, scaled, nlo_type):
+def multiply_sindarins (base_sindarin, proc_dict, scaled, nlo_type):
   scaled_sindarins = None
   if scaled:
     scaled_sindarins = create_scale_sindarins (base_sindarin)
   if nlo_type == 'nlo':
     if scaled_sindarins != None:
       for sindarin in scaled_sindarins:
-        create_nlo_component_sindarins (template_sindarin, sindarin)
+        create_nlo_component_sindarins (proc_dict, sindarin)
     else:
-      create_nlo_component_sindarins (template_sindarin, base_sindarin)
+      create_nlo_component_sindarins (proc_dict, base_sindarin)
+
+def get_full_proc_names (base_name, proc_dict):
+  scaled = proc_dict.get ('scale_variation', False)
+  nlo = proc_dict['nlo_type'] == 'nlo'
+  if not scaled and not nlo:
+    full_names = [base_name]
+  else:
+    if scaled:
+      scaled_names = []
+      for suffix in get_scale_suffixes ():
+        scaled_names += [base_name + '_' + suffix]
+    else:
+      scaled_names = [base_name]
+    if nlo:
+      full_names = []
+      for scaled_name in scaled_names:
+          full_names += create_component_sindarin_names (scaled_name, proc_dict)
+    else:
+      full_names = scaled_names 
+  return full_names
 
 
 def test_replace_nlo_calc():
@@ -204,8 +220,8 @@ def create_scale_sindarins (base_sindarin):
   return new_sindarins
     
 
-def create_nlo_component_sindarins (template_sindarin, base_sindarin):
-  for suffix in get_component_suffixes (template_sindarin):
+def create_nlo_component_sindarins (proc_dict, base_sindarin):
+  for suffix in get_component_suffixes (proc_dict):
     new_sindarin = insert_suffix (base_sindarin, suffix)
     shutil.copyfile(base_sindarin, new_sindarin)
     replace_nlo_calc (suffix, new_sindarin)
@@ -237,8 +253,9 @@ def change_sindarin_for_event_gen(filename, samplename, i, proc_dict):
 def whizard_run(purpose, whizard, sindarin, fifo=None, proc_id=None, options='', analysis=''):
   cmd = whizard + ' ' + sindarin + ' ' + options
   if (purpose == 'histograms'):
+    cmd = 'export RIVET_ANALYSIS_PATH=../../rivet; ' + cmd
     yoda_file = '../../rivet/' + fifo.replace ('hepmc', 'yoda')
-    cmd = cmd + ' & rivet --quiet --pwd -H ' + yoda_file + ' -a ' + analysis + ' ' + fifo
+    cmd = cmd + ' & rivet --quiet -H ' + yoda_file + ' -a ' + analysis + ' ' + fifo
   num = ' in ' + str(proc_id) if proc_id != None else ''
   logger.info('Running ' + cmd + num)
   try:
