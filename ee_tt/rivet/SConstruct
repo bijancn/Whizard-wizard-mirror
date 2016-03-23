@@ -28,8 +28,6 @@ build_envelope = Builder(action = './yodaenvelopes -o $TARGET -c $SOURCE $SOURCE
 plot_cmd = 'rivet-mkhtml --mc-errs --pdf --cm --single ' + \
       '--ignore-unvalidated --num-threads=$NUMTHREADS --config=$CONFIG --no-ratio '
 
-plot_with_errors = 'rivet-mkhtml proc_nlo_central.yoda:"Title=NLO:ErrorBands=0" env.yoda:"Title=:ErrorBands=1:ErrorBandColor=red:ErrorBandOpacity=0.1:LegendOrder=0"'
-
 def generate_plot(source, target, env, for_signature):
   target_dir = target[0].dir
   try:
@@ -44,7 +42,7 @@ def generate_plot(source, target, env, for_signature):
 
 def generate_plot_with_errors (source, target, env, for_signature):
   target_dir = target[0].dir
-  return 'rivet-mkhtml -c $CONFIG %s:"Title=LO:ErrorBands=0:LineColor=black" %s:"Title=NLO:ErrorBands=0:LineColor=blue" %s:"Title=:ErrorBands=1:ErrorBandColor=red:ErrorBandOpacity=0.3"' % (source[0], source[1], source[2]) 
+  return 'rivet-mkhtml -c $CONFIG %s:"Title=LO:ErrorBands=0:LineColor=blue" %s:"Title=NLO:ErrorBands=0:LineColor=red" %s:"Title=:ErrorBands=1:ErrorBandColor=red:ErrorBandOpacity=0.5:LineColor=red"' % (source[0], source[1], source[2]) 
 
 build_plot_with_errors = Builder (generator = generate_plot_with_errors,
                                   suffix = '.html',

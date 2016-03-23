@@ -30,6 +30,10 @@ namespace Rivet {
       const int stdbin = 20;
       addProjection(fs, "FS");
 
+      const IdentifiedFinalState t(PID::TQUARK);
+      addProjection(t, "top");
+      const IdentifiedFinalState tbar(-PID::TQUARK);
+      addProjection(tbar, "antitop");
       const IdentifiedFinalState H(PID::HIGGS);
       addProjection(H, "higgs");
 
@@ -42,19 +46,26 @@ namespace Rivet {
       FastJets jets(veto, ee);
       addProjection(jets, "Jets");
 
-      _h["leadingjet_E"] = bookNLOHisto1D("leading-jet-E", stdbin, 250., 400.);
-      _h["leadingjet_Pt"] = bookNLOHisto1D("leading-jet-pT", stdbin, 0., 400.);
+      _h["leadingjet_E"] = bookNLOHisto1D("leading-jet-E", stdbin,  150., 405.);
+      _h["leadingjet_Pt"] = bookNLOHisto1D("leading-jet-pT", stdbin, 0., 350.);
       _h["leadingjet_Theta"] = bookNLOHisto1D("leading-jet-Theta", stdbin, -1.1, 1.1);
 
-      _h["2ndleadingjet_E"] = bookNLOHisto1D("2nd-leading-jet-E", stdbin, 0., 350.);
+      _h["2ndleadingjet_E"] = bookNLOHisto1D("2nd-leading-jet-E", stdbin, 0., 405.);
       _h["2ndleadingjet_Pt"] = bookNLOHisto1D("2nd-leading-jet-pT", stdbin, 0., 350.);
       _h["2ndleadingjet_Theta"] = bookNLOHisto1D("2nd-leading-jet-Theta", stdbin, -1.1, 1.1);
+
+      _h["top-E"] = bookNLOHisto1D("top-E", stdbin, 0., 405.);
+      _h["antitop-E"] = bookNLOHisto1D("antitop-E", stdbin, 0., 405.);
+      _h["top-pT"] = bookNLOHisto1D("top-pT", stdbin, 0., 350.);
+      _h["antitop-pT"] = bookNLOHisto1D("antitop-pT", stdbin, 0., 350.);
+      _h["top-theta"] = bookNLOHisto1D("top-theta", stdbin, -1.1, 1.1);
+      _h["antitop-theta"] = bookNLOHisto1D("antitop-theta", stdbin, -1.1, 1.1);
 
       _h["Higgs_E"] = bookNLOHisto1D("Higgs-E", stdbin, 0., 350.);
       _h["Higgs_Pt"] = bookNLOHisto1D("Higgs-Pt", stdbin, 0., 350.);
       _h["Higgs_Theta"] = bookNLOHisto1D("Higgs-Theta", stdbin, -1.1, 1.1);
 
-      _h["jets_invMass"] = bookNLOHisto1D("jets-inv", stdbin, 0., 650.);
+      _h["jets_invMass"] = bookNLOHisto1D("jets-inv", stdbin, 125., 750.);
       _h["jetcount"] = bookNLOHisto1D("jet-count", 4, 0.5, 4.5);
       _h["jetcount_incl"] = bookNLOHisto1D("jet-count-incl", 4, 0.5, 4.5);
 
@@ -67,14 +78,28 @@ namespace Rivet {
     void analyze(const Event& event) {
       double weight = event.weight();
     
-      Jets jets;
+      Jets jets, tjets, tbarjets;
+
+      ParticleVector tpartons = applyProjection<IdentifiedFinalState>(event, "top").particlesByPt();
+      ParticleVector tbarpartons = applyProjection<IdentifiedFinalState>(event, "antitop").particlesByPt();
       //get the jets
       const FastJets& fastjets = applyProjection<FastJets>(event, "Jets");
       double minjetE = 1. * GeV;
       const PseudoJets pseudo_jets = fastjets.pseudoJetsByE(minjetE);
 
-      foreach (const PseudoJet & pseudo_jet, pseudo_jets)
+      foreach (const PseudoJet & pseudo_jet, pseudo_jets) {
+         vector<PseudoJet> constituents = pseudo_jet.constituents();
+         bool is_t = false;
+         foreach (const PseudoJet& constituent, constituents) {
+            foreach (const Particle& tparton, tpartons) {
+               if (have_same_momentum (constituent, tparton)) {tjets.push_back(pseudo_jet); is_t = true;}
+            }
+            foreach (const Particle& tbarparton, tbarpartons) {
+               if (have_same_momentum (constituent, tbarparton)) {tbarjets.push_back(pseudo_jet); is_t = true;}
+            }
+         }
          jets.push_back (pseudo_jet);
+      }
 
       //get the Higgs
       ParticleVector H_cand = applyProjection<IdentifiedFinalState>(event, "higgs").particlesByPt();
@@ -83,7 +108,7 @@ namespace Rivet {
          H.push_back(hi);
 
       eventCounter++;
-      bool vetoCondition = jets.size() < 2;
+      bool vetoCondition = jets.size() < 2 or tjets.size() == 0 or tbarjets.size() == 0;
       if (vetoCondition) {
         vetoCounter++;
         vetoEvent;
@@ -95,6 +120,13 @@ namespace Rivet {
       _h["jetcount"]->fill(jets.size(), event);
       for (unsigned int i = 0; i < jets.size(); i++)
          _h["jetcount_incl"]->fill(i + 1, event);
+
+      _h["top-E"]->fill(tjets[0].E(), event);
+      _h["antitop-E"]->fill(tbarjets[0].E(), event);
+      _h["top-pT"]->fill(tjets[0].pt(), event);
+      _h["antitop-pT"]->fill(tbarjets[0].pt(), event);
+      _h["top-theta"]->fill(std::cos(tjets[0].theta()), event);
+      _h["antitop-theta"]->fill(std::cos(tbarjets[0].theta()), event);
 
       _h["leadingjet_E"]->fill(jets[0].E(), event);
       _h["leadingjet_Pt"]->fill(jets[0].pt(), event);

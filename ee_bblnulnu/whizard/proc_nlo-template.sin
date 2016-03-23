@@ -10,6 +10,8 @@ wW = 2.0978
 ?unweighted = false
 ?negative_weights = true
 
+$fks_mapping_type = "resonances"
+
 
 real dummy = 0.0
 scale = mtop

@@ -34,27 +34,16 @@ Title=$\quad e^+e^-\to t\bar{t}$
 #========================#
 #  invariant mass plots  #
 #========================#
- BEGIN PLOT /WHIZARD_.*/.*-inv
-YLabel=$\frac{d\sigma}{dm}[\text{fb}/\text{GeV}]$
- END PLOT
-
  BEGIN PLOT /WHIZARD_.*/jets-inv
 LogY=1
-XLabel=$m(p^{j_1}+p^{j_2})$
+XLabel=$m(p_{j_1}+p_{j_2})$
+LegendYPos=0.90
+LegendXPos=0.05
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/.*-Theta
 YLabel=$\frac{d\sigma}{dm}[\text{fb}/\text{GeV}]$
 XLabel=$\cos{\theta_{jj}}$
- END PLOT
-
- BEGIN PLOT /WHIZARD_.*/BW-inv
-LogY=1
-XLabel=$m_{BW}[\text{GeV}]$
- END PLOT
-
- BEGIN PLOT /WHIZARD_.*/BB-inv
-XLabel=$m_{b\bar{b}}[\text{GeV}]$
  END PLOT
 
 #============#
@@ -65,35 +54,16 @@ YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
 LogY=1
  END PLOT
 
- BEGIN PLOT /WHIZARD_.*/jet-pT
-XLabel=$\sum_i p_T^{j_i}[\text{GeV}]$
- END PLOT
-
- BEGIN PLOT /WHIZARD_.*/jet-pT-log
-YLabel=$\frac{d\sigma}{d\sum_i\log{p_{T,j_i}}}[\text{fb}/\text{GeV}]$
-XLabel=$\sum_i\log{p_{T,j_i}}[\text{GeV}]$
- END PLOT
-
- BEGIN PLOT /WHIZARD_.*/gluon-pT
-XLabel=$p_{T,g}[\text{GeV}]$
- END PLOT
-
- BEGIN PLOT /WHIZARD_.*/t-quark-pT
-XLabel=$p_{T,t}[\text{GeV}]$
-YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
- END PLOT
-
  BEGIN PLOT /WHIZARD_.*/leading-jet-pT
 XLabel=$p_T^{j_1}[\text{GeV}]$
+LegendYPos=0.90
+LegendXPos=0.25
  END PLOT
 
- BEGIN PLOT /WHIZARD_.*/second-leading-jet-pT
+ BEGIN PLOT /WHIZARD_.*/2nd-leading-jet-pT
 XLabel=$p_T^{j_2}[\text{GeV}]$
- END PLOT
-
- BEGIN PLOT /WHIZARD_.*/W_plus-pT
-XLabel=$p_{T,W^+}[\text{GeV}]$
-YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
+LegendYPos=0.90
+LegendXPos=0.25
  END PLOT
 
 #===========#
@@ -105,28 +75,11 @@ LegendXPos=0.05
 LogY=1
  END PLOT
 
- BEGIN PLOT /WHIZARD_.*/b-quark-E
-XLabel=$E_{b}[\text{GeV}]$
- END PLOT
-
- BEGIN PLOT /WHIZARD_.*/gluon-E
-XLabel=$E_g[\text{GeV}]$
-LegendXPos=0.65
- END PLOT
-
- BEGIN PLOT /WHIZARD_.*/t-quark-E
-XLabel=$E_t[\text{GeV}]$
- END PLOT
-
- BEGIN PLOT /WHIZARD_.*/W_plus-E
-XLabel=$E_{W^+}[\text{GeV}]$
- END PLOT
-
  BEGIN PLOT /WHIZARD_.*/leading-jet-E
 XLabel=$E^{j_1}[\text{GeV}]$
  END PLOT
 
- BEGIN PLOT /WHIZARD_.*/second-leading-jet-E
+ BEGIN PLOT /WHIZARD_.*/2nd-leading-jet-E
 XLabel=$E^{j_2}[\text{GeV}]$
  END PLOT
 
