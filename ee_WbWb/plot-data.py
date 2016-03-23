@@ -18,11 +18,18 @@ def ls_decider(lbl, title):
 
 def pretty_label(l, title):
   l = os.path.basename(l)
-  l = l.replace('proc_lo_thresholdparams', '$W^+b W^-\\bar b$')
-  l = l.replace('signaldiagram_lo', '$W^+b W^-\\bar b$ signal diagram only')
-  l = l.replace('factorized_lo', '$W^+b W^-\\bar b$ factorized')
-  l = l.replace('ttbar_lo_thresholdparams', '$t \\bar t$')
+  l = l.replace('proc', '')
+  l = l.replace('_thresholdparams', '')
+  l = l.replace('_lo', '')
+  if not 'ttbar' in l:
+    l = '$W^+b W^-\\bar b$, ' + l
+  else:
+    l = l.replace('ttbar_lo_thresholdparams', '$t \\bar t$')
   l = l.replace('.dat', '')
+  l = l.replace('_', ', ')
+  l = l.replace(', , ', ', ')
+  l = re.sub(r", $", "", l)
+  l = l.replace(', , ', ', ')
   return l
 
 def main ():
