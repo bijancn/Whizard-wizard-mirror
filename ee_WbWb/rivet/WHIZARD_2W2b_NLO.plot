@@ -26,11 +26,11 @@ ErrorBands=0
 #==========#
 #  titles  #
 #==========#
- BEGIN PLOT /WHIZARD_2015_NLO
+ BEGIN PLOT /WHIZARD_2W2b_NLO
 Title=$\quad e^+e^-\to W^+b W^-\bar{b}$, $N_\text{jets}\geq 2$
  END PLOT
 
- BEGIN PLOT /WHIZARD_2015_NLO_ttbarcuts
+ BEGIN PLOT /WHIZARD_2W2b_NLO_ttbarcuts
 Title=$\quad e^+e^-\to W^+b W^-\bar{b}$, $N_\text{jets}\geq 2$, $\lvert m_{Wj_b}-m_t\rvert\leq 5 \text{GeV}$
  END PLOT
 

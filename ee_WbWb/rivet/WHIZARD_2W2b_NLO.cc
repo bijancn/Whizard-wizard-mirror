@@ -8,18 +8,18 @@ namespace Rivet {
 
   using namespace Cuts;
 
-  class WHIZARD_2015_NLO_ttbarcuts : public Analysis {
+  class WHIZARD_2W2b_NLO : public Analysis {
   public:
 
     /// Constructor
-    WHIZARD_2015_NLO_ttbarcuts()
-      : Analysis("WHIZARD_2015_NLO_ttbarcuts")
+    WHIZARD_2W2b_NLO()
+      : Analysis("WHIZARD_2W2b_NLO")
     {    }
 
     /// Book histograms and initialise projections before the run
     void init() {
       const FinalState fs;
-      const int stdbin = 50;
+      const int stdbin = 30;
       addProjection(fs, "FS");
 
       VetoedFinalState veto;
@@ -50,75 +50,20 @@ namespace Rivet {
 
       vetoCounter = 0;
       eventCounter = 0;
-      acceptedWeights = 0.0;
+      acceptedWeights = 0.;
+      low_energy_counts = 0;
+      low_energy_weights = 0.;
     }
 
     void analyze(const Event& event) {
       const FastJets& fastjets = applyProjection<FastJets>(event, "Jets");
       const FinalState& fs = applyProjection<FinalState>(event, "FS");
-      const double minjetE = 5.0 * GeV;
-      const double mtop = 173.0 * GeV;
-      const double mdelta = 5.0 * GeV;
+      double minjetE = 1. * GeV;
       const PseudoJets jets = fastjets.pseudoJetsByE(minjetE);
       double weight = event.weight();
 
       eventCounter++;
       bool vetoCondition = jets.size() < 2;
-      bool isSet = false;
-      PseudoJet bparton;
-      foreach (const Particle& p, fs.particles()) {
-        int id = p.pid();
-        if(id == PID::BQUARK) {
-          bparton = p.pseudojet();
-          isSet = true;
-        }
-      }
-      if (isSet) {
-        isSet = false;
-      }
-      else {
-        cout << "b parton not found!" << endl;
-        exit(1);
-      }
-      PseudoJet Bparton;
-      foreach (const Particle& p, fs.particles()) {
-        int id = p.pid();
-        if(id == -PID::BQUARK) {
-          Bparton = p.pseudojet();
-          isSet = true;
-        }
-      }
-      if (not isSet) {
-        cout << "B parton not found!" << endl;
-        exit(1);
-      }
-      foreach (const Particle& p1, fs.particles()) {
-        int id1 = p1.pid(); 
-        if (id1 == PID::WPLUSBOSON) {
-          foreach (const PseudoJet& j2, jets) {
-            vector<PseudoJet> constituents = j2.constituents();
-            foreach (const PseudoJet& jj2, constituents) {
-              if (have_same_momentum(jj2, bparton)) {
-                PseudoJet p_sum = p1.pseudojet() + j2;
-                double diff = abs(p_sum.m() - mtop);
-                vetoCondition = vetoCondition or diff > mdelta;
-              }
-            }
-          }
-        }
-        if (id1 == PID::WMINUSBOSON) {
-          foreach (const PseudoJet& j2, jets) {
-            vector<PseudoJet> constituents = j2.constituents();
-            foreach (const PseudoJet& jj2, constituents) {
-              if (have_same_momentum(jj2, Bparton)) {
-                PseudoJet p_sum = p1.pseudojet() + j2;
-                double diff = abs(p_sum.m() - mtop);
-                vetoCondition = vetoCondition or diff > mdelta;
-              }
-            }
-          }
-        }
-      }
       if (vetoCondition) {
         vetoCounter++;
         vetoEvent;
@@ -143,6 +88,7 @@ namespace Rivet {
       PseudoJet p_sum = jets[0] + jets[1];
       _h_jets_invMass->fill(p_sum.m(), weight);
 
+      PseudoJet bparton;
       // Register single particle properties
       foreach (const Particle& p, fs.particles()) {
         int id = p.pid();
@@ -152,11 +98,16 @@ namespace Rivet {
           _h_Wp_E->fill(E, weight);
           _h_Wp_Theta->fill(costheta, weight);
         } else if(id == PID::BQUARK) {
+          bparton = p.pseudojet();
           _h_B_E->fill(E, weight);
           _h_B_Theta->fill(costheta, weight);
         } else if(id == PID::GLUON) {
           _h_g_E->fill(E, weight);
           _h_g_Theta->fill(costheta, weight);
+          if (E < 5.) {
+             low_energy_weights += weight;
+             low_energy_counts++;
+          }
         }
       }
 
@@ -199,6 +150,8 @@ namespace Rivet {
       cout << "Numer of vetoed events: " << vetoCounter << endl;
       cout << "Final (fiducial) cross section (fb): " << fiducial_xsection << endl;
       cout << "Scale factor: " << scale_factor << endl;
+      cout << "Gluon weights below 5 GeV: " << low_energy_weights << endl;
+      cout << "Number of gluon emissions below 5 GeV: " << low_energy_counts << endl;
 
       scale(_h_Wp_E, scale_factor);
       scale(_h_B_E, scale_factor);
@@ -242,12 +195,14 @@ namespace Rivet {
     Histo1DPtr _h_jetcount;
 
     int vetoCounter, eventCounter;
+    int low_energy_counts;
+    double low_energy_weights;
     double acceptedWeights;
   };
 
 
 
   // The hook for the plugin system
-  DECLARE_RIVET_PLUGIN(WHIZARD_2015_NLO_ttbarcuts);
+  DECLARE_RIVET_PLUGIN(WHIZARD_2W2b_NLO);
 
 }
