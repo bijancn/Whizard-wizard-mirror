@@ -1,34 +1,10 @@
-model = SM_tt_threshold
-
-?vis_history = false
+include("../process_settings_threshold.sin")
 
 library = signaldiagram_lo
+$method = "omega"
 process signaldiagram_lo = e1, E1 => Wp, Wm, b, B {$restrictions = "3+5~t && 4+6~tbar"}
-
 compile
 
-mZ = 91.188
-mW = 80.419
-mb = 4.2
-mH =  1.250000000000E+02
-me =  0.0
-wZ =  2.443
-wW =  2.049000000000E+00
-wH =  4.143000000000E-03
-?alpha_s_is_fixed = false
-?alpha_s_from_mz = true
-?alpha_s_from_lambda_qcd = false
-alpha_s_order = 1
-alpha_s_nf = 5
-alphas = 0.118 ! (Z pole, NLL running to mu_h)
-alpha_em_i = 125.924 ! (not running)
-m1S = 172.0
-mpole_fixed = 1
-
-nrqcd_order  = 0
-sh     = 1.
-sf     = 1.
-Vtb    = 1.
 FF =  10
 offshell_strategy = 0
 
@@ -39,5 +15,6 @@ show(model)
 sqrtsstepsize = 0.1 GeV
 sqrtsmin = sqrts - sqrtsstepsize
 sqrtsmax = sqrts + sqrtsstepsize
+
 integrate (signaldiagram_lo)
 printf "RES %g %g %g" (sqrts, integral(signaldiagram_lo), error(signaldiagram_lo))
