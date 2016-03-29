@@ -128,77 +128,109 @@ def check_for_all_sets(found_lines, wanted_lines):
     print 'The available labels are: ', found_labels
     sys.exit(1)
 
-def set_if_not_none(plot_dict, decider, thing_to_set, default, *args):
-  if decider is not None:
-    return decider(args)
+def decide_if_not_none(dictionary, decider, thing_to_set, default, *args):
+  try:
+    return dictionary[thing_to_set]
+  except (KeyError, TypeError):
+    if decider is not None:
+      return decider(*args)
+    else:
+      return default
+
+def get_label(title, filename=None, pretty_label=None, object_dict=None):
+  if filename is not None:
+    default = os.path.basename(filename)
+    return decide_if_not_none (object_dict, pretty_label, 'label', default, filename, title).replace('_', '\_')
   else:
-    return plot_dict.get(thing_to_set, default)
+    return object_dict.get('label', '').replace('_', '\_')
 
 def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     label_decider=None, legend_decider=None, marker_decider=None,
     linestyle_decider=None, pretty_label=None, set_extra_settings=None):
+  """
+  data: [(identifier_string, numpy_array),...] where numpy_array has the columns
+        x, y and optionally yerror
+  """
   mkdirs(pic_path)
   title = plot_dict.get('title', 'plot')
   print 'Plotting ' + title
-  this_data = []
+  line_data = []
   lines = plot_dict.get('lines', [])
   for lbl in lines:
-    this_data += [d for d in data if lbl == os.path.basename(d[0]).replace('.dat', '')]
-  many_labels = len(this_data) > 6
-  check_for_all_sets(this_data, lines)
+    line_data += [d for d in data if lbl == os.path.basename(d[0]).replace('.dat', '')]
+  bands = plot_dict.get('bands', [])
+  band_data = []
+  lst_of_band_lsts = [b.get('data', []) for b in bands]
+  for lbl_lst in lst_of_band_lsts:
+    this_band_data = []
+    for lbl in lbl_lst:
+      this_band_data += [d for d in data if lbl == os.path.basename(d[0]).replace('.dat', '')]
+    band_data += [this_band_data]
+  n_objects = len(line_data) + len(band_data)
+  many_labels = n_objects > 6
+  check_for_all_sets(line_data, lines)
+  # check_for_all_sets(band_data, band_lst)
+  if n_objects == 0:
+    raise Exception("You have to give select data to plot")
   size = (9,9) if many_labels else (9,7.5)
   fig = plt.figure(figsize = size)
   ax = fig.add_subplot(1,1,1)
-  set_if_not = partial(set_if_not_none, plot_dict)
   if plot_extra is not None:
     ax = plot_extra(ax, title)
   if range_decider is not None:
-    ymin, ymax, xmin, xmax = range_decider(this_data, title)
+    ymin, ymax, xmin, xmax = range_decider(line_data, title)
   else:
-    ymin = plot_dict.get('ymin', min([np.amin(d[1][1]) for d in this_data]))
-    ymax = plot_dict.get('ymax', max([np.amax(d[1][1]) for d in this_data]))
-    xmin = plot_dict.get('xmin', min([np.amin(d[1][0]) for d in this_data]))
-    xmax = plot_dict.get('xmax', min([np.amax(d[1][0]) for d in this_data]))
+    try:
+      flattened_band_data = reduce(lambda x,y: x+y, band_data)
+    except TypeError:
+      flattened_band_data = []
+    all_data = line_data + flattened_band_data
+    xmin = plot_dict.get('xmin', min([np.amin(d[1][0]) for d in all_data]))
+    xmax = plot_dict.get('xmax', min([np.amax(d[1][0]) for d in all_data]))
+    ymin = plot_dict.get('ymin', min([np.amin(d[1][1]) for d in all_data]))
+    ymax = plot_dict.get('ymax', max([np.amax(d[1][1]) for d in all_data]))
   if label_decider is not None:
     xlabel, ylabel = label_decider (title)
   else:
     xlabel, ylabel = (plot_dict.get('xlabel', 'x'), plot_dict.get('ylabel', 'y'))
   xlog, ylog = (plot_dict.get('xlog', False), plot_dict.get('ylog', False))
   xminors, yminors = (plot_dict.get('xminors', False), plot_dict.get('yminors', False))
-  # TODO: (bcn 2016-03-03) check that this works
-  legend_location = set_if_not (legend_decider, 'legend_location', 'best', title)
-  if legend_decider is not None:
-    legend_location = legend_decider (title)
-  else:
-    legend_location = plot_dict.get('legend_location', 'best')
+  decide_or_get = partial(decide_if_not_none, plot_dict)
+  legend_location = decide_or_get (legend_decider, 'legend_location', 'best', title)
   if set_extra_settings is not None:
     ax = set_extra_settings(ax, title)
-  # if plot_dict.get('plot_type', 'default') == 'fill_band':
-  # Use matplotlib's fill_between() call to create error bars.
-  # plt.fill_between(years, mean_PlyCount - sem_PlyCount,
-             # mean_PlyCount + sem_PlyCount, color="#3F5D7D")
   pl = Plotter()
   i = 0
-  for td,c in zip(this_data, colors):
-    l, d = td[0], td[1]
-    print l
-    lbl = pretty_label(l, title) if pretty_label is not None else os.path.basename(l)
-    lbl = lbl.replace('_', '\_')
+  for data_of_a_band, band, color in zip(band_data, bands, colors):
+    label = get_label(title, pretty_label=pretty_label, object_dict=band)
+    print label
+    opacity = band.get('opacity', 0.3)
+    color = band.get('color', color)
+    x = data_of_a_band[0][1][0]
+    list_of_y_arrays = [db[1][1] for db in data_of_a_band]
+    y_array = np.vstack(tuple(list_of_y_arrays))
+    plt.fill_between(x, np.amin(y_array, axis=0), np.amax(y_array, axis=0),
+        color=color, label=label, alpha=opacity)
+    # for this_d, this_lbl in zip(d, lbl):
+  for td,c in zip(line_data, colors):
+    filename, d = td[0], td[1]
+    label = get_label(title, filename=filename, pretty_label=pretty_label)
+    print label
     if linestyle_decider is not None:
-      linestyle = linestyle_decider (l, title)
+      linestyle = linestyle_decider (filename, title)
     else:
       linestyle = plot_dict.get('linestyle', None)
     if linestyle is not None:
-      ax.plot(d[0], d[1], color=c, label=lbl, linestyle=linestyle)
+      ax.plot(d[0], d[1], color=c, label=label, linestyle=linestyle)
     else:
       if marker_decider is not None:
-        marker = marker_decider(l, title)
+        marker = marker_decider(filename, title)
       else:
         marker = plot_dict.get('marker', '+')
       if len(d) > 2:
-        ax.errorbar(d[0], d[1], fmt=marker, yerr=d[2], color=c, label=lbl)
+        ax.errorbar(d[0], d[1], fmt=marker, yerr=d[2], color=c, label=label)
       else:
-        ax.errorbar(d[0], d[1], fmt=marker, color=c, label=lbl)
+        ax.errorbar(d[0], d[1], fmt=marker, color=c, label=label)
     if plot_dict.get('generate_animated', False):
       i += 1
       pl.setfig(ax, title=None,

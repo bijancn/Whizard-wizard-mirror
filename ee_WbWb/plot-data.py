@@ -14,10 +14,13 @@ import bcn_plot
 from utils import load_json
 
 def ls_decider(lbl, title):
-  return None
+  if 'zoom' in title:
+    return None
+  else:
+    return 'solid'
 
-def pretty_label(l, title):
-  l = os.path.basename(l)
+def pretty_label(filename, title):
+  l = os.path.basename(filename)
   l = l.replace('proc', '')
   l = l.replace('_thresholdparams', '')
   l = l.replace('_lo', '')
@@ -38,6 +41,12 @@ def main ():
   files = glob.glob(data_path + '/*.dat')
   plot_json = load_json('plot.json')
   data = [(filename, np.loadtxt(filename, unpack=True)) for filename in files]
+  for index, item in enumerate(data):  # for d in data:
+    x = item[1][0]
+    y = item[1][1]
+    yerr = item[1][2]
+    order = np.argsort(x)
+    data[index] = (item[0], np.array((x[order], y[order], yerr[order])))
   pool = mp.Pool(processes=3)
   plot_this = partial(bcn_plot.plot, data=data, pic_path=pic_path,
       linestyle_decider=ls_decider, pretty_label=pretty_label)

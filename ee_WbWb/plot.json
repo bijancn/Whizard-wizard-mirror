@@ -1,13 +1,14 @@
 {
   "plots": [
-  {"title": "Gauge-dependence of LO cross sections",
-   "lines": [
-     "proc_lo_thresholdparams",
-     "factorized_lo",
-     "factorized_onshellprojected_lo",
-     "signaldiagram_lo",
-     "ttbar_lo_thresholdparams"
-       ],
+  {"title": "test",
+    "bands": [
+    {"label":"banded",
+      "data":
+        ["proc_lo_thresholdparams",
+         "factorized_lo",
+         "factorized_onshellprojected_lo"
+        ]
+    } ],
    "xlabel": "$\\sqrt{s}$ [GeV]",
    "ylabel": "$\\sigma$ [fb]",
    "ylog": true,

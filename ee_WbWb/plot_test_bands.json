@@ -1,0 +1,41 @@
+{
+  "plots": [
+  {"title": "test",
+    "lines": ["proc_lo_thresholdparams",
+         "factorized_lo",
+         "factorized_onshellprojected_lo"
+        ],
+    "bands": [
+    {"label":"banded",
+      "data":
+        ["proc_lo_thresholdparams",
+         "factorized_lo"
+        ]
+    },
+    {"label":"superbanded",
+      "data":
+        ["factorized_lo",
+         "factorized_onshellprojected_lo"
+        ],
+      "color":"green"
+    },
+    { "data":
+        [ "factorized_lo",
+         "factorized_onshellprojected_lo"
+        ],
+      "color":"blue",
+      "opacity":0.1
+    }
+    ],
+   "xlabel": "$\\sqrt{s}$ [GeV]",
+   "ylabel": "$\\sigma$ [fb]",
+   "ylog": true,
+   "xlog": true,
+   "ymin": 1,
+   "ymax": 10000,
+   "xmax": 100000,
+   "xminors": true,
+   "yminors": true
+  }
+  ]
+}
