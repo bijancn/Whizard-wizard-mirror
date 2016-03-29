@@ -15,9 +15,9 @@ from utils import load_json
 
 def ls_decider(lbl, title):
   if 'zoom' in title:
-    return None
+    return 'banded'
   else:
-    return 'solid'
+    return 'banded'
 
 def pretty_label(filename, title):
   l = os.path.basename(filename)

@@ -201,26 +201,29 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     ax = set_extra_settings(ax, title)
   pl = Plotter()
   i = 0
+  global_opacity = plot_dict.get('opacity', 0.3)
   for data_of_a_band, band, color in zip(band_data, bands, colors):
     label = get_label(title, pretty_label=pretty_label, object_dict=band)
     print label
-    opacity = band.get('opacity', 0.3)
+    opacity = band.get('opacity', global_opacity)
     color = band.get('color', color)
     x = data_of_a_band[0][1][0]
     list_of_y_arrays = [db[1][1] for db in data_of_a_band]
     y_array = np.vstack(tuple(list_of_y_arrays))
     plt.fill_between(x, np.amin(y_array, axis=0), np.amax(y_array, axis=0),
         color=color, label=label, alpha=opacity)
-    # for this_d, this_lbl in zip(d, lbl):
   for td,c in zip(line_data, colors):
     filename, d = td[0], td[1]
     label = get_label(title, filename=filename, pretty_label=pretty_label)
     print label
-    if linestyle_decider is not None:
-      linestyle = linestyle_decider (filename, title)
-    else:
-      linestyle = plot_dict.get('linestyle', None)
-    if linestyle is not None:
+    linestyle = decide_or_get (linestyle_decider, 'linestyle', None, filename, title)
+    if linestyle == 'banded':
+      if len(d) > 2:
+        plt.fill_between(d[0], d[1] - d[2], d[1] + d[2],
+          color=c, label=label, alpha=global_opacity)
+      else:
+        raise Exception("You have to supply errors for banded linestyle")
+    elif linestyle is not None:
       ax.plot(d[0], d[1], color=c, label=label, linestyle=linestyle)
     else:
       if marker_decider is not None:
