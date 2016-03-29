@@ -9,9 +9,18 @@ from time import sleep
 from functools import partial
 from utils import *
 from termcolor import colored
-from nose.tools import eq_, assert_almost_equal, raises
+from nose.tools import *
 
 logger = logging.getLogger(__name__)
+
+def setup_func():
+  with open('test_nlo_base', "w") as test:
+    test.write('include("process_settings.sin")\n')
+    test.write('process proc_nlo = e1, E1 => e2, E2 {nlo_calculation = "Full"}\n')
+    test.write('integrate (proc_nlo)')
+
+def teardown_func():
+  os.remove('test_nlo_base')
 
 def fill_runs(proc_name, proc_dict):
   if proc_dict['purpose'] == 'events' or proc_dict['purpose'] == 'histograms':
@@ -69,11 +78,14 @@ def test_fill_runs_basic():
     assert_almost_equal (r[0], e[0], places=4)
     eq_ (r[1:2], e[1:2])
 
+@raises(Exception)
 def test_fill_runs_exception():
   proc_name = 'test'
   proc_dict = {'purpose': 'scan'}
   runs = fill_runs(proc_name, proc_dict)
   eq_ (runs, [])
+  proc_dict = {'purpose': 'foo'}
+  runs = fill_runs(proc_name, proc_dict)
 
 def get_component_suffixes (proc_dict):
   suffixes = ['Born', 'Real', 'Virtual']
@@ -87,56 +99,35 @@ def get_scale_suffixes ():
 def append_scale_suffixes (proc_name):
   return [proc_name + '_' + s for s in get_scale_suffixes()]
 
+def test_append_scale_suffixes():
+  proc_name = 'test'
+  eq_(append_scale_suffixes(proc_name), ['test_central','test_low','test_high'])
+
 def create_component_sindarin_names (sindarin, proc_dict):
   return [sindarin + '_' + s for s in get_component_suffixes (proc_dict)]
 
-def get_mandatory(proc_dict, key):
+def test_create_component_sindarin_names ():
+  test_dict = {'fks_method': 'foo'}
+  test_sindarin = "proc_nlo"
+  eq_(create_component_sindarin_names(test_sindarin, test_dict),
+      ['proc_nlo_Born', 'proc_nlo_Real', 'proc_nlo_Virtual'])
+  test_dict = {'fks_method': 'resonances'}
+  eq_(create_component_sindarin_names(test_sindarin, test_dict),
+      ['proc_nlo_Born', 'proc_nlo_Real', 'proc_nlo_Virtual', 'proc_nlo_Mismatch'])
+
+# TODO: (bcn 2016-03-29) is this used anywhere???
+def get_mandatory(proc_dict, key): # pragma: no cover
   try:
     return p[key]
   except KeyError:
     logger.fatal('Aborting: ' + key + 'is mandatory')
 
-def get_combined_integration(filename):
+# TODO: (bcn 2016-03-29) is this used anywhere???
+def get_combined_integration(filename): # pragma: no cover
   return get_logical('\?combined_nlo_integration', filename)
 
-def is_nlo_calculation(filename):
-  return grep("nlo_calculation *=", filename)
-
-def test_is_nlo_calculation():
-  filename = 'test_is_nlo_calculation'
-  test = open(filename, "w")
-  test.write('foo bar')
-  test.close()
-  eq_(is_nlo_calculation(filename), False)
-  test = open(filename, "w")
-  test.write('nlo_calculation = "Full"')
-  test.close()
-  eq_(is_nlo_calculation(filename), True)
-  os.remove(filename)
-
-def replace_scale (factor, filename):
-  original_scale = get_value("(scale *= *)(.*$)", filename)
-  #Add brackets because scale expression can be a sum of variables
-  replace_func = lambda l: l.replace (original_scale, '(' + original_scale + ') * ' + str (factor))
-  sed(filename, replace_line=replace_func)
-
-def replace_nlo_calc(part, filename):
-  # Expects part  = 'Real', 'Born', etc as strings
-  replace_func = lambda l : l.replace('"Full"', '"' + part +'"')
-  sed(filename, replace_line=replace_func)
-
-def multiply_sindarins (base_sindarin, proc_dict, scaled, nlo_type):
-  scaled_sindarins = None
-  if scaled:
-    scaled_sindarins = create_scale_sindarins (base_sindarin)
-  if nlo_type == 'nlo':
-    if scaled_sindarins != None:
-      for sindarin in scaled_sindarins:
-        create_nlo_component_sindarins (proc_dict, sindarin)
-    else:
-      create_nlo_component_sindarins (proc_dict, base_sindarin)
-
-def get_full_proc_names (base_name, proc_dict):
+# TODO: (bcn 2016-03-29) is this used anywhere??? whats the purpose?
+def get_full_proc_names (base_name, proc_dict): # pragma: no cover
   scaled = proc_dict.get ('scale_variation', False)
   nlo = proc_dict['nlo_type'] == 'nlo'
   if not scaled and not nlo:
@@ -156,6 +147,87 @@ def get_full_proc_names (base_name, proc_dict):
       full_names = scaled_names
   return full_names
 
+def is_nlo_calculation(filename):
+  return grep("nlo_calculation *=", filename)
+
+def test_is_nlo_calculation():
+  filename = 'test_is_nlo_calculation'
+  with open(filename, "w") as test:
+    test.write('foo bar')
+  eq_(is_nlo_calculation(filename), False)
+  with open(filename, "w") as test:
+    test.write('nlo_calculation = "Full"')
+  eq_(is_nlo_calculation(filename), True)
+  os.remove(filename)
+
+def replace_scale (factor, filename):
+  original_scale = get_value("(scale *= *)(.*$)", filename)
+  # Add brackets because scale expression can be a sum of variables
+  replace_func = lambda l: l.replace (original_scale, '(' + original_scale + ') * ' + str (factor))
+  sed(filename, replace_line=replace_func)
+
+def test_replace_scale():
+  filename = 'test_replace_scale'
+  with open(filename, "w") as test:
+    test.write('scale = mtop')
+  replace_scale (3, filename)
+  with open(filename, "r") as test:
+    eq_(test.read(), 'scale = (mtop) * 3')
+
+  with open(filename, "w") as test:
+    test.write('scale = 2 * mtop + 3 mH')
+  replace_scale (3, filename)
+  with open(filename, "r") as test:
+    eq_(test.read(), 'scale = (2 * mtop + 3 mH) * 3')
+
+def replace_nlo_calc(part, filename):
+  # Expects part  = 'Real', 'Born', etc as strings
+  replace_func = lambda l : l.replace('"Full"', '"' + part +'"')
+  sed(filename, replace_line=replace_func)
+
+def insert_suffix (sindarin, suffix):
+  if 'integrate' in sindarin:
+    return sindarin.replace('-integrate.sin', '_' + suffix + '-integrate.sin')
+  else:
+    return sindarin.replace('.sin', '_' + suffix + '.sin')
+
+def test_insert_suffix ():
+  test_sindarin = "proc_nlo-integrate.sin"
+  eq_(insert_suffix(test_sindarin, "suffix"), "proc_nlo_suffix-integrate.sin")
+  test_sindarin2 = "proc_nlo.sin"
+  eq_(insert_suffix(test_sindarin2, "suffix"), "proc_nlo_suffix.sin")
+
+def create_nlo_component_sindarins (proc_dict, base_sindarin):
+  for suffix in get_component_suffixes (proc_dict):
+    new_sindarin = insert_suffix (base_sindarin, suffix)
+    shutil.copyfile(base_sindarin, new_sindarin)
+    replace_nlo_calc (suffix, new_sindarin)
+    replace_proc_id (suffix, new_sindarin)
+
+def create_scale_sindarins (base_sindarin):
+  new_sindarins = []
+  for suffix in get_scale_suffixes ():
+    new_sindarin = insert_suffix (base_sindarin, suffix)
+    new_sindarins.append(new_sindarin)
+    shutil.copyfile (base_sindarin, new_sindarin)
+    if suffix == 'low':
+      replace_scale (0.5, new_sindarin)
+    elif suffix == 'high':
+      replace_scale (2.0, new_sindarin)
+    replace_proc_id (suffix, new_sindarin)
+  return new_sindarins
+
+def multiply_sindarins (base_sindarin, proc_dict, scaled, nlo_type):
+  scaled_sindarins = None
+  if scaled:
+    scaled_sindarins = create_scale_sindarins (base_sindarin)
+  if nlo_type == 'nlo':
+    if scaled_sindarins != None:
+      for sindarin in scaled_sindarins:
+        create_nlo_component_sindarins (proc_dict, sindarin)
+    else:
+      create_nlo_component_sindarins (proc_dict, base_sindarin)
+
 def test_get_full_proc_names():
   pass
 
@@ -165,23 +237,18 @@ def replace_proc_id(part, filename):
   replace_func = lambda l : l.replace(proc_id, proc_id + '_' + part)
   sed(filename, replace_line=replace_func)
 
+@with_setup(setup_func, teardown_func)
 def test_replace_proc_id():
-  filename = 'test_replace_nlo_calc'
-  test = open(filename, "w")
-  test.write('include("process_settings.sin")\n')
-  test.write("process proc_nlo = e1, E1 => e2, E2\n")
-  test.write("integrate (proc_nlo)")
-  test.close()
+  filename = 'test_replace_proc_id'
+  shutil.copyfile('test_nlo_base', filename)
   replace_proc_id('Real', filename)
   eq_(get_value("(process +)(\w+)", filename), 'proc_nlo_Real')
-  test = open(filename, "r")
-  expectation = ['include("process_settings.sin")\n',
-                 "process proc_nlo_Real = e1, E1 => e2, E2\n",
-                 "integrate (proc_nlo_Real)"]
-  for t, e in zip(test, expectation):
-    eq_(t, e)
-  test.close()
-  os.remove(filename)
+  with open(filename, "r") as test:
+    expectation = ['include("process_settings.sin")\n',
+                   'process proc_nlo_Real = e1, E1 => e2, E2 {nlo_calculation = "Full"}\n',
+                   'integrate (proc_nlo_Real)']
+    for t, e in zip(test, expectation):
+      eq_(t, e)
 
 def replace_iterations (adaption_iterations, integration_iterations):
   iterations = 'iterations = ' + adaption_iterations + ':"gw"'
@@ -202,34 +269,6 @@ def create_simulation_sindarin (simulation_sindarin, template_sindarin, process,
           + 'checkpoint = n_events / 20' + '\n' \
           + 'simulate(' + process + ')'
   sed(simulation_sindarin, write_to_bottom=command)
-
-def insert_suffix (sindarin, suffix):
-  if 'integrate' in sindarin:
-    return sindarin.replace('-integrate.sin', '_' + suffix + '-integrate.sin')
-  else:
-    return sindarin.replace('.sin', '_' + suffix + '.sin')
-
-
-def create_scale_sindarins (base_sindarin):
-  new_sindarins = []
-  for suffix in get_scale_suffixes ():
-    new_sindarin = insert_suffix (base_sindarin, suffix)
-    new_sindarins.append(new_sindarin)
-    shutil.copyfile (base_sindarin, new_sindarin)
-    if suffix == 'low':
-      replace_scale (0.5, new_sindarin)
-    elif suffix == 'high':
-      replace_scale (2.0, new_sindarin)
-    replace_proc_id (suffix, new_sindarin)
-  return new_sindarins
-
-
-def create_nlo_component_sindarins (proc_dict, base_sindarin):
-  for suffix in get_component_suffixes (proc_dict):
-    new_sindarin = insert_suffix (base_sindarin, suffix)
-    shutil.copyfile(base_sindarin, new_sindarin)
-    replace_nlo_calc (suffix, new_sindarin)
-    replace_proc_id (suffix, new_sindarin)
 
 def get_grid_index (proc_name):
   words = proc_name.split ('_')
