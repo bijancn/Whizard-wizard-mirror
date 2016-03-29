@@ -173,6 +173,7 @@ def test_replace_scale():
   replace_scale (3, filename)
   with open(filename, "r") as test:
     eq_(test.read(), 'scale = (mtop) * 3')
+  os.remove(filename)
 
   with open(filename, "w") as test:
     test.write('scale = 2 * mtop + 3 mH')
@@ -249,6 +250,7 @@ def test_replace_proc_id():
                    'integrate (proc_nlo_Real)']
     for t, e in zip(test, expectation):
       eq_(t, e)
+  os.remove(filename)
 
 def replace_iterations (adaption_iterations, integration_iterations):
   iterations = 'iterations = ' + adaption_iterations + ':"gw"'
