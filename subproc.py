@@ -23,19 +23,23 @@ def fill_runs(proc_name, proc_dict):
       stepsize = proc_dict['stepsize']
     except KeyError:
       fatal('Aborting: You want a scan but have not set start, stop and stepsize')
-    if stepsize == 'logarithmic':
-      step_range = logspace(start, stop, num=proc_dict.get('steps', 10),
-          endpoint=True, base=10.0)
     else:
-      step_range = arange(start, stop, float(stepsize))
-    runs = [(b, proc_name, proc_dict) for b in step_range]
+      if stepsize == 'logarithmic':
+        step_range = logspace(start, stop, num=proc_dict.get('steps', 10),
+            endpoint=True, base=10.0)
+      else:
+        step_range = arange(start, stop, float(stepsize))
+      runs = [(b, proc_name, proc_dict) for b in step_range]
   elif proc_dict['purpose'] == 'integrate':
     runs = [(-1, proc_name, proc_dict)]
   elif proc_dict['purpose'] == 'disabled':
     runs = []
   else:
     raise Exception("fill_runs: Unknown purpose")
-  return runs
+  try:
+    return runs
+  except UnboundLocalError:
+    return []
 
 def test_fill_runs_basic():
   proc_dict = {'purpose': 'events', 'batches': 2}
@@ -65,11 +69,11 @@ def test_fill_runs_basic():
     assert_almost_equal (r[0], e[0], places=4)
     eq_ (r[1:2], e[1:2])
 
-@raises(SystemExit)
 def test_fill_runs_exception():
   proc_name = 'test'
   proc_dict = {'purpose': 'scan'}
   runs = fill_runs(proc_name, proc_dict)
+  eq_ (runs, [])
 
 def get_component_suffixes (proc_dict):
   suffixes = ['Born', 'Real', 'Virtual']
@@ -99,7 +103,6 @@ def is_nlo_calculation(filename):
   return grep("nlo_calculation *=", filename)
 
 def test_is_nlo_calculation():
-  from nose.tools import eq_
   filename = 'test_is_nlo_calculation'
   test = open(filename, "w")
   test.write('foo bar')
@@ -120,12 +123,6 @@ def replace_scale (factor, filename):
 def replace_nlo_calc(part, filename):
   # Expects part  = 'Real', 'Born', etc as strings
   replace_func = lambda l : l.replace('"Full"', '"' + part +'"')
-  sed(filename, replace_line=replace_func)
-
-def replace_proc_id(part, filename):
-  # Expects part  = 'Real', 'Born', etc as strings
-  proc_id = get_value("(process +)(\w+)", filename)
-  replace_func = lambda l : l.replace(proc_id, proc_id + '_' + part)
   sed(filename, replace_line=replace_func)
 
 def multiply_sindarins (base_sindarin, proc_dict, scaled, nlo_type):
@@ -156,12 +153,19 @@ def get_full_proc_names (base_name, proc_dict):
       for scaled_name in scaled_names:
           full_names += create_component_sindarin_names (scaled_name, proc_dict)
     else:
-      full_names = scaled_names 
+      full_names = scaled_names
   return full_names
 
+def test_get_full_proc_names():
+  pass
 
-def test_replace_nlo_calc():
-  from nose.tools import eq_
+def replace_proc_id(part, filename):
+  # Expects part  = 'Real', 'Born', etc as strings
+  proc_id = get_value("(process +)(\w+)", filename)
+  replace_func = lambda l : l.replace(proc_id, proc_id + '_' + part)
+  sed(filename, replace_line=replace_func)
+
+def test_replace_proc_id():
   filename = 'test_replace_nlo_calc'
   test = open(filename, "w")
   test.write('include("process_settings.sin")\n')
@@ -218,7 +222,7 @@ def create_scale_sindarins (base_sindarin):
       replace_scale (2.0, new_sindarin)
     replace_proc_id (suffix, new_sindarin)
   return new_sindarins
-    
+
 
 def create_nlo_component_sindarins (proc_dict, base_sindarin):
   for suffix in get_component_suffixes (proc_dict):
