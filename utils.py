@@ -6,25 +6,60 @@ import shutil
 import tempfile
 import json
 
-def setup_logger():
+BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
+
+#These are the sequences need to get colored ouput
+RESET_SEQ = "\033[0m"
+COLOR_SEQ = "\033[1;%dm"
+BOLD_SEQ = "\033[1m"
+
+def formatter_message(message, use_color = True):
+    if use_color:
+        message = message.replace("$RESET", RESET_SEQ).replace("$BOLD", BOLD_SEQ)
+    else:
+        message = message.replace("$RESET", "").replace("$BOLD", "")
+    return message
+
+COLORS = {
+    'WARNING': YELLOW,
+    'INFO': BLACK,
+    'DEBUG': BLUE,
+    'CRITICAL': RED,
+    'ERROR': RED
+}
+
+class ColoredFormatter(logging.Formatter):
+    def __init__(self, msg, use_color = True):
+        logging.Formatter.__init__(self, msg)
+        self.use_color = use_color
+
+    def format(self, record):
+        levelname = record.levelname
+        if self.use_color and levelname in COLORS:
+            color = COLOR_SEQ % (30 + COLORS[levelname])
+            levelname_color = color + levelname + RESET_SEQ
+            record.levelname = levelname_color
+        return logging.Formatter.format(self, record)
+
+def setup_logger(verbose=True):
   logPath = os.getcwd()
   logName = 'default'
-  logFormatter = logging.Formatter('%(asctime)s ' + \
-      '[%(levelname)-5.5s]  %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+  log_fmt = '[%(asctime)-20s][%(levelname)-10s] %(message)s ($BOLD%(filename)s$RESET:%(lineno)d)'
+  date_fmt = '%Y-%m-%d %H:%M:%S'
+  logFormatter = logging.Formatter(formatter_message(log_fmt, False),
+      datefmt=date_fmt)
   rootLogger = logging.getLogger()
   fileHandler = logging.FileHandler('{0}/{1}.log'.format(logPath, logName))
   fileHandler.setFormatter(logFormatter)
   rootLogger.addHandler(fileHandler)
   rootLogger.setLevel(logging.INFO)
-  consoleHandler = logging.StreamHandler()
-  consoleHandler.setFormatter(logFormatter)
-  rootLogger.addHandler(consoleHandler)
+  if verbose:
+    consoleHandler = logging.StreamHandler()
+    consoleHandler.setFormatter(ColoredFormatter(formatter_message(log_fmt)))
+    rootLogger.addHandler(consoleHandler)
   logger = logging.getLogger(__name__)
   return logger
 
-# try:
-  # logger = logging.getLogger(__name__)
-# except:
 logger = setup_logger()
 
 class cd:
@@ -88,8 +123,13 @@ def get_logical(keyword, filename):
   return get_value("(" + keyword + " *= *)(true|false)", filename)
 
 def get_string(keyword, filename):
-  #return get_value("(" + keyword + " *= *)(\w*)", filename)
   return get_value ("(" + keyword + " *= *)(.*$)", filename)
+
+def get_process(filename):
+  return get_value ("(process +)(\w+)", filename)
+
+def get_scale(filename):
+  return get_value("(scale *= *)(.*$)", filename)
 
 def test_get():
   from nose.tools import eq_

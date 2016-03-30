@@ -1,4 +1,4 @@
 [report]
-omit = *numpy*,*numbers*
+omit = *numpy*,*numbers*,*distutils*,*jsonschema*
 [run]
-omit = *numpy*,*numbers*
+omit = *numpy*,*numbers*,*distutils*,*jsonschema*
