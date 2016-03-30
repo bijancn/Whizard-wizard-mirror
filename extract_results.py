@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 import sys
 import os
-import glob
 import subprocess
-from utils import cd, load_json, mkdirs
+from utils import cd, load_json, mkdirs, fatal
 
-def get_RES (c):
+
+def get_RES(c):
   return "grep RES " + c + "-*/whizard.log | sed 's/^.*RES //'"
+
 
 def main():
   try:
@@ -18,20 +19,20 @@ def main():
     mkdirs(result_path)
     run_json = load_json('run.json')
     processes = [p['process'] for p in run_json['processes'] if p['purpose'] == 'scan']
-    print 'processes = ', processes # Debugging
+    print 'processes = ', processes
     runfolders = ['whizard/' + p for p in processes]
-    print 'runfolders = ', runfolders # Debugging
+    print 'runfolders = ', runfolders
     result_cmd = [get_RES(runfolder) for runfolder in runfolders]
-    print 'result_cmd = ', result_cmd # Debugging
+    print 'result_cmd = ', result_cmd
     result_file = [os.path.join(result_path, p + '.dat') for p in processes]
-    print 'result_file = ', result_file # Debugging
+    print 'result_file = ', result_file
     for cmd, file in zip(result_cmd, result_file):
-      print 'cmd = ', cmd + ' > ' + file # Debugging
+      print 'cmd = ', cmd + ' > ' + file
       ret = subprocess.call(cmd + ' > ' + file, shell=True)
       if (ret == 0):
         print '\nSaved to ' + file
       else:
-        print '\nSaving to '+ file + ' returned ' + str(ret)
+        print '\nSaving to ' + file + ' returned ' + str(ret)
         sys.exit(1)
 
 main()

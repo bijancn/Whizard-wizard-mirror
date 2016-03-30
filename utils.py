@@ -1,19 +1,19 @@
 import logging
 import os
 import re
-import sys
 import shutil
 import tempfile
 import json
 
 BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
 
-#These are the sequences need to get colored ouput
+# These are the sequences need to get colored ouput
 RESET_SEQ = "\033[0m"
 COLOR_SEQ = "\033[1;%dm"
 BOLD_SEQ = "\033[1m"
 
-def formatter_message(message, use_color = True):
+
+def formatter_message(message, use_color=True):
     if use_color:
         message = message.replace("$RESET", RESET_SEQ).replace("$BOLD", BOLD_SEQ)
     else:
@@ -28,8 +28,9 @@ COLORS = {
     'ERROR': RED
 }
 
+
 class ColoredFormatter(logging.Formatter):
-    def __init__(self, msg, use_color = True):
+    def __init__(self, msg, use_color=True):
         logging.Formatter.__init__(self, msg)
         self.use_color = use_color
 
@@ -41,10 +42,12 @@ class ColoredFormatter(logging.Formatter):
             record.levelname = levelname_color
         return logging.Formatter.format(self, record)
 
+
 def setup_logger(verbose=True):
   logPath = os.getcwd()
   logName = 'default'
-  log_fmt = '[%(asctime)-20s][%(levelname)-10s] %(message)s ($BOLD%(filename)s$RESET:%(lineno)d)'
+  log_fmt = '[%(asctime)-20s][%(levelname)-10s] %(message)s ' + \
+            '($BOLD%(filename)s$RESET:%(lineno)d)'
   date_fmt = '%Y-%m-%d %H:%M:%S'
   logFormatter = logging.Formatter(formatter_message(log_fmt, False),
       datefmt=date_fmt)
@@ -60,7 +63,9 @@ def setup_logger(verbose=True):
   logger = logging.getLogger(__name__)
   return logger
 
+
 logger = setup_logger()
+
 
 class cd:
   """Context manager for changing the current working directory"""
@@ -74,20 +79,23 @@ class cd:
   def __exit__(self, etype, value, traceback):
     os.chdir(self.savedPath)
 
+
 def remove(filename):
-  if (os.path.isfile (filename)):
-    os.remove (filename)
+  if (os.path.isfile(filename)):
+    os.remove(filename)
+
 
 def mkdirs(directory):
   if not os.path.exists(directory):
     os.makedirs(directory)
 
+
 def fatal(message):
   logger.fatal('>>> ' + message + ' <<<')
-  # sys.exit(1)
+
 
 def sed(original, replace_line=None, new_file=None, write_to_top='', write_to_bottom=''):
-  overwrite = new_file == None
+  overwrite = new_file is None
   tmp_fh, tmp_file = tempfile.mkstemp()
   with open(tmp_file, 'w') as new_f:
     with open(original) as old_f:
@@ -106,6 +114,7 @@ def sed(original, replace_line=None, new_file=None, write_to_top='', write_to_bo
   remove(target)
   shutil.move(tmp_file, target)
 
+
 def grep(pattern, filename):
   try:
    file = open(filename, "r")
@@ -116,20 +125,26 @@ def grep(pattern, filename):
       return True
   return False
 
+
 def get_number(keyword, filename):
   return int(get_value("(" + keyword + ") *= *([0-9]*)" , filename))
+
 
 def get_logical(keyword, filename):
   return get_value("(" + keyword + " *= *)(true|false)", filename)
 
+
 def get_string(keyword, filename):
-  return get_value ("(" + keyword + " *= *)(.*$)", filename)
+  return get_value("(" + keyword + " *= *)(.*$)", filename)
+
 
 def get_process(filename):
-  return get_value ("(process +)(\w+)", filename)
+  return get_value("(process +)(\w+)", filename)
+
 
 def get_scale(filename):
   return get_value("(scale *= *)(.*$)", filename)
+
 
 def test_get():
   from nose.tools import eq_
@@ -144,6 +159,7 @@ def test_get():
   eq_(get_number("bar", filename), 123)
   os.remove(filename)
 
+
 def get_value(pattern, filename):
   try:
    file = open(filename, "r")
@@ -155,11 +171,12 @@ def get_value(pattern, filename):
       return m.group(2)
   return None
 
+
 def load_json(json_file):
   try:
     with open(json_file) as f:
       return json.load(f)
   except IOError:
-    fatal('json not found: ' + json_file )
+    fatal('json not found: ' + json_file)
   except ValueError:
     fatal('json seems invalid. Check it on http://jsonlint.com/')

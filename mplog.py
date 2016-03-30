@@ -1,6 +1,10 @@
 from logging.handlers import RotatingFileHandler
-import multiprocessing, threading, logging, sys, traceback
-import os
+import multiprocessing
+import threading
+import logging
+import sys
+import traceback
+
 
 class MultiProcessingLog(logging.Handler):
     def __init__(self, name, mode, maxsize, rotate):
@@ -40,7 +44,7 @@ class MultiProcessingLog(logging.Handler):
             record.msg = record.msg % record.args
             record.args = None
         if record.exc_info:
-            dummy = self.format(record)
+            self.format(record)
             record.exc_info = None
 
         return record
@@ -57,6 +61,7 @@ class MultiProcessingLog(logging.Handler):
     def close(self):
         self._handler.close()
         logging.Handler.close(self)
+
 
 class StreamToLogger(object):
    """

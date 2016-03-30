@@ -1,11 +1,10 @@
 import sys
 import os
 import math
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib._cm import cubehelix
-from matplotlib.ticker import *
+from matplotlib.ticker import AutoMinorLocator
 from functools import partial
 from utils import mkdirs
 
@@ -17,15 +16,16 @@ colors = ['#EE3311',  # red
           '#ab47bc',  # purple
           '#000000',  # black
           '#f06292',  # pink
-          #'#cddc39',  # lime
+          # '#cddc39',  # lime
           '#3f51b5'   # indigo
-          #'#009688',  # teal
+          # '#009688',  # teal
           ]
 
 # Valid legend locations
 # right         # center left   # upper right    # lower right   # best
 # center        # lower left    # center right   # upper left    # upper center
 # lower center
+
 
 class Plotter(object):
   def __init__(self):
@@ -34,7 +34,8 @@ class Plotter(object):
 
   def setfig(self, ax, xmin, xmax, ymin, ymax, xlabel, ylabel,
       title=None, xlog=False, ylog=False, xminors=False, yminors=False,
-      n_minors=5, n_majors=5, xticks=None, yticks=None, puff=0.05, legend_location='best',
+      n_minors=5, n_majors=5, xticks=None, yticks=None, puff=0.05,
+      legend_location='best',
       legend_columns=1, legend_outside=False, height_shrinker=0.80,
       legend_hide=False, legend_ordering=[]):
     # label axes and set ranges and scales
@@ -48,9 +49,6 @@ class Plotter(object):
     # title (ensuring no double set)
     if title is not None and self.title_notset:
       plt.suptitle(title, y=0.99)
-      #plt.text(0.7, 1.01, title,
-         #horizontalalignment='center',
-         #transform = ax.transAxes)
       self.title_notset = False
 
     # tight layout with extra padding
@@ -58,7 +56,7 @@ class Plotter(object):
     #       fraction of the font-size
     # h_pad, w_pad : padding (height/width) between edges of adjacent subplots.
     #                Defaults to pad_inches
-    #rect : if rect is given, it is interpreted as a rectangle
+    # rect : if rect is given, it is interpreted as a rectangle
     #       (left, bottom, right, top) in the normalized figure coordinate that
     #       the whole subplots area (including labels) will fit into.
     #       Default is (0, 0, 1, 1)
@@ -107,7 +105,7 @@ class Plotter(object):
       if legend_outside:
         # Shrink current axis's height by (1.0-height_shrinker) on the bottom
         box = ax.get_position()
-        ax.set_position([box.x0, box.y0 + box.height * (1.0-height_shrinker),
+        ax.set_position([box.x0, box.y0 + box.height * (1.0 - height_shrinker),
                          box.width, box.height * height_shrinker])
         # Put a legend below current axis
         ax.legend(handles, labels, loc='upper center',
@@ -117,16 +115,19 @@ class Plotter(object):
         ax.legend(handles, labels, loc=legend_location,
                   fancybox=False, ncol=legend_columns)
 
+
 def check_for_all_sets(found_lines, wanted_lines):
   if len(found_lines) < len(wanted_lines):
     print 'Did not find all sets: But only ', len(found_lines), \
           ' out of ', len(wanted_lines)
     found_labels = [lbl[0] for lbl in found_lines]
     for l in wanted_lines:
-      if not any ([l == os.path.basename(label).replace('.dat', '') for label in found_labels]):
+      if not any([l == os.path.basename(label).replace('.dat', '') for
+                 label in found_labels]):
         print l, ' not found!'
     print 'The available labels are: ', found_labels
     sys.exit(1)
+
 
 def decide_if_not_none(dictionary, decider, thing_to_set, default, *args):
   try:
@@ -137,12 +138,15 @@ def decide_if_not_none(dictionary, decider, thing_to_set, default, *args):
     else:
       return default
 
+
 def get_label(title, filename=None, pretty_label=None, object_dict=None):
   if filename is not None:
     default = os.path.basename(filename)
-    return decide_if_not_none (object_dict, pretty_label, 'label', default, filename, title).replace('_', '\_')
+    return decide_if_not_none(object_dict, pretty_label, 'label', default,
+        filename, title).replace('_', '\_')
   else:
     return object_dict.get('label', '').replace('_', '\_')
+
 
 def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     label_decider=None, legend_decider=None, marker_decider=None,
@@ -164,7 +168,8 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   for lbl_lst in lst_of_band_lsts:
     this_band_data = []
     for lbl in lbl_lst:
-      this_band_data += [d for d in data if lbl == os.path.basename(d[0]).replace('.dat', '')]
+      this_band_data += [d for d in data
+          if lbl == os.path.basename(d[0]).replace('.dat', '')]
     band_data += [this_band_data]
   n_objects = len(line_data) + len(band_data)
   many_labels = n_objects > 6
@@ -172,16 +177,16 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   # check_for_all_sets(band_data, band_lst)
   if n_objects == 0:
     raise Exception("You have to give select data to plot")
-  size = (9,9) if many_labels else (9,7.5)
-  fig = plt.figure(figsize = size)
-  ax = fig.add_subplot(1,1,1)
+  size = (9, 9) if many_labels else (9, 7.5)
+  fig = plt.figure(figsize=size)
+  ax = fig.add_subplot(1, 1, 1)
   if plot_extra is not None:
     ax = plot_extra(ax, title)
   if range_decider is not None:
     ymin, ymax, xmin, xmax = range_decider(line_data, title)
   else:
     try:
-      flattened_band_data = reduce(lambda x,y: x+y, band_data)
+      flattened_band_data = reduce(lambda x, y: x + y, band_data)
     except TypeError:
       flattened_band_data = []
     all_data = line_data + flattened_band_data
@@ -190,13 +195,13 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     ymin = plot_dict.get('ymin', min([np.amin(d[1][1]) for d in all_data]))
     ymax = plot_dict.get('ymax', max([np.amax(d[1][1]) for d in all_data]))
   if label_decider is not None:
-    xlabel, ylabel = label_decider (title)
+    xlabel, ylabel = label_decider(title)
   else:
     xlabel, ylabel = (plot_dict.get('xlabel', 'x'), plot_dict.get('ylabel', 'y'))
   xlog, ylog = (plot_dict.get('xlog', False), plot_dict.get('ylog', False))
   xminors, yminors = (plot_dict.get('xminors', False), plot_dict.get('yminors', False))
   decide_or_get = partial(decide_if_not_none, plot_dict)
-  legend_location = decide_or_get (legend_decider, 'legend_location', 'best', title)
+  legend_location = decide_or_get(legend_decider, 'legend_location', 'best', title)
   if set_extra_settings is not None:
     ax = set_extra_settings(ax, title)
   pl = Plotter()
@@ -212,11 +217,11 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     y_array = np.vstack(tuple(list_of_y_arrays))
     plt.fill_between(x, np.amin(y_array, axis=0), np.amax(y_array, axis=0),
         color=color, label=label, alpha=opacity)
-  for td,c in zip(line_data, colors):
+  for td, c in zip(line_data, colors):
     filename, d = td[0], td[1]
     label = get_label(title, filename=filename, pretty_label=pretty_label)
     print label
-    linestyle = decide_or_get (linestyle_decider, 'linestyle', None, filename, title)
+    linestyle = decide_or_get(linestyle_decider, 'linestyle', None, filename, title)
     if linestyle == 'banded':
       if len(d) > 2:
         plt.fill_between(d[0], d[1] - d[2], d[1] + d[2],
@@ -244,7 +249,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
                 legend_outside=many_labels, height_shrinker=0.70,
                 legend_location=legend_location,
                 legend_hide=False)
-      fig.savefig(os.path.join(pic_path,  title + '-' + str(i) + '.pdf'),
+      fig.savefig(os.path.join(pic_path, title + '-' + str(i) + '.pdf'),
                   dpi=fig.dpi)
   pl.setfig(ax, title=title,
             xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax,
@@ -257,6 +262,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
               dpi=fig.dpi)
   plt.close(fig)
 
+
 def get_linecolors_from_cubehelix(N, gamma=0.8, hue=3.0, rot=1.8, start=-0.30):
   """Return N colors from the cubehelix for plots
   """
@@ -267,9 +273,10 @@ def get_linecolors_from_cubehelix(N, gamma=0.8, hue=3.0, rot=1.8, start=-0.30):
   ret = [(_norm(a), _norm(b), _norm(c)) for a, b, c in rgb_list]
   return ret
 
+
 def _set_puffed_scale(puff, smax, smin, slog, ax_set_slim, ax_set_sscale):
   if slog:
-    puffs = puff * np.log(smax-smin)
+    puffs = puff * np.log(smax - smin)
     ax_set_slim(np.exp(np.log(smin) - puffs),
                 np.exp(np.log(smax) + puffs))
     ax_set_sscale('log')
@@ -277,9 +284,10 @@ def _set_puffed_scale(puff, smax, smin, slog, ax_set_slim, ax_set_sscale):
     puffx = puff * (smax - smin)
     ax_set_slim(smin - puffx, smax + puffx)
 
+
 def _norm(x):
-  if (x>1.0):
+  if (x > 1.0):
     return 1.0
-  if (x<0.0):
+  if (x < 0.0):
     return 0.0
   return x

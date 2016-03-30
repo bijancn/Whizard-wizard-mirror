@@ -1,12 +1,12 @@
 #!/bin/env python
 
 import sys
-import os
 from mpi4py import MPI
 comm = MPI.COMM_WORLD
 BARRIER = 123
 EXIT = 2
 WORK = 10
+
 
 def mpi_map(function, sequence, *args, **kwargs):
     """Return a list of the results of applying the function in
@@ -31,6 +31,7 @@ def mpi_map(function, sequence, *args, **kwargs):
     else:
         # Worker
         _mpi_worker(function, sequence, *args, **kwargs)
+
 
 def _mpi_controller(sequence, *args, **kwargs):
     """Controller function that sends each element in sequence to
