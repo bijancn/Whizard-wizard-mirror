@@ -1,21 +1,22 @@
 import os
 import re
 import shutil
-import jsonschema
-import textwrap
 import subprocess
+import textwrap
+import unittest
 from distutils import spawn
+from functools import partial
+import jsonschema
 from mpi4py import MPI
 from numpy import logspace, arange
-from functools import partial
-import utils as ut
 import nose.tools as nt
+import utils as ut
 # from termcolor import colored
 
 
-def fill_all_runs(run_json):
+def fill_all_runs(_run_json):
   runs = []
-  for proc_dict in run_json['processes']:
+  for proc_dict in _run_json['processes']:
     if proc_dict.get('scale_variation', False):
       processes = append_scale_suffixes(proc_dict['process'])
     else:
@@ -35,22 +36,22 @@ def retrieve_and_validate_run_json(process_folder, json_name='run.json'):
   ut.logger.info('Trying to read: ' + schema_file)
   schema = ut.load_json(schema_file)
   ut.logger.info('Trying to read: ' + json_file)
-  run_json = ut.load_json(json_file)
+  json = ut.load_json(json_file)
   try:
-    ut.logger.error(jsonschema.exceptions.best_match(jsonschema.
-        Draft4Validator(schema).iter_errors(run_json)).message)
+    ut.logger.error(jsonschema.exceptions.best_match
+        (jsonschema.Draft4Validator(schema).iter_errors(json)).message)
   except:
     pass
   try:
-    jsonschema.validate(run_json, schema)
+    jsonschema.validate(json, schema)
   except jsonschema.exceptions.SchemaError as e:
     ut.fatal('Failed to validate schema:\n' + str(e))
   except jsonschema.exceptions.ValidationError as e:
     ut.fatal('Failed to validate json:\n' + str(e))
   ut.logger.info('Found the following processes:')
-  for p in run_json['processes']:
+  for p in json['processes']:
     ut.logger.info(p['process'] + '\t[' + p['purpose'] + ']')
-  return run_json
+  return json
 
 
 def log(action, batch, proc_dict):
@@ -114,7 +115,7 @@ class Whizard():
         change_sindarin_for_event_gen(sindarin, runfolder, proc_id, proc_dict)
         return self.execute(purpose, sindarin, fifo=fifo, proc_id=proc_id,
             options=options, analysis=analysis)
-    else:
+    elif purpose == 'scan':
       scan_expression = proc_dict['scan_object'] + " = " + str(proc_id)
       replace_line = lambda line: line.replace('#SETSCAN',
         scan_expression).replace('include("', 'include("../')
@@ -123,6 +124,8 @@ class Whizard():
           new_file=os.path.join(runfolder, sindarin))
       with ut.cd(runfolder):
         return self.execute(purpose, sindarin, proc_id=proc_id, options=options)
+    else:
+      raise Exception("Implement me")
 
   def run_process(self, (proc_id, proc_name, proc_dict)):
     log('Trying', proc_id, proc_dict)
@@ -175,8 +178,6 @@ def setup_sindarins(run_json):
 def setup_sindarin(proc_dict):
   if proc_dict['purpose'] != 'disabled':
     ut.logger.info('Setting up sindarins of ' + str(proc_dict))
-    if os.path.isdir('tests/whizard'):
-      os.chdir('tests')
     whizard_folder = 'whizard'
     with ut.cd(whizard_folder):
       base_sindarin = proc_dict['process'] + '.sin'
@@ -223,14 +224,15 @@ def teardown_func():
 
 
 def fill_runs(proc_name, proc_dict):
-  if proc_dict['purpose'] == 'events' or proc_dict['purpose'] == 'histograms':
+  purpose = proc_dict['purpose']
+  if purpose == 'events' or purpose == 'histograms':
     runs = [(b, proc_name, proc_dict) for b in range(proc_dict['batches'])]
-  # TODO: (bcn 2016-03-30) this should be made impossible in the scheme
-  elif proc_dict['purpose'] == 'scan':
+  elif purpose == 'scan':
     try:
       start = float(proc_dict['start'])
       stop = float(proc_dict['stop'])
       stepsize = proc_dict['stepsize']
+    # TODO: (bcn 2016-03-30) this should be made impossible in the scheme
     except KeyError:
       ut.fatal('Aborting: You want a scan but have not set start, stop and stepsize')
     else:
@@ -240,9 +242,9 @@ def fill_runs(proc_name, proc_dict):
       else:
         step_range = arange(start, stop, float(stepsize))
       runs = [(b, proc_name, proc_dict) for b in step_range]
-  elif proc_dict['purpose'] == 'integrate':
+  elif purpose == 'integrate' or purpose == 'test_soft':
     runs = [(-1, proc_name, proc_dict)]
-  elif proc_dict['purpose'] == 'disabled':
+  elif purpose == 'disabled':
     runs = []
   else:
     raise Exception("fill_runs: Unknown purpose")
@@ -589,10 +591,11 @@ def change_sindarin_for_event_gen(filename, samplename, i, proc_dict):
 
 def run_json(json_name):
   run_json = retrieve_and_validate_run_json('tests', json_name=json_name)
-  setup_sindarins(run_json)
-  whizard = Whizard(run_json)
-  runs = fill_all_runs(run_json)
-  return map(whizard.run_process, runs)
+  with ut.cd('tests'):
+    setup_sindarins(run_json)
+    whizard = Whizard(run_json)
+    runs = fill_all_runs(run_json)
+    return map(whizard.run_process, runs)
 
 
 def test_integration_whizard_wizard_1():
@@ -603,3 +606,9 @@ def test_integration_whizard_wizard_1():
 def test_integration_whizard_wizard_2():
   results = run_json('lo.json')
   nt.eq_(results, [FAIL])
+
+
+@unittest.skip("No reason")
+def test_integration_whizard_wizard_3():
+  results = run_json('test_soft.json')
+  nt.eq_(results, [SUCCESS])

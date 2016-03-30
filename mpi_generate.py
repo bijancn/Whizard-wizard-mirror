@@ -25,12 +25,16 @@ whizard = whizard_wizard.Whizard(run_json)
 
 comm.Barrier()
 
-runs = whizard_wizard.fill_all_runs (run_json)
+runs = whizard_wizard.fill_all_runs(run_json)
 
-mpi_map(whizard.run_process, runs)
+results = mpi_map(whizard.run_process, runs)
 
 if comm.Get_rank() == 0:
   logger.info('This is the MPI master: All processes returned.')
+  for res, run in zip(results, runs):
+    if res != whizard_wizard.SUCCESS:
+      fatal('Unsuccessful run occured. Return code: ' + str(res) +
+          ' in this run ' + str(run))
   logger.info("""
 #==============================================================================#
 #                                     DONE                                     #
