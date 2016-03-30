@@ -1,4 +1,5 @@
 [report]
 omit = *numpy*,*numbers*,*distutils*,*jsonschema*
 [run]
+branch = True
 omit = *numpy*,*numbers*,*distutils*,*jsonschema*
