@@ -1,0 +1,14 @@
+{
+  "processes": [
+  {"process": "proc_lo",
+    "purpose": "integrate",
+    "nlo_type": "lo",
+    "batches": 100,
+    "events_per_batch": 2000,
+    "adaption_iterations": "3:10000",
+    "integration_iterations": "3:10000"
+  }
+  ],
+  "whizard": "whizard",
+  "data_output": "./"
+}

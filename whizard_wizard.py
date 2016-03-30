@@ -30,12 +30,8 @@ def fill_all_runs(run_json):
         runs += fill_runs(proc_name, proc_dict)
   return runs
 
-def mpi_load_json():
-  try:
-    process_folder = sys.argv[1]
-  except:
-    fatal('You have to give me the process directory as argument')
-  json_file = os.path.join(process_folder, 'run.json')
+def retrieve_and_validate_run_json(process_folder, json_name='run.json'):
+  json_file = os.path.join(process_folder, json_name)
   schema_file = os.path.join(process_folder, '../run-schema.json')
   logger.info('Trying to read: ' + schema_file)
   schema = load_json(schema_file)
@@ -63,6 +59,7 @@ def log(action, batch, proc_dict):
 
 # TODO: (bcn 2016-03-30) slim the Whizard. would be nice to only have
 # information and data how to run Whizard here
+SUCCESS, FAIL = range(2)
 class Whizard():
   def __init__(self, run_json):
     self.binary = run_json['whizard']
@@ -83,13 +80,16 @@ class Whizard():
       process = subprocess.call(cmd, shell=True)
     except Exception as e:
       fatal('Exception occured: ' + str(e) + 'Whizard failed on executing ' + sindarin + num)
+      return FAIL
     else:
-      if not grep('FATAL ERROR', 'whizard.log'):
+      if not grep('ERROR', 'whizard.log'):
         logger.info('Whizard finished' + num)
         with open('done', 'a'):
           os.utime('done', None)
+        return SUCCESS
       else:
-        fatal('FATAL ERROR in whizard.log of ' + sindarin + num)
+        fatal('ERROR in whizard.log of ' + sindarin + num)
+        return FAIL
 
   def generate(self, proc_name, proc_id, proc_dict, integration_grids, analysis=''):
     purpose = proc_dict['purpose']
@@ -107,7 +107,7 @@ class Whizard():
           remove(fifo)
           subprocess.call ("mkfifo " + fifo, shell=True)
         change_sindarin_for_event_gen(sindarin, runfolder, proc_id, proc_dict)
-        self.execute(purpose, sindarin, fifo=fifo, proc_id=proc_id, options=options,
+        return self.execute(purpose, sindarin, fifo=fifo, proc_id=proc_id, options=options,
             analysis=analysis)
     else:
       scan_expression = proc_dict['scan_object'] + " = " + str(proc_id)
@@ -116,7 +116,7 @@ class Whizard():
       integration_sindarin = proc_name + '-integrate.sin'
       sed(integration_sindarin, replace_line, new_file=os.path.join(runfolder, sindarin))
       with cd(runfolder):
-        self.execute(purpose, sindarin, proc_id=proc_id, options=options)
+        return self.execute(purpose, sindarin, proc_id=proc_id, options=options)
 
   def run_process(self, (proc_id, proc_name, proc_dict)):
     log('Trying', proc_id, proc_dict)
@@ -132,10 +132,10 @@ class Whizard():
       if not os.path.exists(integration_grids) and event_generation:
         logger.error('Didnt find integration grids with name ' + integration_grids + \
              ', but you wanted events! Aborting! Please use "integrate" first')
-        return
+        return FAIL
       elif purpose == 'integrate':
         logger.info('Generating the following integration grids: ' + integration_grids)
-        whizard.execute(purpose,
+        return self.execute(purpose,
             sindarin=integration_sindarin,
             options=whizard_options)
       else:
@@ -144,23 +144,32 @@ class Whizard():
         runfolder = proc_name + '-' + str(proc_id)
         if (not os.path.isfile(os.path.join(runfolder, 'done'))):
           analysis = proc_dict.get('analysis', '')
-          self.generate(proc_name,
+          return_code = self.generate(proc_name,
               proc_id,
               proc_dict,
               integration_grids=integration_grids,
               analysis=analysis)
-          if (os.path.isfile(os.path.join(runfolder, 'done')) and \
-              purpose == 'events'):
-            os.rename(os.path.join(runfolder, runfolder) + '.hepmc',
-                os.path.join("../rivet", runfolder + '.hepmc'))
-          return
+          if return_code == SUCCESS:
+            if (os.path.isfile(os.path.join(runfolder, 'done')) and \
+                purpose == 'events'):
+              os.rename(os.path.join(runfolder, runfolder) + '.hepmc',
+                  os.path.join("../rivet", runfolder + '.hepmc'))
+          return return_code
         else:
           logger.info('Skipping ' + runfolder + ' because done is found')
+          return SUCCESS
 
-def setup_sindarins(proc_dict, batch=None):
+def setup_sindarins(run_json):
+  for p in run_json['processes']:
+    setup_sindarin(p)
+
+def setup_sindarin(proc_dict):
   if proc_dict['purpose'] != 'disabled':
     logger.info('Setting up sindarins of ' + str(proc_dict))
-    with cd('whizard/'):
+    if os.path.isdir('tests/whizard'):
+      os.chdir('tests')
+    whizard_folder = 'whizard'
+    with cd(whizard_folder):
       base_sindarin = proc_dict['process'] + '.sin'
       template_sindarin = base_sindarin.replace('.sin', '-template.sin')
       integration_sindarin = base_sindarin.replace('.sin', '-integrate.sin')
@@ -522,3 +531,18 @@ def change_sindarin_for_event_gen(filename, samplename, i, proc_dict):
   replace_line = lambda line : events_re.sub(replace_func,
       line).replace('include("', 'include("../')
   sed(filename, replace_line, write_to_top = sample + seed)
+
+def run_json(json_name):
+  run_json = retrieve_and_validate_run_json('tests', json_name=json_name)
+  setup_sindarins(run_json)
+  whizard = Whizard(run_json)
+  runs = fill_all_runs (run_json)
+  return map(whizard.run_process, runs)
+
+def test_integration_whizard_wizard_1():
+  results = run_json('disabled.json')
+  eq_ (results, [])
+
+def test_integration_whizard_wizard_2():
+  results = run_json('lo.json')
+  eq_ (results, [FAIL])
