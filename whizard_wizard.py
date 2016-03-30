@@ -349,6 +349,7 @@ def test_replace_scale():
   replace_scale (1.0/2, filename)
   with open(filename, "r") as test:
     eq_(test.read(), 'scale = (2 * mtop + 3 mH) * 0.5')
+  os.remove('test_replace_scale')
 
 def replace_nlo_calc(part, filename):
   # Expects part  = 'Real', 'Born', etc as strings
@@ -376,11 +377,11 @@ def create_nlo_component_sindarins (proc_dict, integration_sindarin):
 
 @with_setup(setup_func, teardown_func)
 def test_create_nlo_component_sindarins():
-  base_sindarin = 'test_nlo_base-template.sin'
-  integration_sindarin = base_sindarin.replace('-template', '')
-  shutil.copyfile(base_sindarin, integration_sindarin)
+  template_sindarin = 'test_nlo_base-template.sin'
+  base_sindarin = template_sindarin.replace('-template', '')
+  shutil.copyfile(template_sindarin, base_sindarin)
   proc_dict = {}
-  create_nlo_component_sindarins(proc_dict, integration_sindarin)
+  create_nlo_component_sindarins(proc_dict, base_sindarin)
   base = 'test_nlo_base_'
   suffixes = ['Born', 'Real', 'Virtual']
   sindarins = [base + s + '.sin' for s in suffixes]
@@ -388,6 +389,7 @@ def test_create_nlo_component_sindarins():
     proc_id = get_process(filename)
     eq_ (proc_id, base + suffix)
     os.remove(filename)
+  os.remove('test_nlo_base.sin')
 
 def is_valid_wizard_sindarin (proc_dict, template_sindarin):
   proc_id = get_process(template_sindarin)
