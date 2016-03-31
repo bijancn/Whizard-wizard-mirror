@@ -182,6 +182,7 @@ def setup_sindarin(proc_dict):
     with ut.cd(whizard_folder):
       base_sindarin = proc_dict['process'] + '.sin'
       template_sindarin = base_sindarin.replace('.sin', '-template.sin')
+      check_for_valid_wizard_sindarin(proc_dict, template_sindarin)
       integration_sindarin = base_sindarin.replace('.sin', '-integrate.sin')
       template_present = os.path.isfile(template_sindarin)
       scan = proc_dict['purpose'] == 'scan'
