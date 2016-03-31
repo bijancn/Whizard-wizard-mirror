@@ -61,7 +61,7 @@ def check_files(files, check):
   return result
 
 
-def main(all_files):
+def main(all_files, syntax_only):
     # Stash any changes to the working tree that are not going to be committed
     subprocess.call(['git', 'stash', '-q', '--keep-index'],
         stdout=subprocess.PIPE)
@@ -86,9 +86,10 @@ def main(all_files):
     for check in CHECKS:
       result = check_files(files, check) or result
 
-    print 'Running Test Suite...'
-    return_code = subprocess.call('./run_tests.sh', shell=True)
-    result = return_code or result
+    if (not syntax_only):
+      print 'Running Test Suite...'
+      return_code = subprocess.call('./run_tests.sh', shell=True)
+      result = return_code or result
 
     # Unstash changes to the working tree that we had stashed
     subprocess.call(['git', 'stash', 'pop', '-q'], stdout=subprocess.PIPE,
@@ -97,6 +98,9 @@ def main(all_files):
 
 if __name__ == '__main__':
     all_files = False
+    syntax_only = False
     if len(sys.argv) > 1 and sys.argv[1] == '--all-files':
         all_files = True
-    main(all_files)
+    if len(sys.argv) > 1 and sys.argv[1] == '--syntax-only':
+        syntax_only = True
+    main(all_files, syntax_only)
