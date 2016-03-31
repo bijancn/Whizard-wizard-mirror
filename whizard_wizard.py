@@ -3,7 +3,7 @@ import re
 import shutil
 import subprocess
 import textwrap
-import unittest
+# import unittest   # has decorator for skipping tests: @unittest.skip("reason")
 from distutils import spawn
 from functools import partial
 import jsonschema
@@ -124,8 +124,19 @@ class Whizard():
           new_file=os.path.join(runfolder, sindarin))
       with ut.cd(runfolder):
         return self.execute(purpose, sindarin, proc_id=proc_id, options=options)
+    elif purpose == 'test_soft':
+      options = options + ' --debug subtraction '
+      replace_line = lambda line: line.replace('include("', 'include("../')
+      integration_sindarin = proc_name + '-integrate.sin'
+      target_sindarin = os.path.join(runfolder, sindarin)
+      ut.sed(integration_sindarin, replace_line=replace_line,
+          write_to_top='?test_soft_limit = true\n',
+          new_file=target_sindarin)
+      replace_nlo_calc('Real', target_sindarin)
+      with ut.cd(runfolder):
+        return self.execute(purpose, sindarin, proc_id=proc_id, options=options)
     else:
-      raise Exception("Implement me")
+      raise NotImplementedError
 
   def run_process(self, (proc_id, proc_name, proc_dict)):
     log('Trying', proc_id, proc_dict)
@@ -160,10 +171,14 @@ class Whizard():
               integration_grids=integration_grids,
               analysis=analysis)
           if return_code == SUCCESS:
-            if (os.path.isfile(os.path.join(runfolder, 'done')) and
-                    purpose == 'events'):
+            done = os.path.isfile(os.path.join(runfolder, 'done'))
+            if (done and purpose == 'events'):
               os.rename(os.path.join(runfolder, runfolder) + '.hepmc',
                   os.path.join("../rivet", runfolder + '.hepmc'))
+            if (done and purpose == 'test_soft'):
+              ut.mkdirs("../scan-results")
+              os.rename(os.path.join(runfolder, 'soft.log'),
+                  os.path.join("../scan-results", runfolder.strip('--1') + '.soft.dat'))
           return return_code
         else:
           ut.logger.info('Skipping ' + runfolder + ' because done is found')
@@ -186,6 +201,7 @@ def setup_sindarin(proc_dict):
       integration_sindarin = base_sindarin.replace('.sin', '-integrate.sin')
       template_present = os.path.isfile(template_sindarin)
       scan = proc_dict['purpose'] == 'scan'
+      test_soft = proc_dict['purpose'] == 'test_soft'
       if scan and not template_present:
         ut.fatal('You have to supply ' + template_sindarin + ' for a scan')
       elif not scan and not template_present:
@@ -196,7 +212,7 @@ def setup_sindarin(proc_dict):
         else:
           ut.fatal('Didnt find ' + template_sindarin + ' nor ' + fallback)
       if template_present:
-        if proc_dict['purpose'] == 'integrate' or scan:
+        if proc_dict['purpose'] == 'integrate' or scan or test_soft:
           create_integration_sindarin(integration_sindarin, template_sindarin,
               proc_dict['adaption_iterations'],
               proc_dict.get('integration_iterations', ' '))
@@ -599,17 +615,26 @@ def run_json(json_name):
     return map(whizard.run_process, runs)
 
 
+def clean_whizard_folder():
+  cmd = "find . ! -name '*-template.sin' -type f -exec rm -f {} +"
+  with ut.cd('tests/whizard'):
+    return_code = subprocess.call(cmd, shell=True)
+    nt.eq_(return_code, 0)
+
+
+@nt.with_setup(setup=clean_whizard_folder)
 def test_integration_whizard_wizard_1():
   results = run_json('disabled.json')
   nt.eq_(results, [])
 
 
+@nt.with_setup(setup=clean_whizard_folder)
 def test_integration_whizard_wizard_2():
   results = run_json('lo.json')
   nt.eq_(results, [FAIL])
 
 
-@unittest.skip("No reason")
+@nt.with_setup(setup=clean_whizard_folder)
 def test_integration_whizard_wizard_3():
   results = run_json('test_soft.json')
   nt.eq_(results, [SUCCESS])

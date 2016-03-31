@@ -1,12 +1,12 @@
 {
   "processes": [
-  {"process": "proc_lo",
+  {"process": "proc_nlo",
     "purpose": "test_soft",
     "nlo_type": "lo",
     "batches": 100,
     "events_per_batch": 2000,
-    "adaption_iterations": "3:10000",
-    "integration_iterations": "3:10000"
+    "adaption_iterations": "1:1000",
+    "integration_iterations": "1:1000"
   }
   ],
   "whizard": "whizard",
