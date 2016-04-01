@@ -1,5 +1,39 @@
 {
   "plots": [
+  {"title": "Effectiveness of subtraction in the soft limit (histogram)",
+    "lines": [
+      "proc_nlo.soft",
+      "factorized_nlo.soft"
+    ],
+    "xlabel": "$E_{g}$ [GeV]",
+    "ylabel": "$\\frac{R_\\alpha}{R_\\alpha^{soft}}$",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "ymin": 0.95,
+    "ymax": 1.05,
+    "xmin": 0.0,
+    "xmax": 0.075,
+    "xminors": true,
+    "yminors": true
+  },
+  {"title": "Effectiveness of subtraction in the soft limit (scatter)",
+    "lines": [
+      "proc_nlo.soft",
+      "factorized_nlo.soft"
+    ],
+    "xlabel": "$E_{g}$ [GeV]",
+    "ylabel": "$\\frac{R_\\alpha}{R_\\alpha^{soft}}$",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "ymin": 0.95,
+    "ymax": 1.05,
+    "xmin": 0.0,
+    "xmax": 0.075,
+    "xminors": true,
+    "yminors": true
+  },
   {"title": "Gauge-dependence of LO cross sections (influence of helicity approximation)",
     "lines": [
       "proc_lo_thresholdparams",

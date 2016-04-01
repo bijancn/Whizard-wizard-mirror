@@ -3,6 +3,7 @@ import re
 import shutil
 import subprocess
 import textwrap
+import logging
 # import unittest   # has decorator for skipping tests: @unittest.skip("reason")
 from distutils import spawn
 from functools import partial
@@ -65,12 +66,19 @@ SUCCESS, FAIL = range(2)
 
 
 class Whizard():
-  def __init__(self, run_json):
+  def __init__(self, run_json, silent):
     self.binary = run_json['whizard']
     if not spawn.find_executable(self.binary):
       ut.fatal('No valid whizard found. You gave whizard = ' + self.binary)
     else:
       ut.logger.info('Using ' + self.binary)
+    if silent:
+      devnull = open(os.devnull, 'w')
+      self.out = devnull
+      self.err = devnull
+    else:
+      self.out = subprocess.STD_OUTPUT_HANDLE
+      self.err = subprocess.STD_ERROR_HANDLE
 
   def execute(self, purpose, sindarin, fifo=None, proc_id=None, options='',
       analysis=''):
@@ -82,7 +90,8 @@ class Whizard():
     num = ' in ' + str(proc_id) if proc_id is not None else ''
     ut.logger.info('Calling subprocess ' + cmd + num)
     try:
-      return_code = subprocess.call(cmd, shell=True)
+      return_code = subprocess.call(cmd, shell=True, stderr=self.err,
+          stdout=self.out)
     except Exception as e:
       ut.fatal('Exception occured: ' + str(e) + 'Whizard failed on executing ' +
           sindarin + num)
@@ -301,7 +310,12 @@ def test_fill_runs_basic():
     nt.eq_(r[1:2], e[1:2])
 
 
+def no_critical_log():
+  logging.disable(logging.CRITICAL)
+
+
 @nt.raises(Exception)
+@nt.with_setup(no_critical_log)
 def test_fill_runs_exception():
   proc_name = 'test'
   proc_dict = {'purpose': 'scan'}
@@ -457,13 +471,19 @@ def test_create_nlo_component_sindarins():
 
 
 def is_valid_wizard_sindarin(proc_dict, template_sindarin):
-  proc_id = ut.get_process(template_sindarin)
-  valid = proc_id == template_sindarin.replace('-template.sin', '')
   purpose = proc_dict['purpose']
-  if purpose == 'scan':
-    valid = valid and ut.grep('#SETSCAN', template_sindarin)
-  elif purpose == 'nlo' or purpose == 'nlo_combined':
-    valid = valid and is_nlo_calculation(template_sindarin)
+  proc_id = ut.get_process(template_sindarin)
+  valid = True
+  if proc_id != template_sindarin.replace('-template.sin', ''):
+    ut.fatal('The process doesnt have the same name as the file')
+    valid = False
+  if purpose == 'scan' and not ut.grep('#SETSCAN', template_sindarin):
+    ut.fatal('Your purpose is scan but the sindarin has no #SETSCAN')
+    valid = False
+  elif (purpose == 'nlo' or purpose == 'nlo_combined') and \
+      not is_nlo_calculation(template_sindarin):
+    ut.fatal('Your purpose is nlo* but the sindarin has no nlo command')
+    valid = False
   return valid
 
 
@@ -474,18 +494,22 @@ def test_is_valid_wizard_sindarin():
     test.write('process proc_nlo = e1, E1 => e2, E2 {nlo_calculation = "Full"}\n')
   nt.eq_(is_valid_wizard_sindarin(proc_dict, 'test_nlo_wrong.sin'), False)
 
-  nt.eq_(is_valid_wizard_sindarin(proc_dict, 'test_nlo_base-template.sin'), True)
+  nt.eq_(is_valid_wizard_sindarin(proc_dict, 'test_nlo_base-template.sin'),
+      True, "test_nlo_base should work with purpose foo")
 
   proc_dict = {'purpose': 'scan'}
-  nt.eq_(is_valid_wizard_sindarin(proc_dict, 'test_nlo_base-template.sin'), False)
+  nt.eq_(is_valid_wizard_sindarin(proc_dict, 'test_nlo_base-template.sin'),
+      False, "test_nlo_base should not work with purpose scan")
 
   replace_func = lambda l : l.replace('test_nlo_base', 'test_nlo_scan')
   ut.sed('test_nlo_base-template.sin', replace_line=replace_func,
       new_file='test_nlo_scan-template.sin', write_to_top='#SETSCAN')
-  nt.eq_(is_valid_wizard_sindarin(proc_dict, 'test_nlo_scan-template.sin'), True)
+  nt.eq_(is_valid_wizard_sindarin(proc_dict, 'test_nlo_scan-template.sin'),
+      True, "test_nlo_scan should work with purpose scan")
 
   proc_dict = {'purpose': 'nlo'}
-  nt.eq_(is_valid_wizard_sindarin(proc_dict, 'test_nlo_base-template.sin'), True)
+  nt.eq_(is_valid_wizard_sindarin(proc_dict, 'test_nlo_base-template.sin'),
+      True, "test_nlo_base should work with purpose nlo")
 
   os.remove('test_nlo_wrong.sin')
   os.remove('test_nlo_scan-template.sin')
@@ -493,7 +517,7 @@ def test_is_valid_wizard_sindarin():
 
 def check_for_valid_wizard_sindarin(proc_dict, template_sindarin):
   if not is_valid_wizard_sindarin(proc_dict, template_sindarin):
-    ut.fatal('Given sindarin is invalid for intended use')
+    ut.fatal('Given sindarin (' + template_sindarin + ') is invalid for intended use')
 
 
 # TODO: (bcn 2016-03-30) this only executes but doesnt check.. maybe we can use raise?
@@ -610,7 +634,7 @@ def run_json(json_name):
   run_json = retrieve_and_validate_run_json('tests', json_name=json_name)
   with ut.cd('tests'):
     setup_sindarins(run_json)
-    whizard = Whizard(run_json)
+    whizard = Whizard(run_json, True)
     runs = fill_all_runs(run_json)
     return map(whizard.run_process, runs)
 

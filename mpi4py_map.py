@@ -55,6 +55,9 @@ def _mpi_controller(sequence, *args, **kwargs):
     status = MPI.Status()
 
     process_list = range(1, comm.Get_size())
+    number_of_tasks = len(process_list) * 1.0
+    print "Number of tasks:", number_of_tasks
+    last_percentage = 0.0
     workers_done = []
     results = {}
     if debug: print "Data:", sequence
@@ -114,6 +117,10 @@ def _mpi_controller(sequence, *args, **kwargs):
             # print 'Process %i exited, removing.' % status.source
             process_list.remove(status.source)
             # print 'Processes left over: ' + str(process_list)
+            percentage = (1 - len(process_list) / number_of_tasks) * 100
+            if (percentage > last_percentage + 5.0):
+              print percentage
+              last_percentage = percentage
             # Task queue is empty
             if len(process_list) == 0:
                 break

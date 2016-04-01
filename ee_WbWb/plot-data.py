@@ -13,18 +13,22 @@ sys.path.insert(0, parentdir)
 import bcn_plot
 from utils import load_json
 
+
 def ls_decider(lbl, title):
-  if 'zoom' in title:
-    return 'banded'
+  if 'soft limit' in title and 'scatter' in title:
+    return 'scatter'
+  elif 'soft limit' in title and 'histogram' in title:
+    return 'histogram'
   else:
     return 'banded'
+
 
 def pretty_label(filename, title):
   l = os.path.basename(filename)
   l = l.replace('proc', '')
   l = l.replace('_thresholdparams', '')
   l = l.replace('_lo', '')
-  if not 'ttbar' in l:
+  if 'ttbar' not in l:
     l = '$W^+b W^-\\bar b$, ' + l
   else:
     l = l.replace('ttbar_lo_thresholdparams', '$t \\bar t$')
@@ -35,7 +39,8 @@ def pretty_label(filename, title):
   l = l.replace(', , ', ', ')
   return l
 
-def main ():
+
+def main():
   pic_path = os.path.abspath('./plots') + '/'
   data_path = os.path.abspath('./scan-results')
   files = glob.glob(data_path + '/*.dat')

@@ -21,7 +21,7 @@ if comm.Get_rank() == 0:
 else:
   run_json = None
 run_json = comm.bcast(run_json, root=0)
-whizard = whizard_wizard.Whizard(run_json)
+whizard = whizard_wizard.Whizard(run_json, True)
 
 comm.Barrier()
 

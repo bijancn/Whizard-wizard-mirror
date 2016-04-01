@@ -1,0 +1,29 @@
+include("../../general_settings.sin")
+include("../process_settings_threshold.sin")
+
+library = factorized_nlo
+process factorized_nlo = e1, E1 => Wp, Wm, b, B {$restrictions = "3+5~t && 4+6~tbar" nlo_calculation="Full"}
+compile
+
+FF = 9        # tree level from signal comp
+offshell_strategy = 1+2+0+0
+
+show(model)
+
+#ITERATIONS
+#SETSCAN
+sqrtsstepsize = 0.1 GeV
+sqrtsmin = sqrts - sqrtsstepsize
+sqrtsmax = sqrts + sqrtsstepsize
+
+?nlo_fixed_order = true
+?unweighted = false
+?negative_weights = true
+
+$fks_mapping_type = "resonances"
+
+scale = m1S
+
+mult_call_real = 5
+integrate (factorized_nlo)
+printf "RES %8e %8e %8e" (sqrts, integral(factorized_nlo), error(factorized_nlo))

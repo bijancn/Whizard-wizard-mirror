@@ -1,7 +1,7 @@
 include("../process_settings_threshold.sin")
 
-library = factorized_lo
-process factorized_lo = e1, E1 => Wp, Wm, b, B {$restrictions = "3+5~t && 4+6~tbar"}
+library = factorized_lo_helapprox
+process factorized_lo_helapprox = e1, E1 => Wp, Wm, b, B {$restrictions = "3+5~t && 4+6~tbar"}
 compile
 
 FF = 9        # tree level from signal comp
@@ -15,5 +15,5 @@ sqrtsstepsize = 0.1 GeV
 sqrtsmin = sqrts - sqrtsstepsize
 sqrtsmax = sqrts + sqrtsstepsize
 
-integrate (factorized_lo)
-printf "RES %g %g %g" (sqrts, integral(factorized_lo), error(factorized_lo))
+integrate (factorized_lo_helapprox)
+printf "RES %g %g %g" (sqrts, integral(factorized_lo_helapprox), error(factorized_lo_helapprox))

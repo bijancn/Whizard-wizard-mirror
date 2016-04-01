@@ -209,7 +209,6 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   global_opacity = plot_dict.get('opacity', 0.3)
   for data_of_a_band, band, color in zip(band_data, bands, colors):
     label = get_label(title, pretty_label=pretty_label, object_dict=band)
-    print label
     opacity = band.get('opacity', global_opacity)
     color = band.get('color', color)
     x = data_of_a_band[0][1][0]
@@ -220,7 +219,6 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   for td, c in zip(line_data, colors):
     filename, d = td[0], td[1]
     label = get_label(title, filename=filename, pretty_label=pretty_label)
-    print label
     linestyle = decide_or_get(linestyle_decider, 'linestyle', None, filename, title)
     if linestyle == 'banded':
       if len(d) > 2:
@@ -228,6 +226,20 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
           color=c, label=label, alpha=global_opacity)
       else:
         raise Exception("You have to supply errors for banded linestyle")
+    elif linestyle == 'scatter':
+      # TODO: (bcn 2016-03-31) hacking in a ratio for now #notproud
+      ax.scatter(d[0], d[1] / d[2], c=c, alpha=global_opacity, label=label, marker="+")
+    elif linestyle == 'histogram':
+      # TODO: (bcn 2016-03-31) hacking in a ratio for now #notproud
+      nbins = 10
+      n, _ = np.histogram(d[0], bins=nbins)
+      sy, _ = np.histogram(d[0], bins=nbins, weights=d[1] / d[2])
+      sy2, _ = np.histogram(d[0], bins=nbins, weights=d[1] / d[2] * d[1] / d[2])
+      mean = sy / n
+      std = np.sqrt(sy2 / n - mean * mean)
+      plt.errorbar((_[1:] + _[:-1]) / 2, mean, yerr=std, ecolor=c, fmt="none",
+          alpha=global_opacity)
+      plt.hlines(mean, _[:-1], _[1:], label=label, colors=c)
     elif linestyle is not None:
       ax.plot(d[0], d[1], color=c, label=label, linestyle=linestyle)
     else:

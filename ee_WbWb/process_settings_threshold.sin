@@ -2,7 +2,7 @@ model = SM_tt_threshold
 
 ?vis_history = false
 
-mZ = 91.188
+mZ = 91.1876
 mW = 80.419
 mb = 4.2
 mH =  1.250000000000E+02
@@ -32,3 +32,5 @@ $correlation_me_method = "threshold"
 $real_tree_me_method = "threshold"
 alpha_power = 4
 alphas_power = 0
+
+sqrts = 800 GeV

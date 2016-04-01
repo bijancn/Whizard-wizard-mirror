@@ -1,0 +1,40 @@
+include("../../general_settings.sin")
+alpha_power = 2
+alphas_power = 0
+
+sqrts = 800 GeV
+iterations = 5:20*K:"gw", 3:15*K
+
+mZ = 91.1876
+mW = 80.385
+mb = 4.2
+mH =  1.250000000000E+02
+me =  0.0
+mmu = 0.0
+wH =  4.143000000000E-03      ! should be recomputed
+mtop = 173.2
+GF = 1.1663787E-005
+alphas = 0.1185
+
+printf "alpha_em_i = %g" (alpha_em_i)
+printf "ee   = %g" (ee)
+printf "cw   = %g" (cw)
+printf "sw   = %g" (sw)
+printf "v   = %g" (v)
+
+
+wtop = 0.0
+wZ = 2.5060
+wW = 2.0978
+
+?nlo_fixed_order = true
+?unweighted = false
+?negative_weights = true
+
+real dummy = 0.0
+scale = mtop
+#ITERATIONS
+library = proc_nlo
+process proc_nlo = e1, E1 => t, T { nlo_calculation = "Full" }
+integrate (proc_nlo)
+printf "RES %8e %8e %8e" (mtop, integral(proc_nlo), error(proc_nlo))
