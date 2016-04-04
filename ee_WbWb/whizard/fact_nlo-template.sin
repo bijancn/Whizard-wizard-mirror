@@ -1,8 +1,8 @@
 include("../../general_settings.sin")
 include("../process_settings_threshold.sin")
 
-library = factorized_nlo
-process factorized_nlo = e1, E1 => Wp, Wm, b, B {$restrictions = "3+5~t && 4+6~tbar" nlo_calculation="Full"}
+library = fact_nlo
+process fact_nlo = e1, E1 => Wp, Wm, b, B {$restrictions = "3+5~t && 4+6~tbar" nlo_calculation="Full"}
 compile
 
 FF = 9        # tree level from signal comp
@@ -25,5 +25,5 @@ $fks_mapping_type = "resonances"
 scale = m1S
 
 mult_call_real = 5
-integrate (factorized_nlo)
-printf "RES %8e %8e %8e" (sqrts, integral(factorized_nlo), error(factorized_nlo))
+integrate (fact_nlo)
+printf "RES %8e %8e %8e" (sqrts, integral(fact_nlo), error(fact_nlo))

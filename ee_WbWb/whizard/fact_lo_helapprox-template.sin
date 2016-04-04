@@ -1,0 +1,19 @@
+include("../process_settings_threshold.sin")
+
+library = fact_lo_helapprox
+process fact_lo_helapprox = e1, E1 => Wp, Wm, b, B {$restrictions = "3+5~t && 4+6~tbar"}
+compile
+
+FF = 9        # tree level from signal comp
+offshell_strategy = 0+2+0+0+32
+
+show(model)
+
+#ITERATIONS
+#SETSCAN
+sqrtsstepsize = 0.1 GeV
+sqrtsmin = sqrts - sqrtsstepsize
+sqrtsmax = sqrts + sqrtsstepsize
+
+integrate (fact_lo_helapprox)
+printf "RES %g %g %g" (sqrts, integral(fact_lo_helapprox), error(fact_lo_helapprox))

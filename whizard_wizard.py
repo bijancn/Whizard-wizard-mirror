@@ -83,7 +83,7 @@ class Whizard():
 
   def execute(self, purpose, sindarin, fifo=None, proc_id=None, options='',
       analysis=''):
-    cmd = self.binary + ' ' + sindarin + ' ' + options
+    cmd = 'nice -n 9 ' + self.binary + ' ' + sindarin + ' ' + options
     if (purpose == 'histograms'):
       cmd = 'export RIVET_ANALYSIS_PATH=../../rivet; ' + cmd
       yoda_file = '../../rivet/' + fifo.replace('hepmc', 'yoda')
