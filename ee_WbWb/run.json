@@ -122,6 +122,24 @@
     "adaption_iterations": "3:20000",
     "integration_iterations": "3:20000"
   },
+  {"process": "fact_onshellprojected_lo_helapprox",
+    "purpose": "scan",
+    "nlo_type": "lo",
+    "scan_object": "sqrts",
+    "ranges": [
+    {"type": "logarithmic",
+      "start": 500,
+      "stop": 1000000,
+      "steps": 100},
+    {"type": "linear",
+      "start": 345.0,
+      "stop": 500.0,
+      "stepsize": 2.0
+    }
+    ],
+    "adaption_iterations": "3:20000",
+    "integration_iterations": "3:20000"
+  },
   {"process": "fact_onshellprojected_lo",
     "purpose": "scan",
     "nlo_type": "lo",
@@ -140,7 +158,25 @@
     "adaption_iterations": "3:20000",
     "integration_iterations": "3:20000"
   },
-  {"process": "fact_onshellprojected_lo_helapprox",
+  {"process": "fact_productiononshellprojected_lo",
+    "purpose": "scan",
+    "nlo_type": "lo",
+    "scan_object": "sqrts",
+    "ranges": [
+    {"type": "logarithmic",
+      "start": 500,
+      "stop": 1000000,
+      "steps": 100},
+    {"type": "linear",
+      "start": 345.0,
+      "stop": 500.0,
+      "stepsize": 2.0
+    }
+    ],
+    "adaption_iterations": "3:20000",
+    "integration_iterations": "3:20000"
+  },
+  {"process": "fact_decayonshellprojected_lo",
     "purpose": "scan",
     "nlo_type": "lo",
     "scan_object": "sqrts",

@@ -3,7 +3,7 @@
   {"title": "Effectiveness of subtraction in the soft limit (histogram)",
     "lines": [
       "proc_nlo.soft",
-      "factorized_nlo.soft"
+      "fact_nlo.soft"
     ],
     "xlabel": "$E_{g}$ [GeV]",
     "ylabel": "$\\frac{R_\\alpha}{R_\\alpha^{soft}}$",
@@ -20,7 +20,7 @@
   {"title": "Effectiveness of subtraction in the soft limit (scatter)",
     "lines": [
       "proc_nlo.soft",
-      "factorized_nlo.soft"
+      "fact_nlo.soft"
     ],
     "xlabel": "$E_{g}$ [GeV]",
     "ylabel": "$\\frac{R_\\alpha}{R_\\alpha^{soft}}$",
@@ -37,10 +37,10 @@
   {"title": "Gauge-dependence of LO cross sections (influence of helicity approximation)",
     "lines": [
       "proc_lo_thresholdparams",
-      "factorized_lo",
-      "factorized_lo_helapprox",
-      "factorized_onshellprojected_lo",
-      "factorized_onshellprojected_lo_helapprox",
+      "fact_lo",
+      "fact_lo_helapprox",
+      "fact_onshellprojected_lo",
+      "fact_onshellprojected_lo_helapprox",
       "ttbar_lo_thresholdparams"
     ],
     "xlabel": "$\\sqrt{s}$ [GeV]",
@@ -57,10 +57,10 @@
   {"title": "Gauge-dependence of LO cross sections (influence of helicity approximation, zoom)",
     "lines": [
       "proc_lo_thresholdparams",
-      "factorized_lo",
-      "factorized_lo_helapprox",
-      "factorized_onshellprojected_lo",
-      "factorized_onshellprojected_lo_helapprox",
+      "fact_lo",
+      "fact_lo_helapprox",
+      "fact_onshellprojected_lo",
+      "fact_onshellprojected_lo_helapprox",
       "ttbar_lo_thresholdparams"
     ],
     "xlabel": "$\\sqrt{s}$ [GeV]",
@@ -78,8 +78,8 @@
   {"title": "Gauge-dependence of LO cross sections (zoom)",
     "lines": [
       "proc_lo_thresholdparams",
-      "factorized_lo",
-      "factorized_onshellprojected_lo",
+      "fact_lo",
+      "fact_onshellprojected_lo",
       "signaldiagram_lo",
       "ttbar_lo_thresholdparams"
     ],
@@ -98,8 +98,10 @@
   {"title": "Gauge-dependence of LO cross sections",
     "lines": [
       "proc_lo_thresholdparams",
-      "factorized_lo",
-      "factorized_onshellprojected_lo",
+      "fact_lo",
+      "fact_decayonshellprojected_lo",
+      "fact_productiononshellprojected_lo",
+      "fact_onshellprojected_lo",
       "signaldiagram_lo",
       "ttbar_lo_thresholdparams"
     ],

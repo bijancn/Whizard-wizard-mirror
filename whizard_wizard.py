@@ -270,6 +270,7 @@ def fill_runs(proc_name, proc_dict):
     except KeyError:
       ut.fatal('Aborting: You want a scan but have not set a ranges array')
     else:
+      runs = []
       for scan in scans:
         start = float(scan['start'])
         stop = float(scan['stop'])
@@ -289,7 +290,7 @@ def fill_runs(proc_name, proc_dict):
           step_range = arange(start, stop, float(stepsize))
         else:
           ut.fatal('Aborting: Unknown scan type')
-      runs = [(b, proc_name, proc_dict) for b in step_range]
+        runs += [(b, proc_name, proc_dict) for b in step_range]
   elif purpose == 'integrate' or purpose == 'test_soft':
     runs = [(-1, proc_name, proc_dict)]
   elif purpose == 'disabled':
