@@ -6,7 +6,8 @@
     "batches": 100,
     "events_per_batch": 2000,
     "adaption_iterations": "1:1000",
-    "integration_iterations": "1:1000"
+    "integration_iterations": "1:1000",
+    "only_sindarins": true
   }
   ],
   "whizard": "whizard",

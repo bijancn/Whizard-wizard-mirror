@@ -43,7 +43,7 @@ class ColoredFormatter(logging.Formatter):
         return logging.Formatter.format(self, record)
 
 
-def setup_logger(verbose=True):
+def setup_logger(verbose=False):
   logPath = os.getcwd()
   logName = 'default'
   log_fmt = '[%(asctime)-20s][%(levelname)-10s] %(message)s '  # + \
@@ -56,11 +56,13 @@ def setup_logger(verbose=True):
   fileHandler.setFormatter(logFormatter)
   rootLogger.addHandler(fileHandler)
   rootLogger.setLevel(logging.INFO)
+  consoleHandler = logging.StreamHandler()
+  consoleHandler.setFormatter(ColoredFormatter(formatter_message(log_fmt)))
   if verbose:
-    consoleHandler = logging.StreamHandler()
-    consoleHandler.setFormatter(ColoredFormatter(formatter_message(log_fmt)))
+    consoleHandler.setLevel(logging.INFO)
+  else:
     consoleHandler.setLevel(logging.WARNING)
-    rootLogger.addHandler(consoleHandler)
+  rootLogger.addHandler(consoleHandler)
   logger = logging.getLogger(__name__)
   return logger
 

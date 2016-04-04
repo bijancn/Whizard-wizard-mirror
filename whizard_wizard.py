@@ -7,6 +7,7 @@ import logging
 # import unittest   # has decorator for skipping tests: @unittest.skip("reason")
 from distutils import spawn
 from functools import partial
+from math import log10
 import jsonschema
 from mpi4py import MPI
 from numpy import logspace, arange
@@ -113,7 +114,13 @@ class Whizard():
     runfolder = proc_name + '-' + str(proc_id)
     fifo = proc_name + '-' + str(proc_id) + '.hepmc'
     event_generation = purpose == 'events' or purpose == 'histograms'
+    only_sindarins = proc_dict.get('only_sindarins', False)
     ut.mkdirs(runfolder)
+    if not only_sindarins:
+      _exe = lambda p: self.execute(p, sindarin, fifo=fifo, proc_id=proc_id,
+            options=options, analysis=analysis)
+    else:
+      _exe = lambda p: SUCCESS
     if event_generation:
       shutil.copyfile(sindarin, os.path.join(runfolder, sindarin))
       shutil.copyfile(integration_grids, os.path.join(runfolder, integration_grids))
@@ -122,8 +129,7 @@ class Whizard():
           ut.remove(fifo)
           subprocess.call("mkfifo " + fifo, shell=True)
         change_sindarin_for_event_gen(sindarin, runfolder, proc_id, proc_dict)
-        return self.execute(purpose, sindarin, fifo=fifo, proc_id=proc_id,
-            options=options, analysis=analysis)
+        return _exe(purpose)
     elif purpose == 'scan':
       scan_expression = proc_dict['scan_object'] + " = " + str(proc_id)
       replace_line = lambda line: line.replace('#SETSCAN',
@@ -132,7 +138,7 @@ class Whizard():
       ut.sed(integration_sindarin, replace_line,
           new_file=os.path.join(runfolder, sindarin))
       with ut.cd(runfolder):
-        return self.execute(purpose, sindarin, proc_id=proc_id, options=options)
+        return _exe(purpose)
     elif purpose == 'test_soft':
       options = options + ' --debug subtraction '
       replace_line = lambda line: line.replace('include("', 'include("../')
@@ -143,7 +149,7 @@ class Whizard():
           new_file=target_sindarin)
       replace_nlo_calc('Real', target_sindarin)
       with ut.cd(runfolder):
-        return self.execute(purpose, sindarin, proc_id=proc_id, options=options)
+        return _exe(purpose)
     else:
       raise NotImplementedError
 
@@ -186,8 +192,12 @@ class Whizard():
                   os.path.join("../rivet", runfolder + '.hepmc'))
             if (done and purpose == 'test_soft'):
               ut.mkdirs("../scan-results")
-              os.rename(os.path.join(runfolder, 'soft.log'),
-                  os.path.join("../scan-results", runfolder.strip('--1') + '.soft.dat'))
+              soft_log = os.path.join(runfolder, 'soft.log')
+              if os.path.isfile(soft_log):
+                os.rename(soft_log, os.path.join("../scan-results",
+                  runfolder.strip('--1') + '.soft.dat'))
+              else:
+                return FAIL
           return return_code
         else:
           ut.logger.info('Skipping ' + runfolder + ' because done is found')
@@ -238,14 +248,14 @@ def setup_sindarin(proc_dict):
     ut.logger.info('Skipping ' + proc_dict['process'] + ' because it is disabled')
 
 
-def setup_func():
+def create_test_nlo_base():
   with open('test_nlo_base-template.sin', "w") as test:
     test.write('include("process_settings.sin")\n')
     test.write('process test_nlo_base = e1, E1 => e2, E2 {nlo_calculation = "Full"}\n')
     test.write('integrate (test_nlo_base)')
 
 
-def teardown_func():
+def remove_test_nlo_base():
   os.remove('test_nlo_base-template.sin')
 
 
@@ -255,18 +265,30 @@ def fill_runs(proc_name, proc_dict):
     runs = [(b, proc_name, proc_dict) for b in range(proc_dict['batches'])]
   elif purpose == 'scan':
     try:
-      start = float(proc_dict['start'])
-      stop = float(proc_dict['stop'])
-      stepsize = proc_dict['stepsize']
+      scans = proc_dict['ranges']
     # TODO: (bcn 2016-03-30) this should be made impossible in the scheme
     except KeyError:
-      ut.fatal('Aborting: You want a scan but have not set start, stop and stepsize')
+      ut.fatal('Aborting: You want a scan but have not set a ranges array')
     else:
-      if stepsize == 'logarithmic':
-        step_range = logspace(start, stop, num=proc_dict.get('steps', 10),
-            endpoint=True, base=10.0)
-      else:
-        step_range = arange(start, stop, float(stepsize))
+      for scan in scans:
+        start = float(scan['start'])
+        stop = float(scan['stop'])
+        scan_type = scan['type']
+        try:
+          steps = scan['steps']
+          stepsize = (stop - start) / steps
+        except KeyError:
+          stepsize = scan['stepsize']
+          steps = (stop - start) / stepsize
+        except KeyError:
+          ut.fatal('Aborting: You have to give either steps or stepsize')
+        if scan_type == 'logarithmic':
+          step_range = logspace(log10(start), log10(stop), num=steps,
+              endpoint=True, base=10.0)
+        elif scan_type == 'linear':
+          step_range = arange(start, stop, float(stepsize))
+        else:
+          ut.fatal('Aborting: Unknown scan type')
       runs = [(b, proc_name, proc_dict) for b in step_range]
   elif purpose == 'integrate' or purpose == 'test_soft':
     runs = [(-1, proc_name, proc_dict)]
@@ -286,7 +308,8 @@ def test_fill_runs_basic():
   runs = fill_runs(proc_name, proc_dict)
   nt.eq_(runs, [(0, proc_name, proc_dict), (1, proc_name, proc_dict)])
 
-  proc_dict = {'purpose': 'scan', 'start': 0.1, 'stop': 0.2, 'stepsize': 0.05}
+  proc_dict = {'purpose': 'scan', 'ranges':
+      [{'start': 0.1, 'stop': 0.2, 'stepsize': 0.05, 'type': 'linear'}]}
   runs = fill_runs(proc_name, proc_dict)
   expectation = [(0.1, proc_name, proc_dict), (0.15, proc_name, proc_dict)]
   for r, e in zip(runs, expectation):
@@ -301,10 +324,11 @@ def test_fill_runs_basic():
   runs = fill_runs(proc_name, proc_dict)
   nt.eq_(runs, [])
 
-  proc_dict = {'purpose': 'scan', 'start': 1, 'stop': 2,
-      'stepsize': 'logarithmic', 'steps': 1}
+  proc_dict = {'purpose': 'scan',
+      'ranges': [{'start': 1, 'stop': 10, 'type': 'logarithmic', 'steps': 2}]}
   runs = fill_runs(proc_name, proc_dict)
-  expectation = [(10, proc_name, proc_dict)]
+  expectation = [(1, proc_name, proc_dict), (10, proc_name, proc_dict)]
+  nt.eq_(len(runs), len(expectation))
   for r, e in zip(runs, expectation):
     nt.assert_almost_equal(r[0], e[0], places=4)
     nt.eq_(r[1:2], e[1:2])
@@ -390,7 +414,7 @@ def is_nlo_calculation(filename):
   return ut.grep("nlo_calculation *=", filename)
 
 
-@nt.with_setup(setup_func, teardown_func)
+@nt.with_setup(create_test_nlo_base, remove_test_nlo_base)
 def test_is_nlo_calculation():
   filename = 'test_is_nlo_calculation'
   with open(filename, "w") as test:
@@ -453,7 +477,7 @@ def create_nlo_component_sindarins(proc_dict, integration_sindarin):
     replace_proc_id(suffix, new_sindarin)
 
 
-@nt.with_setup(setup_func, teardown_func)
+@nt.with_setup(create_test_nlo_base, remove_test_nlo_base)
 def test_create_nlo_component_sindarins():
   template_sindarin = 'test_nlo_base-template.sin'
   base_sindarin = template_sindarin.replace('-template', '')
@@ -487,7 +511,7 @@ def is_valid_wizard_sindarin(proc_dict, template_sindarin):
   return valid
 
 
-@nt.with_setup(setup_func, teardown_func)
+@nt.with_setup(create_test_nlo_base, remove_test_nlo_base)
 def test_is_valid_wizard_sindarin():
   proc_dict = {'purpose': 'foo'}
   with open('test_nlo_wrong.sin', "w") as test:
@@ -562,7 +586,7 @@ def replace_proc_id(part, filename):
   ut.sed(filename, replace_line=replace_func)
 
 
-@nt.with_setup(setup_func, teardown_func)
+@nt.with_setup(create_test_nlo_base, remove_test_nlo_base)
 def test_replace_proc_id():
   filename = 'test_replace_proc_id'
   shutil.copyfile('test_nlo_base-template.sin', filename)
@@ -646,19 +670,25 @@ def clean_whizard_folder():
     nt.eq_(return_code, 0)
 
 
-@nt.with_setup(setup=clean_whizard_folder)
-def test_integration_whizard_wizard_1():
+@nt.with_setup(clean_whizard_folder)
+def test_integration_whizard_wizard_disabled():
   results = run_json('disabled.json')
   nt.eq_(results, [])
 
 
-@nt.with_setup(setup=clean_whizard_folder)
-def test_integration_whizard_wizard_2():
+@nt.with_setup(clean_whizard_folder)
+def test_integration_whizard_wizard_lo():
   results = run_json('lo.json')
   nt.eq_(results, [FAIL])
 
 
-@nt.with_setup(setup=clean_whizard_folder)
-def test_integration_whizard_wizard_3():
+@nt.with_setup(clean_whizard_folder)
+def test_integration_whizard_wizard_test_soft():
   results = run_json('test_soft.json')
   nt.eq_(results, [SUCCESS])
+
+
+@nt.with_setup(clean_whizard_folder)
+def test_integration_whizard_wizard_scan():
+  results = run_json('scan.json')
+  nt.ok_(all([r == SUCCESS for r in results]))
