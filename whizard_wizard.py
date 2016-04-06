@@ -660,7 +660,7 @@ def run_json(json_name):
   run_json = retrieve_and_validate_run_json('tests', json_name=json_name)
   with ut.cd('tests'):
     setup_sindarins(run_json)
-    whizard = Whizard(run_json, True)
+    whizard = Whizard(run_json, False)
     runs = fill_all_runs(run_json)
     return map(whizard.run_process, runs)
 
