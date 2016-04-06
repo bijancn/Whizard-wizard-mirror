@@ -1,7 +1,7 @@
 include("../../general_settings.sin")
 include("../process_settings.sin")
 
-wtop = 1.3475
+wtop = 1.3681
 wZ = 2.5060
 wW = 2.0978
 
