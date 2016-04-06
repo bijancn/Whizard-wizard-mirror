@@ -21,9 +21,9 @@
     "scan_object": "sqrts",
     "ranges": [
     {"type": "linear",
-      "start": 375.0,
-      "stop": 385.0,
-      "stepsize": 4.0
+      "start": 360.0,
+      "stop": 500.0,
+      "stepsize": 10.0
     }
     ],
     "nlo_type": "nlo",
@@ -37,9 +37,9 @@
     "scan_object": "sqrts",
     "ranges": [
     {"type": "linear",
-      "start": 375.0,
-      "stop": 385.0,
-      "stepsize": 4.0
+      "start": 360.0,
+      "stop": 500.0,
+      "stepsize": 10.0
     }
     ],
     "nlo_type": "nlo",
