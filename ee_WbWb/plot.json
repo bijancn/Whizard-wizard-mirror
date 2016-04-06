@@ -1,7 +1,7 @@
 {
   "plots": [
   {"title": "Effectiveness of subtraction in the soft limit (histogram)",
-    "lines": [
+    "disabled_lines": [
       "proc_nlo.soft",
       "fact_nlo.soft"
     ],
@@ -17,8 +17,42 @@
     "xminors": true,
     "yminors": true
   },
-  {"title": "Effectiveness of subtraction in the soft limit (scatter)",
+  {"title": "NLO scale variations",
     "lines": [
+      "proc_nlo_central"
+    ],
+    "bands": [
+    {"label":"Scale variation with a factor of 4",
+      "opacity": 0.1,
+      "color": "#3366FF",
+      "data":
+        [ "proc_nlo_extrascale_central",
+          "proc_nlo_extrascale_high",
+          "proc_nlo_extrascale_low"
+        ]
+    },
+    {"label":"Standard scale variation",
+      "opacity": 0.1,
+      "color": "#EE3311",
+      "data":
+        [ "proc_nlo_central",
+          "proc_nlo_high",
+          "proc_nlo_low"
+        ]
+    }
+    ],
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "ymin": 1000,
+    "ymax": 1200,
+    "xminors": true,
+    "yminors": true
+  },
+  {"title": "Effectiveness of subtraction in the soft limit (scatter)",
+    "disabled_lines": [
       "proc_nlo.soft",
       "fact_nlo.soft"
     ],

@@ -4,13 +4,13 @@ import os
 import glob
 import re
 import multiprocessing as mp
-import numpy as np
 import inspect
 from functools import partial
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 import bcn_plot
+import data_utils
 from utils import load_json
 
 
@@ -19,8 +19,16 @@ def ls_decider(lbl, title):
     return 'scatter'
   elif 'soft limit' in title and 'histogram' in title:
     return 'histogram'
-  else:
+  elif 'production' in lbl:
+    return 'dashed'
+  elif 'decay' in lbl:
+    return 'dashdot'
+  elif 'Gauge-dependence' in title:
     return 'banded'
+  elif 'central' in lbl:
+    return 'solid'
+  else:
+    return None
 
 
 def pretty_label(filename, title):
@@ -41,20 +49,15 @@ def pretty_label(filename, title):
 
 
 def main():
+  print 'Start'
   pic_path = os.path.abspath('./plots') + '/'
   data_path = os.path.abspath('./scan-results')
   files = glob.glob(data_path + '/*.dat')
-  plot_json = load_json('plot.json')
-  data = [(filename, np.loadtxt(filename, unpack=True)) for filename in files]
-  for index, item in enumerate(data):  # for d in data:
-    x = item[1][0]
-    y = item[1][1]
-    yerr = item[1][2]
-    order = np.argsort(x)
-    data[index] = (item[0], np.array((x[order], y[order], yerr[order])))
-  pool = mp.Pool(processes=3)
+  data = data_utils.load_and_clean_files(files)
+  pool = mp.Pool(processes=4)
   plot_this = partial(bcn_plot.plot, data=data, pic_path=pic_path,
       linestyle_decider=ls_decider, pretty_label=pretty_label)
+  plot_json = load_json('plot.json')
   pool.map(plot_this, plot_json['plots'])
 
 main()

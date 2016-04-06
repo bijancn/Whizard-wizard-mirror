@@ -1,6 +1,7 @@
 #!/bin/env python
 
 import sys
+import time
 from mpi4py import MPI
 comm = MPI.COMM_WORLD
 BARRIER = 123
@@ -55,8 +56,9 @@ def _mpi_controller(sequence, *args, **kwargs):
     status = MPI.Status()
 
     process_list = range(1, comm.Get_size())
-    number_of_tasks = len(process_list) * 1.0
-    print "Number of tasks:", number_of_tasks
+    number_of_workers = len(process_list) * 1.0
+    print "Number of tasks:", len(sequence)
+    print "Number of workers:", number_of_workers
     last_percentage = 0.0
     workers_done = []
     results = {}
@@ -117,9 +119,9 @@ def _mpi_controller(sequence, *args, **kwargs):
             # print 'Process %i exited, removing.' % status.source
             process_list.remove(status.source)
             # print 'Processes left over: ' + str(process_list)
-            percentage = (1 - len(process_list) / number_of_tasks) * 100
+            percentage = (1 - len(process_list) / number_of_workers) * 100
             if (percentage > last_percentage + 5.0):
-              print percentage
+              print "Percentage of inactive workers", percentage
               last_percentage = percentage
             # Task queue is empty
             if len(process_list) == 0:
@@ -159,6 +161,7 @@ def _mpi_worker(function, sequence, *args, **kwargs):
     assert rank != 0, "rank is 0 which is reserved for the controller."
     proc_name = MPI.Get_processor_name()
     status = MPI.Status()
+    time.sleep(1)
     print "Worker %i on %s: ready!" % (rank, proc_name)
 
     # Send ready signal

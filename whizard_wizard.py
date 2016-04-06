@@ -67,19 +67,20 @@ SUCCESS, FAIL = range(2)
 
 
 class Whizard():
-  def __init__(self, run_json, silent):
+  def __init__(self, run_json, verbose):
     self.binary = run_json['whizard']
     if not spawn.find_executable(self.binary):
       ut.fatal('No valid whizard found. You gave whizard = ' + self.binary)
     else:
       ut.logger.info('Using ' + self.binary)
-    if silent:
+    if not verbose:
       devnull = open(os.devnull, 'w')
       self.out = devnull
       self.err = devnull
+      self.call = lambda cmd: subprocess.call(cmd, shell=True, stderr=self.err,
+          stdout=self.out)
     else:
-      self.out = subprocess.STD_OUTPUT_HANDLE
-      self.err = subprocess.STD_ERROR_HANDLE
+      self.call = lambda cmd: subprocess.call(cmd, shell=True)
 
   def execute(self, purpose, sindarin, fifo=None, proc_id=None, options='',
       analysis=''):
@@ -91,8 +92,7 @@ class Whizard():
     num = ' in ' + str(proc_id) if proc_id is not None else ''
     ut.logger.info('Calling subprocess ' + cmd + num)
     try:
-      return_code = subprocess.call(cmd, shell=True, stderr=self.err,
-          stdout=self.out)
+      return_code = self.call(cmd)
     except Exception as e:
       ut.fatal('Exception occured: ' + str(e) + 'Whizard failed on executing ' +
           sindarin + num)
@@ -554,16 +554,17 @@ def test_check_for_valid_wizard_sindarin():
   check_for_valid_wizard_sindarin(proc_dict, 'test_nlo_base-template.sin')
 
 
-def create_scale_sindarins(base_sindarin):
+def create_scale_sindarins(base_sindarin, proc_dict):
   new_sindarins = []
   for suffix in get_scale_suffixes():
     new_sindarin = insert_suffix_in_sindarin(base_sindarin, suffix)
     new_sindarins.append(new_sindarin)
     shutil.copyfile(base_sindarin, new_sindarin)
+    scale_multiplier = proc_dict.get('scale_multiplier', 2.0)
     if suffix == 'low':
-      replace_scale(0.5, new_sindarin)
+      replace_scale(1.0 / scale_multiplier, new_sindarin)
     elif suffix == 'high':
-      replace_scale(2.0, new_sindarin)
+      replace_scale(scale_multiplier, new_sindarin)
     replace_proc_id(suffix, new_sindarin)
   return new_sindarins
 
@@ -571,7 +572,7 @@ def create_scale_sindarins(base_sindarin):
 def multiply_sindarins(integration_sindarin, proc_dict, scaled, nlo_type):
   scaled_sindarins = None
   if scaled:
-    scaled_sindarins = create_scale_sindarins(integration_sindarin)
+    scaled_sindarins = create_scale_sindarins(integration_sindarin, proc_dict)
   if nlo_type == 'nlo':
     if scaled_sindarins is not None:
       for sindarin in scaled_sindarins:

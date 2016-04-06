@@ -176,7 +176,8 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   check_for_all_sets(line_data, lines)
   # check_for_all_sets(band_data, band_lst)
   if n_objects == 0:
-    raise Exception("You have to give select data to plot")
+    print 'You selected no lines or bands. Not building: ' + title
+    return
   size = (9, 9) if many_labels else (9, 7.5)
   fig = plt.figure(figsize=size)
   ax = fig.add_subplot(1, 1, 1)
