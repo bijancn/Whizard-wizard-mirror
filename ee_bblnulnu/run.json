@@ -1,7 +1,7 @@
 {
   "processes": [
   {"process": "proc_lo",
-    "purpose": "integrate",
+    "purpose": "integration",
     "nlo_type": "lo",
     "batches": 5,
     "events_per_batch": 50000,
@@ -9,7 +9,7 @@
     "scale_variation": true
   },
   {"process": "proc_nlo",
-    "purpose": "integrate",
+    "purpose": "integration",
     "nlo_type": "nlo",
     "batches": 15,
     "events_per_batch": 100000,

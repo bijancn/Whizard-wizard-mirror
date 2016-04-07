@@ -168,7 +168,7 @@ class Whizard():
         ut.logger.error('Didnt find integration grids with name ' + integration_grids +
              ', but you wanted events! Aborting! Please use "integrate" first')
         return FAIL
-      elif purpose == 'integrate':
+      elif purpose == 'integration':
         ut.logger.info('Generating the following integration grids: ' +
             integration_grids)
         return self.execute(purpose,
@@ -231,7 +231,7 @@ def setup_sindarin(proc_dict):
         else:
           ut.fatal('Didnt find ' + template_sindarin + ' nor ' + fallback)
       if template_present:
-        if proc_dict['purpose'] == 'integrate' or scan or test_soft:
+        if proc_dict['purpose'] == 'integration' or scan or test_soft:
           create_integration_sindarin(integration_sindarin, template_sindarin,
               proc_dict['adaption_iterations'],
               proc_dict.get('integration_iterations', ' '))
@@ -291,12 +291,12 @@ def fill_runs(proc_name, proc_dict):
         else:
           ut.fatal('Aborting: Unknown scan type')
         runs += [(b, proc_name, proc_dict) for b in step_range]
-  elif purpose == 'integrate' or purpose == 'test_soft':
+  elif purpose == 'integration' or purpose == 'test_soft':
     runs = [(-1, proc_name, proc_dict)]
   elif purpose == 'disabled':
     runs = []
   else:
-    raise Exception("fill_runs: Unknown purpose")
+    raise Exception("fill_runs: Unknown purpose: " + purpose)
   try:
     return runs
   except UnboundLocalError:
@@ -317,7 +317,7 @@ def test_fill_runs_basic():
     nt.assert_almost_equal(r[0], e[0], places=4)
     nt.eq_(r[1:2], e[1:2])
 
-  proc_dict = {'purpose': 'integrate'}
+  proc_dict = {'purpose': 'integration'}
   runs = fill_runs(proc_name, proc_dict)
   nt.eq_(runs, [(-1, proc_name, proc_dict)])
 
@@ -630,7 +630,19 @@ def create_simulation_sindarin(simulation_sindarin, template_sindarin, process,
 def get_grid_index(proc_name):
   words = proc_name.split('_')
   grid_indices = {'Born': 1, 'Real': 2, 'Virtual': 3, 'Mismatch': 4}
+  # TODO: (bcn 2016-04-07) change to slice
   return grid_indices[words[len(words) - 1]]
+
+
+def test_get_grid_index():
+  proc_name = 'proc_nlo_Born'
+  nt.eq_(get_grid_index(proc_name), 1)
+  proc_name = 'proc_nlo_Real'
+  nt.eq_(get_grid_index(proc_name), 2)
+  proc_name = 'proc_nlo_Virtual'
+  nt.eq_(get_grid_index(proc_name), 3)
+  proc_name = 'proc_nlo_Mismatch'
+  nt.eq_(get_grid_index(proc_name), 4)
 
 
 # TODO: (bcn 2016-03-30) review this

@@ -1,8 +1,9 @@
 {
   "processes": [
   {"process": "proc_lo",
-    "purpose": "scan",
+    "purpose": "disabled",
     "whizard_options": "",
+    "nlo_type": "lo",
     "scan_object": "mtop",
     "start": "100",
     "stop": "250",
@@ -11,8 +12,16 @@
     "integration_iterations": "3:500"
   },
   {"process": "proc_nlo",
-    "purpose": "scan",
+    "purpose": "integration",
+    "nlo_type": "nlo",
+    "whizard_options": "",
+    "adaption_iterations": "3:500",
+    "integration_iterations": "3:500"
+  },
+  {"process": "proc_nlo",
+    "purpose": "disabled",
     "scan_object": "mtop",
+    "nlo_type": "nlo",
     "start": "100",
     "stop": "250",
     "stepsize": "1",

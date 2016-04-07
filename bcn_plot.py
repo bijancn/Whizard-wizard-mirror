@@ -223,6 +223,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     ax1 = None
     this_plot = ax.plot
     this_fill_between = ax.fill_between
+    ylabel1 = None
   if plot_extra is not None:
     ax = plot_extra(ax, title)
   ymin1, ymax1 = None, None
