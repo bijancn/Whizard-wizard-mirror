@@ -3,7 +3,7 @@
 #===================#
  BEGIN SPECIAL /WHIZARD_.*
 \psclip{\psframe[linewidth=0,linestyle=none](0,0)(1,1)}
-\rput[bl](0.1,0.1){\color{gray}\textsc{Whizard+Omega}+\textsc{OpenLoops}}
+\rput[bl](0.1,0.1){\color{gray}\textsc{Whizard+OpenLoops}}
 \endpsclip
  END SPECIAL
 
@@ -11,7 +11,7 @@
 #  general settings  #
 #====================#
  BEGIN PLOT /WHIZARD_.*
-LogY=0
+LogY=1
 RatioPlotYLabel=K-Factor
 RatioPlotSameStyle=1
 LegendXPos=0.70
@@ -27,7 +27,7 @@ ErrorBands=0
 #  titles  #
 #==========#
  BEGIN PLOT /WHIZARD_2W2b_NLO
-Title=$\quad e^+e^-\to W^+b W^-\bar{b}$, $N_\text{jets}\geq 2$
+Title=$\quad e^+e^-\to W^+b W^-\bar{b}$, $N_\text{jets}\geq 2, \quad \quad \sqrt{s} = 800 \text{GeV}$
  END PLOT
 
  BEGIN PLOT /WHIZARD_2W2b_NLO_ttbarcuts
@@ -41,18 +41,69 @@ Title=$\quad e^+e^-\to W^+b W^-\bar{b}$, $N_\text{jets}\geq 2$, $\lvert m_{Wj_b}
 YLabel=$\frac{d\sigma}{dm}[\text{fb}/\text{GeV}]$
  END PLOT
 
- BEGIN PLOT /WHIZARD_.*/jets-inv
+ BEGIN PLOT /WHIZARD_.*/jets-inv*
 XLabel=$m(p^{j_1}+p^{j_2})$
- END PLOT
-
- BEGIN PLOT /WHIZARD_.*/WW-inv
-XLabel=$m_{WW}[\text{GeV}]$
+RatioPlotYMax=1.5
+RatioPlotYMin=0.3
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BW-inv
-LogY=1
-XLabel=$m_{BW}[\text{GeV}]$
-RatioPlotYMax=2.5
+XLabel=$m^{BW}[\text{GeV}]$
+RatioPlotYMax=5.0
+RatioPlotYMin=0.65
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/BW-inv-peak
+XLabel=$m^{BW}[\text{GeV}]$
+RatioPlotYMax=5.0
+RatioPlotYMin=0.65
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/BB-inv-Hpeak
+XLabel=$m^{bb}[\text{GeV}]$
+RatioPlotYMax=5.0
+RatioPlotYMin=0.65
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/BB-inv-Zpeak
+XLabel=$m^{bb}[\text{GeV}]$
+RatioPlotYMax=5.0
+RatioPlotYMin=0.65
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/BB-inv
+XLabel=$m^{bb}[\text{GeV}]$
+RatioPlotYMax=5.0
+RatioPlotYMin=0.65
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/BWm-inv
+XLabel=$m^{\bar{b}W^-}[\text{GeV}]$
+RatioPlotYMax=12.0
+RatioPlotYMin=0.65
+XMax=220.0
+RatioPlotXmax=220.0
+LegendXPos=0.25
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/BWm-inv-peak
+XLabel=$m^{\bar{b}W^-}[\text{GeV}]$
+RatioPlotYMax=5.0
+RatioPlotYMin=0.65
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/BWp-inv
+XLabel=$m^{bW^+}[\text{GeV}]$
+RatioPlotYMax=12.0
+RatioPlotYMin=0.65
+XMax=220.0
+RatioPlotXMax=220.0
+LegendXPos=0.25
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/BWp-inv-peak
+XLabel=$m^{bW^+}[\text{GeV}]$
+RatioPlotYMax=5.0
 RatioPlotYMin=0.65
  END PLOT
 
@@ -63,39 +114,60 @@ RatioPlotYMin=0.65
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
  END PLOT
 
- BEGIN PLOT /WHIZARD_.*/jet-pT
-XLabel=$\sum_i p_T^{j_i}[\text{GeV}]$
-LogX=1
-LogY=1
- END PLOT
-
- BEGIN PLOT /WHIZARD_.*/jet-pT-log
-YLabel=$\frac{d\sigma}{d\sum_i\log{p_{T,j_i}}}[\text{fb}/\text{GeV}]$
-XLabel=$\sum_i\log{p_{T,j_i}}[\text{GeV}]$
- END PLOT
-
- BEGIN PLOT /WHIZARD_.*/gluon-pT
-LogY=1
-XLabel=$p_{T,g}[\text{GeV}]$
- END PLOT
-
- BEGIN PLOT /WHIZARD_.*/b-quark-pT
-XLabel=$p_{T,b}[\text{GeV}]$
-YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
- END PLOT
-
  BEGIN PLOT /WHIZARD_.*/leading-jet-pT
 XLabel=$p_T^{j_1}[\text{GeV}]$
+RatioPlotYMax=1.6
+RatioPlotYMin=0.25
  END PLOT
 
- BEGIN PLOT /WHIZARD_.*/second-leading-jet-pT
+ BEGIN PLOT /WHIZARD_.*/2nd-leading-jet-pT
 XLabel=$p_T^{j_2}[\text{GeV}]$
+RatioPlotYMax=1.4
+RatioPlotYMin=0.3
  END PLOT
 
- BEGIN PLOT /WHIZARD_.*/W_plus-pT
-XLabel=$p_{T,W^+}[\text{GeV}]$
-YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
+ BEGIN PLOT /WHIZARD_.*/b-jet-pT
+XLabel=$p_T^{b}[\text{GeV}]$
+RatioPlotYMax=1.4
+RatioPlotYMin=0.3
  END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/bbar-jet-pT
+XLabel=$p_T^{\bar{b}}[\text{GeV}]$
+RatioPlotYMax=1.4
+RatioPlotYMin=0.3
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/Wp-pT
+XLabel=$p_T^{W^+}[\text{GeV}]$
+RatioPlotYMax=1.3
+RatioPlotYMin=0.3
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/Wm-pT
+XLabel=$p_T^{W^-}[\text{GeV}]$
+RatioPlotYMax=1.3
+RatioPlotYMin=0.3
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/BB-pT
+XLabel=$p_T^{bb}[\text{GeV}]$
+RatioPlotYMax=1.3
+RatioPlotYMin=0.3
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/BWm-pT
+XLabel=$p_T^{\bar{b}W^-}[\text{GeV}]$
+RatioPlotYMax=1.3
+RatioPlotYMin=0.3
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/BWp-pT
+XLabel=$p_T^{bW^+}[\text{GeV}]$
+RatioPlotYMax=1.3
+RatioPlotYMin=0.3
+ END PLOT
+
 
 #===========#
 #  E plots  #
@@ -106,28 +178,148 @@ YLabel=$\frac{d\sigma}{dE}[\text{fb}/\text{GeV}]$
 
  BEGIN PLOT /WHIZARD_.*/leading-jet-E
 XLabel=$E^{j_1}[\text{GeV}]$
+RatioPlotYMax=2.35
+RatioPlotYMin=0.35
  END PLOT
 
- BEGIN PLOT /WHIZARD_.*/second-leading-jet-E
+ BEGIN PLOT /WHIZARD_.*/2nd-leading-jet-E
 XLabel=$E^{j_2}[\text{GeV}]$
+RatioPlotYMax=2.35
+RatioPlotYMin=0.35
  END PLOT
 
- BEGIN PLOT /WHIZARD_.*/b-quark-E
-XLabel=$E_{b}[\text{GeV}]$
+ BEGIN PLOT /WHIZARD_.*/b-jet-E
+XLabel=$E^{b}[\text{GeV}]$
+RatioPlotYMax=2.5
+RatioPlotYMin=0.5
  END PLOT
 
- BEGIN PLOT /WHIZARD_.*/gluon-E
-LogY=1
-XLabel=$E_g[\text{GeV}]$
+ BEGIN PLOT /WHIZARD_.*/bbar-jet-E
+XLabel=$E^{\bar{b}}[\text{GeV}]$
+RatioPlotYMax=2.5
+RatioPlotYMin=0.5
  END PLOT
 
- BEGIN PLOT /WHIZARD_.*/W_plus-E
-XLabel=$E_{W^+}[\text{GeV}]$
+ BEGIN PLOT /WHIZARD_.*/Wp-E
+XLabel=$E^{W^+}[\text{GeV}]$
+RatioPlotYMax=1.55
+RatioPlotYMin=0.35
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/Wm-E
+XLabel=$E^{W^-}[\text{GeV}]$
+RatioPlotYMax=1.55
+RatioPlotYMin=0.35
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/BB-E
+XLabel=$E^{b\bar{b}}[\text{GeV}]$
+RatioPlotYMax=1.8
+RatioPlotYMin=0.3
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/BWm-E
+XLabel=$E^{bW^-}[\text{GeV}]$
+RatioPlotYMax=1.8
+RatioPlotYMin=0.3
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/BWp-E
+XLabel=$E^{\bar{b}W^+}[\text{GeV}]$
+RatioPlotYMax=1.8
+RatioPlotYMin=0.3
+ END PLOT
+
+#=========================#
+#  angular distributions  #
+#=========================#
+
+ BEGIN PLOT /WHIZARD_.*/.*-Theta
+YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}/\text{GeV}]$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/leading-jet-Theta
+XLabel=$\cos\theta^{j_1}$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/2nd-leading-jet-Theta
+XLabel=$\cos\theta^{j_2}$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/BB-Theta
+XLabel=$\cos\theta^{b\bar{b}}$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/BWm-Theta
+XLabel=$\cos\theta^{\bar{b}W^-}$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/BWp-Theta
+XLabel=$\cos\theta^{bW^+}$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/Wm-Theta
+XLabel=$\cos\theta^{W^-}$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/Wp-Theta
+XLabel=$\cos\theta^{W^+}$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/b-jet-Theta
+XLabel=$\cos\theta^{b}$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/bbar-jet-Theta
+XLabel=$\cos\theta^{\bar{b}}$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/b-jet-Theta
+XLabel=$\cos\theta^{b}$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/Phi\(b\,Wm\)
+YLabel=$\frac{d\sigma}{d\phi}[\text{fb}/\text{GeV}]$
+XLabel=$\phi^{\bar{b}W^-}$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/Phi\(b\,Wp\)
+YLabel=$\frac{d\sigma}{d\phi}[\text{fb}/\text{GeV}]$
+XLabel=$\phi^{bW^+}$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/Phi\(b\,b\)
+YLabel=$\frac{d\sigma}{d\phi}[\text{fb}/\text{GeV}]$
+XLabel=$\phi^{b\bar{b}}$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/Phi\(b\,Wm\)
+YLabel=$\frac{d\sigma}{d\phi}[\text{fb}/\text{GeV}]$
+XLabel=$\phi^{\bar{b}W^-}$
+ END PLOT
+
+#==================#
+#  rapidity plots  #
+#==================#
+ BEGIN PLOT /WHIZARD_.*/R\(b\,Wm\)
+YLabel=$\frac{d\sigma}{dR}[\text{fb}/\text{GeV}]$
+XLabel=$R^{\bar{b}W^-}$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/R\(b\,Wp\)
+YLabel=$\frac{d\sigma}{dR}[\text{fb}/\text{GeV}]$
+XLabel=$R^{bW^+}$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/R\(b\,b\)
+YLabel=$\frac{d\sigma}{dR}[\text{fb}/\text{GeV}]$
+XLabel=$R^{b\bar{b}}$
  END PLOT
 
 #===============#
 #  other plots  #
 #===============#
+
  BEGIN PLOT /WHIZARD_.*/jet-count
 YLabel=$\frac{d\sigma}{dN_\text{jets}}[\text{fb}]$
 XLabel=$N_\text{jets}$

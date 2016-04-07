@@ -4,7 +4,6 @@
 #include "Rivet/Projections/FastJets.hh"
 #include "Rivet/Projections/VetoedFinalState.hh"
 #include "Rivet/Projections/IdentifiedFinalState.hh"
-#include <math.h>
 
 double cut_ptl = 0;
 double cut_etal = 999999.;
@@ -50,12 +49,13 @@ namespace Rivet {
       _h["2ndleadingjet_Pt"] = bookNLOHisto1D("2nd-leading-jet-pT", stdbin, 0., 405.);
       _h["2ndleadingjet_Theta"] = bookNLOHisto1D("2nd-leading-jet-Theta", stdbin, -1.1, 1.1);
 
-      _h["top-E"] = bookNLOHisto1D("top-E", stdbin, 0., 405.);
-      _h["antitop-E"] = bookNLOHisto1D("antitop-E", stdbin, 0., 405.);
-      _h["top-pT"] = bookNLOHisto1D("top-pT", stdbin, 0., 350.);
-      _h["antitop-pT"] = bookNLOHisto1D("antitop-pT", stdbin, 0., 350.);
+      _h["top-E"] = bookNLOHisto1D("top-E", stdbin, 150.1, 500.1);
+      _h["antitop-E"] = bookNLOHisto1D("antitop-E", stdbin, 150.1, 500.1);
+      _h["top-pT"] = bookNLOHisto1D("top-pT", stdbin, 0., 405.);
+      _h["antitop-pT"] = bookNLOHisto1D("antitop-pT", stdbin, 0., 405.);
       _h["top-theta"] = bookNLOHisto1D("top-theta", stdbin, -1.1, 1.1);
       _h["antitop-theta"] = bookNLOHisto1D("antitop-theta", stdbin, -1.1, 1.1);
+      _h["tt-inv"] = bookNLOHisto1D("tt-inv", stdbin, 500., 805.);
 
 
       _h["jets_invMass"] = bookNLOHisto1D("jets-inv", 25, 780.1, 805.1);
@@ -114,6 +114,7 @@ namespace Rivet {
       _h["antitop-pT"]->fill(tbarjets[0].pt(), event);
       _h["top-theta"]->fill(std::cos(tjets[0].theta()), event);
       _h["antitop-theta"]->fill(std::cos(tbarjets[0].theta()), event);
+      _h["tt-inv"]->fill((tjets[0].momentum() + tbarjets[0].momentum()).mass(), event);
 
       _h["leadingjet_E"]->fill(jets[0].E(), event);
       _h["leadingjet_Pt"]->fill(jets[0].pt(), event);

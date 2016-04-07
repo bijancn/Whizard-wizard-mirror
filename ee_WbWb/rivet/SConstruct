@@ -2,42 +2,12 @@
 
 import re
 import os
+import sys
+import SConstruct_utils
+import shutil
 
-env = Environment(ENV = os.environ)
 
-build_yoda = Builder(action = 'rivet --quiet --pwd -H $TARGET $ANALYSIS $SOURCES',
-                    suffix = '.yoda', src_suffix = '.hepmc')
-
-build_analysis = Builder(action = 'rivet-buildplugin $SOURCES',
-                    suffix = '.so', src_suffix = '.cc')
-
-# It seems that --assume-normalized keeps the cross section fixed while the
-# unnormalized mode just adds the values of the histograms
-merge_yodas = Builder(action = 'yodamerge --assume-normalized -o $TARGET $SOURCES',
-    suffix = '.yoda', src_suffix = '.yoda')
-
-# Add --no-ratio to disable the ratio plots
-plot_cmd = 'rivet-mkhtml --mc-errs --pdf --cm --single ' + \
-      '--ignore-unvalidated --num-threads=$NUMTHREADS --config=$CONFIG '
-
-def generate_plot(source, target, env, for_signature):
-  target_dir = target[0].dir
-  try:
-    descriptions = env['DESCRIPTIONS'].split('::')
-  except KeyError:
-    descriptions = None
-  if descriptions is not None:
-    sources = ' '.join([str(s) + ':' + "'" + d + "'" for (s,d) in zip(source, descriptions)])
-  else:
-    sources = ' '.join([str(s) for s in source])
-  return plot_cmd + '-o %s %s' % (target_dir, sources)
-
-build_plot = Builder(generator = generate_plot,
-                    suffix = '.html',
-                    src_suffix = '.yoda')
-
-env.Append(BUILDERS = {'Yoda' : build_yoda, 'Analysis' : build_analysis,
-  'MergeYodas': merge_yodas, 'Plot' : build_plot})
+env = Environment(ENV=os.environ, tools=['default', ADD_BUILDERS])
 
 
 # We use timestamps instead of MD5s since hepmc's are big
@@ -48,18 +18,15 @@ env['NUMTHREADS'] = '4'
 
 dirify = lambda d : d + '/index.html'
 
-processes = ['proc_lo', 'proc_nlo', 'proc_nlo_highscale', 'proc_nlo_lowscale', 'proc_powheg']
-processes = filter(lambda p: os.path.isfile(p + '-0.hepmc'), processes)
+processes = ['proc_lo', 
+             'proc_nlo_low_Born', 'proc_nlo_central_Born', 'proc_nlo_high_Born',
+             'proc_nlo_low_Virtual', 'proc_nlo_central_Virtual', 'proc_nlo_high_Virtual', 
+             'proc_nlo_low_Real', 'proc_nlo_central_Real', 'proc_nlo_high_Real']
+###processes = SConstruct_utils.filter_existing_processes (processes, 'yoda')
+print 'processes: ', processes
 
-processes_lo = ['proc_lo', 'proc_lo_polarized', 'proc_lo_beamstrahlung']
-processes_lo = filter(lambda p: os.path.isfile(p + '-0.hepmc'), processes)
-
-# This is a list of processes consisting of lists of hepmcs
-#hepmcs = [Glob(p + '-*.hepmc') for p in processes + processes_lo]
-hepmcs = [Glob(p + '-*.hepmc') for p in processes]
 control_plots = map(dirify, processes)
-descriptions = [r"\textsc{LO}", r"\textsc{NLO}", r"\textsc{NLO} $\mu_r=2\mu$",
-                r"\textsc{NLO} $\mu_r=\mu/2$", r"\textsc{POWHEG}"]
+descriptions = [r"\textsc{LO}", r"\textsc{NLO}", r"\textsc{POWHEG}"]
 
 # This is a list of plots corresponding to a list of configs
 plots = ['plots', 'show-MCerrors']
@@ -67,31 +34,67 @@ plots = map(dirify, plots)
 configs = [base_analysis, base_analysis + '-show-MCerrors']
 configs = [c + '.plot' for c in configs]
 
-final_yoda_name = lambda s : re.sub('-[0-9]+.hepmc', '.yoda', str(s[0]))
-small_yoda_name = lambda s : re.sub('.hepmc', '.yoda', str(s))
-final_yoda_names = map (final_yoda_name, hepmcs)
-small_yoda_names = []
-for proc in hepmcs:
-  small_yoda_names.append(map (small_yoda_name, proc))
-print 'Want to build the following yodas: ', final_yoda_names, '\n'
-print 'Out of these small yodas: ', small_yoda_names, '\n'
+small_yoda_names = SConstruct_utils.get_yodas_from_proc_list (processes) 
+print 'small_yoda_names: ', small_yoda_names
+final_yoda_names = SConstruct_utils.get_final_yoda_names (small_yoda_names)
+print 'final_yoda_names: ', final_yoda_names
 
-# Actual building starts here
 Analysis = env.Analysis('RivetAnalysis', analysiss)
 merged_yodas = []
-for hepmc_lst, yoda, yodas in \
-    zip(hepmcs, final_yoda_names, small_yoda_names):
-  ana = ' '.join(['-a ' + a for a in analysiss])
-  make_yoda = lambda h : env.Yoda(source = h, ANALYSIS=ana)
-  build_yodas = map(make_yoda, hepmc_lst)
-  Depends(build_yodas, Analysis)
-  merged_yodas.append(env.MergeYodas(target = yoda, source = build_yodas))
 
-for (plot, config) in zip(plots, configs):
-  plot = env.Plot(target = plot, source = merged_yodas, DESCRIPTIONS = '::'.join(descriptions),
-      CONFIG=config)
-  Depends(plot, config)
+for small_yoda, yoda in zip (small_yoda_names, final_yoda_names):
+  if len (small_yoda) > 1:
+    merged_yodas.append (env.MergeYodas(target = yoda, source = small_yoda))
+  else:
+    shutil.copyfile (str (small_yoda[0]), yoda)
+    merged_yodas.append (yoda)
 
+lo_low_yodas = []
+lo_central_yodas = []
+lo_high_yodas = []
+nlo_low_yodas = []
+nlo_central_yodas = []
+nlo_high_yodas = []
+for yoda in merged_yodas:
+    print 'yoda name: ', str (yoda)
+    if 'nlo_low' in str (yoda):
+      nlo_low_yodas.append(yoda)
+    elif 'nlo_central' in str (yoda):
+      nlo_central_yodas.append(yoda)
+    elif 'nlo_high' in str (yoda):
+      nlo_high_yodas.append(yoda)
+    elif 'lo_low' in str (yoda):
+      lo_low_yodas.append(yoda)
+    elif 'lo_central' in str (yoda):
+      lo_central_yodas.append(yoda)
+    elif 'lo_high' in str (yoda):
+      lo_high_yodas.append(yoda)
+
+print 'Merge NLO yodas (?)'
+print 'nlo_low_yodas: ', nlo_low_yodas
+print 'nlo_central_yodas: ', nlo_central_yodas
+print 'nlo_high_yodas: ', nlo_high_yodas
+env.MergeYodasNoScale (target = 'proc_nlo_low.yoda', source = nlo_low_yodas)
+env.MergeYodasNoScale (target = 'proc_nlo_central.yoda', source = nlo_central_yodas)
+env.MergeYodasNoScale (target = 'proc_nlo_high.yoda', source = nlo_high_yodas)
+final_yodas = [merged_yodas[0], merged_yodas[1], merged_yodas[2]]
+final_nlo_yodas = ['proc_nlo_central.yoda', 'proc_nlo_low.yoda', 'proc_nlo_high.yoda']
+small_yoda_names = small_yoda_names + final_nlo_yodas
+control_plots = control_plots + map(dirify, ['proc_nlo_low', 'proc_nlo_central', 'proc_nlo_high'])
+
+print 'Create envelope: '
+env.BuildEnvelope (target = 'envelope.yoda', source = final_nlo_yodas)
+
+print 'Create plots: ', plots
+print 'configs: ', configs
+
+print 'Control plots: ', control_plots
 for (small_yodas, control_plot) in zip(small_yoda_names, control_plots):
   plot = env.Plot(target = control_plot, source = small_yodas, CONFIG=configs[0])
   Depends(plot, configs[0])
+
+env.Plot (target = 'proc_nlo/index.html', source = ['proc_nlo_low.yoda', 'proc_nlo_central.yoda', 'proc_nlo_high.yoda'], 
+   CONFIG=configs[0])
+env.PlotWithErrorBand (target = plots[0], source = ['proc_lo.yoda', 'proc_nlo_central.yoda', 'envelope.yoda'], 
+   CONFIG=configs[0])
+print 'Done'

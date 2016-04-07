@@ -1,25 +1,26 @@
 {
   "processes": [
   {"process": "proc_lo",
-    "purpose": "integrate",
+    "purpose": "histograms",
     "nlo_type": "lo",
     "batches": 5,
-    "events_per_batch": 50000,
+    "events_per_batch": 500000,
     "adaption_iterations": "10:200000",
-    "scale_variation": true
+    "analysis": "WHIZARD_4l2b_NLO"
   },
   {"process": "proc_nlo",
-    "purpose": "integrate",
+    "purpose": "histograms",
     "nlo_type": "nlo",
-    "batches": 15,
-    "events_per_batch": 100000,
+    "batches": 80,
+    "events_per_batch": 1000000,
     "whizard_options": "",
     "adaption_iterations": "15:200000",
-    "integration_iterations": "3:10000",
-    "scale_variation": true
+    "scale_variation": true,
+    "fks_method": "resonances",
+    "analysis": "WHIZARD_4l2b_NLO"
   }
   ],
   "whizard": "whizard",
   "data_output": "./",
-  "analysis": "WHIZARD_4l2b_NLO"
+  "analysis": "WHIZARD_2b2WH_NLO"
 }

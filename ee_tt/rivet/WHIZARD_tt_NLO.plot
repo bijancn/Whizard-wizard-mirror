@@ -28,7 +28,7 @@ ErrorBands=0
 #  titles  #
 #==========#
  BEGIN PLOT /WHIZARD_.*
-Title=$\quad e^+e^-\to t\bar{t}$
+Title=$\quad e^+e^-\to t\bar{t}, \quad \quad \sqrt{s} = 800\, \text{GeV}$
  END PLOT
 
 #========================#
@@ -36,15 +36,43 @@ Title=$\quad e^+e^-\to t\bar{t}$
 #========================#
  BEGIN PLOT /WHIZARD_.*/jets-inv
 LogY=1
-XLabel=$m(p_{j_1}+p_{j_2})$
+XLabel=$m(p^{j_1}+p^{j_2})$
 LegendYPos=0.90
 LegendXPos=0.05
  END PLOT
 
- BEGIN PLOT /WHIZARD_.*/.*-Theta
-YLabel=$\frac{d\sigma}{dm}[\text{fb}/\text{GeV}]$
-XLabel=$\cos{\theta_{jj}}$
+ BEGIN PLOT /WHIZARD_.*/tt-inv
+LogY=1
+XLabel=$m(p^{t}+p^{\bar{t}})$
+LegendYPos=0.90
+LegendXPos=0.05
  END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/leading-jet-Theta
+YLabel=$\frac{d\sigma}{dm}[\text{fb}/\text{GeV}]$
+XLabel=$\cos{\theta^{j_1}}$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/2nd-leading-jet-Theta
+YLabel=$\frac{d\sigma}{dm}[\text{fb}/\text{GeV}]$
+XLabel=$\cos{\theta^{j_2}}$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/top-theta
+YLabel=$\frac{d\sigma}{dm}[\text{fb}/\text{GeV}]$
+XLabel=$\cos{\theta^{t}}$
+LegendYPos=0.90
+LegendXPos=0.8
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/antitop-theta
+YLabel=$\frac{d\sigma}{dm}[\text{fb}/\text{GeV}]$
+XLabel=$\cos{\theta^{\bar{t}}}$
+LegendYPos=0.90
+LegendXPos=0.15
+ END PLOT
+
+
 
 #============#
 #  pT plots  #
@@ -54,16 +82,31 @@ YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
 LogY=1
  END PLOT
 
+ BEGIN PLOT /WHIZARD_.*/top-pT
+XLabel=$p_T^{t}[\text{GeV}]$
+LegendYPos=0.90
+LegendXPos=0.15
+XMax=355.0
+RatioPlotXMax=355.0
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/antitop-pT
+XLabel=$p_T^{\bar{t}}[\text{GeV}]$
+LegendYPos=0.90
+LegendXPos=0.15
+ END PLOT
+
+
  BEGIN PLOT /WHIZARD_.*/leading-jet-pT
 XLabel=$p_T^{j_1}[\text{GeV}]$
 LegendYPos=0.90
-LegendXPos=0.25
+LegendXPos=0.15
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/2nd-leading-jet-pT
 XLabel=$p_T^{j_2}[\text{GeV}]$
 LegendYPos=0.90
-LegendXPos=0.25
+LegendXPos=0.15
  END PLOT
 
 #===========#
@@ -74,6 +117,15 @@ YLabel=$\frac{d\sigma}{dE}[\text{fb}/\text{GeV}]$
 LegendXPos=0.05
 LogY=1
  END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/top-E
+XLabel=$E^{t}[\text{GeV}]$
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/antitop-E
+XLabel=$E^{\bar{t}}[\text{GeV}]$
+ END PLOT
+
 
  BEGIN PLOT /WHIZARD_.*/leading-jet-E
 XLabel=$E^{j_1}[\text{GeV}]$

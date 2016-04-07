@@ -101,7 +101,7 @@ namespace Rivet {
       _h["Wp_invMass"] = bookNLOHisto1D("Wp-inv", stdbin, 0., 600.);
       _h["Wp_invMass_peak"] = bookNLOHisto1D("Wp-inv-peak", stdbin, 70., 90.);
 
-      _h["BWm_E"] = bookNLOHisto1D("BWm-E", stdbin, 0., 425.);
+      _h["BWm_E"] = bookNLOHisto1D("BWm-E", stdbin, 0., 700.);
       _h["BWm_Pt"] = bookNLOHisto1D("BWm-pT", stdbin, 0., 400.);
       _h["BWm_Theta"] = bookNLOHisto1D("BWm-Theta", stdbin, -1.1, 1.1);
       _h["BWm_Phi"] = bookNLOHisto1D("Phi(b,Wm)", stdbin, 0., M_PI);
@@ -109,7 +109,7 @@ namespace Rivet {
       _h["BWm_invMass"] = bookNLOHisto1D("BWm-inv", stdbin, 0., 600.);
       _h["BWm_invMass_peak"] = bookNLOHisto1D("BWm-inv-peak", stdbin, 160., 180.);
 
-      _h["BWp_E"] = bookNLOHisto1D("BWp-E", stdbin, 0., 425.);
+      _h["BWp_E"] = bookNLOHisto1D("BWp-E", stdbin, 0., 700.);
       _h["BWp_Pt"] = bookNLOHisto1D("BWp-pT", stdbin, 0., 400.);
       _h["BWp_Theta"] = bookNLOHisto1D("BWp-Theta", stdbin, -1.1, 1.1);
       _h["BWp_Phi"] = bookNLOHisto1D("Phi(b,Wp)", stdbin, 0., M_PI);

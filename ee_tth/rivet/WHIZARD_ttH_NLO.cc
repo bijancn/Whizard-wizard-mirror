@@ -4,6 +4,7 @@
 #include "Rivet/Projections/FastJets.hh"
 #include "Rivet/Projections/VetoedFinalState.hh"
 #include "Rivet/Projections/IdentifiedFinalState.hh"
+#include <stdlib.h>
 
 double cut_ptl = 0;
 double cut_etal = 999999.;
@@ -36,6 +37,9 @@ namespace Rivet {
       addProjection(tbar, "antitop");
       const IdentifiedFinalState H(PID::HIGGS);
       addProjection(H, "higgs");
+      const IdentifiedFinalState gluon(PID::GLUON);
+      addProjection(gluon, "gluon");
+
 
       VetoedFinalState veto;
       veto.addVetoPairId(PID::HIGGS);
@@ -54,12 +58,13 @@ namespace Rivet {
       _h["2ndleadingjet_Pt"] = bookNLOHisto1D("2nd-leading-jet-pT", stdbin, 0., 350.);
       _h["2ndleadingjet_Theta"] = bookNLOHisto1D("2nd-leading-jet-Theta", stdbin, -1.1, 1.1);
 
-      _h["top-E"] = bookNLOHisto1D("top-E", stdbin, 0., 405.);
-      _h["antitop-E"] = bookNLOHisto1D("antitop-E", stdbin, 0., 405.);
+      _h["top-E"] = bookNLOHisto1D("top-E", stdbin, 125., 550.);
+      _h["antitop-E"] = bookNLOHisto1D("antitop-E", stdbin, 125., 550.);
       _h["top-pT"] = bookNLOHisto1D("top-pT", stdbin, 0., 350.);
       _h["antitop-pT"] = bookNLOHisto1D("antitop-pT", stdbin, 0., 350.);
       _h["top-theta"] = bookNLOHisto1D("top-theta", stdbin, -1.1, 1.1);
       _h["antitop-theta"] = bookNLOHisto1D("antitop-theta", stdbin, -1.1, 1.1);
+      _h["tt-inv"] = bookNLOHisto1D("tt-inv", stdbin, 300., 800.);
 
       _h["Higgs_E"] = bookNLOHisto1D("Higgs-E", stdbin, 0., 350.);
       _h["Higgs_Pt"] = bookNLOHisto1D("Higgs-Pt", stdbin, 0., 350.);
@@ -82,6 +87,7 @@ namespace Rivet {
 
       ParticleVector tpartons = applyProjection<IdentifiedFinalState>(event, "top").particlesByPt();
       ParticleVector tbarpartons = applyProjection<IdentifiedFinalState>(event, "antitop").particlesByPt();
+      ParticleVector gluons = applyProjection<IdentifiedFinalState>(event, "gluon").particlesByPt();
       //get the jets
       const FastJets& fastjets = applyProjection<FastJets>(event, "Jets");
       double minjetE = 1. * GeV;
@@ -89,16 +95,21 @@ namespace Rivet {
 
       foreach (const PseudoJet & pseudo_jet, pseudo_jets) {
          vector<PseudoJet> constituents = pseudo_jet.constituents();
-         bool is_t = false;
+         bool t_in_jet = false; 
+         bool tbar_in_jet = false;
          foreach (const PseudoJet& constituent, constituents) {
             foreach (const Particle& tparton, tpartons) {
-               if (have_same_momentum (constituent, tparton)) {tjets.push_back(pseudo_jet); is_t = true;}
+               if (have_same_momentum (constituent, tparton)) {tjets.push_back(pseudo_jet); t_in_jet = true;}
             }
             foreach (const Particle& tbarparton, tbarpartons) {
-               if (have_same_momentum (constituent, tbarparton)) {tbarjets.push_back(pseudo_jet); is_t = true;}
+              if (have_same_momentum (constituent, tbarparton)) {tbarjets.push_back(pseudo_jet); tbar_in_jet = true;}
             }
          }
          jets.push_back (pseudo_jet);
+         if (t_in_jet and tbar_in_jet) {
+           vetoCounter++;
+           vetoEvent;
+         }
       }
 
       //get the Higgs
@@ -127,6 +138,24 @@ namespace Rivet {
       _h["antitop-pT"]->fill(tbarjets[0].pt(), event);
       _h["top-theta"]->fill(std::cos(tjets[0].theta()), event);
       _h["antitop-theta"]->fill(std::cos(tbarjets[0].theta()), event);
+      double tt_inv = (tjets[0].momentum() + tbarjets[0].momentum()).mass();
+      if (tt_inv > 675.0) {
+         cout << "Found large invariant mass: " << tt_inv << endl;
+         cout << "Tjets: " << endl;
+         cout << tjets[0].momentum() << endl;
+         cout << tbarjets[0].momentum() << endl;
+         cout << "Tpartons: " << endl;
+         cout << tpartons[0].momentum() << endl;
+         cout << tbarpartons[0].momentum() << endl;
+         cout << "Sum of tpartons: " << endl;
+         cout << tpartons[0].momentum() + tbarpartons[0].momentum() << endl;
+         cout << "Higgs: " << endl;
+         cout << H[0].momentum() << endl;
+         cout << "Gluon: " << endl;
+         cout << gluons[0].momentum() << endl;
+         exit (EXIT_FAILURE);
+      }
+      _h["tt-inv"]->fill((tjets[0].momentum() + tbarjets[0].momentum()).mass(), event);
 
       _h["leadingjet_E"]->fill(jets[0].E(), event);
       _h["leadingjet_Pt"]->fill(jets[0].pt(), event);

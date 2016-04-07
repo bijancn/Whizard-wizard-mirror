@@ -11,6 +11,7 @@ real dummy = 0.0
 scale = mtop
 #ITERATIONS
 library = proc_nlo
+cuts = all Pt > 20 GeV [T]
 process proc_nlo = e1, E1 => t, T { nlo_calculation = "Full" }
 #SETSCAN
 integrate (proc_nlo)

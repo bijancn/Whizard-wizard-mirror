@@ -1,0 +1,138 @@
+#Use parameters from sm_physics_test
+mW = 80.385
+mZ = 91.1876
+mb = 4.2
+GF = 1.1663787E-005
+#wW = 2.09974
+wW = 0.0
+wtop = 0.0
+mtop = 173.2
+
+show(model)
+
+me = 0
+ms = 0
+mc = 0
+mmu = 0
+#Use massless taus because OpenLoops does not have a library for massive ones yet.
+#Moreover, we can thus include them in the lepton-alias
+mtau = 0
+
+#Dummy center of mass energy
+sqrts = 7000 GeV
+
+alias p_leptons = E1:E2:E3
+alias m_leptons = e1:e2:e3
+alias neutrinos = n1:n2:n3
+alias anti_neutrinos = N1:N2:N3
+alias leptons = p_leptons:m_leptons:neutrinos:anti_neutrinos
+alias p_hadrons = u:c:D:S
+alias m_hadrons = U:C:d:s
+alias hadrons = p_hadrons:m_hadrons
+
+?vis_channels = true
+?use_vamp_equivalences = false
+
+?alpha_s_is_fixed = false
+?alpha_s_from_mz = true
+?alpha_s_from_lambda_qcd = false
+alpha_s_nf = 5
+alpha_s_order = 1
+#PDG value at mZ
+alphas = 0.1185
+
+seed = 1234567
+
+mult_call_real = 2
+mult_call_virt = 0.75
+
+#Default parameters for FKS mapping
+fks_dij_exp1 = 1.0
+
+$loop_me_method = "openloops"
+alphas_power = 0
+alpha_power = 1
+
+
+process wdecay_leptonic = Wp => p_leptons, neutrinos 
+process wdecay_hadronic_lo = Wp => p_hadrons, p_hadrons 
+
+integrate (wdecay_leptonic) { iterations = 5:50000:"gw" }
+integrate (wdecay_hadronic_lo) { iterations = 5:50000:"gw" }
+
+process zdecay_leptonic_lo = Z => leptons, leptons 
+process zdecay_hadronic_lo = Z => hadrons, hadrons 
+process zdecay_b_lo = Z => b, B 
+
+wZ = 0.0
+scale = mZ
+integrate (zdecay_leptonic_lo) { iterations = 5:50000:"gw" }
+integrate (zdecay_hadronic_lo) { iterations = 5:50000:"gw" }
+integrate (zdecay_b_lo) { iterations = 5:50000:"gw" }
+
+wZ = integral (zdecay_leptonic_lo) + integral (zdecay_b_lo) + integral (zdecay_hadronic_lo)
+wW = integral (wdecay_leptonic) + integral (wdecay_hadronic_lo)
+wtop = 0.0
+process tdecay_onshell_lo = t => b, Wp 
+process tdecay_leptonic_lo = t => b, p_leptons, neutrinos 
+process tdecay_hadronic_lo = t => b, p_hadrons, p_hadrons 
+
+integrate (tdecay_onshell_lo) { iterations = 5:50000:"gw" }
+integrate (tdecay_leptonic_lo) { iterations = 5:50000:"gw" }
+integrate (tdecay_hadronic_lo) { iterations = 5:50000:"gw" }
+
+#################################
+####Next-to-leading Order########
+#################################
+process zdecay_hadronic = Z => hadrons, hadrons {nlo_calculation = "Full"}
+process zdecay_b = Z => b, B                    {nlo_calculation = "Full"}
+
+wZ = 0.0
+scale = mZ
+
+integrate (zdecay_hadronic) { iterations = 5:50000:"gw" }
+integrate (zdecay_b) { iterations = 5:50000:"gw" }
+
+process wdecay_hadronic = Wp => p_hadrons, p_hadrons { nlo_calculation = "Full" }
+process tdecay_onshell = t => b, Wp { nlo_calculation = "Full" }
+
+wW = 0.0
+scale = mW
+integrate (wdecay_hadronic) { iterations = 5:50000:"gw" }
+scale = mtop
+integrate (tdecay_onshell) { iterations = 5:50000:"gw" }
+
+
+alpha_power = 2
+wZ = integral (zdecay_leptonic_lo) + integral (zdecay_b) + integral (zdecay_hadronic)
+wW = integral (wdecay_leptonic) + integral (wdecay_hadronic)
+scale = mtop
+
+#Need complex mass scheme because there exist W-propagators
+$born_me_method = "openloops"
+$real_tree_me_method = "openloops"
+$correlation_me_method = "openloops"
+?openloops_use_cms = true
+
+process tdecay_leptonic = t => b, p_leptons, neutrinos { nlo_calculation = "Full" }
+process tdecay_hadronic = t => b, p_hadrons, p_hadrons { nlo_calculation = "Full" }
+
+integrate (tdecay_leptonic) { iterations = 5:25000:"gw" }
+integrate (tdecay_hadronic) { iterations = 5:50000:"gw" }
+
+real int_T_onshell_LO = integral (tdecay_onshell_lo)
+real int_T_onshell_NLO = integral (tdecay_onshell)
+
+real int_W_tot_LO = integral (wdecay_leptonic) + integral (wdecay_hadronic_lo)
+real int_Z_tot_LO = integral (zdecay_hadronic_lo) + integral (zdecay_b_lo) + integral (zdecay_leptonic_lo)
+real int_T_tot_LO = integral (tdecay_leptonic_lo) + integral (tdecay_hadronic_lo)
+
+real int_Z_tot_NLO = integral (zdecay_hadronic) + integral (zdecay_b) + integral (zdecay_leptonic_lo)
+real int_W_tot_NLO = integral (wdecay_leptonic) + integral (wdecay_hadronic)
+real err_W_tot_NLO = sqrt (error (wdecay_leptonic)^2 + error (wdecay_hadronic)^2)
+
+
+real int_T_tot_NLO = integral (tdecay_leptonic) + integral (tdecay_hadronic)
+real err_T_tot_NLO = sqrt (error (tdecay_leptonic)^2 + error (tdecay_hadronic)^2)
+
+
