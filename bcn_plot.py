@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib._cm import cubehelix
 from matplotlib.ticker import AutoMinorLocator
+import matplotlib.gridspec as gridspec
 from functools import partial
 from utils import mkdirs
 
@@ -34,17 +35,25 @@ class Plotter(object):
 
   def setfig(self, ax, xmin, xmax, ymin, ymax, xlabel, ylabel,
       title=None, xlog=False, ylog=False, xminors=False, yminors=False,
-      n_minors=5, n_majors=5, xticks=None, yticks=None, puff=0.05,
+      n_minors=5, n_majors=6, xticks=None, yticks=None, puff=0.05,
       legend_location='best',
       legend_columns=1, legend_outside=False, height_shrinker=0.80,
-      legend_hide=False, legend_ordering=[]):
+      legend_hide=False, legend_ordering=[], ax1=None, ylabel1=None,
+      ymin1=None, ymax1=None, n_majors1=None):
     # label axes and set ranges and scales
     if xlabel is not None:
-      ax.set_xlabel(xlabel)
+      if ax1 is None:
+        ax.set_xlabel(xlabel)
+      else:
+        ax1.set_xlabel(xlabel)
     if ylabel is not None:
       ax.set_ylabel(ylabel)
+      if ylabel1 is not None and ax1 is not None:
+        ax1.set_ylabel(ylabel1)
     _set_puffed_scale(puff, xmax, xmin, xlog, ax.set_xlim, ax.set_xscale)
     _set_puffed_scale(puff, ymax, ymin, ylog, ax.set_ylim, ax.set_yscale)
+    if ymin1 is not None and ax1 is not None:
+      _set_puffed_scale(puff, ymax1, ymin1, False, ax1.set_ylim, ax1.set_yscale)
 
     # title (ensuring no double set)
     if title is not None and self.title_notset:
@@ -63,6 +72,7 @@ class Plotter(object):
     #       We set top to 0.96 to have space for title
     if self.layout_notset:
       plt.tight_layout(pad=0.5, rect=[0.04, 0.00, 1, 0.96])
+      plt.subplots_adjust(hspace=0.01)
       self.layout_notset = False
 
     # major ticks
@@ -78,6 +88,11 @@ class Plotter(object):
         yticks = np.logspace(math.log10(ymin), math.log10(ymax), num=n_majors)
       else:
         yticks = np.linspace(ymin, ymax, n_majors)
+      if ymin1 is not None and ymax1 is not None and ax1 is not None:
+        if n_majors1 is None:
+          n_majors1 = n_majors
+        yticks1 = np.linspace(ymin1, ymax1, n_majors1)
+        ax1.set_yticks(yticks1)
     ax.set_yticks(yticks)
 
     # minor ticks are auto-set to n_minors if requested
@@ -93,6 +108,8 @@ class Plotter(object):
       else:
         minorLocator = AutoMinorLocator(n_minors)
         ax.yaxis.set_minor_locator(minorLocator)
+        if ax1 is not None:
+          ax1.yaxis.set_minor_locator(minorLocator)
     # TODO: (bcn 2016-03-16) minors are not disabled in log plot
 
     # legend
@@ -148,6 +165,16 @@ def get_label(title, filename=None, pretty_label=None, object_dict=None):
     return object_dict.get('label', '').replace('_', '\_')
 
 
+def combined_plot(base_line, ax, ax1, x, y, *args, **kwargs):
+  ax.plot(x, y, *args, **kwargs)
+  ax1.plot(x, y / base_line, *args, **kwargs)
+
+
+def combined_fill_between(base_line, ax, ax1, x, ymin, ymax, *args, **kwargs):
+  ax.fill_between(x, ymin, ymax, *args, **kwargs)
+  ax1.fill_between(x, ymin / base_line, ymax / base_line, *args, **kwargs)
+
+
 def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     label_decider=None, legend_decider=None, marker_decider=None,
     linestyle_decider=None, pretty_label=None, set_extra_settings=None):
@@ -176,12 +203,30 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   check_for_all_sets(line_data, lines)
   # check_for_all_sets(band_data, band_lst)
   if n_objects == 0:
-    raise Exception("You have to give select data to plot")
+    print 'You selected no lines or bands. Not building: ' + title
+    return
   size = (9, 9) if many_labels else (9, 7.5)
-  fig = plt.figure(figsize=size)
-  ax = fig.add_subplot(1, 1, 1)
+  ratio_dict = plot_dict.get('ratio', None)
+  if ratio_dict is not None:
+    base_line = line_data[0][1][1]
+    fig = plt.figure(figsize=size)
+    gs = gridspec.GridSpec(2, 1, height_ratios=[4, 1])
+    ax = fig.add_subplot(gs[0])
+    ax1 = fig.add_subplot(gs[1], sharex=ax)
+    ylabel1 = ratio_dict.get('ylabel', 'ratio')
+    this_plot = partial(partial(partial(combined_plot, base_line), ax), ax1)
+    this_fill_between = partial(partial(partial(combined_fill_between,
+      base_line), ax), ax1)
+  else:
+    fig = plt.figure(figsize=size)
+    ax = fig.add_subplot(1, 1, 1)
+    ax1 = None
+    this_plot = ax.plot
+    this_fill_between = ax.fill_between
+    ylabel1 = None
   if plot_extra is not None:
     ax = plot_extra(ax, title)
+  ymin1, ymax1 = None, None
   if range_decider is not None:
     ymin, ymax, xmin, xmax = range_decider(line_data, title)
   else:
@@ -194,6 +239,12 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     xmax = plot_dict.get('xmax', min([np.amax(d[1][0]) for d in all_data]))
     ymin = plot_dict.get('ymin', min([np.amin(d[1][1]) for d in all_data]))
     ymax = plot_dict.get('ymax', max([np.amax(d[1][1]) for d in all_data]))
+    if ratio_dict is not None:
+      ymax1 = ratio_dict.get('ymax', max([np.amax(d[1][1] / base_line)
+        for d in all_data]))
+      ymin1 = ratio_dict.get('ymin', min([np.amin(d[1][1] / base_line)
+        for d in all_data]))
+      n_majors1 = ratio_dict.get('nmajors', None)
   if label_decider is not None:
     xlabel, ylabel = label_decider(title)
   else:
@@ -214,7 +265,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     x = data_of_a_band[0][1][0]
     list_of_y_arrays = [db[1][1] for db in data_of_a_band]
     y_array = np.vstack(tuple(list_of_y_arrays))
-    plt.fill_between(x, np.amin(y_array, axis=0), np.amax(y_array, axis=0),
+    this_fill_between(x, np.amin(y_array, axis=0), np.amax(y_array, axis=0),
         color=color, label=label, alpha=opacity)
   for td, c in zip(line_data, colors):
     filename, d = td[0], td[1]
@@ -241,7 +292,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
           alpha=global_opacity)
       plt.hlines(mean, _[:-1], _[1:], label=label, colors=c)
     elif linestyle is not None:
-      ax.plot(d[0], d[1], color=c, label=label, linestyle=linestyle)
+      this_plot(d[0], d[1], color=c, label=label, linestyle=linestyle)
     else:
       if marker_decider is not None:
         marker = marker_decider(filename, title)
@@ -260,7 +311,8 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
                 ylabel=ylabel, ylog=ylog, xlog=xlog,
                 legend_outside=many_labels, height_shrinker=0.70,
                 legend_location=legend_location,
-                legend_hide=False)
+                legend_hide=False, ax1=ax1, ylabel1=ylabel1, ymin1=ymin1,
+                ymax1=ymax1, n_majors1=n_majors1)
       fig.savefig(os.path.join(pic_path, title + '-' + str(i) + '.pdf'),
                   dpi=fig.dpi)
   pl.setfig(ax, title=title,
@@ -269,7 +321,8 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
             xlabel=xlabel,
             ylabel=ylabel, ylog=ylog, xlog=xlog,
             legend_outside=many_labels, height_shrinker=0.70,
-            legend_location=legend_location)
+            legend_location=legend_location, ax1=ax1, ylabel1=ylabel1,
+            ymin1=ymin1, ymax1=ymax1, n_majors1=n_majors1)
   fig.savefig(os.path.join(pic_path, title + '.pdf'),
               dpi=fig.dpi)
   plt.close(fig)

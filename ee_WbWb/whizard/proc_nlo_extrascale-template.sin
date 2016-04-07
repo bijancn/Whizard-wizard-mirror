@@ -13,10 +13,10 @@ $fks_mapping_type = "resonances"
 
 scale = mtop
 #ITERATIONS
-library = proc_nlo
-process proc_nlo = E1, e1 => Wp, Wm, b, B {nlo_calculation="Full"}
+library = proc_nlo_extrascale
+process proc_nlo_extrascale = E1, e1 => Wp, Wm, b, B {nlo_calculation="Full"}
 #SETSCAN
 
 mult_call_real = 50
-integrate (proc_nlo)
-printf "RES %8e %8e %8e" (sqrts, integral(proc_nlo), error(proc_nlo))
+integrate (proc_nlo_extrascale)
+printf "RES %8e %8e %8e" (sqrts, integral(proc_nlo_extrascale), error(proc_nlo_extrascale))

@@ -1,9 +1,9 @@
 {
   "plots": [
   {"title": "Effectiveness of subtraction in the soft limit (histogram)",
-    "lines": [
+    "disabled_lines": [
       "proc_nlo.soft",
-      "factorized_nlo.soft"
+      "fact_nlo.soft"
     ],
     "xlabel": "$E_{g}$ [GeV]",
     "ylabel": "$\\frac{R_\\alpha}{R_\\alpha^{soft}}$",
@@ -17,10 +17,46 @@
     "xminors": true,
     "yminors": true
   },
-  {"title": "Effectiveness of subtraction in the soft limit (scatter)",
+  {"title": "NLO scale variations",
     "lines": [
+      "proc_nlo_central"
+    ],
+    "bands": [
+    {"label":"Scale variation with a factor of 4",
+      "opacity": 0.1,
+      "color": "#3366FF",
+      "data":
+        [ "proc_nlo_extrascale_central",
+          "proc_nlo_extrascale_high",
+          "proc_nlo_extrascale_low"
+        ]
+    },
+    {"label":"Standard scale variation",
+      "opacity": 0.1,
+      "color": "#EE3311",
+      "data":
+        [ "proc_nlo_central",
+          "proc_nlo_high",
+          "proc_nlo_low"
+        ]
+    }
+    ],
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "ymin": 600,
+    "ymax": 1150,
+    "xmin": 350,
+    "xmax": 500,
+    "xminors": true,
+    "yminors": true
+  },
+  {"title": "Effectiveness of subtraction in the soft limit (scatter)",
+    "disabled_lines": [
       "proc_nlo.soft",
-      "factorized_nlo.soft"
+      "fact_nlo.soft"
     ],
     "xlabel": "$E_{g}$ [GeV]",
     "ylabel": "$\\frac{R_\\alpha}{R_\\alpha^{soft}}$",
@@ -37,10 +73,10 @@
   {"title": "Gauge-dependence of LO cross sections (influence of helicity approximation)",
     "lines": [
       "proc_lo_thresholdparams",
-      "factorized_lo",
-      "factorized_lo_helapprox",
-      "factorized_onshellprojected_lo",
-      "factorized_onshellprojected_lo_helapprox",
+      "fact_lo",
+      "fact_lo_helapprox",
+      "fact_onshellprojected_lo",
+      "fact_onshellprojected_lo_helapprox",
       "ttbar_lo_thresholdparams"
     ],
     "xlabel": "$\\sqrt{s}$ [GeV]",
@@ -57,10 +93,10 @@
   {"title": "Gauge-dependence of LO cross sections (influence of helicity approximation, zoom)",
     "lines": [
       "proc_lo_thresholdparams",
-      "factorized_lo",
-      "factorized_lo_helapprox",
-      "factorized_onshellprojected_lo",
-      "factorized_onshellprojected_lo_helapprox",
+      "fact_lo",
+      "fact_lo_helapprox",
+      "fact_onshellprojected_lo",
+      "fact_onshellprojected_lo_helapprox",
       "ttbar_lo_thresholdparams"
     ],
     "xlabel": "$\\sqrt{s}$ [GeV]",
@@ -78,8 +114,8 @@
   {"title": "Gauge-dependence of LO cross sections (zoom)",
     "lines": [
       "proc_lo_thresholdparams",
-      "factorized_lo",
-      "factorized_onshellprojected_lo",
+      "fact_lo",
+      "fact_onshellprojected_lo",
       "signaldiagram_lo",
       "ttbar_lo_thresholdparams"
     ],
@@ -98,11 +134,34 @@
   {"title": "Gauge-dependence of LO cross sections",
     "lines": [
       "proc_lo_thresholdparams",
-      "factorized_lo",
-      "factorized_onshellprojected_lo",
+      "fact_lo",
+      "fact_decayonshellprojected_lo",
+      "fact_productiononshellprojected_lo",
+      "fact_onshellprojected_lo",
       "signaldiagram_lo",
       "ttbar_lo_thresholdparams"
     ],
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": true,
+    "xlog": true,
+    "ymin": 1,
+    "ymax": 10000,
+    "xmax": 100000,
+    "xminors": true,
+    "yminors": true
+  },
+  {"title": "Comparison of onshell projections",
+    "lines": [
+      "ttbar_lo_thresholdparams",
+      "fact_lo",
+      "fact_onshellprojected_lo",
+      "fact_productiononshellprojected_lo",
+      "fact_decayonshellprojected_lo"
+    ],
+    "ratio": {"ylabel": "$\\sigma/\\sigma^{t\\bar t}$",
+      "ymax": 1.25, "ymin": 0.75, "nmajors": 3},
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,

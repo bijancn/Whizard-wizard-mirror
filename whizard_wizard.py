@@ -16,6 +16,10 @@ import utils as ut
 # from termcolor import colored
 
 
+def no_critical_log():
+  logging.disable(logging.CRITICAL)
+
+
 def fill_all_runs(_run_json):
   runs = []
   for proc_dict in _run_json['processes']:
@@ -67,19 +71,20 @@ SUCCESS, FAIL = range(2)
 
 
 class Whizard():
-  def __init__(self, run_json, silent):
+  def __init__(self, run_json, verbose):
     self.binary = run_json['whizard']
     if not spawn.find_executable(self.binary):
       ut.fatal('No valid whizard found. You gave whizard = ' + self.binary)
     else:
       ut.logger.info('Using ' + self.binary)
-    if silent:
+    if not verbose:
       devnull = open(os.devnull, 'w')
       self.out = devnull
       self.err = devnull
+      self.call = lambda cmd: subprocess.call(cmd, shell=True, stderr=self.err,
+          stdout=self.out)
     else:
-      self.out = subprocess.STD_OUTPUT_HANDLE
-      self.err = subprocess.STD_ERROR_HANDLE
+      self.call = lambda cmd: subprocess.call(cmd, shell=True)
 
   def execute(self, purpose, sindarin, fifo=None, proc_id=None, options='',
       analysis=''):
@@ -91,8 +96,7 @@ class Whizard():
     num = ' in ' + str(proc_id) if proc_id is not None else ''
     ut.logger.info('Calling subprocess ' + cmd + num)
     try:
-      return_code = subprocess.call(cmd, shell=True, stderr=self.err,
-          stdout=self.out)
+      return_code = self.call(cmd)
     except Exception as e:
       ut.fatal('Exception occured: ' + str(e) + 'Whizard failed on executing ' +
           sindarin + num)
@@ -168,7 +172,7 @@ class Whizard():
         ut.logger.error('Didnt find integration grids with name ' + integration_grids +
              ', but you wanted events! Aborting! Please use "integrate" first')
         return FAIL
-      elif purpose == 'integrate':
+      elif purpose == 'integration':
         ut.logger.info('Generating the following integration grids: ' +
             integration_grids)
         return self.execute(purpose,
@@ -231,7 +235,7 @@ def setup_sindarin(proc_dict):
         else:
           ut.fatal('Didnt find ' + template_sindarin + ' nor ' + fallback)
       if template_present:
-        if proc_dict['purpose'] == 'integrate' or scan or test_soft:
+        if proc_dict['purpose'] == 'integration' or scan or test_soft:
           create_integration_sindarin(integration_sindarin, template_sindarin,
               proc_dict['adaption_iterations'],
               proc_dict.get('integration_iterations', ' '))
@@ -270,6 +274,7 @@ def fill_runs(proc_name, proc_dict):
     except KeyError:
       ut.fatal('Aborting: You want a scan but have not set a ranges array')
     else:
+      runs = []
       for scan in scans:
         start = float(scan['start'])
         stop = float(scan['stop'])
@@ -289,13 +294,13 @@ def fill_runs(proc_name, proc_dict):
           step_range = arange(start, stop, float(stepsize))
         else:
           ut.fatal('Aborting: Unknown scan type')
-      runs = [(b, proc_name, proc_dict) for b in step_range]
-  elif purpose == 'integrate' or purpose == 'test_soft':
+        runs += [(b, proc_name, proc_dict) for b in step_range]
+  elif purpose == 'integration' or purpose == 'test_soft':
     runs = [(-1, proc_name, proc_dict)]
   elif purpose == 'disabled':
     runs = []
   else:
-    raise Exception("fill_runs: Unknown purpose")
+    raise Exception("fill_runs: Unknown purpose: " + purpose)
   try:
     return runs
   except UnboundLocalError:
@@ -316,7 +321,7 @@ def test_fill_runs_basic():
     nt.assert_almost_equal(r[0], e[0], places=4)
     nt.eq_(r[1:2], e[1:2])
 
-  proc_dict = {'purpose': 'integrate'}
+  proc_dict = {'purpose': 'integration'}
   runs = fill_runs(proc_name, proc_dict)
   nt.eq_(runs, [(-1, proc_name, proc_dict)])
 
@@ -332,10 +337,6 @@ def test_fill_runs_basic():
   for r, e in zip(runs, expectation):
     nt.assert_almost_equal(r[0], e[0], places=4)
     nt.eq_(r[1:2], e[1:2])
-
-
-def no_critical_log():
-  logging.disable(logging.CRITICAL)
 
 
 @nt.raises(Exception)
@@ -508,6 +509,13 @@ def is_valid_wizard_sindarin(proc_dict, template_sindarin):
       not is_nlo_calculation(template_sindarin):
     ut.fatal('Your purpose is nlo* but the sindarin has no nlo command')
     valid = False
+  fks_mapping = ut.get_string("fks_mapping_type", template_sindarin)
+  resonance_set_in_sindarin = fks_mapping == '"resonances"'
+  fks_method = proc_dict.get('fks_method', 'default')
+  resonance_not_set_in_json = fks_method != 'resonances'
+  if resonance_set_in_sindarin and resonance_not_set_in_json:
+    ut.fatal('You set fks_mapping_type to resonances but havent set it in the run.json')
+    valid = False
   return valid
 
 
@@ -535,34 +543,50 @@ def test_is_valid_wizard_sindarin():
   nt.eq_(is_valid_wizard_sindarin(proc_dict, 'test_nlo_base-template.sin'),
       True, "test_nlo_base should work with purpose nlo")
 
+  with open('test_nlo_resonances-template.sin', "w") as test:
+    test.write('process test_nlo_resonances = e1, E1 => e2, E2' +
+        ' {nlo_calculation = "Full"}\n' +
+        '?fks_mapping_type = "resonances"\n')
+  proc_dict = {'purpose': 'nlo'}
+  nt.eq_(is_valid_wizard_sindarin(proc_dict, 'test_nlo_resonances-template.sin'), False)
+
+  proc_dict = {'purpose': 'nlo', 'fks_method': 'resonances'}
+  nt.eq_(is_valid_wizard_sindarin(proc_dict, 'test_nlo_resonances-template.sin'), True)
+
   os.remove('test_nlo_wrong.sin')
   os.remove('test_nlo_scan-template.sin')
+  os.remove('test_nlo_resonances-template.sin')
 
 
 def check_for_valid_wizard_sindarin(proc_dict, template_sindarin):
   if not is_valid_wizard_sindarin(proc_dict, template_sindarin):
     ut.fatal('Given sindarin (' + template_sindarin + ') is invalid for intended use')
+    return FAIL
+  return SUCCESS
 
 
-# TODO: (bcn 2016-03-30) this only executes but doesnt check.. maybe we can use raise?
+@nt.with_setup(create_test_nlo_base, remove_test_nlo_base)
 def test_check_for_valid_wizard_sindarin():
   proc_dict = {'purpose': 'foo'}
-  check_for_valid_wizard_sindarin(proc_dict, 'test_nlo_base-template.sin')
+  nt.eq_(check_for_valid_wizard_sindarin(proc_dict, 'test_nlo_base-template.sin'),
+      SUCCESS)
 
   proc_dict = {'purpose': 'scan'}
-  check_for_valid_wizard_sindarin(proc_dict, 'test_nlo_base-template.sin')
+  nt.eq_(check_for_valid_wizard_sindarin(proc_dict, 'test_nlo_base-template.sin'),
+      FAIL)
 
 
-def create_scale_sindarins(base_sindarin):
+def create_scale_sindarins(base_sindarin, proc_dict):
   new_sindarins = []
   for suffix in get_scale_suffixes():
     new_sindarin = insert_suffix_in_sindarin(base_sindarin, suffix)
     new_sindarins.append(new_sindarin)
     shutil.copyfile(base_sindarin, new_sindarin)
+    scale_multiplier = proc_dict.get('scale_multiplier', 2.0)
     if suffix == 'low':
-      replace_scale(0.5, new_sindarin)
+      replace_scale(1.0 / scale_multiplier, new_sindarin)
     elif suffix == 'high':
-      replace_scale(2.0, new_sindarin)
+      replace_scale(scale_multiplier, new_sindarin)
     replace_proc_id(suffix, new_sindarin)
   return new_sindarins
 
@@ -570,7 +594,7 @@ def create_scale_sindarins(base_sindarin):
 def multiply_sindarins(integration_sindarin, proc_dict, scaled, nlo_type):
   scaled_sindarins = None
   if scaled:
-    scaled_sindarins = create_scale_sindarins(integration_sindarin)
+    scaled_sindarins = create_scale_sindarins(integration_sindarin, proc_dict)
   if nlo_type == 'nlo':
     if scaled_sindarins is not None:
       for sindarin in scaled_sindarins:
@@ -628,7 +652,18 @@ def create_simulation_sindarin(simulation_sindarin, template_sindarin, process,
 def get_grid_index(proc_name):
   words = proc_name.split('_')
   grid_indices = {'Born': 1, 'Real': 2, 'Virtual': 3, 'Mismatch': 4}
-  return grid_indices[words[len(words) - 1]]
+  return grid_indices[words[-1]]
+
+
+def test_get_grid_index():
+  proc_name = 'proc_nlo_Born'
+  nt.eq_(get_grid_index(proc_name), 1)
+  proc_name = 'proc_nlo_Real'
+  nt.eq_(get_grid_index(proc_name), 2)
+  proc_name = 'proc_nlo_Virtual'
+  nt.eq_(get_grid_index(proc_name), 3)
+  proc_name = 'proc_nlo_Mismatch'
+  nt.eq_(get_grid_index(proc_name), 4)
 
 
 # TODO: (bcn 2016-03-30) review this
@@ -658,7 +693,7 @@ def run_json(json_name):
   run_json = retrieve_and_validate_run_json('tests', json_name=json_name)
   with ut.cd('tests'):
     setup_sindarins(run_json)
-    whizard = Whizard(run_json, True)
+    whizard = Whizard(run_json, False)
     runs = fill_all_runs(run_json)
     return map(whizard.run_process, runs)
 

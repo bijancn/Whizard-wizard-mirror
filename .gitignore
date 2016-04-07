@@ -2,7 +2,7 @@
 *.hepmc
 plots/
 noanalytic/
-
+host_file
 *.lo
 *.f90
 *.dvi

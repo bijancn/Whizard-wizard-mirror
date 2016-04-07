@@ -1,0 +1,45 @@
+{
+  "plots": [
+  {"title": "NLO scale variations",
+    "lines": [
+      "proc_nlo_central"
+    ],
+    "bands": [
+    {"label":"Scale variation with a factor of 4",
+      "opacity": 0.1,
+      "color": "#3366FF",
+      "data":
+        [ "proc_nlo_extrascale_central",
+          "proc_nlo_extrascale_high",
+          "proc_nlo_extrascale_low"
+        ]
+    },
+    {"label":"Standard scale variation",
+      "opacity": 0.1,
+      "color": "#EE3311",
+      "data":
+        [ "proc_nlo_central",
+          "proc_nlo_high",
+          "proc_nlo_low"
+        ]
+    }
+    ],
+    "ratio": {
+      "ylabel": "K-Factor",
+      "ymax": 1.05,
+      "ymin": 0.95,
+      "nmajors": 5
+    },
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "ymin": 600,
+    "ymax": 850,
+    "xmin": 350,
+    "xminors": true,
+    "yminors": true
+  }
+  ]
+}
