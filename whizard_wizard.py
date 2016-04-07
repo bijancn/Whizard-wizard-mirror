@@ -16,6 +16,10 @@ import utils as ut
 # from termcolor import colored
 
 
+def no_critical_log():
+  logging.disable(logging.CRITICAL)
+
+
 def fill_all_runs(_run_json):
   runs = []
   for proc_dict in _run_json['processes']:
@@ -335,10 +339,6 @@ def test_fill_runs_basic():
     nt.eq_(r[1:2], e[1:2])
 
 
-def no_critical_log():
-  logging.disable(logging.CRITICAL)
-
-
 @nt.raises(Exception)
 @nt.with_setup(no_critical_log)
 def test_fill_runs_exception():
@@ -509,6 +509,13 @@ def is_valid_wizard_sindarin(proc_dict, template_sindarin):
       not is_nlo_calculation(template_sindarin):
     ut.fatal('Your purpose is nlo* but the sindarin has no nlo command')
     valid = False
+  fks_mapping = ut.get_string("fks_mapping_type", template_sindarin)
+  resonance_set_in_sindarin = fks_mapping == '"resonances"'
+  fks_method = proc_dict.get('fks_method', 'default')
+  resonance_not_set_in_json = fks_method != 'resonances'
+  if resonance_set_in_sindarin and resonance_not_set_in_json:
+    ut.fatal('You set fks_mapping_type to resonances but havent set it in the run.json')
+    valid = False
   return valid
 
 
@@ -536,22 +543,37 @@ def test_is_valid_wizard_sindarin():
   nt.eq_(is_valid_wizard_sindarin(proc_dict, 'test_nlo_base-template.sin'),
       True, "test_nlo_base should work with purpose nlo")
 
+  with open('test_nlo_resonances-template.sin', "w") as test:
+    test.write('process test_nlo_resonances = e1, E1 => e2, E2' +
+        ' {nlo_calculation = "Full"}\n' +
+        '?fks_mapping_type = "resonances"\n')
+  proc_dict = {'purpose': 'nlo'}
+  nt.eq_(is_valid_wizard_sindarin(proc_dict, 'test_nlo_resonances-template.sin'), False)
+
+  proc_dict = {'purpose': 'nlo', 'fks_method': 'resonances'}
+  nt.eq_(is_valid_wizard_sindarin(proc_dict, 'test_nlo_resonances-template.sin'), True)
+
   os.remove('test_nlo_wrong.sin')
   os.remove('test_nlo_scan-template.sin')
+  os.remove('test_nlo_resonances-template.sin')
 
 
 def check_for_valid_wizard_sindarin(proc_dict, template_sindarin):
   if not is_valid_wizard_sindarin(proc_dict, template_sindarin):
     ut.fatal('Given sindarin (' + template_sindarin + ') is invalid for intended use')
+    return FAIL
+  return SUCCESS
 
 
-# TODO: (bcn 2016-03-30) this only executes but doesnt check.. maybe we can use raise?
+@nt.with_setup(create_test_nlo_base, remove_test_nlo_base)
 def test_check_for_valid_wizard_sindarin():
   proc_dict = {'purpose': 'foo'}
-  check_for_valid_wizard_sindarin(proc_dict, 'test_nlo_base-template.sin')
+  nt.eq_(check_for_valid_wizard_sindarin(proc_dict, 'test_nlo_base-template.sin'),
+      SUCCESS)
 
   proc_dict = {'purpose': 'scan'}
-  check_for_valid_wizard_sindarin(proc_dict, 'test_nlo_base-template.sin')
+  nt.eq_(check_for_valid_wizard_sindarin(proc_dict, 'test_nlo_base-template.sin'),
+      FAIL)
 
 
 def create_scale_sindarins(base_sindarin, proc_dict):
@@ -630,8 +652,7 @@ def create_simulation_sindarin(simulation_sindarin, template_sindarin, process,
 def get_grid_index(proc_name):
   words = proc_name.split('_')
   grid_indices = {'Born': 1, 'Real': 2, 'Virtual': 3, 'Mismatch': 4}
-  # TODO: (bcn 2016-04-07) change to slice
-  return grid_indices[words[len(words) - 1]]
+  return grid_indices[words[-1]]
 
 
 def test_get_grid_index():

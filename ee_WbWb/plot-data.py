@@ -13,6 +13,8 @@ import bcn_plot
 import data_utils
 from utils import load_json
 
+parallel = False
+
 
 def ls_decider(lbl, title):
   if 'soft limit' in title and 'scatter' in title:
@@ -25,6 +27,8 @@ def ls_decider(lbl, title):
     return 'dashdot'
   elif 'Gauge-dependence' in title:
     return 'banded'
+  elif 'onshell projections' in title:
+    return 'solid'
   elif 'central' in lbl:
     return 'solid'
   else:
@@ -45,6 +49,12 @@ def pretty_label(filename, title):
   l = l.replace(', , ', ', ')
   l = re.sub(r", $", "", l)
   l = l.replace(', , ', ', ')
+  l = l.replace('productiononshellprojected',
+      'only for $\\mathcal{M}^{\\text{production}}$ projected')
+  l = l.replace('decayonshellprojected',
+      'only for $\\mathcal{M}^{\\text{decay}}$ projected')
+  l = l.replace('fact', 'factorized')
+  l = l.replace('onshellprojected', 'onshell projected')
   return l
 
 
@@ -54,10 +64,13 @@ def main():
   data_path = os.path.abspath('./scan-results')
   files = glob.glob(data_path + '/*.dat')
   data = data_utils.load_and_clean_files(files)
-  pool = mp.Pool(processes=4)
   plot_this = partial(bcn_plot.plot, data=data, pic_path=pic_path,
       linestyle_decider=ls_decider, pretty_label=pretty_label)
   plot_json = load_json('plot.json')
-  pool.map(plot_this, plot_json['plots'])
+  if parallel:
+    pool = mp.Pool(processes=4)
+    pool.map(plot_this, plot_json['plots'])
+  else:
+    map(plot_this, plot_json['plots'])
 
 main()

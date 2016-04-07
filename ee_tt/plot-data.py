@@ -27,6 +27,8 @@ def ls_decider(lbl, title):
     return 'dashdot'
   elif 'Gauge-dependence' in title:
     return 'banded'
+  elif 'onshell projections' in title:
+    return 'solid'
   elif 'central' in lbl:
     return 'solid'
   else:
@@ -47,6 +49,12 @@ def pretty_label(filename, title):
   l = l.replace(', , ', ', ')
   l = re.sub(r", $", "", l)
   l = l.replace(', , ', ', ')
+  l = l.replace('productiononshellprojected',
+      'only for $\\mathcal{M}^{\\text{production}}$ projected')
+  l = l.replace('decayonshellprojected',
+      'only for $\\mathcal{M}^{\\text{decay}}$ projected')
+  l = l.replace('fact', 'factorized')
+  l = l.replace('onshellprojected', 'onshell projected')
   return l
 
 
