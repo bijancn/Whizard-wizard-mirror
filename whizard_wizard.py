@@ -432,6 +432,13 @@ def replace_scale(factor, filename):
       '(' + original_scale + ') * ' + str(factor))
   ut.sed(filename, replace_line=replace_func)
 
+def replace_n_events(factor, filename):
+  original_n_events = ut.get_n_events(filename)
+  if original_n_events != None:
+    new_n_events = factor * int (original_n_events)
+    replace_func = lambda l: l.replace(original_n_events, str(new_n_events))
+    ut.sed(filename, replace_line=replace_func)
+
 
 def test_replace_scale():
   filename = 'test_replace_scale'
@@ -470,12 +477,27 @@ def test_insert_suffix_in_sindarin():
   nt.eq_(insert_suffix_in_sindarin(test_sindarin2, "suffix"), "proc_nlo_suffix.sin")
 
 
-def create_nlo_component_sindarins(proc_dict, integration_sindarin):
+def create_nlo_component_sindarins(proc_dict, integration_sindarin, all_sindarins=''):
   for suffix in get_component_suffixes(proc_dict):
     new_sindarin = insert_suffix_in_sindarin(integration_sindarin, suffix)
     shutil.copyfile(integration_sindarin, new_sindarin)
     replace_nlo_calc(suffix, new_sindarin)
     replace_proc_id(suffix, new_sindarin)
+    event_mult = proc_dict.get('event_mult_real', 1)
+    if event_mult != 1 and "Real" in new_sindarin:
+      replace_n_events (event_mult, new_sindarin)
+
+def get_all_sindarin_names (integration_sindarin, proc_dict):
+  all_sindarins = []
+  if proc_dict.get('scale_variation', False):
+     scaled_sindarins = create_scale_sindarins (integration_sindarin, proc_dict)
+  else:
+     scaled_sindarins = [integration_sindarin]
+  for ssindarin in scaled_sindarins: 
+    for suffix in get_component_suffixes (proc_dict):
+      new_sindarin = insert_suffix_in_sindarin (ssindarin, suffix)
+      all_sindarins.append (new_sindarin)
+  return all_sindarins
 
 
 @nt.with_setup(create_test_nlo_base, remove_test_nlo_base)
@@ -591,7 +613,7 @@ def create_scale_sindarins(base_sindarin, proc_dict):
   return new_sindarins
 
 
-def multiply_sindarins(integration_sindarin, proc_dict, scaled, nlo_type):
+def multiply_sindarins(integration_sindarin, proc_dict, scaled, nlo_type, all_sindarins=''):
   scaled_sindarins = None
   if scaled:
     scaled_sindarins = create_scale_sindarins(integration_sindarin, proc_dict)

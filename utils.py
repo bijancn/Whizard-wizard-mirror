@@ -148,6 +148,9 @@ def get_process(filename):
 def get_scale(filename):
   return get_value("(scale *= *)(.*$)", filename)
 
+def get_n_events(filename):
+  return get_value("(n_events *= *)(.*$)", filename)
+
 
 def test_get():
   from nose.tools import eq_
