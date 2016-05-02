@@ -104,8 +104,7 @@ class Whizard():
     else:
       if not ut.grep('ERROR', 'whizard.log'):
         ut.logger.info('Whizard finished' + num)
-        with open('done', 'a'):
-          os.utime('done', None)
+        ut.touch('done')
         return return_code
       else:
         ut.fatal('ERROR in whizard.log of ' + sindarin + num)

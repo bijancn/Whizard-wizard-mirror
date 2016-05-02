@@ -2,8 +2,8 @@
   "plots": [
   {"title": "Effectiveness of subtraction in the soft limit (histogram)",
     "disabled_lines": [
-      "proc_nlo.soft",
-      "fact_nlo.soft"
+      "fact_nlo.soft",
+      "proc_nlo.soft"
     ],
     "xlabel": "$E_{g}$ [GeV]",
     "ylabel": "$\\frac{R_\\alpha}{R_\\alpha^{soft}}$",
@@ -19,35 +19,46 @@
   },
   {"title": "NLO scale variations",
     "lines": [
-      "proc_nlo_central"
+    {"name": "proc_nlo_central",
+     "label": "$t\\bar t$",
+     "color": "#EE3311",
+     "folder": "../ee_tt"
+    },
+    {"name": "proc_nlo_central",
+     "label": "$W^+b W^-\\bar b$",
+     "color": "#3366FF",
+     "folder": "."
+    }
     ],
     "bands": [
-    {"label":"Scale variation with a factor of 4",
+    {"label":"",
       "opacity": 0.1,
       "color": "#3366FF",
       "data":
-        [ "proc_nlo_extrascale_central",
-          "proc_nlo_extrascale_high",
-          "proc_nlo_extrascale_low"
+        [ {"name": "proc_nlo_central"},
+          {"name": "proc_nlo_high"},
+          {"name": "proc_nlo_low"}
         ]
     },
-    {"label":"Standard scale variation",
+    {"label":"",
       "opacity": 0.1,
       "color": "#EE3311",
       "data":
-        [ "proc_nlo_central",
-          "proc_nlo_high",
-          "proc_nlo_low"
+        [ {"name": "proc_nlo_central", "folder": "../ee_tt"},
+          {"name": "proc_nlo_high", "folder": "../ee_tt"},
+          {"name": "proc_nlo_low", "folder": "../ee_tt"}
         ]
     }
     ],
+    "ratio": {"ylabel": "K-factor",
+      "ymax": 1.05, "ymin": 0.95, "nmajors": 3},
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
     "ylog": false,
     "xlog": false,
     "ymin": 600,
-    "ymax": 1150,
+    "ymax": 850,
     "xmin": 350,
     "xmax": 500,
     "xminors": true,
@@ -72,12 +83,12 @@
   },
   {"title": "Gauge-dependence of LO cross sections (influence of helicity approximation)",
     "lines": [
-      "proc_lo_thresholdparams",
-      "fact_lo",
-      "fact_lo_helapprox",
-      "fact_onshellprojected_lo",
-      "fact_onshellprojected_lo_helapprox",
-      "ttbar_lo_thresholdparams"
+      {"name": "proc_lo_thresholdparams"},
+      {"name": "fact_lo"},
+      {"name": "fact_lo_helapprox"},
+      {"name": "fact_onshellprojected_lo"},
+      {"name": "fact_onshellprojected_lo_helapprox"},
+      {"name": "ttbar_lo_thresholdparams"}
     ],
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
@@ -92,12 +103,12 @@
   },
   {"title": "Gauge-dependence of LO cross sections (influence of helicity approximation, zoom)",
     "lines": [
-      "proc_lo_thresholdparams",
-      "fact_lo",
-      "fact_lo_helapprox",
-      "fact_onshellprojected_lo",
-      "fact_onshellprojected_lo_helapprox",
-      "ttbar_lo_thresholdparams"
+      {"name": "proc_lo_thresholdparams"},
+      {"name": "fact_lo"},
+      {"name": "fact_lo_helapprox"},
+      {"name": "fact_onshellprojected_lo"},
+      {"name": "fact_onshellprojected_lo_helapprox"},
+      {"name": "ttbar_lo_thresholdparams"}
     ],
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
@@ -113,11 +124,11 @@
   },
   {"title": "Gauge-dependence of LO cross sections (zoom)",
     "lines": [
-      "proc_lo_thresholdparams",
-      "fact_lo",
-      "fact_onshellprojected_lo",
-      "signaldiagram_lo",
-      "ttbar_lo_thresholdparams"
+      {"name": "proc_lo_thresholdparams"},
+      {"name": "fact_lo"},
+      {"name": "fact_onshellprojected_lo"},
+      {"name": "signaldiagram_lo"},
+      {"name": "ttbar_lo_thresholdparams"}
     ],
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
@@ -133,13 +144,13 @@
   },
   {"title": "Gauge-dependence of LO cross sections",
     "lines": [
-      "proc_lo_thresholdparams",
-      "fact_lo",
-      "fact_decayonshellprojected_lo",
-      "fact_productiononshellprojected_lo",
-      "fact_onshellprojected_lo",
-      "signaldiagram_lo",
-      "ttbar_lo_thresholdparams"
+      {"name": "proc_lo_thresholdparams"},
+      {"name": "fact_lo"},
+      {"name": "fact_decayonshellprojected_lo"},
+      {"name": "fact_productiononshellprojected_lo"},
+      {"name": "fact_onshellprojected_lo"},
+      {"name": "signaldiagram_lo"},
+      {"name": "ttbar_lo_thresholdparams"}
     ],
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
@@ -154,11 +165,11 @@
   },
   {"title": "Comparison of onshell projections",
     "lines": [
-      "ttbar_lo_thresholdparams",
-      "fact_lo",
-      "fact_onshellprojected_lo",
-      "fact_productiononshellprojected_lo",
-      "fact_decayonshellprojected_lo"
+      {"name": "ttbar_lo_thresholdparams"},
+      {"name": "fact_lo"},
+      {"name": "fact_onshellprojected_lo"},
+      {"name": "fact_productiononshellprojected_lo"},
+      {"name": "fact_decayonshellprojected_lo"}
     ],
     "ratio": {"ylabel": "$\\sigma/\\sigma^{t\\bar t}$",
       "ymax": 1.25, "ymin": 0.75, "nmajors": 3},

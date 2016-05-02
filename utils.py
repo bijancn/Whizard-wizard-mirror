@@ -186,3 +186,14 @@ def load_json(json_file):
     fatal('json not found: ' + json_file)
   except ValueError:
     fatal('json seems invalid. Check it on http://jsonlint.com/')
+
+
+def touch(filename):
+  with open(filename, 'a'):
+    os.utime(filename, None)
+
+
+def test_touch():
+  test_file = 'test_touch_foo'
+  touch(test_file)
+  os.remove(test_file)

@@ -6,6 +6,7 @@ import numpy as np
 from matplotlib._cm import cubehelix
 from matplotlib.ticker import AutoMinorLocator
 import matplotlib.gridspec as gridspec
+import data_utils
 from functools import partial
 from utils import mkdirs
 
@@ -156,23 +157,42 @@ def decide_if_not_none(dictionary, decider, thing_to_set, default, *args):
       return default
 
 
-def get_label(title, filename=None, pretty_label=None, object_dict=None):
+def get_label(object_dict, title, filename=None, pretty_label=None):
+  label = ''
   if filename is not None:
     default = os.path.basename(filename)
-    return decide_if_not_none(object_dict, pretty_label, 'label', default,
+    label = decide_if_not_none(object_dict, pretty_label, 'label', default,
         filename, title).replace('_', '\_')
-  else:
-    return object_dict.get('label', '').replace('_', '\_')
+  return object_dict.get('label', label)
 
 
 def combined_plot(base_line, ax, ax1, x, y, *args, **kwargs):
   ax.plot(x, y, *args, **kwargs)
-  ax1.plot(x, y / base_line, *args, **kwargs)
+  comb = data_utils.normalize(base_line, x, y)
+  ax1.plot(comb[0], comb[1], *args, **kwargs)
+
+
+def combined_errorbar(base_line, ax, ax1, x, y, yerr=None, **kwargs):
+  ax.errorbar(x, y, yerr=yerr, **kwargs)
+  comb = data_utils.normalize(base_line, x, y, yerr=yerr)
+  ax1.errorbar(comb[0], comb[1], yerr=comb[2], **kwargs)
 
 
 def combined_fill_between(base_line, ax, ax1, x, ymin, ymax, *args, **kwargs):
   ax.fill_between(x, ymin, ymax, *args, **kwargs)
-  ax1.fill_between(x, ymin / base_line, ymax / base_line, *args, **kwargs)
+  comb = data_utils.normalize(base_line, x, ymin, yerr=ymax)
+  ax1.fill_between(comb[0], comb[1], comb[2], *args, **kwargs)
+
+
+def get_name(line):
+  try:
+    folder = line.get('folder', '.')
+  except AttributeError:
+    print 'lines and bands interface has changed:' + \
+          'Please give an object with name instead of ' + line
+  else:
+    path = os.path.abspath(os.path.join(folder, 'scan-results', line.get('name', None)))
+    return path
 
 
 def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
@@ -187,8 +207,8 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   print 'Plotting ' + title
   line_data = []
   lines = plot_dict.get('lines', [])
-  for lbl in lines:
-    line_data += [d for d in data if lbl == os.path.basename(d[0]).replace('.dat', '')]
+  for line in lines:
+    line_data += [d for d in data if get_name(line) == d[0].replace('.dat', '')]
   bands = plot_dict.get('bands', [])
   band_data = []
   lst_of_band_lsts = [b.get('data', []) for b in bands]
@@ -196,7 +216,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     this_band_data = []
     for lbl in lbl_lst:
       this_band_data += [d for d in data
-          if lbl == os.path.basename(d[0]).replace('.dat', '')]
+          if get_name(lbl) == d[0].replace('.dat', '')]
     band_data += [this_band_data]
   n_objects = len(line_data) + len(band_data)
   many_labels = n_objects > 6
@@ -208,12 +228,13 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   size = (9, 9) if many_labels else (9, 7.5)
   ratio_dict = plot_dict.get('ratio', None)
   if ratio_dict is not None:
-    base_line = line_data[0][1][1]
+    base_line = line_data[0][1]
     fig = plt.figure(figsize=size)
-    gs = gridspec.GridSpec(2, 1, height_ratios=[4, 1])
+    gs = gridspec.GridSpec(2, 1, height_ratios=[2, 1])
     ax = fig.add_subplot(gs[0])
     ax1 = fig.add_subplot(gs[1], sharex=ax)
     ylabel1 = ratio_dict.get('ylabel', 'ratio')
+    this_errorbar = partial(partial(partial(combined_errorbar, base_line), ax), ax1)
     this_plot = partial(partial(partial(combined_plot, base_line), ax), ax1)
     this_fill_between = partial(partial(partial(combined_fill_between,
       base_line), ax), ax1)
@@ -222,6 +243,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     ax = fig.add_subplot(1, 1, 1)
     ax1 = None
     this_plot = ax.plot
+    this_errorbar = ax.errorbar
     this_fill_between = ax.fill_between
     ylabel1 = None
   if plot_extra is not None:
@@ -240,11 +262,13 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     ymin = plot_dict.get('ymin', min([np.amin(d[1][1]) for d in all_data]))
     ymax = plot_dict.get('ymax', max([np.amax(d[1][1]) for d in all_data]))
     if ratio_dict is not None:
-      ymax1 = ratio_dict.get('ymax', max([np.amax(d[1][1] / base_line)
-        for d in all_data]))
-      ymin1 = ratio_dict.get('ymin', min([np.amin(d[1][1] / base_line)
-        for d in all_data]))
+      ymax1 = ratio_dict.get('ymax', None)
+      ymin1 = ratio_dict.get('ymin', None)
+      # max([np.amax(d[1][1] / base_line) for d in all_data])
+      # min([np.amin(d[1][1] / base_line) for d in all_data])
       n_majors1 = ratio_dict.get('nmajors', None)
+    else:
+      n_majors1 = None
   if label_decider is not None:
     xlabel, ylabel = label_decider(title)
   else:
@@ -259,21 +283,24 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   i = 0
   global_opacity = plot_dict.get('opacity', 0.3)
   for data_of_a_band, band, color in zip(band_data, bands, colors):
-    label = get_label(title, pretty_label=pretty_label, object_dict=band)
+    label = band.get('label', get_label(band, title, pretty_label=pretty_label))
     opacity = band.get('opacity', global_opacity)
     color = band.get('color', color)
-    x = data_of_a_band[0][1][0]
     list_of_y_arrays = [db[1][1] for db in data_of_a_band]
+    list_of_x_arrays = [db[1][0] for db in data_of_a_band]
+    combined_x, list_of_y_arrays = data_utils.remove_uncommon(list_of_x_arrays,
+        list_of_y_arrays)
     y_array = np.vstack(tuple(list_of_y_arrays))
-    this_fill_between(x, np.amin(y_array, axis=0), np.amax(y_array, axis=0),
+    this_fill_between(combined_x, np.amin(y_array, axis=0), np.amax(y_array, axis=0),
         color=color, label=label, alpha=opacity)
-  for td, c in zip(line_data, colors):
+  for td, line, color in zip(line_data, lines, colors):
     filename, d = td[0], td[1]
-    label = get_label(title, filename=filename, pretty_label=pretty_label)
+    label = get_label(line, title, filename=filename, pretty_label=pretty_label)
     linestyle = decide_or_get(linestyle_decider, 'linestyle', None, filename, title)
+    c = line.get('color', color)
     if linestyle == 'banded':
       if len(d) > 2:
-        plt.fill_between(d[0], d[1] - d[2], d[1] + d[2],
+        this_fill_between(d[0], d[1] - d[2], d[1] + d[2],
           color=c, label=label, alpha=global_opacity)
       else:
         raise Exception("You have to supply errors for banded linestyle")
@@ -299,9 +326,9 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
       else:
         marker = plot_dict.get('marker', '+')
       if len(d) > 2:
-        ax.errorbar(d[0], d[1], fmt=marker, yerr=d[2], color=c, label=label)
+        this_errorbar(d[0], d[1], fmt=marker, yerr=d[2], color=c, label=label)
       else:
-        ax.errorbar(d[0], d[1], fmt=marker, color=c, label=label)
+        this_errorbar(d[0], d[1], fmt=marker, color=c, label=label)
     if plot_dict.get('generate_animated', False):
       i += 1
       pl.setfig(ax, title=None,
