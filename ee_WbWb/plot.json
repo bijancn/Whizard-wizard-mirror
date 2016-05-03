@@ -50,7 +50,7 @@
         ]
     }
     ],
-    "ratio": {"ylabel": "K-factor",
+    "ratio": {"ylabel": "Ratio",
       "ymax": 1.05, "ymin": 0.95, "nmajors": 3},
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
@@ -159,6 +159,7 @@
     "xlog": true,
     "ymin": 1,
     "ymax": 10000,
+    "xmin": 350,
     "xmax": 100000,
     "xminors": true,
     "yminors": true
@@ -172,7 +173,7 @@
       {"name": "fact_decayonshellprojected_lo"}
     ],
     "ratio": {"ylabel": "$\\sigma/\\sigma^{t\\bar t}$",
-      "ymax": 1.25, "ymin": 0.75, "nmajors": 3},
+      "ymax": 1.15, "ymin": 0.85, "nmajors": 5},
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
@@ -180,7 +181,31 @@
     "xlog": true,
     "ymin": 1,
     "ymax": 10000,
+    "xmin": 350,
     "xmax": 100000,
+    "xminors": true,
+    "yminors": true
+  },
+  {"title": "Comparison of onshell projections (zoom)",
+    "lines": [
+      {"name": "ttbar_lo_thresholdparams"},
+      {"name": "proc_lo_thresholdparams"},
+      {"name": "fact_lo"},
+      {"name": "fact_onshellprojected_lo"},
+      {"name": "fact_productiononshellprojected_lo"},
+      {"name": "fact_decayonshellprojected_lo"}
+    ],
+    "ratio": {"ylabel": "$\\sigma/\\sigma^{t\\bar t}$",
+      "ymax": 1.15, "ymin": 0.85, "nmajors": 5},
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": true,
+    "xlog": false,
+    "ymin": 1,
+    "ymax": 1000,
+    "xmin": 350,
+    "xmax": 1000,
     "xminors": true,
     "yminors": true
   }

@@ -1,7 +1,8 @@
 {
   "processes": [
   {"process": "proc_lo",
-    "purpose": "disabled",
+    "purpose": "histograms",
+    "disabled": true,
     "nlo_type": "lo",
     "batches": 100,
     "events_per_batch": 2000,
@@ -9,7 +10,8 @@
     "integration_iterations": "3:10000"
   },
   {"process": "proc_nlo",
-    "purpose": "disabled",
+    "purpose": "scan",
+    "disabled": true,
     "nlo_type": "nlo",
     "batches": 12,
     "events_per_batch": 2000,
@@ -17,7 +19,8 @@
     "integration_iterations": "3:10000"
   },
   {"process": "ttbar_lo_thresholdparams",
-    "purpose": "disabled",
+    "purpose": "events",
+    "disabled": true,
     "nlo_type": "lo",
     "scan_object": "sqrts",
     "stepsize": "1.0",
@@ -27,7 +30,8 @@
     "integration_iterations": "3:20000"
   },
   {"process": "factorized_lo",
-    "purpose": "disabled",
+    "purpose": "integration",
+    "disabled": true,
     "nlo_type": "lo",
     "scan_object": "sqrts",
     "stepsize": "1.0",

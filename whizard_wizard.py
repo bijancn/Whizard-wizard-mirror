@@ -213,7 +213,7 @@ def setup_sindarins(run_json):
 
 
 def setup_sindarin(proc_dict):
-  if proc_dict['purpose'] != 'disabled':
+  if not proc_dict.get('disabled', False):
     ut.logger.info('Setting up sindarins of ' + str(proc_dict))
     whizard_folder = 'whizard'
     with ut.cd(whizard_folder):
@@ -264,7 +264,9 @@ def remove_test_nlo_base():
 
 def fill_runs(proc_name, proc_dict):
   purpose = proc_dict['purpose']
-  if purpose == 'events' or purpose == 'histograms':
+  if proc_dict.get('disabled', False):
+    runs = []
+  elif purpose == 'events' or purpose == 'histograms':
     runs = [(b, proc_name, proc_dict) for b in range(proc_dict['batches'])]
   elif purpose == 'scan':
     try:
@@ -296,8 +298,6 @@ def fill_runs(proc_name, proc_dict):
         runs += [(b, proc_name, proc_dict) for b in step_range]
   elif purpose == 'integration' or purpose == 'test_soft':
     runs = [(-1, proc_name, proc_dict)]
-  elif purpose == 'disabled':
-    runs = []
   else:
     raise Exception("fill_runs: Unknown purpose: " + purpose)
   try:
@@ -324,7 +324,7 @@ def test_fill_runs_basic():
   runs = fill_runs(proc_name, proc_dict)
   nt.eq_(runs, [(-1, proc_name, proc_dict)])
 
-  proc_dict = {'purpose': 'disabled'}
+  proc_dict = {'purpose': 'histograms', 'disabled': True}
   runs = fill_runs(proc_name, proc_dict)
   nt.eq_(runs, [])
 
@@ -431,10 +431,11 @@ def replace_scale(factor, filename):
       '(' + original_scale + ') * ' + str(factor))
   ut.sed(filename, replace_line=replace_func)
 
+
 def replace_n_events(factor, filename):
   original_n_events = ut.get_n_events(filename)
-  if original_n_events != None:
-    new_n_events = factor * int (original_n_events)
+  if original_n_events is not None:
+    new_n_events = factor * int(original_n_events)
     replace_func = lambda l: l.replace(original_n_events, str(new_n_events))
     ut.sed(filename, replace_line=replace_func)
 
@@ -484,18 +485,19 @@ def create_nlo_component_sindarins(proc_dict, integration_sindarin, all_sindarin
     replace_proc_id(suffix, new_sindarin)
     event_mult = proc_dict.get('event_mult_real', 1)
     if event_mult != 1 and "Real" in new_sindarin:
-      replace_n_events (event_mult, new_sindarin)
+      replace_n_events(event_mult, new_sindarin)
 
-def get_all_sindarin_names (integration_sindarin, proc_dict):
+
+def get_all_sindarin_names(integration_sindarin, proc_dict):
   all_sindarins = []
   if proc_dict.get('scale_variation', False):
-     scaled_sindarins = create_scale_sindarins (integration_sindarin, proc_dict)
+     scaled_sindarins = create_scale_sindarins(integration_sindarin, proc_dict)
   else:
      scaled_sindarins = [integration_sindarin]
-  for ssindarin in scaled_sindarins: 
-    for suffix in get_component_suffixes (proc_dict):
-      new_sindarin = insert_suffix_in_sindarin (ssindarin, suffix)
-      all_sindarins.append (new_sindarin)
+  for ssindarin in scaled_sindarins:
+    for suffix in get_component_suffixes(proc_dict):
+      new_sindarin = insert_suffix_in_sindarin(ssindarin, suffix)
+      all_sindarins.append(new_sindarin)
   return all_sindarins
 
 
@@ -612,7 +614,8 @@ def create_scale_sindarins(base_sindarin, proc_dict):
   return new_sindarins
 
 
-def multiply_sindarins(integration_sindarin, proc_dict, scaled, nlo_type, all_sindarins=''):
+def multiply_sindarins(integration_sindarin, proc_dict, scaled, nlo_type,
+    all_sindarins=''):
   scaled_sindarins = None
   if scaled:
     scaled_sindarins = create_scale_sindarins(integration_sindarin, proc_dict)
