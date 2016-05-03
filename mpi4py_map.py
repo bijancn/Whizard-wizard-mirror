@@ -57,9 +57,11 @@ def _mpi_controller(sequence, *args, **kwargs):
 
     process_list = range(1, comm.Get_size())
     number_of_workers = len(process_list) * 1.0
-    print "Number of tasks:", len(sequence)
+    number_of_tasks = len(sequence) * 1.0
+    print "Number of tasks:", number_of_tasks
     print "Number of workers:", number_of_workers
-    last_percentage = 0.0
+    last_percentage_tasks = 0.0
+    last_percentage_workers = 0.0
     workers_done = []
     results = {}
     if debug: print "Data:", sequence
@@ -88,6 +90,10 @@ def _mpi_controller(sequence, *args, **kwargs):
             # Get next item and send to worker
             try:
                 task = queue.next()
+                percentage = task / number_of_tasks * 100
+                if (percentage > last_percentage_tasks + 5.0):
+                  print "Tasks done: ", task, "(", percentage, "%)"
+                  last_percentage_tasks = percentage
                 if sequence[task] == BARRIER:
                   if debug: print "Issueing barrier"
                   # comm.barrier()
@@ -120,10 +126,11 @@ def _mpi_controller(sequence, *args, **kwargs):
             process_list.remove(status.source)
             # print 'Processes left over: ' + str(process_list)
             percentage = (1 - len(process_list) / number_of_workers) * 100
-            if (percentage > last_percentage + 5.0):
-              print "Percentage of inactive workers", percentage
-              last_percentage = percentage
-            # Task queue is empty
+            if (percentage > last_percentage_workers + 5.0):
+              print "Inactive workers: ", number_of_workers - \
+                  len(process_list), "(", percentage, "%)"
+              last_percentage_workers = percentage
+            # Worker queue is empty
             if len(process_list) == 0:
                 break
 

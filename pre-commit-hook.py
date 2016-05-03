@@ -17,6 +17,11 @@ CHECKS = [
         'print_filename': True,
     },
     {
+        'output': 'Checking for active processes in run.jsons...',
+        'command': 'grep -n \'\"disabled\": false\' %s',
+        'print_filename': True,
+    },
+    {
         'output': 'Running Pyflakes...',
         'command': 'pyflakes %s',
         'match_files': ['.*\.py$'],

@@ -9,7 +9,7 @@ offshell_strategy = 0+2+0+0
 
 show(model)
 
-#ITERATIONS
+iterations = 3:20000:"gw",3:20000
 #SETSCAN
 sqrtsstepsize = 0.1 GeV
 sqrtsmin = sqrts - sqrtsstepsize
