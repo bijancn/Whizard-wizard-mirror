@@ -1,3 +1,3 @@
 #!/bin/sh
 nosetests --with-coverage --with-timer --rednose --cover-erase \
-  utils.py whizard_wizard.py --cover-package=utils,whizard_wizard
+  data_utils.py utils.py whizard_wizard.py --cover-package=data_utils,utils,whizard_wizard

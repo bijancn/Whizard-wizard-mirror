@@ -1,0 +1,20 @@
+include("../process_settings_threshold.sin")
+
+library = proc_lo_thresholdparams
+$method = "omega"
+process proc_lo_thresholdparams = e1, E1 => Wp, Wm, b, B
+compile
+
+FF =  10
+offshell_strategy = 0
+
+show(model)
+
+iterations = 3:20000:"gw",3:20000
+#SETSCAN
+sqrtsstepsize = 0.1 GeV
+sqrtsmin = sqrts - sqrtsstepsize
+sqrtsmax = sqrts + sqrtsstepsize
+
+integrate (proc_lo_thresholdparams)
+printf "RES %g %g %g" (sqrts, integral(proc_lo_thresholdparams), error(proc_lo_thresholdparams))
