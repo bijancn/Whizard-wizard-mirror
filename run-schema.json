@@ -29,6 +29,11 @@
              "type": "string",
              "enum": ["default", "resonances"]
           },
+          "beam_type": {
+             "id" : "processes/beam_type",
+             "type": "string",
+             "enum": ["leptons", "hadrons"]
+          },
           "batches": {
             "id": "processes/batches",
             "type": "number"

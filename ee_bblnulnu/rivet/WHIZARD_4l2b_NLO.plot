@@ -11,7 +11,7 @@
 #  general settings  #
 #====================#
  BEGIN PLOT /WHIZARD_.*
-LogY=1
+LogY=0
 RatioPlotYLabel=K-Factor
 RatioPlotSameStyle=1
 LegendXPos=0.70
@@ -27,7 +27,7 @@ ErrorBands=0
 #  titles  #
 #==========#
  BEGIN PLOT /WHIZARD_.*
-Title=$\quad e^+e^-\to l^+\nu_l b l^-\bar{\nu_l} \bar{b}$, $N_\text{jets}\geq 2, \quad \quad \sqrt{s} = 800 \text{GeV}$
+Title=$\quad e^+e^-\to \mu^+\nu_\mu e^-\bar{\nu_e} b \bar{b}$, $N_\text{jets}\geq 2, \quad \quad \sqrt{s} = 800 \text{GeV}$
  END PLOT
 
 #========================#
@@ -74,6 +74,7 @@ LegendXPos=0.25
  BEGIN PLOT /WHIZARD_.*/BW-inv-peak
 XLabel=$m^{BW}[\text{GeV}]$
 RatioPlotYMax=5.0
+LegendXPos = 0.8
  END PLOT
 
 
@@ -99,6 +100,7 @@ RatioPlotXMax=200.0
 XLabel=$m^{Bl^+}[\text{GeV}]$
 XMax=200.0
 RatioPlotXMax=200.0
+LegendXPos=0.81
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/W-inv-peak
@@ -134,11 +136,13 @@ XLabel=$p_T^{j_1}[\text{GeV}]$
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
 XMax=350.0
 RatioPlotXMax=350.0
+LegendXPos=0.815
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/2nd-leading-jet-pT
 XLabel=$p_T^{j_2}[\text{GeV}]$
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
+LegendXPos=0.815
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/b-jet-pT
@@ -171,6 +175,7 @@ XLabel=$p_T^{BB}[\text{GeV}]$
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
 XMax=350.0
 RatioPlotXMax=350.0
+LegendXPos=0.8
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BWm-pT
@@ -349,8 +354,8 @@ XLabel=$m^{W^+}[\text{GeV}]$
 #===============#
  BEGIN PLOT /WHIZARD_.*-Theta
 YLabel=$\frac{d\sigma}{d{\cos{\theta}}}$[fb]
-LegendXPos=0.55
-LegendYPos=0.55
+LegendXPos=0.8
+LegendYPos=0.9
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*Phi*
@@ -485,7 +490,7 @@ YLabel=$\frac{d\sigma}{dE_T^{\text{miss}}}$[fb]
 XLabel=$E_T^{\text{miss}}[\text{GeV}]$
  END PLOT
 
- BEGIN PLOT /WHIZARD_.*/MET
+ BEGIN PLOT /WHIZARD_.*/MPT
 YLabel=$\frac{d\sigma}{d{p_T^{\text{miss}}}}$[fb]
 XLabel=$p_T^{\text{miss}}[\text{GeV}]$
  END PLOT

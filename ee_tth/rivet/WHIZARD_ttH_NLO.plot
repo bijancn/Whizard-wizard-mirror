@@ -11,7 +11,7 @@
 #  general settings  #
 #====================#
  BEGIN PLOT /WHIZARD_.*
-LogY=0
+LogY=1
 RatioPlotYLabel=K-Factor
 RatioPlotSameStyle=1
 LegendYPos=0.90
@@ -39,33 +39,58 @@ YLabel=$\frac{d\sigma}{dm}[\text{fb}/\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/jets-inv
-LogY=1
 XLabel=$m(p^{j_1}+p^{j_2})$
-LegendYPos=0.90
-LegendXPos=0.1
+LegendYPos=0.65
+LegendXPos=0.65
 RatioPlotYMax=1.8
 RatioPlotYMin=0.25
+XMin=250.0
+RatioPlotXMin=250.0
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/tbarh-inv
+XLabel=$m(p^{\bar{t}} + p^H)$
+LegendYPos=0.90
+LegendXPos=0.8
+RatioPlotYMax=1.02
+RatioPlotYMin=0.95
+XMin=200.0
+XMax=700.0
+RatioPlotXMin=200.0
+RatioPlotXMax=700.0
+ END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/th-inv
+XLabel=$m(p^{t}+p^H)$
+LegendYPos=0.90
+LegendXPos=0.8
+RatioPlotYMax=1.02
+RatioPlotYMin=0.95
+XMin=200.0
+XMax=700.0
+RatioPlotXMin=200.0
+RatioPlotXMax=700.0
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/tt-inv
-LogY=1
 XLabel=$m(p^{t}+p^{\bar{t}})$
-LegendYPos=0.90
-LegendXPos=0.8
-RatioPlotYMax=1.8
-RatioPlotYMin=0.25
+LegendYPos=0.65
+LegendXPos=0.65
+RatioPlotYMax=1.6
+RatioPlotYMin=0.4
+XMax=700.0
+RatioPlotXMax=700.0
  END PLOT
 
-
  BEGIN PLOT /WHIZARD_.*/leading-jet-Theta
-YLabel=$\frac{d\sigma}{dm}[\text{fb}/\text{GeV}]$
+YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}/\text{GeV}]$
 XLabel=$\cos{\theta^{j_1}}$
 LegendYPos=0.55
 LegendXPos=0.55
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/2nd-leading-jet-Theta
-YLabel=$\frac{d\sigma}{dm}[\text{fb}/\text{GeV}]$
+YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}/\text{GeV}]$
 XLabel=$\cos{\theta^{j_2}}$
 LegendYPos=0.55
 LegendXPos=0.55
@@ -73,16 +98,26 @@ LegendXPos=0.55
 
 
  BEGIN PLOT /WHIZARD_.*/top-theta
-YLabel=$\frac{d\sigma}{dm}[\text{fb}/\text{GeV}]$
+YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}/\text{GeV}]$
 XLabel=$\cos{\theta^{t}}$
 LegendYPos=0.9
 LegendXPos=0.15
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/antitop-theta
-YLabel=$\frac{d\sigma}{dm}[\text{fb}/\text{GeV}]$
+YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}/\text{GeV}]$
 XLabel=$\cos{\theta^{\bar{t}}}$
+LegendXPos=0.8
+LegendYPos=0.9
  END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/Higgs-Theta
+YLabel=$\frac{d\sigma}{d\cos}[\text{fb}/\text{GeV}]$
+XLabel=$\cos{\theta^H}$
+LegendXPos=0.55
+LegendYPos=0.55
+ END PLOT
+
 
 
 
@@ -92,7 +127,6 @@ XLabel=$\cos{\theta^{\bar{t}}}$
 BEGIN PLOT /WHIZARD_.*/top-pT
 XLabel=$p_T^{t}[\text{GeV}]$
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
-LogY=1
 LegendYPos=0.5
 LegendXPos=0.5
 RatioPlotYMax=1.2
@@ -102,7 +136,6 @@ RatioPlotYMin=0.2
 BEGIN PLOT /WHIZARD_.*/antitop-pT
 XLabel=$p_T^{\bar{t}}[\text{GeV}]$
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
-LogY=1
 LegendYPos=0.5
 LegendXPos=0.5
 RatioPlotYMax=1.2
@@ -113,7 +146,6 @@ RatioPlotYMin=0.2
 BEGIN PLOT /WHIZARD_.*/leading-jet-pT
 XLabel=$p_T^{j_1}[\text{GeV}]$
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
-LogY=1
 LegendYPos=0.90
 LegendXPos=0.10
 RatioPlotYMax=1.2
@@ -123,7 +155,6 @@ RatioPlotYMin=0.2
  BEGIN PLOT /WHIZARD_.*/2nd-leading-jet-pT
 XLabel=$p_T^{j_2}[\text{GeV}]$
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
-LogY=1
 LegendYPos=0.90
 LegendXPos=0.80
 RatioPlotYMax=1.2
@@ -133,10 +164,9 @@ RatioPlotYMin=0.25
  BEGIN PLOT /WHIZARD_.*/Higgs-Pt
 XLabel=$p_T^H[\text{GeV}]$
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
-LogY=1
 LegendYPos=0.90
 LegendXPos=0.80
-RatioPlotYMax=1.5
+RatioPlotYMax=1.8
 RatioPlotYMin=0.7
  END PLOT
 
@@ -145,23 +175,26 @@ RatioPlotYMin=0.7
 #===========#
  BEGIN PLOT /WHIZARD_.*/.*-E
 YLabel=$\frac{d\sigma}{dE}[\text{fb}/\text{GeV}]$
-LogY=1
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/top-E
 XLabel=$E^t[\text{GeV}]$
-LegendYPos=0.95
-LegendXPos=0.75
+LegendYPos=0.65
+LegendXPos=0.65
 RatioPlotYMax=2.0
 RatioPlotYMin=0.25
+XMax=400.0
+RatioPlotXMax=400.0
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/antitop-E
 XLabel=$E^{\bar{t}}[\text{GeV}]$
-LegendYPos=0.95
-LegendXPos=0.75
+LegendYPos=0.65
+LegendXPos=0.65
 RatioPlotYMax=2.0
 RatioPlotYMin=0.25
+XMax=400.0
+RatioPlotXMax=400.0
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/leading-jet-E
@@ -170,6 +203,8 @@ LegendYPos=0.95
 LegendXPos=0.1
 RatioPlotYMax=2.0
 RatioPlotYMin=0.25
+XMin=150.0
+RatioPlotXMin=150.0
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/2nd-leading-jet-E
@@ -178,15 +213,30 @@ LegendYPos=0.95
 LegendXPos=0.1
 RatioPlotYMax=1.2
 RatioPlotYMin=0.4
+XMin=125.0
+XMax=375.0
+RatioPlotXMin=125.0
+RatioPlotXMax=375.0
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Higgs-E
 XLabel=$E^H[\text{GeV}]$
-LegendYPos=0.8
-LegendXPos=0.15
-RatioPlotYMax=1.8
-RatioPlotYMin=0.7
+LegendYPos=0.9
+LegendXPos=0.8
+RatioPlotYMax=1.6
+RatioPlotYMin=0.8
+XMin=100.0
+RatioPlotXMin=100.0
  END PLOT
+
+ BEGIN PLOT /WHIZARD_.*/tt-E
+XLabel=$E^{t\bar{t}}[\text{GeV}]$
+LegendYPos=0.8
+LegendXPos=0.2
+RatioPlotYMax=1.6
+RatioPlotYMin=0.4
+ END PLOT
+
 
 #===============#
 #  other plots  #

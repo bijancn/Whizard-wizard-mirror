@@ -353,6 +353,8 @@ def get_component_suffixes(proc_dict):
   suffixes = ['Born', 'Real', 'Virtual']
   if proc_dict.get('fks_method', 'default') == 'resonances':
     suffixes += ['Mismatch']
+  if proc_dict.get('beam_type', 'leptons') == 'hadrons':
+    suffixes += ['DGLAP']
   return suffixes
 
 
@@ -431,12 +433,17 @@ def replace_scale(factor, filename):
       '(' + original_scale + ') * ' + str(factor))
   ut.sed(filename, replace_line=replace_func)
 
+def check_for_n_events (line, new_n_events):
+  if 'n_events = ' in line:
+     line_split = line.split()
+     return line_split[0] + ' = ' + str (new_n_events) + '\n'
+  else:
+     return line
 
-def replace_n_events(factor, filename):
-  original_n_events = ut.get_n_events(filename)
+
   if original_n_events is not None:
-    new_n_events = factor * int(original_n_events)
-    replace_func = lambda l: l.replace(original_n_events, str(new_n_events))
+    new_n_events = factor * int (original_n_events)
+    replace_func = lambda l: check_for_n_events (l, new_n_events)
     ut.sed(filename, replace_line=replace_func)
 
 

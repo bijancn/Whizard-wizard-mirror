@@ -21,3 +21,4 @@ printf "cw   = %g" (cw)
 printf "sw   = %g" (sw)
 printf "v   = %g" (v)
 
+?check_grid_file = false

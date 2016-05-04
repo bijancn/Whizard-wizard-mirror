@@ -79,22 +79,27 @@ namespace Rivet {
       const FastJets& fastjets = applyProjection<FastJets>(event, "Jets");
       double minjetE = 1. * GeV;
       const PseudoJets pseudo_jets = fastjets.pseudoJetsByE(minjetE);
+      eventCounter++;
 
       foreach (const PseudoJet & pseudo_jet, pseudo_jets) {
          vector<PseudoJet> constituents = pseudo_jet.constituents();
-         bool is_t = false;
+         bool t_in_jet = false;
+         bool tbar_in_jet = false;
          foreach (const PseudoJet& constituent, constituents) {
             foreach (const Particle& tparton, tpartons) {
-               if (have_same_momentum (constituent, tparton)) {tjets.push_back(pseudo_jet); is_t = true;}
+               if (have_same_momentum (constituent, tparton)) {tjets.push_back(pseudo_jet); t_in_jet = true;}
             }
             foreach (const Particle& tbarparton, tbarpartons) {
-               if (have_same_momentum (constituent, tbarparton)) {tbarjets.push_back(pseudo_jet); is_t = true;}
+               if (have_same_momentum (constituent, tbarparton)) {tbarjets.push_back(pseudo_jet); tbar_in_jet = true;}
             }
          }
          jets.push_back (pseudo_jet);
+         if (t_in_jet and tbar_in_jet) {
+           vetoCounter++;
+           vetoEvent;
+         }       
       }
 
-      eventCounter++;
       bool vetoCondition = jets.size() < 2 or tjets.size() == 0 or tbarjets.size() == 0;
       if (vetoCondition) {
         vetoCounter++;
@@ -133,16 +138,17 @@ namespace Rivet {
     void finalize() {
       // normalize(_h_YYYY); // normalize to unity
       const double fb_per_pb = 1000.0;
-      double fiducial_xsection = crossSection() * fb_per_pb * acceptedWeights / sumOfWeights();
-      double scale_factor = crossSection() * fb_per_pb / sumOfWeights();
+      //double fiducial_xsection = crossSection() * fb_per_pb * acceptedWeights / sumOfWeights();
+      //double scale_factor = crossSection() * fb_per_pb / sumOfWeights();
+      double scale_factor = fb_per_pb / eventCounter;
 
       cout << "Sum of weights: " << sumOfWeights () << endl;
       cout << "Sum of weights / N: " << sumOfWeights () / eventCounter << endl;
-      cout << "Original cross section (pb): " << crossSection () << endl;
+      //cout << "Original cross section (pb): " << crossSection () << endl;
       cout << "Number of total events: " << eventCounter << endl;
       cout << "Sum of weights / n_events: " << sumOfWeights () / eventCounter << endl;
       cout << "Numer of vetoed events: " << vetoCounter << endl;
-      cout << "Final (fiducial) cross section (fb): " << fiducial_xsection << endl;
+      //cout << "Final (fiducial) cross section (fb): " << fiducial_xsection << endl;
       cout << "Scale factor: " << scale_factor << endl;
 
       typedef std::map<string, NLOHisto1DPtr>::iterator it;

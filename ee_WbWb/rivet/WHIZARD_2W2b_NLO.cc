@@ -113,7 +113,7 @@ namespace Rivet {
       double minjetE = 1. * GeV;
       const PseudoJets pseudo_jets = fastjets.pseudoJetsByE(minjetE);
       double weight = event.weight();
-
+ 
       Jets jets, bjets, bbarjets;
 
       ParticleVector bpartons    = applyProjection<IdentifiedFinalState>(event, "bquark").particlesByPt();
@@ -152,7 +152,9 @@ namespace Rivet {
 
 
       eventCounter++;
-      bool vetoCondition = jets.size() < 2;
+      FourMomentum Wm = wm[0].momentum();
+      FourMomentum Wp = wp[0].momentum();
+      bool vetoCondition = jets.size () < 2;
       if (vetoCondition) {
         vetoCounter++;
         vetoEvent;
@@ -190,8 +192,6 @@ namespace Rivet {
       _h["jets_invMass_Zpeak"]->fill(jetsMass, event);
       _h["jets_invMass_Hpeak"]->fill(jetsMass, event);
 
-      FourMomentum Wm = wm[0].momentum();
-      FourMomentum Wp = wp[0].momentum();
 
       _h["Wm_E"]->fill(Wm.E(), event);
       _h["Wm_Pt"]->fill(Wm.pt(), event);
@@ -238,6 +238,8 @@ namespace Rivet {
         _h["BW_invMass_peak"]->fill(Top.mass(), event);
         _h["BWp_E"]->fill(Top.E(), event);
         _h["BWp_Pt"]->fill(Top.pt(), event);
+        cout << "Momentum: " << Top << endl;
+        cout << "cos(Theta): " << std::cos (Top.theta()) << endl;
         _h["BWp_Theta"]->fill(std::cos(Top.theta()), event);
         _h["BWp_Phi"]->fill(Rivet::deltaPhi(bjets[0].momentum(),Wp), event);
         _h["BWp_R"]->fill(Rivet::deltaR(bjets[0].momentum(),Wp), event);

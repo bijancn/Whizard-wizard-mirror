@@ -4,7 +4,7 @@
     "disabled": true,
     "purpose": "histograms",
     "nlo_type": "lo",
-    "batches": 20,
+    "batches": 10,
     "events_per_batch": 50000,
     "adaption_iterations": "3:50000",
     "analysis": "WHIZARD_2W2b_NLO"
@@ -30,7 +30,6 @@
     "disabled": true,
     "purpose": "scan",
     "nlo_type": "nlo",
-    "scale_variation": true,
     "adaption_iterations": "5:100000",
     "integration_iterations": "5:100000",
     "scan_object": "sqrts",
@@ -181,6 +180,8 @@
     ],
     "adaption_iterations": "3:20000",
     "integration_iterations": "3:20000"
+    "fks_method": "resonances",
+    "analysis": "WHIZARD_2W2b_NLO"
   }
   ],
   "whizard": "whizard",

@@ -11,7 +11,7 @@ wW = 2.0978
 scale = mtop
 #ITERATIONS
 library = proc_nlo
-process proc_nlo = e1, E1 => t, T { nlo_calculation = "Full" }
+process proc_nlo = E1, e1 => t, T { nlo_calculation = "Full" }
 #SETSCAN
 
 mult_call_real = 5

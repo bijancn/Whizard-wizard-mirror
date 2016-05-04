@@ -9,6 +9,9 @@ wW = 2.0978
 ?unweighted = false
 ?negative_weights = true
 
+$fks_mapping_type = "resonances"
+$resonances_exclude_particles = "t:T"
+
 scale = mtop
 #ITERATIONS
 library = proc_nlo

@@ -65,6 +65,12 @@ namespace Rivet {
       _h["top-theta"] = bookNLOHisto1D("top-theta", stdbin, -1.1, 1.1);
       _h["antitop-theta"] = bookNLOHisto1D("antitop-theta", stdbin, -1.1, 1.1);
       _h["tt-inv"] = bookNLOHisto1D("tt-inv", stdbin, 300., 800.);
+      _h["th-inv"] = bookNLOHisto1D("th-inv", stdbin, 0., 800.);
+      _h["tbarh-inv"] = bookNLOHisto1D("tbarh-inv", stdbin, 0., 800.);
+      _h["tt-E"] = bookNLOHisto1D("tt-E", stdbin, 350.0, 700.0);
+      _h["tt-pT"] = bookNLOHisto1D("tt-pT", stdbin, 0., 400.);
+      _h["tH-E"] = bookNLOHisto1D("tH-E", stdbin, 250., 700.);
+      _h["tH-pT"] = bookNLOHisto1D("tH-pT", stdbin, 0., 400.);
 
       _h["Higgs_E"] = bookNLOHisto1D("Higgs-E", stdbin, 0., 350.);
       _h["Higgs_Pt"] = bookNLOHisto1D("Higgs-Pt", stdbin, 0., 350.);
@@ -155,7 +161,15 @@ namespace Rivet {
          cout << gluons[0].momentum() << endl;
          exit (EXIT_FAILURE);
       }
-      _h["tt-inv"]->fill((tjets[0].momentum() + tbarjets[0].momentum()).mass(), event);
+      FourMomentum TT = tjets[0].momentum() + tbarjets[0].momentum();
+      FourMomentum TH = tjets[0].momentum() + H[0].momentum();
+      _h["tt-inv"]->fill(TT.mass(), event);
+      _h["th-inv"]->fill(TH.mass(), event);
+      _h["tt-E"]->fill(TT.E(), event);
+      _h["tt-pT"]->fill(TT.pt(), event);
+      _h["tH-E"]->fill(TH.E(), event);
+      _h["tH-pT"]->fill(TH.pt(), event); 
+      _h["tbarh-inv"]->fill(TH.mass(), event);
 
       _h["leadingjet_E"]->fill(jets[0].E(), event);
       _h["leadingjet_Pt"]->fill(jets[0].pt(), event);

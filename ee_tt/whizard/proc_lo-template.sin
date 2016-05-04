@@ -10,7 +10,7 @@ scale = mtop
 ?unweighted = false
 ?negative_weights = true
 #ITERATIONS
-process proc_lo = e1, E1 => t, T
+process proc_lo = E1, e1 => t, T
 #SETSCAN
 integrate (proc_lo)
 printf "RES %8e %8e %8e" (mtop, integral(proc_lo), error(proc_lo))
