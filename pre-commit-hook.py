@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Install me with `ln -s ../../pre-commit.sh .git/hooks/pre-commit-hook.py`
+# Install me with `ln -s ../../pre-commit-hook.py .git/hooks/pre-commit-hook.py`
 
 import os
 import re
