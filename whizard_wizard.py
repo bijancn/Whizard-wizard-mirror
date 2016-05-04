@@ -354,7 +354,7 @@ def get_component_suffixes(proc_dict):
   if proc_dict.get('fks_method', 'default') == 'resonances':
     suffixes += ['Mismatch']
   if proc_dict.get('beam_type', 'leptons') == 'hadrons':
-    suffixes += ['DGLAP']
+    suffixes += ['Dglap']
   return suffixes
 
 
