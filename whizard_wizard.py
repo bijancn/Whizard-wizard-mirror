@@ -160,7 +160,9 @@ class Whizard():
     log('Trying', proc_id, proc_dict)
     integration_sindarin = proc_name + '-integrate.sin'
     if proc_dict['nlo_type'] == 'nlo':
-      integration_grids = proc_name + '_m' + str(get_grid_index(proc_name)) + '.vg'
+      beam_type = proc_dict.get('beam_type', 'leptons')
+      index = get_grid_index(proc_name, beam_type)
+      integration_grids = proc_name + '_m' + str(index) + '.vg'
     else:
       integration_grids = proc_name + '_m1.vg'
     purpose = proc_dict['purpose']
@@ -433,25 +435,21 @@ def replace_scale(factor, filename):
       '(' + original_scale + ') * ' + str(factor))
   ut.sed(filename, replace_line=replace_func)
 
-def check_for_n_events (line, new_n_events):
+
+def check_for_n_events(line, new_n_events):
   if 'n_events = ' in line:
      line_split = line.split()
-     return line_split[0] + ' = ' + str (new_n_events) + '\n'
+     return line_split[0] + ' = ' + str(new_n_events) + '\n'
   else:
      return line
 
 
+def replace_n_events(factor, filename):
+  original_n_events = ut.get_n_events(filename)
   if original_n_events is not None:
-    new_n_events = factor * int (original_n_events)
-    replace_func = lambda l: check_for_n_events (l, new_n_events)
+    new_n_events = factor * int(original_n_events)
+    replace_func = lambda l: check_for_n_events(1, new_n_events)
     ut.sed(filename, replace_line=replace_func)
-
-def replace_n_events (factor, filename):
-  original_n_events = ut.get_n_events (filename)
-  if original_n_events is not None:
-    new_n_events = factor * int (original_n_events)
-    replace_func = lambda l: check_for_n_events (1, new_n_events)
-    ut.sed (filename, replace_line = replace_func)
 
 
 def test_replace_scale():
@@ -687,21 +685,24 @@ def create_simulation_sindarin(simulation_sindarin, template_sindarin, process,
   ut.sed(simulation_sindarin, write_to_bottom=command)
 
 
-def get_grid_index(proc_name):
+def get_grid_index(proc_name, beam_type):
   words = proc_name.split('_')
-  grid_indices = {'Born': 1, 'Real': 2, 'Virtual': 3, 'Mismatch': 4}
+  if beam_type == 'leptons':
+     grid_indices = {'Born': 1, 'Real': 2, 'Virtual': 3, 'Mismatch': 4}
+  else:
+     grid_indices = {'Born': 1, 'Real': 2, 'Virtual': 3, 'Dglap': 4, 'Mismatch': 5}
   return grid_indices[words[-1]]
 
 
 def test_get_grid_index():
   proc_name = 'proc_nlo_Born'
-  nt.eq_(get_grid_index(proc_name), 1)
+  nt.eq_(get_grid_index(proc_name, 'leptons'), 1)
   proc_name = 'proc_nlo_Real'
-  nt.eq_(get_grid_index(proc_name), 2)
+  nt.eq_(get_grid_index(proc_name, 'leptons'), 2)
   proc_name = 'proc_nlo_Virtual'
-  nt.eq_(get_grid_index(proc_name), 3)
+  nt.eq_(get_grid_index(proc_name, 'leptons'), 3)
   proc_name = 'proc_nlo_Mismatch'
-  nt.eq_(get_grid_index(proc_name), 4)
+  nt.eq_(get_grid_index(proc_name, 'leptons'), 4)
 
 
 # TODO: (bcn 2016-03-30) review this
