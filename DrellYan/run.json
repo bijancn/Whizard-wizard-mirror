@@ -12,14 +12,14 @@
     "analysis": "WHIZARD_tt_NLO"
   },
   {"process": "proc_nlo",
-    "purpose": "integration",
+    "purpose": "events",
     "nlo_type": "nlo",
     "beam_type": "hadrons",
     "whizard_options":"--rebuild-library",
     "adaption_iterations": "6:20000",
     "integration_iterations": "4:15000",
-    "batches": 20,
-    "events_per_batch":20000,
+    "batches": 5,
+    "events_per_batch":1000,
     "scale_variation": false, 
     "analysis": "WHIZARD_tt_NLO",
     "event_mult_real": 5

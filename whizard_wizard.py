@@ -448,7 +448,7 @@ def replace_n_events(factor, filename):
   original_n_events = ut.get_n_events(filename)
   if original_n_events is not None:
     new_n_events = factor * int(original_n_events)
-    replace_func = lambda l: check_for_n_events(1, new_n_events)
+    replace_func = lambda l: check_for_n_events(l, new_n_events)
     ut.sed(filename, replace_line=replace_func)
 
 

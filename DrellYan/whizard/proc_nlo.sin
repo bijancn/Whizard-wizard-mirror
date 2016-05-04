@@ -18,6 +18,6 @@ cuts = all M > 16.3316 GeV [e1, E1] and all M < 166.0436 [e1, E1]
 mult_call_real = 5
 integrate (proc_nlo)
 
-n_events = 20000
+n_events = 1000
 checkpoint = n_events / 20
 simulate(proc_nlo)
