@@ -130,7 +130,9 @@ class Whizard():
       with ut.cd(runfolder):
         if (purpose == 'histograms'):
           ut.remove(fifo)
-          subprocess.call("mkfifo " + fifo, shell=True)
+          # Suppress annoying display output if Fifo is already present
+          if not os.path.isfile(fifo):
+            subprocess.call("mkfifo " + fifo, shell=True)
         change_sindarin_for_event_gen(sindarin, runfolder, proc_id, proc_dict)
         return _exe(purpose)
     elif purpose == 'scan':
