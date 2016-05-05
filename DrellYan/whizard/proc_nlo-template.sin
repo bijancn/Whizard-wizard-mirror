@@ -5,6 +5,14 @@ sqrts = 7000 GeV
 scale = mZ
 beams = p, p => lhapdf
 
+#We use OpenLoops everywhere in the general settings to
+#cope with the CMS for the paper. Hower, IS-events do not
+#work yet with full OL matrix elments.
+$born_me_method = "omega"
+$real_tree_me_method = "omega"
+$correlation_me_method = "omega"
+
+
 ?nlo_fixed_order = true
 ?unweighted = false
 ?negative_weights = true

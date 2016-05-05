@@ -41,7 +41,7 @@ namespace Rivet {
       const double R = 0.4; const double p = -1.0;
       fastjet::JetDefinition ee(fastjet::ee_genkt_algorithm, R, p,
           fastjet::E_scheme, fastjet::Best);
-      FastJets jets(veto, ee);
+      FastJets jets(fs, ee);
       addProjection(jets, "Jets");
 
       _h["leadingjet_E"] = bookNLOHisto1D("leading-jet-E", stdbin, 250., 600.);
@@ -55,6 +55,12 @@ namespace Rivet {
       _h["jets_invMass"] = bookNLOHisto1D("jets-inv", 25, 780.1, 805.1);
       _h["jetcount"] = bookNLOHisto1D("jet-count", 4, 0.5, 4.5);
       _h["jetcount_incl"] = bookNLOHisto1D("jet-count-incl", 4, 0.5, 4.5);
+
+      _h["lepton_invMass"] = bookNLOHisto1D("lepton-inv", stdbin, 20., 120.);
+      _h["electron_pT"] = bookNLOHisto1D("electron-pT", stdbin, 0., 200.);
+      _h["positron_pT"] = bookNLOHisto1D("positron-pT", stdbin, 0., 200.);
+      _h["electron_Theta"] = bookNLOHisto1D("electron-Theta", stdbin, 0., 200.);
+      _h["positron_Theta"] = bookNLOHisto1D("positron-Theta", stdbin, 0., 200.);
 
 
       vetoCounter = 0;
@@ -92,9 +98,6 @@ namespace Rivet {
       FourMomentum Ppos = pos[0].momentum();
       //cout << Pel << endl;
       //cout << Ppos << endl;
-      double m = (Pel + Ppos).mass();
-      //cout << "m: " << m << endl;
-      if (m < 16.3316 or m > 166.0436) cout << "Out of bounds!";
 
 
       foreach (const PseudoJet & pseudo_jet, pseudo_jets) {
@@ -102,31 +105,38 @@ namespace Rivet {
          jets.push_back (pseudo_jet);
       }
 
-      //cout << "Jet size: " << jets.size () << endl;
-     // bool vetoCondition = jets.size() < 2;
-      //if (vetoCondition) {
-      //  vetoCounter++;
-      //  vetoEvent;
-      //}
-      //else {
+      bool vetoCondition = jets.size() < 2;
+      if (vetoCondition) {
+        vetoCounter++;
+        vetoEvent;
+      }
+      else {
         acceptedWeights += weight;
-      //}
+      }
 
-      //_h["jetcount"]->fill(jets.size(), event);
-      //for (unsigned int i = 0; i < jets.size(); i++)
-      //   _h["jetcount_incl"]->fill(i + 1, event);
+      double m = (Pel + Ppos).mass();
+      if (m < 16.3316 or m > 166.0436) cout << "Out of bounds!";
+      _h["lepton_invMass"]->fill(m, event);
+      _h["electron_pT"]->fill(Pel.pt(), event);
+      _h["positron_pT"]->fill(Ppos.pt(), event);
+      _h["electron_Theta"]->fill(std::cos(Pel.theta()), event);
+      _h["positron_Theta"]->fill(std::cos(Ppos.theta()), event);
 
-      //_h["leadingjet_E"]->fill(jets[0].E(), event);
-      //_h["leadingjet_Pt"]->fill(jets[0].pt(), event);
-      //_h["leadingjet_Theta"]->fill(std::cos(jets[0].theta()), event);
+      _h["jetcount"]->fill(jets.size(), event);
+      for (unsigned int i = 0; i < jets.size(); i++)
+         _h["jetcount_incl"]->fill(i + 1, event);
 
-      //_h["2ndleadingjet_E"]->fill(jets[1].E(), event);
-      //_h["2ndleadingjet_Pt"]->fill(jets[1].pt(), event);
-      //_h["2ndleadingjet_Theta"]->fill(std::cos(jets[1].theta()), event);
+      _h["leadingjet_E"]->fill(jets[0].E(), event);
+      _h["leadingjet_Pt"]->fill(jets[0].pt(), event);
+      _h["leadingjet_Theta"]->fill(std::cos(jets[0].theta()), event);
+
+      _h["2ndleadingjet_E"]->fill(jets[1].E(), event);
+      _h["2ndleadingjet_Pt"]->fill(jets[1].pt(), event);
+      _h["2ndleadingjet_Theta"]->fill(std::cos(jets[1].theta()), event);
 
 
-      //double jetsMass = (jets[0].momentum() + jets[1].momentum()).mass();
-      //_h["jets_invMass"]->fill(jetsMass, event);
+      double jetsMass = (jets[0].momentum() + jets[1].momentum()).mass();
+      _h["jets_invMass"]->fill(jetsMass, event);
 
     }
 
@@ -135,7 +145,6 @@ namespace Rivet {
       const double fb_per_pb = 1000.0;
       double fiducial_xsection = crossSection() * fb_per_pb * acceptedWeights / sumOfWeights();
       double scale_factor = crossSection() * fb_per_pb / sumOfWeights();
-      //double scale_factor = fb_per_pb / eventCounter;
 
       cout << "Event Counter: " << eventCounter << endl;
       cout << "Sum of weights: " << sumOfWeights () << endl;
