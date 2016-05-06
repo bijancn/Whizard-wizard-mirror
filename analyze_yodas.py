@@ -135,7 +135,7 @@ def compute_mean_and_variance(base_name, yoda_histos, n_yoda):
           # So, we end up with this stupid looking constructions.
           old_mean = yoda_histos[current_name].mean[i_bin]
           new_mean = compute_elemental_mean(old_mean, float(x[2]), n_yoda)
-          yoda_histo[current_name].mean[i_bin] = new_mean
+          yoda_histos[current_name].mean[i_bin] = new_mean
           old_variance = yoda_histos[current_name].variance[i_bin]
           foo = compute_elemental_variance(
               old_variance, old_mean, new_mean, n_yoda)
