@@ -55,6 +55,8 @@ def pretty_label(filename, title):
       'only for $\\mathcal{M}^{\\text{decay}}$ projected')
   l = l.replace('fact', 'factorized')
   l = l.replace('onshellprojected', 'onshell projected')
+  l = l.replace('widthunprojected', '$\\Gamma[\\sqrt{p--{\\text{top}}^2}]$')
+  l = l.replace('ttbar', '$t \\bar t$')
   return l
 
 
