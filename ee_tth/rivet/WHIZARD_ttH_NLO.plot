@@ -39,7 +39,7 @@ YLabel=$\frac{d\sigma}{dm}[\text{fb}/\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/jets-inv
-XLabel=$m(p^{j_1}+p^{j_2})$
+XLabel=$m^{j_1j_2}$
 LegendYPos=0.65
 LegendXPos=0.65
 RatioPlotYMax=1.8
@@ -49,7 +49,7 @@ RatioPlotXMin=250.0
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/tbarh-inv
-XLabel=$m(p^{\bar{t}} + p^H)$
+XLabel=$m^{\bar{t}H}$
 LegendYPos=0.90
 LegendXPos=0.8
 RatioPlotYMax=1.02
@@ -61,7 +61,7 @@ RatioPlotXMax=700.0
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/th-inv
-XLabel=$m(p^{t}+p^H)$
+XLabel=$m^{tH}$
 LegendYPos=0.90
 LegendXPos=0.8
 RatioPlotYMax=1.02
@@ -73,7 +73,7 @@ RatioPlotXMax=700.0
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/tt-inv
-XLabel=$m(p^{t}+p^{\bar{t}})$
+XLabel=$m^{t\bar{t}}$
 LegendYPos=0.65
 LegendXPos=0.65
 RatioPlotYMax=1.6
@@ -100,8 +100,8 @@ LegendXPos=0.55
  BEGIN PLOT /WHIZARD_.*/top-theta
 YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}/\text{GeV}]$
 XLabel=$\cos{\theta^{t}}$
-LegendYPos=0.9
-LegendXPos=0.15
+LegendYPos=0.55
+LegendXPos=0.55
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/antitop-theta
@@ -231,9 +231,9 @@ RatioPlotXMin=100.0
 
  BEGIN PLOT /WHIZARD_.*/tt-E
 XLabel=$E^{t\bar{t}}[\text{GeV}]$
-LegendYPos=0.8
-LegendXPos=0.2
-RatioPlotYMax=1.6
+LegendYPos=0.85
+LegendXPos=0.05
+RatioPlotYMax=2.0
 RatioPlotYMin=0.4
  END PLOT
 

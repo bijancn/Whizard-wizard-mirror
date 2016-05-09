@@ -10,7 +10,7 @@ from functools import partial
 from math import log10
 import jsonschema
 from mpi4py import MPI
-from numpy import logspace, arange
+from numpy import logspace, arange, log2
 import nose.tools as nt
 import utils as ut
 # from termcolor import colored
@@ -295,6 +295,9 @@ def fill_runs(proc_name, proc_dict):
         if scan_type == 'logarithmic':
           step_range = logspace(log10(start), log10(stop), num=steps,
               endpoint=True, base=10.0)
+        elif scan_type == 'logarithmic2':
+          step_range = logspace(log2(start), log2(stop), num=steps,
+              endpoint=True, base=2.0)
         elif scan_type == 'linear':
           step_range = arange(start, stop, float(stepsize))
         else:
@@ -388,32 +391,6 @@ def test_create_component_sindarin_names():
   test_dict = {'fks_method': 'resonances'}
   nt.eq_(create_nlo_component_names(test_sindarin, test_dict),
       ['proc_nlo_Born', 'proc_nlo_Real', 'proc_nlo_Virtual', 'proc_nlo_Mismatch'])
-
-
-# TODO: (bcn 2016-03-29) is this used anywhere??? whats the purpose?
-def get_full_proc_names(base_name, proc_dict):  # pragma: no cover
-  scaled = proc_dict.get('scale_variation', False)
-  nlo = proc_dict['nlo_type'] == 'nlo'
-  if not scaled and not nlo:
-    full_names = [base_name]
-  else:
-    if scaled:
-      scaled_names = []
-      for suffix in get_scale_suffixes():
-        scaled_names += [base_name + '_' + suffix]
-    else:
-      scaled_names = [base_name]
-    if nlo:
-      full_names = []
-      for scaled_name in scaled_names:
-          full_names += create_nlo_component_names(scaled_name, proc_dict)
-    else:
-      full_names = scaled_names
-  return full_names
-
-
-def test_get_full_proc_names():
-  pass
 
 
 def is_nlo_calculation(filename):

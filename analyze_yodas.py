@@ -9,6 +9,7 @@ parser.add_argument('--search-negative-histograms',
    dest='negative_yodas', type=bool, default=False)
 parser.add_argument('--tolerance', dest='tolerance', type=int, default=10)
 parser.add_argument('--verbose', dest='verbose', type=bool, default=False)
+parser.add_argument('--all', dest='all', type=bool, default=False)
 args = parser.parse_args()
 
 require_bad_rel = 0.25
@@ -233,27 +234,35 @@ def print_all_histos(yoda_histos):
     print "**********************"
 
 
-print 'Initializing histogram objects'
-i_yodas = find_associated_yodas(args.yoda_name)
-yoda_histos = create_histos(args.yoda_name, i_yodas)
-yoda_histos = loop_over_all_yodas_and_compute_mean(args.yoda_name, i_yodas, yoda_histos)
-tolerance = args.tolerance
-loop_over_histos_and_find_deviators(args.yoda_name, i_yodas, yoda_histos, args.tolerance)
-if args.verbose:
-  print_all_histos(yoda_histos)
-count_deviators = np.zeros(n_yodas_max)
-for name, yh in yoda_histos.items():
-  for deviator in yh.deviant:
-    count_deviators[deviator] += 1
+def evaluate_yoda_samples(yoda_name, tolerance):
+  i_yodas = find_associated_yodas(yoda_name)
+  yoda_histos = create_histos(yoda_name, i_yodas)
+  yoda_histos = loop_over_all_yodas_and_compute_mean(yoda_name, i_yodas, yoda_histos)
+  tolerance = args.tolerance
+  loop_over_histos_and_find_deviators(yoda_name, i_yodas, yoda_histos, tolerance)
+  if args.verbose:
+    print_all_histos(yoda_histos)
+  count_deviators = np.zeros(n_yodas_max)
+  for name, yh in yoda_histos.items():
+    for deviator in yh.deviant:
+      count_deviators[deviator] += 1
 
-if args.verbose:
-  print 'How often does a yoda deviate? ', count_deviators
-print 'Require at least ', int(require_bad_rel * len(i_yodas)), ' deviations.'
-i_yoda = 0
-remove_yodas = []
-for counter in count_deviators:
-  if counter >= int(require_bad_rel * len(i_yodas)):
-    remove_yodas.append(i_yoda)
-  i_yoda += 1
+  if args.verbose:
+    print 'How often does a yoda deviate? ', count_deviators
+  print 'Require at least ', int(require_bad_rel * len(i_yodas)), ' deviations.'
+  i_yoda = 0
+  remove_yodas = []
+  for counter in count_deviators:
+    if counter >= int(require_bad_rel * len(i_yodas)):
+      remove_yodas.append(i_yoda)
+    i_yoda += 1
 
-print 'Would remove: ', remove_yodas
+  print 'yoda sample: ', yoda_name
+  print 'Tolerance: ', tolerance
+  print 'Would remove the following yodas: ', remove_yodas
+
+
+if args.all:
+  pass
+else:
+  evaluate_yoda_samples(args.yoda_name, args.tolerance)
