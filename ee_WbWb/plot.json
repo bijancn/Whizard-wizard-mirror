@@ -170,10 +170,9 @@
       {"name": "fact_lo"},
       {"name": "fact_onshellprojected_lo"},
       {"name": "fact_productiononshellprojected_lo"},
-      {"name": "fact_decayonshellprojected_lo"}
+      {"name": "fact_decayonshellprojected_lo"},
+      {"name": "fact_lo_widthunprojected"}
     ],
-    "ratio": {"ylabel": "$\\sigma/\\sigma^{t\\bar t}$",
-      "ymax": 1.15, "ymin": 0.85, "nmajors": 5},
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
@@ -184,7 +183,9 @@
     "xmin": 350,
     "xmax": 100000,
     "xminors": true,
-    "yminors": true
+    "yminors": true,
+    "xpagelength": 9,
+    "ypagelength": 7.5
   },
   {"title": "Comparison of onshell projections (zoom)",
     "lines": [
@@ -193,7 +194,8 @@
       {"name": "fact_lo"},
       {"name": "fact_onshellprojected_lo"},
       {"name": "fact_productiononshellprojected_lo"},
-      {"name": "fact_decayonshellprojected_lo"}
+      {"name": "fact_decayonshellprojected_lo"},
+      {"name": "fact_lo_widthunprojected"}
     ],
     "ratio": {"ylabel": "$\\sigma/\\sigma^{t\\bar t}$",
       "ymax": 1.15, "ymin": 0.85, "nmajors": 5},
@@ -202,12 +204,14 @@
     "opacity": 0.7,
     "ylog": true,
     "xlog": false,
-    "ymin": 1,
+    "ymin": 50,
     "ymax": 1000,
     "xmin": 350,
-    "xmax": 1000,
+    "xmax": 500,
     "xminors": true,
-    "yminors": true
+    "yminors": true,
+    "xpagelength": 9,
+    "ypagelength": 9
   }
   ]
 }

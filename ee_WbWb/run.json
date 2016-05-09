@@ -60,7 +60,6 @@
   {"process": "fact_nlo",
     "disabled": true,
     "purpose": "test_soft",
-    "fks_method": "resonances",
     "nlo_type": "nlo_combined",
     "batches": 12,
     "events_per_batch": 2000,
@@ -79,6 +78,11 @@
       "steps": 100},
     {"type": "linear",
       "start": 345.0,
+      "stop": 360.0,
+      "stepsize": 1.0
+    },
+    {"type": "linear",
+      "start": 360.0,
       "stop": 500.0,
       "stepsize": 5.0
     }
@@ -98,6 +102,11 @@
       "steps": 100},
     {"type": "linear",
       "start": 345.0,
+      "stop": 360.0,
+      "stepsize": 1.0
+    },
+    {"type": "linear",
+      "start": 360.0,
       "stop": 500.0,
       "stepsize": 5.0
     }
@@ -117,6 +126,11 @@
       "steps": 100},
     {"type": "linear",
       "start": 345.0,
+      "stop": 360.0,
+      "stepsize": 1.0
+    },
+    {"type": "linear",
+      "start": 360.0,
       "stop": 500.0,
       "stepsize": 5.0
     }
@@ -136,6 +150,11 @@
       "steps": 100},
     {"type": "linear",
       "start": 345.0,
+      "stop": 360.0,
+      "stepsize": 1.0
+    },
+    {"type": "linear",
+      "start": 360.0,
       "stop": 500.0,
       "stepsize": 5.0
     }
@@ -155,6 +174,11 @@
       "steps": 100},
     {"type": "linear",
       "start": 345.0,
+      "stop": 360.0,
+      "stepsize": 1.0
+    },
+    {"type": "linear",
+      "start": 360.0,
       "stop": 500.0,
       "stepsize": 5.0
     }
@@ -174,6 +198,35 @@
       "steps": 100},
     {"type": "linear",
       "start": 345.0,
+      "stop": 360.0,
+      "stepsize": 1.0
+    },
+    {"type": "linear",
+      "start": 360.0,
+      "stop": 500.0,
+      "stepsize": 5.0
+    }
+    ],
+    "adaption_iterations": "3:20000",
+    "integration_iterations": "3:20000"
+  },
+  {"process": "fact_lo_widthunprojected",
+    "disabled": true,
+    "purpose": "scan",
+    "nlo_type": "lo",
+    "scan_object": "sqrts",
+    "ranges": [
+    {"type": "logarithmic",
+      "start": 500,
+      "stop": 1000000,
+      "steps": 100},
+    {"type": "linear",
+      "start": 345.0,
+      "stop": 360.0,
+      "stepsize": 1.0
+    },
+    {"type": "linear",
+      "start": 360.0,
       "stop": 500.0,
       "stepsize": 5.0
     }

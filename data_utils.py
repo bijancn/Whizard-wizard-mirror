@@ -13,6 +13,8 @@ def remove_empty_data(data):
     except IndexError:
       print 'Removing empty data from data list: ', data[index][0]
       del data[index]
+      # As the del changes what data[index] means, we have to call again
+      remove_empty_data(data)
   return data
 
 
@@ -41,13 +43,17 @@ def test_remove_empty_data():
 
 def sort_data(data):
   for index, item in enumerate(data):
-    x = item[1][0]
-    if x.size > 1:
-      rest = item[1][1:]
-      order = np.argsort(x)
-      rest_lst = [rest[idx][order] for idx in range(rest.shape[0])]
-      array = np.vstack(tuple([x[order]] + rest_lst))
-      data[index] = (item[0], array)
+    try:
+      x = item[1][0]
+    except IndexError:
+      print 'It seems you still have empty data: ', item
+    else:
+      if x.size > 1:
+        rest = item[1][1:]
+        order = np.argsort(x)
+        rest_lst = [rest[idx][order] for idx in range(rest.shape[0])]
+        array = np.vstack(tuple([x[order]] + rest_lst))
+        data[index] = (item[0], array)
   return data
 
 

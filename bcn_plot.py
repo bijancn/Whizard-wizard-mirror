@@ -34,6 +34,7 @@ class Plotter(object):
     self.title_notset = True
     self.layout_notset = True
 
+  # TODO: (bcn 2016-05-03) legend_outside seems broken with ratio plot
   def setfig(self, ax, xmin, xmax, ymin, ymax, xlabel, ylabel,
       title=None, xlog=False, ylog=False, xminors=False, yminors=False,
       n_minors=5, n_majors=6, xticks=None, yticks=None, puff=0.05,
@@ -162,7 +163,7 @@ def get_label(object_dict, title, filename=None, pretty_label=None):
   if filename is not None:
     default = os.path.basename(filename)
     label = decide_if_not_none(object_dict, pretty_label, 'label', default,
-        filename, title).replace('_', '\_')
+        filename, title).replace('_', '\_').replace('--', '_')
   return object_dict.get('label', label)
 
 
@@ -225,7 +226,10 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   if n_objects == 0:
     print 'You selected no lines or bands. Not building: ' + title
     return
-  size = (9, 9) if many_labels else (9, 7.5)
+  try:
+    size = (plot_dict['xpagelength'], plot_dict['ypagelength'])
+  except KeyError:
+    size = (9, 9) if many_labels else (9, 7.5)
   ratio_dict = plot_dict.get('ratio', None)
   if ratio_dict is not None:
     base_line = line_data[0][1]

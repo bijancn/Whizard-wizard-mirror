@@ -1,0 +1,19 @@
+include("../process_settings_threshold.sin")
+
+library = fact_lo_widthunprojected
+process fact_lo_widthunprojected = e1, E1 => Wp, Wm, b, B {$restrictions = "3+5~t && 4+6~tbar"}
+compile
+
+FF = 9        # tree level from signal comp
+offshell_strategy = 0+2+0+0+0
+
+show(model)
+
+iterations = 3:20000:"gw",3:20000
+#SETSCAN
+sqrtsstepsize = 0.1 GeV
+sqrtsmin = sqrts - sqrtsstepsize
+sqrtsmax = sqrts + sqrtsstepsize
+
+integrate (fact_lo_widthunprojected)
+printf "RES %g %g %g" (sqrts, integral(fact_lo_widthunprojected), error(fact_lo_widthunprojected))

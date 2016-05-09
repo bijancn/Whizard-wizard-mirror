@@ -92,7 +92,7 @@ def _mpi_controller(sequence, *args, **kwargs):
                 task = queue.next()
                 percentage = task / number_of_tasks * 100
                 if (percentage > last_percentage_tasks + 5.0):
-                  print "Tasks done: ", task, "(", percentage, "%)"
+                  print "Tasks done:", task, "/", int(number_of_tasks), "(", percentage, "%)"
                   last_percentage_tasks = percentage
                 if sequence[task] == BARRIER:
                   if debug: print "Issueing barrier"
@@ -127,8 +127,8 @@ def _mpi_controller(sequence, *args, **kwargs):
             # print 'Processes left over: ' + str(process_list)
             percentage = (1 - len(process_list) / number_of_workers) * 100
             if (percentage > last_percentage_workers + 5.0):
-              print "Inactive workers: ", number_of_workers - \
-                  len(process_list), "(", percentage, "%)"
+              print "Inactive workers:", int(number_of_workers -
+                  len(process_list)), "/", int(number_of_workers), "(", percentage, "%)"
               last_percentage_workers = percentage
             # Worker queue is empty
             if len(process_list) == 0:

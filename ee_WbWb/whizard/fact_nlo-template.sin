@@ -20,8 +20,6 @@ sqrtsmax = sqrts + sqrtsstepsize
 ?unweighted = false
 ?negative_weights = true
 
-$fks_mapping_type = "resonances"
-
 scale = m1S
 
 mult_call_real = 5

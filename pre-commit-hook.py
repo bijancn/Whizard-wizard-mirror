@@ -5,6 +5,7 @@ import os
 import re
 import subprocess
 import sys
+from termcolor import colored
 
 modified = re.compile('^(?:M|A)(\s+)(?P<name>.*)')
 
@@ -59,9 +60,12 @@ def check_files(files, check):
           else:
             prefix = '\t'
           output_lines = ['%s%s' % (prefix, line) for line in out.splitlines()]
-          print '\n'.join(output_lines)
+          if 'grep' not in check['command']:
+            print '\n'.join(output_lines)
+          else:
+            print colored('\n'.join(output_lines), 'red')
           if err:
-            print err
+            print colored(err, 'red')
           result = 1
   return result
 
@@ -99,6 +103,8 @@ def main(all_files, syntax_only):
     # Unstash changes to the working tree that we had stashed
     subprocess.call(['git', 'stash', 'pop', '-q'], stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
+    if result != 0:
+      print colored('Commit cannot be accepted. See errors above.', 'red')
     sys.exit(result)
 
 if __name__ == '__main__':
