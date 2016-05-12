@@ -1,11 +1,11 @@
 # Various tools for fitting functions to our data
 # Needs statsmodels which can be installed by checking out the following repo:
 # git clone git://github.com/statsmodels/statsmodels.git
-import statsmodels.api as sm
 import numpy as np
 
 
 def fit_line(x, y, verbose=False):
+  import statsmodels.api as sm
   regression = sm.OLS(y, sm.add_constant(x)).fit()
   if verbose:
     print regression.summary()
