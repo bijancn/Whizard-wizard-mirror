@@ -366,9 +366,11 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   for data_of_a_fit, fit, color in zip(fit_data, fits, colors):
     label = fit.get('label', get_label(fit, title, pretty_label=pretty_label))
     color = fit.get('color', color)
+    linestyle = decide_if_not_none(fit, linestyle_decider, 'linestyle', 'solid',
+        data_of_a_fit[0][0], title)
     x = data_of_a_fit[0][1][0]
     y = data_of_a_fit[0][1][1]
-    this_fit_plot(x, y, color=color, label=label)
+    this_fit_plot(x, y, color=color, label=label, linestyle=linestyle)
 
   xticks = plot_dict.get('xticks', None)
   yticks = plot_dict.get('yticks', None)
