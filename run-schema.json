@@ -70,6 +70,10 @@
              "id": "processes/scale_variation",
              "type": "boolean"
           },
+          "only_sindarins": {
+             "id": "processes/only_sindarins",
+             "type": "boolean"
+          },
           "event_mult_real": {
              "id": "processes/event_mult_real",
              "type": "number"

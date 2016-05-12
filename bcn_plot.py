@@ -9,6 +9,7 @@ import matplotlib.gridspec as gridspec
 import data_utils
 from functools import partial
 from utils import mkdirs
+import fit_utils
 
 colors = ['#EE3311',  # red
           '#3366FF',  # blue
@@ -182,7 +183,12 @@ def combined_errorbar(base_line, ax, ax1, x, y, yerr=None, **kwargs):
 def combined_fill_between(base_line, ax, ax1, x, ymin, ymax, *args, **kwargs):
   ax.fill_between(x, ymin, ymax, *args, **kwargs)
   comb = data_utils.normalize(base_line, x, ymin, yerr=ymax)
-  ax1.fill_between(comb[0], comb[1], comb[2], *args, **kwargs)
+  ax1.fill_between(comb[0], comb[1], comb[2][0], *args, **kwargs)
+
+
+def fit_plot(ax, x, y, *args, **kwargs):
+  fit_x, fit_y = fit_utils.fit_line(x, y)
+  ax.plot(fit_x, fit_y, *args, **kwargs)
 
 
 def get_name(line):
@@ -196,30 +202,37 @@ def get_name(line):
     return path
 
 
+def get_associated_plot_data(data, special):
+  special_data = []
+  list_of_lists = [s.get('data', []) for s in special]
+  for lbl_list in list_of_lists:
+    this_special_data = []
+    for lbl in lbl_list:
+      this_special_data += [d for d in data
+          if get_name(lbl) == d[0].replace('.dat', '')]
+      special_data += [this_special_data]
+  return special_data
+
+
 def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     label_decider=None, legend_decider=None, marker_decider=None,
-    linestyle_decider=None, pretty_label=None, set_extra_settings=None):
+    linestyle_decider=None, pretty_label=None, set_extra_settings=None,
+    output_file=None):
   """
   data: [(identifier_string, numpy_array),...] where numpy_array has the columns
         x, y and optionally yerror
   """
   mkdirs(pic_path)
   title = plot_dict.get('title', 'plot')
-  print 'Plotting ' + title
   line_data = []
   lines = plot_dict.get('lines', [])
   for line in lines:
     line_data += [d for d in data if get_name(line) == d[0].replace('.dat', '')]
   bands = plot_dict.get('bands', [])
-  band_data = []
-  lst_of_band_lsts = [b.get('data', []) for b in bands]
-  for lbl_lst in lst_of_band_lsts:
-    this_band_data = []
-    for lbl in lbl_lst:
-      this_band_data += [d for d in data
-          if get_name(lbl) == d[0].replace('.dat', '')]
-    band_data += [this_band_data]
-  n_objects = len(line_data) + len(band_data)
+  band_data = get_associated_plot_data(data, bands)
+  fits = plot_dict.get('fits', [])
+  fit_data = get_associated_plot_data(data, fits)
+  n_objects = len(line_data) + len(band_data) + len(fit_data)
   many_labels = n_objects > 6
   check_for_all_sets(line_data, lines)
   # check_for_all_sets(band_data, band_lst)
@@ -250,6 +263,8 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     this_errorbar = ax.errorbar
     this_fill_between = ax.fill_between
     ylabel1 = None
+  if len(fit_data) > 0:
+    this_fit_plot = partial(fit_plot, ax)
   if plot_extra is not None:
     ax = plot_extra(ax, title)
   ymin1, ymax1 = None, None
@@ -300,7 +315,9 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   for td, line, color in zip(line_data, lines, colors):
     filename, d = td[0], td[1]
     label = get_label(line, title, filename=filename, pretty_label=pretty_label)
-    linestyle = decide_or_get(linestyle_decider, 'linestyle', None, filename, title)
+    # linestyle = decide_or_get(linestyle_decider, 'linestyle', None, filename, title)
+    linestyle = decide_if_not_none(line, linestyle_decider, 'linestyle', 'solid',
+        filename, title)
     c = line.get('color', color)
     if linestyle == 'banded':
       if len(d) > 2:
@@ -346,15 +363,34 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
                 ymax1=ymax1, n_majors1=n_majors1)
       fig.savefig(os.path.join(pic_path, title + '-' + str(i) + '.pdf'),
                   dpi=fig.dpi)
+  for data_of_a_fit, fit, color in zip(fit_data, fits, colors):
+    label = fit.get('label', get_label(fit, title, pretty_label=pretty_label))
+    color = fit.get('color', color)
+    x = data_of_a_fit[0][1][0]
+    y = data_of_a_fit[0][1][1]
+    this_fit_plot(x, y, color=color, label=label)
+
+  xticks = plot_dict.get('xticks', None)
+  yticks = plot_dict.get('yticks', None)
   pl.setfig(ax, title=title,
             xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax,
             xminors=xminors, yminors=yminors,
             xlabel=xlabel,
             ylabel=ylabel, ylog=ylog, xlog=xlog,
+            xticks=xticks, yticks=yticks,
             legend_outside=many_labels, height_shrinker=0.70,
             legend_location=legend_location, ax1=ax1, ylabel1=ylabel1,
             ymin1=ymin1, ymax1=ymax1, n_majors1=n_majors1)
-  fig.savefig(os.path.join(pic_path, title + '.pdf'),
+  if output_file is not None:
+    # We do not want to have to remember whether the ending has to be supplied
+    if output_file.endswith('.pdf'):
+      out_file = output_file
+    else:
+      out_file = output_file + '.pdf'
+  else:
+    out_file = title + '.pdf'
+  print 'Writing to output: ', os.path.join(pic_path, out_file)
+  fig.savefig(os.path.join(pic_path, out_file),
               dpi=fig.dpi)
   plt.close(fig)
 
