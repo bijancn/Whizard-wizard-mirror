@@ -186,8 +186,8 @@ def combined_fill_between(base_line, ax, ax1, x, ymin, ymax, *args, **kwargs):
   ax1.fill_between(comb[0], comb[1], comb[2][0], *args, **kwargs)
 
 
-def fit_plot(ax, x, y, *args, **kwargs):
-  fit_x, fit_y = fit_utils.fit_line(x, y)
+def fit_plot(ax, x, y, xmin, xmax, degree, *args, **kwargs):
+  fit_x, fit_y = fit_utils.fit_polynomial(x, y, xmin, xmax, degree)
   ax.plot(fit_x, fit_y, *args, **kwargs)
 
 
@@ -370,7 +370,18 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
         data_of_a_fit[0][0], title)
     x = data_of_a_fit[0][1][0]
     y = data_of_a_fit[0][1][1]
-    this_fit_plot(x, y, color=color, label=label, linestyle=linestyle)
+    xmin = decide_if_not_none(fit, None, 'extrapolation_minus', min(x),
+        data_of_a_fit[0][0], title)
+    xmax = decide_if_not_none(fit, None, 'extrapolation_plus', max(x),
+        data_of_a_fit[0][0], title)
+    degree = decide_if_not_none(fit, None, 'fit_degree', -1,
+        data_of_a_fit[0][0], title)
+    if degree < 0:
+      print 'You have not specified the degree of the polynomial to be fitted. '
+      print 'Going to fit a line!'
+      degree = 1
+    this_fit_plot(x, y, xmin, xmax, degree, color=color,
+      label=label, linestyle=linestyle)
 
   xticks = plot_dict.get('xticks', None)
   yticks = plot_dict.get('yticks', None)
