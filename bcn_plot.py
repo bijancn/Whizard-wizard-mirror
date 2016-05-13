@@ -339,7 +339,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
       plt.errorbar((_[1:] + _[:-1]) / 2, mean, yerr=std, ecolor=c, fmt="none",
           alpha=global_opacity)
       plt.hlines(mean, _[:-1], _[1:], label=label, colors=c)
-    elif linestyle is not None:
+    elif linestyle is not None and linestyle != "None":
       this_plot(d[0], d[1], color=c, label=label, linestyle=linestyle)
     else:
       if marker_decider is not None:

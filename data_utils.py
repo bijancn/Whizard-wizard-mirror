@@ -182,7 +182,11 @@ def combine_and_project(data, indices, operation, error_func):
   lengths = [len(array[0]) for array in unpacked_data]
   combiner = Combiner(x_generators, y_generators, lengths,
       yerr_generators=yerr_generators, error_func=error_func, operation=operation)
-  return combiner.get_all()
+  tmp = combiner.get_all()
+  try:
+    return tmp[0], tmp[1], tmp[2][0]
+  except:
+    return tmp[0], tmp[1]
 
 
 def build_sum(data, indices):
@@ -301,6 +305,8 @@ def test_build_sum():
   combined_x, combined_y, combined_yerr = build_sum(data, indices)
   np.testing.assert_allclose(combined_x, np.array([1., 2.]))
   np.testing.assert_allclose(combined_y, np.array([.3, .3]))
+  np.testing.assert_allclose(combined_yerr,
+    np.array([np.sqrt(0.01**2 + 0.02**2), np.sqrt(0.02**2 + 0.01**2)]))
 
   with open(test_file, 'w') as t:
     t.write('1. .1 .01\n')
