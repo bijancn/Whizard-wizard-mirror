@@ -71,22 +71,25 @@ def test_sort_data():
 def build_nlo_sums(data):
   for index, item in enumerate(data):
     if '_Born' in item[0]:
-      real_index = next((i for i, x in enumerate(data) if
-        item[0].replace('_Born', '_Real') == x[0]))
-      virtual_index = next((i for i, x in enumerate(data) if
-        item[0].replace('_Born', '_Virtual') == x[0]))
-      indices = [index, real_index, virtual_index]
       try:
-        mismatch_index = next((i for i, x in enumerate(data) if
-          item[0].replace('_Born', '_Mismatch') == x[0]))
-        indices += [mismatch_index]
+        real_index = next((i for i, x in enumerate(data) if
+          item[0].replace('_Born', '_Real') == x[0]))
+        virtual_index = next((i for i, x in enumerate(data) if
+          item[0].replace('_Born', '_Virtual') == x[0]))
+        indices = [index, real_index, virtual_index]
+        try:
+          mismatch_index = next((i for i, x in enumerate(data) if
+            item[0].replace('_Born', '_Mismatch') == x[0]))
+          indices += [mismatch_index]
+        except StopIteration:
+         pass
+        combined_x, combined_y, combined_yerr = build_sum(data, indices)
+        combined_name = item[0].replace('_Born', '')
+        array = np.array((combined_x, combined_y, combined_yerr))
+        print 'Appending ' + combined_name + ' to data'
+        data.append((combined_name, array))
       except StopIteration:
         pass
-      combined_x, combined_y, combined_yerr = build_sum(data, indices)
-      combined_name = item[0].replace('_Born', '')
-      array = np.array((combined_x, combined_y, combined_yerr))
-      print 'Appending ' + combined_name + ' to data'
-      data.append((combined_name, array))
   return data
 
 
@@ -325,12 +328,32 @@ def test_build_sum():
 
 
 def load_and_clean_files(files):
-  print 'Loading data'
   data = [(filename, np.loadtxt(filename, unpack=True)) for filename in files]
   data = remove_empty_data(data)
-  print 'Sorting data'
   data = sort_data(data)
-  print 'Building NLO sums'
   data = build_nlo_sums(data)
   data = remove_empty_data(data)
   return data
+
+
+def smooth_data(x_values, y_values, delta):
+  smoothed_x = []
+  smoothed_y = []
+  x_mean = 0
+  y_mean = 0
+  n = 0
+  x_left = x_values[0]
+  for j, x in enumerate(x_values):
+    x_right = x
+    n += 1
+    if abs(x_right - x_left) <= delta:
+      x_mean += (x - x_mean) / n
+      y_mean += (y_values[j] - y_mean) / n
+    else:
+      smoothed_x.append(x_mean)
+      smoothed_y.append(y_mean)
+      x_left = x
+      n = 1
+      x_mean = x
+      y_mean = y_values[j]
+  return smoothed_x, smoothed_y

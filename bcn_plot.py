@@ -191,6 +191,11 @@ def fit_plot(ax, x, y, xmin, xmax, degree, *args, **kwargs):
   ax.plot(fit_x, fit_y, *args, **kwargs)
 
 
+def smooth_plot(ax, x, y, delta, *args, **kwargs):
+  smooth_x, smooth_y = data_utils.smooth_data(x, y, delta)
+  ax.plot(smooth_x, smooth_y, *args, **kwargs)
+
+
 def get_name(line):
   try:
     folder = line.get('folder', '.')
@@ -232,7 +237,9 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   band_data = get_associated_plot_data(data, bands)
   fits = plot_dict.get('fits', [])
   fit_data = get_associated_plot_data(data, fits)
-  n_objects = len(line_data) + len(band_data) + len(fit_data)
+  smooths = plot_dict.get('smooth', [])
+  smooth_data = get_associated_plot_data(data, smooths)
+  n_objects = len(line_data) + len(band_data) + len(fit_data) + len(smooth_data)
   many_labels = n_objects > 6
   check_for_all_sets(line_data, lines)
   # check_for_all_sets(band_data, band_lst)
@@ -265,6 +272,8 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     ylabel1 = None
   if len(fit_data) > 0:
     this_fit_plot = partial(fit_plot, ax)
+  if len(smooth_data) > 0:
+    this_smooth_plot = partial(smooth_plot, ax)
   if plot_extra is not None:
     ax = plot_extra(ax, title)
   ymin1, ymax1 = None, None
@@ -382,6 +391,14 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
       degree = 1
     this_fit_plot(x, y, xmin, xmax, degree, color=color,
       label=label, linestyle=linestyle)
+  for data_of_a_smooth, smooth, color in zip(smooth_data, smooths, colors):
+    label = smooth.get('label', get_label(smooth, title, pretty_label=pretty_label))
+    color = smooth.get('color', color)
+    linestyle = decide_if_not_none(smooth, linestyle_decider, 'linestyle', 'solid',
+       data_of_a_smooth[0][0], title)
+    delta = smooth.get('interval_size', 0)
+    this_smooth_plot(data_of_a_smooth[0][1][0], data_of_a_smooth[0][1][1],
+      delta, color=color, label=label, linestyle=linestyle)
 
   xticks = plot_dict.get('xticks', None)
   yticks = plot_dict.get('yticks', None)

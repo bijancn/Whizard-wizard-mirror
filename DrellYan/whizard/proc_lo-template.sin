@@ -5,6 +5,7 @@ sqrts = 7000 GeV
 scale = mZ
 beams = p, p => lhapdf
 
+?keep_failed_events = true
 ?unweighted = false
 sample_format = hepmc
 #ITERATIONS

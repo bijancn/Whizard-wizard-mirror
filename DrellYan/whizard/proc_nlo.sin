@@ -13,9 +13,10 @@ $real_tree_me_method = "omega"
 $correlation_me_method = "omega"
 
 
-?nlo_fixed_order = true
+?fixed_order_nlo_events = true
 ?unweighted = false
 ?negative_weights = true
+?keep_failed_events = true
 sample_format = hepmc
 iterations = 6:20000:"gw",4:15000
 library = proc_nlo

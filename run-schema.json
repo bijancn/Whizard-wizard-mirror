@@ -16,7 +16,7 @@
           "purpose": {
             "id": "processes/purpose",
             "type": "string",
-            "enum": ["disabled", "scan", "integration", "histograms", "events",
+            "enum": ["scan", "integration", "histograms", "events",
                      "test_soft"]
           },
           "nlo_type": {
