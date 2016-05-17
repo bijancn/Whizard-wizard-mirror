@@ -1,6 +1,7 @@
 import numpy as np
 import nose.tools as nt
 import os
+from scipy.signal import savgol_filter
 
 
 def remove_empty_data(data):
@@ -336,7 +337,23 @@ def load_and_clean_files(files):
   return data
 
 
-def smooth_data(x_values, y_values, delta):
+def smooth_data_sg(x_values, y_values, window_size=0):
+  # This filter does not change the x_values
+  smoothed_x = x_values
+  if window_size > 0:
+    smoothed_y = savgol_filter(y_values, window_size, 3)
+  else:
+    # Window size not specified. Use maximal allowed value.
+    # Note that the window size must be odd.
+    if len(y_values) % 2 == 0:
+      ws = len(y_values) - 1
+    else:
+      ws = len(y_values)
+    smoothed_y = savgol_filter(y_values, ws, 3)
+  return smoothed_x, smoothed_y
+
+
+def smooth_data_internal(x_values, y_values, delta):
   smoothed_x = []
   smoothed_y = []
   x_mean = 0

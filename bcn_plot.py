@@ -191,8 +191,8 @@ def fit_plot(ax, x, y, xmin, xmax, degree, *args, **kwargs):
   ax.plot(fit_x, fit_y, *args, **kwargs)
 
 
-def smooth_plot(ax, x, y, delta, *args, **kwargs):
-  smooth_x, smooth_y = data_utils.smooth_data(x, y, delta)
+def smooth_plot(ax, x, y, window_size, *args, **kwargs):
+  smooth_x, smooth_y = data_utils.smooth_data_sg(x, y, window_size=window_size)
   ax.plot(smooth_x, smooth_y, *args, **kwargs)
 
 
@@ -396,9 +396,9 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     color = smooth.get('color', color)
     linestyle = decide_if_not_none(smooth, linestyle_decider, 'linestyle', 'solid',
        data_of_a_smooth[0][0], title)
-    delta = smooth.get('interval_size', 0)
+    window_size = smooth.get('window_size', 0)
     this_smooth_plot(data_of_a_smooth[0][1][0], data_of_a_smooth[0][1][1],
-      delta, color=color, label=label, linestyle=linestyle)
+      window_size, color=color, label=label, linestyle=linestyle)
 
   xticks = plot_dict.get('xticks', None)
   yticks = plot_dict.get('yticks', None)
