@@ -2,6 +2,7 @@ import numpy as np
 import nose.tools as nt
 import os
 from scipy.signal import savgol_filter
+from termcolor import colored
 
 
 def remove_empty_data(data):
@@ -122,8 +123,12 @@ def build_smooth(data, plot_dict):
   smooth_data = get_associated_plot_data(data, smooths)
   for data_of_a_smooth, smooth in zip(smooth_data, smooths):
     for i, item in enumerate(data_of_a_smooth):
-      smooth_x, smooth_y = smooth_data_sg(item[1][0], item[1][1],
-        smooth.get('window_size', 0))
+      smooth_x, smooth_y = smooth_data_sg(
+          item[1][0],
+          item[1][1],
+          window_size=smooth.get('window_size', 0),
+          poly_order=smooth.get('poly_order', 3)
+      )
       smooth_name = item[0].replace('.dat', '_smooth.dat')
       data.append((smooth_name, np.array((smooth_x, smooth_y))))
   return data
@@ -373,20 +378,37 @@ def load_and_clean_files(files, plot_dict):
   return data
 
 
-def smooth_data_sg(x_values, y_values, window_size=0):
+def smooth_data_sg(x_values, y_values, window_size=0, poly_order=3):
   # This filter does not change the x_values
   smoothed_x = x_values
   if window_size > 0:
-    smoothed_y = savgol_filter(y_values, window_size, 3)
+    ws = window_size
   else:
     # Window size not specified. Use maximal allowed value.
-    # Note that the window size must be odd.
-    if len(y_values) % 2 == 0:
-      ws = len(y_values) - 1
+    ws = len(y_values)
+  # Note that the window size must be odd.
+  if ws % 2 == 0:
+    print colored('window size is not odd. Reduce by one.', 'yellow')
+    ws -= 1
+  try:
+    smoothed_y = savgol_filter(y_values, ws, poly_order)
+    return smoothed_x, smoothed_y
+  except:
+    if ws <= poly_order:
+      print colored('SavGol-Filter failed because the window size is smaller \
+        than the degree of the polynomial: ', 'red')
+      print 'Given window size (minus 1 if even): ', ws
+      print 'Polynomial degree: ', poly_order
+    elif ws > len(y_values):
+      print colored('SavGol-Filter failed because the window size is larger \
+        than the total number of sampling points: ', 'red')
+      print 'Given window size (minus 1 if even): ', ws
+      print 'Number of sampling points: ', len(y_values)
     else:
-      ws = len(y_values)
-    smoothed_y = savgol_filter(y_values, ws, 3)
-  return smoothed_x, smoothed_y
+      print colored('SavGol-Filter failed, but the reason could not be identified!',
+        'red')
+    print 'No Smoothing has been performed!'
+    return x_values, y_values
 
 
 def smooth_data_internal(x_values, y_values, delta):
