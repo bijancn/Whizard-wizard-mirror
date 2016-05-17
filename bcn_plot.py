@@ -7,6 +7,7 @@ from matplotlib._cm import cubehelix
 from matplotlib.ticker import AutoMinorLocator
 import matplotlib.gridspec as gridspec
 import data_utils
+from data_utils import get_name
 from functools import partial
 from utils import mkdirs
 import fit_utils
@@ -191,34 +192,6 @@ def fit_plot(ax, x, y, xmin, xmax, degree, *args, **kwargs):
   ax.plot(fit_x, fit_y, *args, **kwargs)
 
 
-def smooth_plot(ax, x, y, window_size, *args, **kwargs):
-  smooth_x, smooth_y = data_utils.smooth_data_sg(x, y, window_size=window_size)
-  ax.plot(smooth_x, smooth_y, *args, **kwargs)
-
-
-def get_name(line):
-  try:
-    folder = line.get('folder', '.')
-  except AttributeError:
-    print 'lines and bands interface has changed:' + \
-          'Please give an object with name instead of ' + line
-  else:
-    path = os.path.abspath(os.path.join(folder, 'scan-results', line.get('name', None)))
-    return path
-
-
-def get_associated_plot_data(data, special):
-  special_data = []
-  list_of_lists = [s.get('data', []) for s in special]
-  for lbl_list in list_of_lists:
-    this_special_data = []
-    for lbl in lbl_list:
-      this_special_data += [d for d in data
-          if get_name(lbl) == d[0].replace('.dat', '')]
-      special_data += [this_special_data]
-  return special_data
-
-
 def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     label_decider=None, legend_decider=None, marker_decider=None,
     linestyle_decider=None, pretty_label=None, set_extra_settings=None,
@@ -234,12 +207,10 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   for line in lines:
     line_data += [d for d in data if get_name(line) == d[0].replace('.dat', '')]
   bands = plot_dict.get('bands', [])
-  band_data = get_associated_plot_data(data, bands)
+  band_data = data_utils.get_associated_plot_data(data, bands)
   fits = plot_dict.get('fits', [])
-  fit_data = get_associated_plot_data(data, fits)
-  smooths = plot_dict.get('smooth', [])
-  smooth_data = get_associated_plot_data(data, smooths)
-  n_objects = len(line_data) + len(band_data) + len(fit_data) + len(smooth_data)
+  fit_data = data_utils.get_associated_plot_data(data, fits)
+  n_objects = len(line_data) + len(band_data) + len(fit_data)
   many_labels = n_objects > 6
   check_for_all_sets(line_data, lines)
   # check_for_all_sets(band_data, band_lst)
@@ -272,8 +243,6 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     ylabel1 = None
   if len(fit_data) > 0:
     this_fit_plot = partial(fit_plot, ax)
-  if len(smooth_data) > 0:
-    this_smooth_plot = partial(smooth_plot, ax)
   if plot_extra is not None:
     ax = plot_extra(ax, title)
   ymin1, ymax1 = None, None
@@ -391,14 +360,6 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
       degree = 1
     this_fit_plot(x, y, xmin, xmax, degree, color=color,
       label=label, linestyle=linestyle)
-  for data_of_a_smooth, smooth, color in zip(smooth_data, smooths, colors):
-    label = smooth.get('label', get_label(smooth, title, pretty_label=pretty_label))
-    color = smooth.get('color', color)
-    linestyle = decide_if_not_none(smooth, linestyle_decider, 'linestyle', 'solid',
-       data_of_a_smooth[0][0], title)
-    window_size = smooth.get('window_size', 0)
-    this_smooth_plot(data_of_a_smooth[0][1][0], data_of_a_smooth[0][1][1],
-      window_size, color=color, label=label, linestyle=linestyle)
 
   xticks = plot_dict.get('xticks', None)
   yticks = plot_dict.get('yticks', None)

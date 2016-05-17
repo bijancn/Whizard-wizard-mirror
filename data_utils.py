@@ -69,6 +69,29 @@ def test_sort_data():
   np.testing.assert_array_almost_equal(data[0][1], expectation)
 
 
+def get_name(line):
+  try:
+    folder = line.get('folder', '.')
+  except AttributeError:
+    print 'lines and bands interface has changed:' + \
+          'Please give an object with name instead of ' + line
+  else:
+    path = os.path.abspath(os.path.join(folder, 'scan-results', line.get('name', None)))
+    return path
+
+
+def get_associated_plot_data(data, special):
+  special_data = []
+  list_of_lists = [s.get('data', []) for s in special]
+  for lbl_list in list_of_lists:
+    this_special_data = []
+    for lbl in lbl_list:
+      this_special_data += [d for d in data
+          if get_name(lbl) == d[0].replace('.dat', '')]
+      special_data += [this_special_data]
+  return special_data
+
+
 def build_nlo_sums(data):
   for index, item in enumerate(data):
     if '_Born' in item[0]:
@@ -83,7 +106,7 @@ def build_nlo_sums(data):
             item[0].replace('_Born', '_Mismatch') == x[0]))
           indices += [mismatch_index]
         except StopIteration:
-         pass
+          pass
         combined_x, combined_y, combined_yerr = build_sum(data, indices)
         combined_name = item[0].replace('_Born', '')
         array = np.array((combined_x, combined_y, combined_yerr))
@@ -91,6 +114,18 @@ def build_nlo_sums(data):
         data.append((combined_name, array))
       except StopIteration:
         pass
+  return data
+
+
+def build_smooth(data, plot_dict):
+  smooths = plot_dict.get('smooth', [])
+  smooth_data = get_associated_plot_data(data, smooths)
+  for data_of_a_smooth, smooth in zip(smooth_data, smooths):
+    for i, item in enumerate(data_of_a_smooth):
+      smooth_x, smooth_y = smooth_data_sg(item[1][0], item[1][1],
+        smooth.get('window_size', 0))
+      smooth_name = item[0].replace('.dat', '_smooth.dat')
+      data.append((smooth_name, np.array((smooth_x, smooth_y))))
   return data
 
 
@@ -328,11 +363,12 @@ def test_build_sum():
   os.remove(test_file2)
 
 
-def load_and_clean_files(files):
+def load_and_clean_files(files, plot_dict):
   data = [(filename, np.loadtxt(filename, unpack=True)) for filename in files]
   data = remove_empty_data(data)
   data = sort_data(data)
   data = build_nlo_sums(data)
+  data = build_smooth(data, plot_dict)
   data = remove_empty_data(data)
   return data
 
