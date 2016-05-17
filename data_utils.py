@@ -368,12 +368,13 @@ def test_build_sum():
   os.remove(test_file2)
 
 
-def load_and_clean_files(files, plot_dict):
+def load_and_clean_files(files, plot_dict=None):
   data = [(filename, np.loadtxt(filename, unpack=True)) for filename in files]
   data = remove_empty_data(data)
   data = sort_data(data)
   data = build_nlo_sums(data)
-  data = build_smooth(data, plot_dict)
+  if plot_dict is not None:
+    data = build_smooth(data, plot_dict)
   data = remove_empty_data(data)
   return data
 
