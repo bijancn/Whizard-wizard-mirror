@@ -214,12 +214,9 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
       print 'at the same time. Not building ' + title
       return
     if scale_by_value > 0:
-      print 'Going to scale by value:', scale_by_value
       ld[1][1] /= scale_by_value
       ld[1][2] /= scale_by_value
     if scale_by_point is not None:
-      print 'Going to scale by point:', scale_by_point
-      print 'x_values: ', ld[1][0]
       index = np.where(ld[1][0] == scale_by_point)
       if (len(index[0]) == 0):
         print 'Cannot scale w.r.t.' + str(scale_by_point) + '. Not in data!'
