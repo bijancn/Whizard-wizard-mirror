@@ -206,6 +206,32 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   lines = plot_dict.get('lines', [])
   for line in lines:
     line_data += [d for d in data if get_name(line) == d[0].replace('.dat', '')]
+  for ld, line in zip(line_data, lines):
+    scale_by_value = line.get('scale_by_value', 0)
+    scale_by_point = line.get('scale_by_point', None)
+    if scale_by_value > 0 and (scale_by_point is not None):
+      print 'Cannot scale by a fixed value and with reference to a fixed point'
+      print 'at the same time. Not building ' + title
+      return
+    if scale_by_value > 0:
+      print 'Going to scale by value:', scale_by_value
+      ld[1][1] /= scale_by_value
+      ld[1][2] /= scale_by_value
+    if scale_by_point is not None:
+      print 'Going to scale by point:', scale_by_point
+      print 'x_values: ', ld[1][0]
+      index = np.where(ld[1][0] == scale_by_point)
+      if (len(index[0]) == 0):
+        print 'Cannot scale w.r.t.' + str(scale_by_point) + '. Not in data!'
+        return
+      elif(len(index[0]) > 1):
+        print 'Cannot scale w.r.t.' + str(scale_by_point) + '. Not uniqe!'
+        print 'You have the same xvalue more than once in your data. It might be broken!'
+        return
+      else:
+        scale_value = ld[1][1][index[0][0]]
+        ld[1][1] /= scale_value
+        ld[1][2] /= scale_value
   bands = plot_dict.get('bands', [])
   band_data = data_utils.get_associated_plot_data(data, bands)
   fits = plot_dict.get('fits', [])
