@@ -11,7 +11,7 @@
 #  general settings  #
 #====================#
  BEGIN PLOT /WHIZARD_.*
-LogY=0
+LogY=1
 RatioPlotYLabel=K-Factor
 RatioPlotSameStyle=1
 LegendXPos=0.70
@@ -55,19 +55,15 @@ XLabel=$m^{WW}[\text{GeV}]$
 
  BEGIN PLOT /WHIZARD_.*/BWp-inv
 XLabel=$m^{BW^+}[\text{GeV}]$
-RatioPlotYMax=12.0
-RatioPlotYMin=0.65
-XMax=220.0
-RatioPlotXMax=220.0
+RatioPlotYMax=5.0
+RatioPlotYMin=0.5
 LegendXPos=0.25
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BWm-inv
 XLabel=$m^{BW^-}[\text{GeV}]$
-RatioPlotYMax=12.0
-RatioPlotYMin=0.65
-XMax=220.0
-RatioPlotXMax=220.0
+RatioPlotYMax=5.0
+RatioPlotYMin=0.5
 LegendXPos=0.25
  END PLOT
 
@@ -402,18 +398,24 @@ XLabel=$\cos\theta^{BB}$
 
  BEGIN PLOT /WHIZARD_.*/BWp-Theta
 XLabel=$\cos\theta^{BW^+}$
+YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}]$
+LegendXPos=0.75
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BWm-Theta
 XLabel=$\cos\theta^{BW^-}$
+YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}]$
+LegendXPos=0.1
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Blm-Theta
 XLabel=$\cos\theta^{Bl^-}$
+YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Blp-Theta
 XLabel=$\cos\theta^{Bl^+}$
+YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}]$
  END PLOT
 
 

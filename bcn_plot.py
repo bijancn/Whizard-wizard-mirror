@@ -194,14 +194,14 @@ def fit_plot(ax, x, y, xmin, xmax, degree, *args, **kwargs):
 
 def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     label_decider=None, legend_decider=None, marker_decider=None,
-    linestyle_decider=None, pretty_label=None, set_extra_settings=None,
-    output_file=None):
+    linestyle_decider=None, pretty_label=None, set_extra_settings=None):
   """
   data: [(identifier_string, numpy_array),...] where numpy_array has the columns
         x, y and optionally yerror
   """
   mkdirs(pic_path)
   title = plot_dict.get('title', 'plot')
+  output_file = plot_dict.get('output_file', '')
   line_data = []
   lines = plot_dict.get('lines', [])
   for line in lines:
@@ -372,7 +372,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
             legend_outside=many_labels, height_shrinker=0.70,
             legend_location=legend_location, ax1=ax1, ylabel1=ylabel1,
             ymin1=ymin1, ymax1=ymax1, n_majors1=n_majors1)
-  if output_file is not None:
+  if output_file is not '':
     # We do not want to have to remember whether the ending has to be supplied
     if output_file.endswith('.pdf'):
       out_file = output_file

@@ -238,8 +238,6 @@ namespace Rivet {
         _h["BW_invMass_peak"]->fill(Top.mass(), event);
         _h["BWp_E"]->fill(Top.E(), event);
         _h["BWp_Pt"]->fill(Top.pt(), event);
-        cout << "Momentum: " << Top << endl;
-        cout << "cos(Theta): " << std::cos (Top.theta()) << endl;
         _h["BWp_Theta"]->fill(std::cos(Top.theta()), event);
         _h["BWp_Phi"]->fill(Rivet::deltaPhi(bjets[0].momentum(),Wp), event);
         _h["BWp_R"]->fill(Rivet::deltaR(bjets[0].momentum(),Wp), event);
