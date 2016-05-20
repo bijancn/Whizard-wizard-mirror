@@ -1,0 +1,74 @@
+{
+  "plots": [
+  {"title": "$e^+ e^- \\to t \\bar{t}H, \\quad \\sqrt{s} = 800 GeV$",
+   "output_file": "tth-yt-scan",
+   "lines": [
+   {"name": "proc_lo_tth",
+    "label": "ttH - LO",
+    "color": "blue"
+   },
+   {"name": "proc_nlo_tth",
+    "label": "ttH - NLO",
+    "color": "red"
+   }
+   ],
+   "ratio": {"ylabel": "",
+      "ymax": 1.02, "ymin": 0.96,
+      "ymajors": 4,
+      "yticks": [0.96, 0.98, 1.0, 1.02]},
+   "xlabel": "$y_t / m_t$",
+   "ylabel": "$\\sigma[fb]$",
+   "ylog": false,
+   "xlog": false,
+   "xminors": false,
+   "yminors": false,
+   "ymax": 3.0,
+   "ymin": 1.8,
+   "yticks": [1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0],
+   "yminors": 1,
+   "xticks": [0.9, 0.95, 1.0, 1.05, 1.1],
+   "xminors": 4
+   },
+   {"title": "bar",
+    "output_file": "check",
+    "lines": [ 
+   {"name": "proc_lo_WbWbH",
+    "label": "WbWbH - LO",
+    "color": "blue"
+   },
+   {"name": "proc_nlo_WbWbH",
+    "label": "WbWbH - NLO",
+    "linestyle": "None",
+    "color": "black"
+   },
+   {"name": "proc_nlo_WbWbH_smooth",
+    "label": "WbWbH - NLO, interpolated",
+    "color": "red"
+   }
+   ],
+   "ratio": {"ylabel": "",
+      "ymax": 1.02, "ymin": 0.96,
+      "ymajors": 4,
+      "yticks": [0.96, 0.98, 1.0, 1.02]},
+   "xlabel": "$y_t / m_t$",
+   "ylabel": "$\\sigma[fb]$",
+   "ylog": false,
+   "xlog": false,
+   "xminors": false,
+   "yminors": false,
+   "ymax": 3.0,
+   "ymin": 1.8,
+   "yticks": [1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0],
+   "yminors": 1,
+   "xticks": [0.9, 0.95, 1.0, 1.05, 1.1],
+   "xminors": 4
+  }
+ ],
+ "smooth": [
+ {"window_size": 5,
+  "poly_order": 3,
+  "data": [{"name": "proc_nlo_WbWbH"}
+   ]
+  }
+ ]
+}

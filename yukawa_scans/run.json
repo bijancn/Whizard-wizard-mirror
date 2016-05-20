@@ -1,0 +1,72 @@
+{
+  "processes": [
+  {"process": "proc_lo_tth",
+    "purpose": "scan",
+    "nlo_type": "lo",
+    "whizard_options": "",
+    "scan_object": "dummy",
+    "ranges": [
+    {"type": "linear",
+      "start": 0.9,
+      "stop": 1.1,
+      "stepsize": 0.01
+    }
+    ],
+    "adaption_iterations": "10:50000",
+    "integration_iterations": "5:40000",
+    "batches": 24
+  },
+  {"process": "proc_nlo_tth",
+    "purpose": "scan",
+    "nlo_type": "nlo",
+    "whizard_options": "",
+    "scan_object": "dummy",
+    "ranges": [
+    {"type": "linear",
+      "start": 0.9,
+      "stop": 1.1,
+      "stepsize": 0.01
+    }
+    ],
+    "fks_method": "resonances",
+    "adaption_iterations": "10:50000",
+    "integration_iterations": "5:40000",
+    "batches": 24
+  },
+  {"process": "proc_lo_WbWbH",
+    "purpose": "scan",
+    "nlo_type": "lo",
+    "whizard_options": "",
+    "scan_object": "dummy",
+    "ranges": [
+    {"type": "linear",
+      "start": 0.9,
+      "stop": 1.1,
+      "stepsize": 0.01
+    }
+    ],
+    "adaption_iterations": "6:25000",
+    "integration_iterations": "3:15000",
+    "batches": 24
+  },
+  {"process": "proc_nlo_WbWbH",
+    "purpose": "scan",
+    "nlo_type": "nlo",
+    "whizard_options": "",
+    "scan_object": "dummy",
+    "ranges": [
+    {"type": "linear",
+      "start": 0.9,
+      "stop": 1.1,
+      "stepsize": 0.01
+    }
+    ],
+    "fks_method": "resonances",
+    "adaption_iterations": "10:25000",
+    "integration_iterations": "6:15000",
+    "batches": 24
+  }
+  ],
+  "whizard": "whizard",
+  "data_output": "./"
+}

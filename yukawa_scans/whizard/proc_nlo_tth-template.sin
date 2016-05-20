@@ -1,0 +1,21 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+wtop = 0.0
+wZ = 2.5060
+wW = 2.0978
+alpha_power = 3
+
+real dummy = 0.0
+?nlo_fixed_order = true
+?unweighted = false
+?negative_weights = true
+#SETSCAN
+scale = mtop + mH
+real yukawa = dummy * mtop
+blha_use_top_yukawa = yukawa
+#ITERATIONS
+library = proc_nlo_tth
+process proc_nlo_tth = e1, E1 => t, T, H { nlo_calculation = "Full" }
+integrate (proc_nlo_tth)
+printf "RES %8e %8e %8e" (dummy, integral(proc_nlo_tth), error(proc_nlo_tth))
