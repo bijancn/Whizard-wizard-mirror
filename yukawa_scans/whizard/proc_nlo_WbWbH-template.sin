@@ -18,7 +18,7 @@ scale = mtop + mH
 real yukawa = dummy * mtop
 blha_use_top_yukawa = yukawa
 #ITERATIONS
-mult_call_real = 100
+mult_call_real = 5
 library = proc_nlo_WbWbH
 process proc_nlo_WbWbH = e1, E1 => Wp, Wm, b, B, H { nlo_calculation = "Full" }
 integrate (proc_nlo_WbWbH)

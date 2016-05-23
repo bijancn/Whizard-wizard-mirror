@@ -6,17 +6,17 @@ wZ = 2.5060
 wW = 2.0978
 
 
-?nlo_fixed_order = true
+?fixed_order_nlo_events = true
 ?unweighted = false
 ?negative_weights = true
 
 
 real dummy = 0.0
-scale = mtop
+scale = mtop + mH
 #ITERATIONS
 library = proc_lo
-process proc_lo = E1, e1 => t, T
+process proc_lo = E1, e1 => Wp, Wm, b, B, H
 #SETSCAN
 
 integrate (proc_lo)
-printf "RES %8e %8e %8e" (mtop, integral(proc_lo), error(proc_lo))
+printf "RES %8e %8e %8e" (sqrts, integral(proc_lo), error(proc_lo))

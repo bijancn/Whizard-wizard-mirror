@@ -54,6 +54,7 @@
     "nlo_type": "nlo",
     "whizard_options": "",
     "scan_object": "dummy",
+    "integration_copies": 100,
     "ranges": [
     {"type": "linear",
       "start": 0.9,
@@ -62,8 +63,8 @@
     }
     ],
     "fks_method": "resonances",
-    "adaption_iterations": "10:25000",
-    "integration_iterations": "6:15000",
+    "adaption_iterations": "5:20000",
+    "integration_iterations": "5:20000",
     "batches": 24
   }
   ],

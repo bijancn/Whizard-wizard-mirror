@@ -5,12 +5,32 @@
    "lines": [
    {"name": "proc_lo_tth",
     "label": "ttH - LO",
-    "color": "blue"
+    "color": "blue",
+    "linestyle": "None"
    },
    {"name": "proc_nlo_tth",
     "label": "ttH - NLO",
-    "color": "red"
+    "color": "red",
+    "linestyle": "None"
    }
+   ],
+   "fits": [
+   {"label": "Fit - ttH - NLO",
+    "color": "red",
+    "linestyle": "solid",
+    "fit_degree": 1,
+    "print_fit_parameters": true,
+    "data": [{"name": "proc_nlo_tth"}
+    ]
+    },
+   {"label": "Fit - ttH - LO",
+    "color": "blue",
+    "linestyle": "solid",
+    "print_fit_parameters": true, 
+    "fit_degree": 1,
+    "data": [{"name": "proc_lo_tth"}
+    ]
+    }
    ],
    "ratio": {"ylabel": "",
       "ymax": 1.02, "ymin": 0.96,
@@ -34,17 +54,32 @@
     "lines": [ 
    {"name": "proc_lo_WbWbH",
     "label": "WbWbH - LO",
-    "color": "blue"
+    "color": "blue",
+    "linestyle": "None"
    },
    {"name": "proc_nlo_WbWbH",
     "label": "WbWbH - NLO",
     "linestyle": "None",
-    "color": "black"
-   },
-   {"name": "proc_nlo_WbWbH_smooth",
-    "label": "WbWbH - NLO, interpolated",
     "color": "red"
    }
+   ],
+   "fits": [
+   {"label": "Fit - WbWbH - NLO",
+    "color": "red",
+    "linestyle": "solid",
+    "fit_degree": 1,
+    "print_fit_parameters": true,
+    "data": [{"name": "proc_nlo_WbWbH"}
+    ]
+    },
+   {"label": "Fit - WbWbH - LO",
+    "color": "blue",
+    "linestyle": "solid",
+    "print_fit_parameters": true, 
+    "fit_degree": 1,
+    "data": [{"name": "proc_lo_WbWbH"}
+    ]
+    }
    ],
    "ratio": {"ylabel": "",
       "ymax": 1.02, "ymin": 0.96,
@@ -62,13 +97,6 @@
    "yminors": 1,
    "xticks": [0.9, 0.95, 1.0, 1.05, 1.1],
    "xminors": 4
-  }
- ],
- "smooth": [
- {"window_size": 5,
-  "poly_order": 3,
-  "data": [{"name": "proc_nlo_WbWbH"}
-   ]
   }
  ]
 }

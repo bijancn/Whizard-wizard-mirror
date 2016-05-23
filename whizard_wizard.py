@@ -72,7 +72,7 @@ SUCCESS, FAIL = range(2)
 
 class Whizard():
   def __init__(self, run_json, verbose):
-    self.binary = run_json['whizard']
+    self.binary = run_json.get('whizard', 'whizard')
     if not spawn.find_executable(self.binary):
       ut.fatal('No valid whizard found. You gave whizard = ' + self.binary)
     else:
@@ -136,13 +136,18 @@ class Whizard():
         change_sindarin_for_event_gen(sindarin, runfolder, proc_id, proc_dict)
         return _exe(purpose)
     elif purpose == 'scan':
-      scan_expression = proc_dict['scan_object'] + " = " + str(proc_id)
+      if '-' in str(proc_id):
+        scan_value = str(proc_id).split('-')[0]
+      else:
+        scan_value = str(proc_id)
+      scan_expression = proc_dict['scan_object'] + " = " + scan_value
       replace_line = lambda line: line.replace('#SETSCAN',
         scan_expression).replace('include("', 'include("../')
       integration_sindarin = proc_name + '-integrate.sin'
       ut.sed(integration_sindarin, replace_line,
           new_file=os.path.join(runfolder, sindarin))
       with ut.cd(runfolder):
+        set_seed(sindarin, runfolder)
         return _exe(purpose)
     elif purpose == 'test_soft':
       options = options + ' --debug subtraction '
@@ -302,7 +307,10 @@ def fill_runs(proc_name, proc_dict):
           step_range = arange(start, stop, float(stepsize))
         else:
           ut.fatal('Aborting: Unknown scan type')
-        runs += [(b, proc_name, proc_dict) for b in step_range]
+        if proc_dict.get('integration_copies', 1) > 1:
+          runs += get_process_copies(proc_name, proc_dict, step_range)
+        else:
+          runs += [(b, proc_name, proc_dict) for b in step_range]
   elif purpose == 'integration' or purpose == 'test_soft':
     runs = [(-1, proc_name, proc_dict)]
   else:
@@ -371,6 +379,13 @@ def get_scale_suffixes():
 
 def append_scale_suffixes(proc_name):
   return [proc_name + '_' + s for s in get_scale_suffixes()]
+
+
+def get_process_copies(proc_name, proc_dict, step_range):
+  runs = []
+  for i_copy in range(proc_dict.get('integration_copies', 1)):
+    runs += [(str(b) + '-' + str(i_copy), proc_name, proc_dict) for b in step_range]
+  return runs
 
 
 def test_append_scale_suffixes():
@@ -694,9 +709,14 @@ def divider(matchobj, batches):
 events_re = re.compile(r"(n_events = )([0-9]*)( \* K)")
 
 
+def set_seed(filename, samplename):
+  seed = 'seed = ' + str(abs(hash(samplename)) % (10**8)) + '\n'
+  ut.sed(filename, write_to_top=seed)
+
+
 def change_sindarin_for_event_gen(filename, samplename, i, proc_dict):
   sample = '$sample = "' + samplename + '"\n'
-  seed = 'seed = ' + str(abs(hash(samplename)) % (10 ** 8)) + '\n'
+  # seed = 'seed = ' + str(abs(hash(samplename)) % (10 ** 8)) + '\n'
   events_per_batch = proc_dict['events_per_batch']
   if events_per_batch is None:
     replace_func = partial(divider, batches=proc_dict['batches'])
@@ -704,7 +724,8 @@ def change_sindarin_for_event_gen(filename, samplename, i, proc_dict):
     replace_func = lambda x : x.group(1) + str(events_per_batch)
   replace_line = lambda line : events_re.sub(
       replace_func, line).replace('include("', 'include("../')
-  ut.sed(filename, replace_line, write_to_top=sample + seed)
+  ut.sed(filename, replace_line, write_to_top=sample)
+  set_seed(filename, samplename)
 
 
 def run_json(json_name):
@@ -744,4 +765,10 @@ def test_integration_whizard_wizard_test_soft():
 @nt.with_setup(clean_whizard_folder)
 def test_integration_whizard_wizard_scan():
   results = run_json('scan.json')
+  nt.ok_(all([r == SUCCESS for r in results]))
+
+
+@nt.with_setup(clean_whizard_folder)
+def test_integration_whizard_wizard_scan_WbWbH():
+  results = run_json('WbWbH_scan.json')
   nt.ok_(all([r == SUCCESS for r in results]))

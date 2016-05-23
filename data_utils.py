@@ -243,6 +243,50 @@ def build_ratio(data, indices):
   return combine_and_project(data, indices, lambda x, y: x / y, error_func)
 
 
+def average_copies(data):
+  def get_variance(sigma):
+    sum_var_inv = sum([1.0 / (s * s) for s in sigma])
+    return 1.0 / sum_var_inv
+
+  def get_weighted_mean(values, sigma):
+    mean = 0.0
+    for v, s in zip(values, sigma):
+      mean += v / (s * s)
+    return mean * get_variance(sigma)
+
+  def average_data_item(item, limits):
+    if sum(l for l in limits) == len(limits) * (len(limits) - 1) / 2:
+      # Equidistant values, no averaging necessary
+      return item
+    for i in range(len(limits) - 1):
+      l_low = limits[i]
+      l_high = limits[i + 1] - 1
+      if l_low == l_high:
+        # There is only one point for this x-value. Nothing to average over.
+        new_y_err.append(item[1][2][l_low])
+        new_y.append(item[1][1][l_low])
+      else:
+        new_y_err.append(np.sqrt(get_variance(item[1][2][l_low:l_high])))
+        new_y.append(get_weighted_mean(item[1][1][l_low:l_high],
+           item[1][2][l_low:l_high]))
+
+    item = (item[0], np.array([item[1][0][limits], np.array(new_y),
+       np.array(new_y_err)]))
+    return item
+
+  for data_index, item in enumerate(data):
+    new_y = []
+    new_y_err = []
+    limits = [0]
+    current_x = item[1][0][0]
+    for index, x, in enumerate(item[1][0]):
+      if x != current_x:
+        limits.append(index)
+        current_x = x
+    data[data_index] = average_data_item(data[data_index], limits)
+  return data
+
+
 class Combiner():
   def __init__(self, x_generators, y_generators, lengths,
       yerr_generators=None, error_func=None, operation=lambda x: x):
@@ -371,6 +415,7 @@ def load_and_clean_files(files, smooth_dict=None):
   data = [(filename, np.loadtxt(filename, unpack=True)) for filename in files]
   data = remove_empty_data(data)
   data = sort_data(data)
+  data = average_copies(data)
   data = build_nlo_sums(data)
   if smooth_dict is not None:
     data = build_smooth(data, smooth_dict)

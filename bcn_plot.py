@@ -171,7 +171,13 @@ def get_label(object_dict, title, filename=None, pretty_label=None):
 
 def combined_plot(base_line, ax, ax1, x, y, *args, **kwargs):
   ax.plot(x, y, *args, **kwargs)
+  print 'x: ', x
+  print 'x: ', x
+  # print 'y: ', y
+  # print 'baseline: ', base_line
   comb = data_utils.normalize(base_line, x, y)
+  # print 'comb[0]: ', comb[0]
+  # print 'comb[1]: ', comb[1]
   ax1.plot(comb[0], comb[1], *args, **kwargs)
 
 
@@ -187,9 +193,9 @@ def combined_fill_between(base_line, ax, ax1, x, ymin, ymax, *args, **kwargs):
   ax1.fill_between(comb[0], comb[1], comb[2][0], *args, **kwargs)
 
 
-def fit_plot(ax, x, y, xmin, xmax, degree, *args, **kwargs):
-  fit_x, fit_y = fit_utils.fit_polynomial(x, y, xmin, xmax, degree)
-  ax.plot(fit_x, fit_y, *args, **kwargs)
+def fit_plot(plot_func, x, y, xmin, xmax, degree, verbose=False, *args, **kwargs):
+  fit_x, fit_y = fit_utils.fit_polynomial(x, y, xmin, xmax, degree, verbose)
+  plot_func(fit_x, fit_y, *args, **kwargs)
 
 
 def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
@@ -265,7 +271,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     this_fill_between = ax.fill_between
     ylabel1 = None
   if len(fit_data) > 0:
-    this_fit_plot = partial(fit_plot, ax)
+    this_fit_plot = partial(fit_plot, this_plot)
   if plot_extra is not None:
     ax = plot_extra(ax, title)
   ymin1, ymax1 = None, None
@@ -341,6 +347,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
           alpha=global_opacity)
       plt.hlines(mean, _[:-1], _[1:], label=label, colors=c)
     elif linestyle is not None and linestyle != "None":
+      print 'label: ', label
       this_plot(d[0], d[1], color=c, label=label, linestyle=linestyle)
     else:
       if marker_decider is not None:
@@ -367,6 +374,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   for data_of_a_fit, fit, color in zip(fit_data, fits, colors):
     label = fit.get('label', get_label(fit, title, pretty_label=pretty_label))
     color = fit.get('color', color)
+    verbose = fit.get('print_fit_parameters', False)
     linestyle = decide_if_not_none(fit, linestyle_decider, 'linestyle', 'solid',
         data_of_a_fit[0][0], title)
     x = data_of_a_fit[0][1][0]
@@ -381,7 +389,9 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
       print 'You have not specified the degree of the polynomial to be fitted. '
       print 'Going to fit a line!'
       degree = 1
-    this_fit_plot(x, y, xmin, xmax, degree, color=color,
+    if verbose:
+      print 'Fit summary for ' + str(label)
+    this_fit_plot(x, y, xmin, xmax, degree, verbose=verbose, color=color,
       label=label, linestyle=linestyle)
 
   xticks = plot_dict.get('xticks', None)
