@@ -11,7 +11,7 @@
 #  general settings  #
 #====================#
  BEGIN PLOT /WHIZARD_.*
-LogY=1
+LogY=0
 RatioPlotYLabel=K-Factor
 RatioPlotSameStyle=1
 LegendYPos=0.90
@@ -86,8 +86,8 @@ XLabel=$\cos{\theta^{j_2}}$
 YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}/\text{GeV}]$
 XLabel=$\cos{\theta^{t}}$
 LegendYPos=0.90
-LegendXPos=0.25
-RatioPlotYMin=0.95
+LegendXPos=0.75
+RatioPlotYMin=0.8
 RatioPlotYMax=1.2
  END PLOT
 
@@ -95,8 +95,8 @@ RatioPlotYMax=1.2
 YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}/\text{GeV}]$
 XLabel=$\cos{\theta^{\bar{t}}}$
 LegendYPos=0.90
-LegendXPos=0.25
-RatioPlotYMin=0.95
+LegendXPos=0.75
+RatioPlotYMin=0.8
 RatioPlotYMax=1.2
  END PLOT
 

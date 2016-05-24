@@ -11,7 +11,7 @@
 #  general settings  #
 #====================#
  BEGIN PLOT /WHIZARD_.*
-LogY=1
+LogY=0
 RatioPlotYLabel=K-Factor
 RatioPlotSameStyle=1
 LegendYPos=0.90

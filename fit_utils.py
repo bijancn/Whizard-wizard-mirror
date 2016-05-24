@@ -14,12 +14,15 @@ def fit_line(x, y, xmin, xmax, verbose=False):
   return fit_x, fit_y
 
 
-def fit_polynomial(x, y, xmin, xmax, degree, verbose=False):
-  parameters, residuals, _, _, _ = np.polyfit(x, y, degree, full=True)
+def fit_polynomial(x, y, xmin, xmax, degree, y_err=None, verbose=False):
+  # parameters, residuals, _, _, _ = np.polyfit(x, y, degree, w=y_err, full=True)
+  parameters, cov = np.polyfit(x, y, degree, w=y_err, cov=True)
+  parameter_errors = np.diagonal(cov)
   if verbose:
     print 'Polynomial coefficients: '
     for i in range(degree + 1):
-      print 'C[' + str(i) + ']= ' + str(parameters[degree - i])
+      print 'C[' + str(i) + ']= ' + str(parameters[degree - i]) + \
+          ' +- ' + str(parameter_errors[degree - i])
   delta_x = 10
   x_work = x
   if xmin < x_work[0]:
@@ -30,7 +33,7 @@ def fit_polynomial(x, y, xmin, xmax, degree, verbose=False):
   for i in range(len(x_work) - 1):
     fit_x = np.append(fit_x, np.linspace(x_work[i], x_work[i + 1], delta_x))
 
-  fit_y = np.zeros(100)
+  fit_y = np.zeros(len(fit_x))
   for i in range(degree + 1):
     fit_y += pow(fit_x, i) * parameters[degree - i]
   return fit_x, fit_y

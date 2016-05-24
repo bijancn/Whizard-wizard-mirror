@@ -25,6 +25,11 @@ colors = ['#EE3311',  # red
           # '#009688',  # teal
           ]
 
+N_YMINORS_DEFAULT = 5
+N_XMINORS_DEFAULT = 5
+N_YMAJORS_DEFAULT = 6
+N_XMAJORS_DEFAULT = 6
+
 # Valid legend locations
 # right         # center left   # upper right    # lower right   # best
 # center        # lower left    # center right   # upper left    # upper center
@@ -38,8 +43,10 @@ class Plotter(object):
 
   # TODO: (bcn 2016-05-03) legend_outside seems broken with ratio plot
   def setfig(self, ax, xmin, xmax, ymin, ymax, xlabel, ylabel,
-      title=None, xlog=False, ylog=False, xminors=False, yminors=False,
-      n_minors=5, n_majors=6, xticks=None, yticks=None, puff=0.05,
+      title=None, xlog=False, ylog=False,
+      xmajors=N_XMAJORS_DEFAULT, ymajors=N_YMAJORS_DEFAULT,
+      xminors=0, yminors=0,
+      xticks=None, yticks=None, puff=0.05,
       legend_location='best',
       legend_columns=1, legend_outside=False, height_shrinker=0.80,
       legend_hide=False, legend_ordering=[], ax1=None, ylabel1=None,
@@ -82,35 +89,36 @@ class Plotter(object):
     # major ticks
     if xticks is None:
       if xlog:
-        xticks = np.logspace(math.log10(xmin), math.log10(xmax), num=n_majors)
+        xticks = np.logspace(math.log10(xmin), math.log10(xmax), num=xmajors)
       else:
-        xticks = np.linspace(xmin, xmax, n_majors)
+        xticks = np.linspace(xmin, xmax, xmajors)
     ax.set_xticks(xticks)
     ax.set_xticklabels([str(xt) for xt in xticks])
     if yticks is None:
       if ylog:
-        yticks = np.logspace(math.log10(ymin), math.log10(ymax), num=n_majors)
+        yticks = np.logspace(math.log10(ymin), math.log10(ymax), num=ymajors)
       else:
-        yticks = np.linspace(ymin, ymax, n_majors)
+        yticks = np.linspace(ymin, ymax, ymajors)
+        print 'yticks: ', yticks
       if ymin1 is not None and ymax1 is not None and ax1 is not None:
         if n_majors1 is None:
-          n_majors1 = n_majors
+          n_majors1 = ymajors
         yticks1 = np.linspace(ymin1, ymax1, n_majors1)
         ax1.set_yticks(yticks1)
     ax.set_yticks(yticks)
 
     # minor ticks are auto-set to n_minors if requested
-    if xminors:
+    if xminors > 0:
       if xlog:
         ax.set_xscale('log', subsx=[2, 3, 4, 5, 6, 7, 8, 9])
       else:
-        minorLocator = AutoMinorLocator(n_minors)
+        minorLocator = AutoMinorLocator(xminors)
         ax.xaxis.set_minor_locator(minorLocator)
-    if yminors:
+    if yminors > 0:
       if ylog:
         ax.set_yscale('log', subsy=[2, 3, 4, 5, 6, 7, 8, 9])
       else:
-        minorLocator = AutoMinorLocator(n_minors)
+        minorLocator = AutoMinorLocator(yminors)
         ax.yaxis.set_minor_locator(minorLocator)
         if ax1 is not None:
           ax1.yaxis.set_minor_locator(minorLocator)
@@ -171,8 +179,6 @@ def get_label(object_dict, title, filename=None, pretty_label=None):
 
 def combined_plot(base_line, ax, ax1, x, y, *args, **kwargs):
   ax.plot(x, y, *args, **kwargs)
-  print 'x: ', x
-  print 'x: ', x
   # print 'y: ', y
   # print 'baseline: ', base_line
   comb = data_utils.normalize(base_line, x, y)
@@ -193,8 +199,10 @@ def combined_fill_between(base_line, ax, ax1, x, ymin, ymax, *args, **kwargs):
   ax1.fill_between(comb[0], comb[1], comb[2][0], *args, **kwargs)
 
 
-def fit_plot(plot_func, x, y, xmin, xmax, degree, verbose=False, *args, **kwargs):
-  fit_x, fit_y = fit_utils.fit_polynomial(x, y, xmin, xmax, degree, verbose)
+def fit_plot(plot_func, x, y, xmin, xmax, degree, y_err=None,
+    verbose=False, *args, **kwargs):
+  fit_x, fit_y = fit_utils.fit_polynomial(x, y, xmin, xmax,
+    degree, y_err=y_err, verbose=verbose)
   plot_func(fit_x, fit_y, *args, **kwargs)
 
 
@@ -300,7 +308,8 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   else:
     xlabel, ylabel = (plot_dict.get('xlabel', 'x'), plot_dict.get('ylabel', 'y'))
   xlog, ylog = (plot_dict.get('xlog', False), plot_dict.get('ylog', False))
-  xminors, yminors = (plot_dict.get('xminors', False), plot_dict.get('yminors', False))
+  xminors = plot_dict.get('xminors', N_XMINORS_DEFAULT)
+  yminors = plot_dict.get('yminors', N_YMINORS_DEFAULT)
   decide_or_get = partial(decide_if_not_none, plot_dict)
   legend_location = decide_or_get(legend_decider, 'legend_location', 'best', title)
   if set_extra_settings is not None:
@@ -347,7 +356,6 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
           alpha=global_opacity)
       plt.hlines(mean, _[:-1], _[1:], label=label, colors=c)
     elif linestyle is not None and linestyle != "None":
-      print 'label: ', label
       this_plot(d[0], d[1], color=c, label=label, linestyle=linestyle)
     else:
       if marker_decider is not None:
@@ -379,6 +387,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
         data_of_a_fit[0][0], title)
     x = data_of_a_fit[0][1][0]
     y = data_of_a_fit[0][1][1]
+    y_err = data_of_a_fit[0][1][2]
     xmin = decide_if_not_none(fit, None, 'extrapolation_minus', min(x),
         data_of_a_fit[0][0], title)
     xmax = decide_if_not_none(fit, None, 'extrapolation_plus', max(x),
@@ -391,7 +400,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
       degree = 1
     if verbose:
       print 'Fit summary for ' + str(label)
-    this_fit_plot(x, y, xmin, xmax, degree, verbose=verbose, color=color,
+    this_fit_plot(x, y, xmin, xmax, degree, y_err=y_err, verbose=verbose, color=color,
       label=label, linestyle=linestyle)
 
   xticks = plot_dict.get('xticks', None)

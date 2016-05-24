@@ -57,7 +57,8 @@ RatioPlotYMin=0.65
 XLabel=$m^{BW}[\text{GeV}]$
 RatioPlotYMax=5.0
 RatioPlotYMin=0.5
-LegendXPos=0.85
+LegendXPos=0.15
+LegendYPos=0.9
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BB-inv-Hpeak
@@ -264,12 +265,16 @@ XLabel=$\cos\theta^{b\bar{b}}$
 XLabel=$\cos\theta^{\bar{b}W^-}$
 YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}]$
 LegendXPos=0.1
+RatioPlotYMin=0.8
+RatioPlotYMax=1.2
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BWp-Theta
 XLabel=$\cos\theta^{bW^+}$
 YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}]$
 LegendXPos=0.75
+RatioPlotYMin=0.8
+RatioPlotYMax=1.2
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Wm-Theta

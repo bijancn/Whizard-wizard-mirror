@@ -122,12 +122,24 @@ def build_smooth(data, smooths):
   smooth_data = get_associated_plot_data(data, smooths)
   for data_of_a_smooth, smooth in zip(smooth_data, smooths):
     for i, item in enumerate(data_of_a_smooth):
+      x_start = smooth.get('start_at', item[1][0][0])
+      if x_start != item[1][0][0]:
+        i_start = min(enumerate(item[1][0]), key=lambda x: abs(x[1] - x_start))
+        x = item[1][0][i_start[0]:]
+        y = item[1][1][i_start[0]:]
+      else:
+        x = item[1][0]
+        y = item[1][1]
       smooth_x, smooth_y = smooth_data_sg(
-          item[1][0],
-          item[1][1],
+          x, y,
           window_size=smooth.get('window_size', 0),
           poly_order=smooth.get('poly_order', 3)
       )
+      if x_start != item[1][0][0]:
+        non_smooth_x = np.array(item[1][0][0 : i_start[0] - 1])
+        non_smooth_y = np.array(item[1][1][0 : i_start[0] - 1])
+        smooth_x = np.concatenate((non_smooth_x, smooth_x))
+        smooth_y = np.concatenate((non_smooth_y, smooth_y))
       smooth_name = item[0].replace('.dat', '_smooth.dat')
       data.append((smooth_name, np.array((smooth_x, smooth_y))))
   return data
