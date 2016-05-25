@@ -178,7 +178,7 @@ class Whizard():
     with ut.cd('whizard/'):
       if not os.path.exists(integration_grids) and event_generation:
         ut.logger.error('Didnt find integration grids with name ' + integration_grids +
-             ', but you wanted events! Aborting! Please use "integrate" first')
+             ', but you wanted events! Aborting! Please use "integration" first')
         return FAIL
       elif purpose == 'integration':
         ut.logger.info('Generating the following integration grids: ' +

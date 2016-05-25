@@ -1,3 +1,4 @@
+sqrts = 800 GeV
 library = "unity"
 $method = "template_unity"
 process unity = e1, E1 => Wp, Wm, b, B
