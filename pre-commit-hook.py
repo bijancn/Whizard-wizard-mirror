@@ -5,6 +5,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 from termcolor import colored
 
 modified = re.compile('^(?:M|A)(\s+)(?P<name>.*)')
@@ -71,9 +72,21 @@ def check_files(files, check):
 
 
 def main(all_files, syntax_only):
+    new_stash = subprocess.Popen(['git', 'rev-parse', '-q', '--verify', 'refs/stash'],
+      stdout=subprocess.PIPE).stdout.read()
+
     # Stash any changes to the working tree that are not going to be committed
-    subprocess.call(['git', 'stash', '-q', '--keep-index'],
+    subprocess.call(['git', 'stash', 'save', '-q', '--keep-index'],
         stdout=subprocess.PIPE)
+
+    old_stash = subprocess.Popen(['git', 'rev-parse', '-q', '--verify', 'refs/stash'],
+      stdout=subprocess.PIPE).stdout.read()
+    print 'old stash:', old_stash
+    print 'new stash:', new_stash
+    if new_stash == old_stash:
+      print 'No changes to test'
+      time.sleep(1)
+      sys.exit(0)
 
     files = []
     if all_files:
@@ -101,7 +114,11 @@ def main(all_files, syntax_only):
       result = return_code or result
 
     # Unstash changes to the working tree that we had stashed
-    subprocess.call(['git', 'stash', 'pop', '-q'], stdout=subprocess.PIPE,
+    subprocess.call(['git', 'reset', '--hard', '-q'], stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+    subprocess.call(['git', 'stash', 'apply', '--index', '-q'], stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+    subprocess.call(['git', 'stash', 'drop', '-q'], stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     if result != 0:
       print colored('Commit cannot be accepted. See errors above.', 'red')

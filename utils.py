@@ -97,7 +97,8 @@ def fatal(message):
   logger.fatal('>>> ' + message + ' <<<')
 
 
-def sed(original, replace_line=None, new_file=None, write_to_top='', write_to_bottom='', write_after_include=''):
+def sed(original, replace_line=None, new_file=None, write_to_top='',
+    write_to_bottom='', write_after_include=''):
   overwrite = new_file is None
   tmp_fh, tmp_file = tempfile.mkstemp()
   with open(tmp_file, 'w') as new_f:
@@ -110,9 +111,10 @@ def sed(original, replace_line=None, new_file=None, write_to_top='', write_to_bo
         else:
           new_f.write(line)
         if include_count == 2:
-          new_f.write(write_after_include) 
+          new_f.write(write_after_include)
           include_count += 1
-        if include_count < 2 and 'include' in line: include_count += 1
+        if include_count < 2 and 'include' in line:
+          include_count += 1
       new_f.write(write_to_bottom)
   os.close(tmp_fh)
   if overwrite:
@@ -152,6 +154,7 @@ def get_process(filename):
 
 def get_scale(filename):
   return get_value("(scale *= *)(.*$)", filename)
+
 
 def get_n_events(filename):
   return get_value("(n_events *= *)(.*$)", filename)
