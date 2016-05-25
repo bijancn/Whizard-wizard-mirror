@@ -1,0 +1,12 @@
+library = "unity"
+$method = "template_unity"
+process unity = e1, E1 => Wp, Wm, b, B
+compile
+
+show(model)
+
+#ITERATIONS
+#SETSCAN
+
+integrate (unity)
+printf "RES %g %g %g" (sqrts, integral(unity), error(unity))

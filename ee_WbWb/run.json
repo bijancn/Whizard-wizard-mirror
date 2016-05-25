@@ -10,15 +10,244 @@
     "analysis": "WHIZARD_2W2b_NLO"
   },
   {"process": "proc_nlo",
+    "disabled": true,
     "purpose": "histograms",
     "nlo_type": "nlo",
-    "batches": 200,
-    "events_per_batch": 40000,
-    "adaption_iterations": "5:20000",
-    "integration_iterations": "1:20000",
+    "batches": 12,
+    "events_per_batch": 2000,
+    "adaption_iterations": "3:10000",
+    "integration_iterations": "3:10000",
     "analysis": "WHIZARD_2W2b_NLO",
+    "scale_variation": true
+  },
+  {"process": "proc_nlo",
+    "disabled": true,
+    "purpose": "test_soft",
+    "nlo_type": "nlo_combined",
+    "adaption_iterations": "1:10000",
+    "integration_iterations": "1:10000"
+  },
+  {"process": "proc_nlo",
+    "disabled": true,
+    "purpose": "scan",
+    "nlo_type": "nlo",
+    "adaption_iterations": "5:100000",
+    "integration_iterations": "5:100000",
+    "scan_object": "sqrts",
+    "ranges": [
+    {"type": "linear",
+      "start": 360.0,
+      "stop": 510.0,
+      "stepsize": 10.0
+    }
+    ]
+  },
+  {"process": "unity",
+    "disabled": true,
+    "purpose": "scan",
+    "nlo_type": "lo",
+    "scan_object": "sqrts",
+    "ranges": [
+    {"type": "logarithmic",
+      "start": 1000,
+      "stop": 1000000,
+      "steps": 4}
+    ],
+    "adaption_iterations": "1:10000",
+    "integration_iterations": "1:10000"
+  },
+  {"process": "fact_nlo",
+    "disabled": true,
+    "purpose": "scan",
+    "nlo_type": "nlo",
     "scale_variation": true,
-    "fks_method": "resonances"  
+    "adaption_iterations": "5:100000",
+    "integration_iterations": "5:100000",
+    "scan_object": "sqrts",
+    "ranges": [
+    {"type": "linear",
+      "start": 360.0,
+      "stop": 510.0,
+      "stepsize": 10.0
+    }
+    ]
+  },
+  {"process": "fact_nlo",
+    "disabled": true,
+    "purpose": "test_soft",
+    "nlo_type": "nlo_combined",
+    "batches": 12,
+    "events_per_batch": 2000,
+    "adaption_iterations": "1:10000",
+    "integration_iterations": "1:10000"
+  },
+  {"process": "signaldiagram_lo",
+    "disabled": true,
+    "purpose": "scan",
+    "nlo_type": "lo",
+    "scan_object": "sqrts",
+    "ranges": [
+    {"type": "logarithmic",
+      "start": 500,
+      "stop": 1000000,
+      "steps": 100},
+    {"type": "linear",
+      "start": 345.0,
+      "stop": 360.0,
+      "stepsize": 1.0
+    },
+    {"type": "linear",
+      "start": 360.0,
+      "stop": 500.0,
+      "stepsize": 5.0
+    }
+    ],
+    "adaption_iterations": "3:20000",
+    "integration_iterations": "3:20000"
+  },
+  {"process": "proc_lo_thresholdparams",
+    "disabled": true,
+    "purpose": "scan",
+    "nlo_type": "lo",
+    "scan_object": "sqrts",
+    "ranges": [
+    {"type": "logarithmic",
+      "start": 500,
+      "stop": 1000000,
+      "steps": 100},
+    {"type": "linear",
+      "start": 345.0,
+      "stop": 360.0,
+      "stepsize": 1.0
+    },
+    {"type": "linear",
+      "start": 360.0,
+      "stop": 500.0,
+      "stepsize": 5.0
+    }
+    ],
+    "adaption_iterations": "3:20000",
+    "integration_iterations": "3:20000"
+  },
+  {"process": "fact_lo",
+    "disabled": true,
+    "purpose": "scan",
+    "nlo_type": "lo",
+    "scan_object": "sqrts",
+    "ranges": [
+    {"type": "logarithmic",
+      "start": 500,
+      "stop": 1000000,
+      "steps": 100},
+    {"type": "linear",
+      "start": 345.0,
+      "stop": 360.0,
+      "stepsize": 1.0
+    },
+    {"type": "linear",
+      "start": 360.0,
+      "stop": 500.0,
+      "stepsize": 5.0
+    }
+    ],
+    "adaption_iterations": "3:20000",
+    "integration_iterations": "3:20000"
+  },
+  {"process": "fact_lo_helapprox",
+    "disabled": true,
+    "purpose": "scan",
+    "nlo_type": "lo",
+    "scan_object": "sqrts",
+    "ranges": [
+    {"type": "logarithmic",
+      "start": 500,
+      "stop": 1000000,
+      "steps": 100},
+    {"type": "linear",
+      "start": 345.0,
+      "stop": 360.0,
+      "stepsize": 1.0
+    },
+    {"type": "linear",
+      "start": 360.0,
+      "stop": 500.0,
+      "stepsize": 5.0
+    }
+    ],
+    "adaption_iterations": "3:20000",
+    "integration_iterations": "3:20000"
+  },
+  {"process": "fact_onshellprojected_lo",
+    "disabled": true,
+    "purpose": "scan",
+    "nlo_type": "lo",
+    "scan_object": "sqrts",
+    "ranges": [
+    {"type": "logarithmic",
+      "start": 500,
+      "stop": 1000000,
+      "steps": 100},
+    {"type": "linear",
+      "start": 345.0,
+      "stop": 360.0,
+      "stepsize": 1.0
+    },
+    {"type": "linear",
+      "start": 360.0,
+      "stop": 500.0,
+      "stepsize": 5.0
+    }
+    ],
+    "adaption_iterations": "3:20000",
+    "integration_iterations": "3:20000"
+  },
+  {"process": "fact_onshellprojected_lo_helapprox",
+    "disabled": true,
+    "purpose": "scan",
+    "nlo_type": "lo",
+    "scan_object": "sqrts",
+    "ranges": [
+    {"type": "logarithmic",
+      "start": 500,
+      "stop": 1000000,
+      "steps": 100},
+    {"type": "linear",
+      "start": 345.0,
+      "stop": 360.0,
+      "stepsize": 1.0
+    },
+    {"type": "linear",
+      "start": 360.0,
+      "stop": 500.0,
+      "stepsize": 5.0
+    }
+    ],
+    "adaption_iterations": "3:20000",
+    "integration_iterations": "3:20000"
+  },
+  {"process": "fact_lo_widthunprojected",
+    "disabled": true,
+    "purpose": "scan",
+    "nlo_type": "lo",
+    "scan_object": "sqrts",
+    "ranges": [
+    {"type": "logarithmic",
+      "start": 500,
+      "stop": 1000000,
+      "steps": 100},
+    {"type": "linear",
+      "start": 345.0,
+      "stop": 360.0,
+      "stepsize": 1.0
+    },
+    {"type": "linear",
+      "start": 360.0,
+      "stop": 500.0,
+      "stepsize": 5.0
+    }
+    ],
+    "adaption_iterations": "3:20000",
+    "integration_iterations": "3:20000"
   }
   ],
   "whizard": "whizard",

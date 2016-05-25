@@ -164,6 +164,18 @@
     "xminors": true,
     "yminors": true
   },
+  {"title": "Unit matrix element",
+    "lines": [
+      {"name": "unity", "linestyle": "solid"}
+    ],
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": true,
+    "xlog": true,
+    "xminors": true,
+    "yminors": true
+  },
   {"title": "Comparison of onshell projections",
     "lines": [
       {"name": "ttbar_lo_thresholdparams"},
@@ -189,7 +201,6 @@
   },
   {"title": "Comparison of onshell projections (zoom)",
     "lines": [
-      {"name": "ttbar_lo_thresholdparams"},
       {"name": "proc_lo_thresholdparams"},
       {"name": "fact_lo"},
       {"name": "fact_onshellprojected_lo"},
@@ -202,12 +213,12 @@
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
-    "ylog": true,
+    "ylog": false,
     "xlog": false,
     "ymin": 50,
-    "ymax": 1000,
+    "ymax": 750,
     "xmin": 350,
-    "xmax": 500,
+    "xmax": 400,
     "xminors": true,
     "yminors": true,
     "xpagelength": 9,
