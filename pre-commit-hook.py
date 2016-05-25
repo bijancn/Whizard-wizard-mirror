@@ -26,6 +26,7 @@ CHECKS = [
         'output': 'Running Pyflakes...',
         'command': 'pyflakes %s',
         'match_files': ['.*\.py$'],
+        'ignore_files': ['ee_WbWb/rivet/site_init.py'],
         'print_filename': False,
     },
     {
