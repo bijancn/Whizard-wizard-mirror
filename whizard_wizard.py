@@ -271,6 +271,37 @@ def remove_test_nlo_base():
   os.remove('test_nlo_base-template.sin')
 
 
+def fill_scan_runs(proc_name, proc_dict, scans):
+  runs = []
+  for scan in scans:
+    start = float(scan['start'])
+    stop = float(scan['stop'])
+    scan_type = scan['type']
+    try:
+      steps = scan['steps']
+      stepsize = (stop - start) / steps
+    except KeyError:
+      stepsize = scan['stepsize']
+      steps = (stop - start) / stepsize
+    except KeyError:
+      ut.fatal('Aborting: You have to give either steps or stepsize')
+    if scan_type == 'logarithmic':
+      step_range = logspace(log10(start), log10(stop), num=steps,
+          endpoint=True, base=10.0)
+    elif scan_type == 'logarithmic2':
+      step_range = logspace(log2(start), log2(stop), num=steps,
+          endpoint=True, base=2.0)
+    elif scan_type == 'linear':
+      step_range = arange(start, stop, float(stepsize))
+    else:
+      ut.fatal('Aborting: Unknown scan type')
+    if proc_dict.get('integration_copies', 1) > 1:
+      runs += get_process_copies(proc_name, proc_dict, step_range)
+    else:
+      runs += [(b, proc_name, proc_dict) for b in step_range]
+  return runs
+
+
 def fill_runs(proc_name, proc_dict):
   purpose = proc_dict['purpose']
   if proc_dict.get('disabled', False):
@@ -284,33 +315,7 @@ def fill_runs(proc_name, proc_dict):
     except KeyError:
       ut.fatal('Aborting: You want a scan but have not set a ranges array')
     else:
-      runs = []
-      for scan in scans:
-        start = float(scan['start'])
-        stop = float(scan['stop'])
-        scan_type = scan['type']
-        try:
-          steps = scan['steps']
-          stepsize = (stop - start) / steps
-        except KeyError:
-          stepsize = scan['stepsize']
-          steps = (stop - start) / stepsize
-        except KeyError:
-          ut.fatal('Aborting: You have to give either steps or stepsize')
-        if scan_type == 'logarithmic':
-          step_range = logspace(log10(start), log10(stop), num=steps,
-              endpoint=True, base=10.0)
-        elif scan_type == 'logarithmic2':
-          step_range = logspace(log2(start), log2(stop), num=steps,
-              endpoint=True, base=2.0)
-        elif scan_type == 'linear':
-          step_range = arange(start, stop, float(stepsize))
-        else:
-          ut.fatal('Aborting: Unknown scan type')
-        if proc_dict.get('integration_copies', 1) > 1:
-          runs += get_process_copies(proc_name, proc_dict, step_range)
-        else:
-          runs += [(b, proc_name, proc_dict) for b in step_range]
+      runs = fill_scan_runs(proc_name, proc_dict, scans)
   elif purpose == 'integration' or purpose == 'test_soft':
     runs = [(-1, proc_name, proc_dict)]
   else:

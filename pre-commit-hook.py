@@ -15,7 +15,6 @@ CHECKS = [
         'output': 'Checking for debugging statements...',
         'command': 'grep -n -i \'# debugging$\' %s',
         'match_files': ['.*\.py$'],
-        'ignore_files': ['pre-commit-hook.py'],
         'print_filename': True,
     },
     {
@@ -27,7 +26,6 @@ CHECKS = [
         'output': 'Running Pyflakes...',
         'command': 'pyflakes %s',
         'match_files': ['.*\.py$'],
-        'ignore_files': ['ee_WbWb/rivet/site_init.py'],
         'print_filename': False,
     },
     {

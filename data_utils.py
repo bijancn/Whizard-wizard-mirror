@@ -255,40 +255,42 @@ def build_ratio(data, indices):
   return combine_and_project(data, indices, lambda x, y: x / y, error_func)
 
 
-def average_copies(data):
-  def get_variance(sigma):
-    sum_var_inv = sum([1.0 / (s * s) for s in sigma])
-    return 1.0 / sum_var_inv
+def get_variance(sigma):
+  sum_var_inv = sum([1.0 / (s * s) for s in sigma])
+  return 1.0 / sum_var_inv
 
-  def get_weighted_mean(values, sigma):
-    mean = 0.0
-    for v, s in zip(values, sigma):
-      mean += v / (s * s)
-    return mean * get_variance(sigma)
 
-  def average_data_item(item, limits):
-    if sum(l for l in limits) == len(limits) * (len(limits) - 1) / 2:
-      # Equidistant values, no averaging necessary
-      return item
-    for i in range(len(limits) - 1):
-      l_low = limits[i]
-      l_high = limits[i + 1] - 1
-      if l_low == l_high:
-        # There is only one point for this x-value. Nothing to average over.
-        new_y_err.append(item[1][2][l_low])
-        new_y.append(item[1][1][l_low])
-      else:
-        new_y_err.append(np.sqrt(get_variance(item[1][2][l_low:l_high])))
-        new_y.append(get_weighted_mean(item[1][1][l_low:l_high],
-           item[1][2][l_low:l_high]))
+def get_weighted_mean(values, sigma):
+  mean = 0.0
+  for v, s in zip(values, sigma):
+    mean += v / (s * s)
+  return mean * get_variance(sigma)
 
+
+def average_data_item(item, limits):
+  if sum(l for l in limits) == len(limits) * (len(limits) - 1) / 2:
+    # Equidistant values, no averaging necessary
+    return item
+  new_y = []
+  new_y_err = []
+  for i in range(len(limits) - 1):
+    l_low = limits[i]
+    l_high = limits[i + 1] - 1
+    if l_low == l_high:
+      # There is only one point for this x-value. Nothing to average over.
+      new_y_err.append(item[1][2][l_low])
+      new_y.append(item[1][1][l_low])
+    else:
+      new_y_err.append(np.sqrt(get_variance(item[1][2][l_low:l_high])))
+      new_y.append(get_weighted_mean(item[1][1][l_low:l_high],
+         item[1][2][l_low:l_high]))
     item = (item[0], np.array([item[1][0][limits], np.array(new_y),
-       np.array(new_y_err)]))
+            np.array(new_y_err)]))
     return item
 
+
+def average_copies(data):
   for data_index, item in enumerate(data):
-    new_y = []
-    new_y_err = []
     limits = [0]
     current_x = item[1][0][0]
     for index, x, in enumerate(item[1][0]):
@@ -331,22 +333,16 @@ class Combiner():
         self.yerr_arr[self.idx, :] = self.error_func(self)
       self.idx += 1
 
-  def fetch_next(self):
+  def get_next_if_valid(self):
     if not self.invalid:
       self.next_x_values = [g.next() for g in self.x_generators]
       self.next_y_values = [g.next() for g in self.y_generators]
       if self.yerrs:
         self.next_yerr_values = [g.next() for g in self.yerr_generators]
-    last_x = self.next_x_values[0]
-    different_x_values = False
-    for x in self.next_x_values:
-      if np.isclose(x, last_x):
-        last_x = x
-      else:
-        different_x_values = True
-        break
-    # different_x_values = len(set(self.next_x_values)) > 1
-    if different_x_values:
+
+  def fetch_next(self):
+    self.get_next_if_valid()
+    if self.different_x_values():
       max_x = max(self.next_x_values)
       for idx, x in enumerate(self.next_x_values):
         if x < max_x:
@@ -365,6 +361,15 @@ class Combiner():
               if next_x > max_x:
                 self.invalid = True
               break
+
+  def different_x_values(self):
+    last_x = self.next_x_values[0]
+    for x in self.next_x_values:
+      if np.isclose(x, last_x):
+        last_x = x
+      else:
+        return True
+    return False
 
   # y_arr = [data_running, different_types]
   def get_all(self):

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from SCons.Script import Builder
 
 
 def generate_plot(source, target, env, for_signature):
@@ -18,7 +19,6 @@ def generate_plot(source, target, env, for_signature):
 
 
 def generate_plot_with_errors(source, target, env, for_signature):
-  target_dir = target[0].dir
   return 'rivet-mkhtml -c $CONFIG %s:"Title=LO:LineColor=blue" \
      %s:"Title=NLO:ErrorBands=0:LineColor=red" \
      %s:"Title=:ErrorBands=1:ErrorBandColor=red:ErrorBandOpacity=0.5:LineColor=red"' \
