@@ -54,10 +54,39 @@ def retrieve_and_validate_run_json(process_folder, json_name='run.json'):
     ut.fatal('Failed to validate schema:\n' + str(e))
   except jsonschema.exceptions.ValidationError as e:
     ut.fatal('Failed to validate json:\n' + str(e))
+  json = expand_process(json)
   ut.logger.info('Found the following processes:')
   for p in json['processes']:
     ut.logger.info(p['process'] + '\t[' + p['purpose'] + ']')
   return json
+
+
+def expand_process(run_json):
+  for proc_dict in list(run_json['processes']):
+    if type(proc_dict['process']) is list:
+      for proc in proc_dict['process']:
+        new_proc_dict = proc_dict.copy()
+        new_proc_dict['process'] = proc
+        run_json['processes'].append(new_proc_dict)
+      run_json['processes'].remove(proc_dict)
+    else:
+      ut.logger.warning('Deprecated: Please use a list for process in the future')
+  return run_json
+
+
+def test_expand_process():
+  test_proc_dict = {'processes': [{'process': 'test_A'}, {'process': 'test_B'}]}
+  result = expand_process(test_proc_dict)
+  nt.eq_(result, test_proc_dict)
+
+  test_proc_dict = {'processes': [{'process': ['test_A', 'test_B'],
+      'purpose': 'scan'}, {'process': 'test_B'}]}
+  result = expand_process(test_proc_dict)
+  expected = {'processes': [
+      {'process': 'test_B'},
+      {'process': 'test_A', 'purpose': 'scan'},
+      {'process': 'test_B', 'purpose': 'scan'}]}
+  nt.eq_(result, expected)
 
 
 def log(action, batch, proc_dict):
