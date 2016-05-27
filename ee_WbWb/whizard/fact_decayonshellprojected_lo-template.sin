@@ -1,12 +1,13 @@
 include("../process_settings_threshold.sin")
 
 library = fact_decayonshellprojected_lo
-process fact_decayonshellprojected_lo = e1, E1 => Wp, Wm, b, B {$restrictions = "3+5~t && 4+6~tbar"}
+process fact_decayonshellprojected_lo = e1, E1 => Wm, Wp, B, b {$restrictions = "3+5~tbar && 4+6~t"}
 compile
 
 FF = 9        # tree level from signal comp
-offshell_strategy = 2   ! fact
+offshell_strategy = 2     ! fact
                     +128  ! decayonshell projected
+                    +256  ! onshell projected width
 
 show(model)
 

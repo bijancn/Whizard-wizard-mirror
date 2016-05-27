@@ -34,3 +34,8 @@ alpha_power = 4
 alphas_power = 0
 
 sqrts = 800 GeV
+
+sample_format = hepmc
+?write_raw = false
+?unweighted = false
+?hepmc_output_cross_section = true

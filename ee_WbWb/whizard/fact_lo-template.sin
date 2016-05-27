@@ -1,7 +1,7 @@
 include("../process_settings_threshold.sin")
 
 library = fact_lo
-process fact_lo = e1, E1 => Wp, Wm, b, B {$restrictions = "3+5~t && 4+6~tbar"}
+process fact_lo = e1, E1 => Wm, Wp, B, b {$restrictions = "3+5~tbar && 4+6~t"}
 compile
 
 FF = 9        # tree level from signal comp
