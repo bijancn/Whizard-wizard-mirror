@@ -28,6 +28,12 @@ processes = ['proc_lo', 'proc_lo_thresholdparams', 'unity', 'fact_lo',
              'proc_nlo_low_Real', 'proc_nlo_central_Real', 'proc_nlo_high_Real',
              'proc_nlo_low_Mismatch', 'proc_nlo_central_Mismatch',
              'proc_nlo_high_Mismatch']
+processes = ['proc_lo_thresholdparams', 'unity', 'fact_lo',
+             'fact_decayonshellprojected_lo']
+for p in list(processes):
+  for mult in ['350', '1000']:
+    processes += [p + mult]
+
 plot_together = ['proc_lo_thresholdparams', 'fact_lo', 'fact_decayonshellprojected_lo']
 # plot_together = []
 descriptions = [r"\textsc{LO}", r"factorized", r"factorized,decay onshellprojected"]

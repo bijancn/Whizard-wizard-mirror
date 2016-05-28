@@ -11,7 +11,7 @@
         "properties": {
           "process": {
             "id": "processes/process",
-            "type": "string"
+            "type": "array"
           },
           "purpose": {
             "id": "processes/purpose",
