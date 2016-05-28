@@ -101,11 +101,6 @@ SUCCESS, FAIL = range(2)
 
 class Whizard():
   def __init__(self, run_json, verbose):
-    self.binary = run_json.get('whizard', 'whizard')
-    if not spawn.find_executable(self.binary):
-      ut.fatal('No valid whizard found. You gave whizard = ' + self.binary)
-    else:
-      ut.logger.info('Using ' + self.binary)
     if not verbose:
       devnull = open(os.devnull, 'w')
       self.out = devnull
@@ -114,6 +109,12 @@ class Whizard():
           stdout=self.out)
     else:
       self.call = lambda cmd: subprocess.call(cmd, shell=True)
+    self.binary = run_json.get('whizard', 'whizard')
+    if not spawn.find_executable(self.binary):
+      ut.fatal('No valid whizard found. You gave whizard = ' + self.binary)
+      self.call = lambda cmd : FAIL
+    else:
+      ut.logger.info('Using ' + self.binary)
 
   def execute(self, purpose, sindarin, fifo=None, proc_id=None, options='',
       analysis=''):
