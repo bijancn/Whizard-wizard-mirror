@@ -307,9 +307,6 @@ def average_data_item(item, limits):
       new_y_err.append(np.sqrt(get_variance(item[1][2][l_low:l_high])))
       new_y.append(get_weighted_mean(item[1][1][l_low:l_high],
          item[1][2][l_low:l_high]))
-    item = (item[0], np.array([item[1][0][limits], np.array(new_y),
-            np.array(new_y_err)]))
-    return item
 
 
 def average_copies(data):
