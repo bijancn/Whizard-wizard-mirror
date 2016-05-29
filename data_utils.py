@@ -3,6 +3,7 @@ import nose.tools as nt
 import os
 from scipy.signal import savgol_filter
 from termcolor import colored
+import fit_utils
 
 
 def remove_empty_data(data):
@@ -142,6 +143,28 @@ def build_smooth(data, smooths):
         smooth_y = np.concatenate((non_smooth_y, smooth_y))
       smooth_name = item[0].replace('.dat', '_smooth.dat')
       data.append((smooth_name, np.array((smooth_x, smooth_y))))
+  return data
+
+
+def build_fits(data, fits):
+  fit_data = get_associated_plot_data(data, fits)
+  for data_of_a_fit, fit in zip(fit_data, fits):
+    x = data_of_a_fit[0][1][0]
+    y = data_of_a_fit[0][1][1]
+    y_err = data_of_a_fit[0][1][2]
+    xmin = fit.get('extrapolation_minus', min(x))
+    xmax = fit.get('extrapolation_plus', max(x))
+    degree = fit.get('fit_degree', -1)
+    verbose = fit.get('print_fit_parameters', False)
+    if degree < 0:
+      print 'You have not specified the degree of the polynomial to be fitted. '
+      print 'Going to fit a line!'
+      degree = 1
+    fit_x, fit_y = fit_utils.fit_polynomial(x, y, xmin, xmax, degree,
+      y_err=y_err, verbose=verbose)
+    fit_name = data_of_a_fit[0][0].replace('.dat', '_fit.dat')
+    print 'Appending Fit data:' + fit_name
+    data.append((fit_name, np.array((fit_x, fit_y))))
   return data
 
 
@@ -428,14 +451,20 @@ def test_build_sum():
   os.remove(test_file2)
 
 
-def load_and_clean_files(files, smooth_dict=None):
+def load_and_clean_files(files, plot_dict=None):
   data = [(filename, np.loadtxt(filename, unpack=True)) for filename in files]
   data = remove_empty_data(data)
   data = sort_data(data)
   data = average_copies(data)
   data = build_nlo_sums(data)
-  if smooth_dict is not None:
-    data = build_smooth(data, smooth_dict)
+  if plot_dict is not None:
+    for plot in plot_dict:
+      smooth_dict = plot.get('smooth', None)
+      fit_dict = plot.get('fits', None)
+      if smooth_dict is not None:
+        data = build_smooth(data, smooth_dict)
+      if fit_dict is not None:
+        data = build_fits(data, fit_dict)
   data = remove_empty_data(data)
   return data
 

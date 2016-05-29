@@ -10,7 +10,6 @@ import data_utils
 from data_utils import get_name
 from functools import partial
 from utils import mkdirs
-import fit_utils
 
 colors = ['#EE3311',  # red
           '#3366FF',  # blue
@@ -121,6 +120,7 @@ class Plotter(object):
         minorLocator = AutoMinorLocator(yminors)
         ax.yaxis.set_minor_locator(minorLocator)
         if ax1 is not None:
+          minorLocator = AutoMinorLocator(yminors)
           ax1.yaxis.set_minor_locator(minorLocator)
     # TODO: (bcn 2016-03-16) minors are not disabled in log plot
 
@@ -179,11 +179,7 @@ def get_label(object_dict, title, filename=None, pretty_label=None):
 
 def combined_plot(base_line, ax, ax1, x, y, *args, **kwargs):
   ax.plot(x, y, *args, **kwargs)
-  # print 'y: ', y
-  # print 'baseline: ', base_line
   comb = data_utils.normalize(base_line, x, y)
-  # print 'comb[0]: ', comb[0]
-  # print 'comb[1]: ', comb[1]
   ax1.plot(comb[0], comb[1], *args, **kwargs)
 
 
@@ -199,11 +195,31 @@ def combined_fill_between(base_line, ax, ax1, x, ymin, ymax, *args, **kwargs):
   ax1.fill_between(comb[0], comb[1], comb[2][0], *args, **kwargs)
 
 
-def fit_plot(plot_func, x, y, xmin, xmax, degree, y_err=None,
-    verbose=False, *args, **kwargs):
-  fit_x, fit_y = fit_utils.fit_polynomial(x, y, xmin, xmax,
-    degree, y_err=y_err, verbose=verbose)
-  plot_func(fit_x, fit_y, *args, **kwargs)
+def scale_data(item_data, items):
+  for i_data, item in zip(item_data, items):
+    scale_by_value = item.get('scale_by_value', 0)
+    scale_by_point = item.get('scale_by_point', None)
+    if scale_by_value > 0 and (scale_by_point is not None):
+      print 'Cannot scale by a fixed value and with reference to a fixed point'
+      print 'at the same time. Not building ' + item[0]
+      return
+    if scale_by_value > 0:
+      i_data[1][1] /= scale_by_value
+      i_data[1][2] /= scale_by_value
+    if scale_by_point is not None:
+      index = np.where(i_data[1][0] == scale_by_point)
+      if (len(index[0]) == 0):
+        print 'Cannot scale w.r.t.' + str(scale_by_point) + '. Not in data!'
+        return
+      elif(len(index[0]) > 1):
+        print 'Cannot scale w.r.t.' + str(scale_by_point) + '. Not uniqe!'
+        print 'You have the same xvalue more than once in your data. It might be broken!'
+        return
+      else:
+        scale_value = i_data[1][1][index[0][0]]
+        i_data[1][1] /= scale_value
+        i_data[1][2] /= scale_value
+  return item_data
 
 
 def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
@@ -220,29 +236,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   lines = plot_dict.get('lines', [])
   for line in lines:
     line_data += [d for d in data if get_name(line) == d[0].replace('.dat', '')]
-  for ld, line in zip(line_data, lines):
-    scale_by_value = line.get('scale_by_value', 0)
-    scale_by_point = line.get('scale_by_point', None)
-    if scale_by_value > 0 and (scale_by_point is not None):
-      print 'Cannot scale by a fixed value and with reference to a fixed point'
-      print 'at the same time. Not building ' + title
-      return
-    if scale_by_value > 0:
-      ld[1][1] /= scale_by_value
-      ld[1][2] /= scale_by_value
-    if scale_by_point is not None:
-      index = np.where(ld[1][0] == scale_by_point)
-      if (len(index[0]) == 0):
-        print 'Cannot scale w.r.t.' + str(scale_by_point) + '. Not in data!'
-        return
-      elif(len(index[0]) > 1):
-        print 'Cannot scale w.r.t.' + str(scale_by_point) + '. Not uniqe!'
-        print 'You have the same xvalue more than once in your data. It might be broken!'
-        return
-      else:
-        scale_value = ld[1][1][index[0][0]]
-        ld[1][1] /= scale_value
-        ld[1][2] /= scale_value
+  line_data = scale_data(line_data, lines)
   bands = plot_dict.get('bands', [])
   band_data = data_utils.get_associated_plot_data(data, bands)
   fits = plot_dict.get('fits', [])
@@ -267,7 +261,8 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     ax1 = fig.add_subplot(gs[1], sharex=ax)
     ylabel1 = ratio_dict.get('ylabel', 'ratio')
     this_errorbar = partial(partial(partial(combined_errorbar, base_line), ax), ax1)
-    this_plot = partial(partial(partial(combined_plot, base_line), ax), ax1)
+    if len(fit_data) == 0:
+      this_plot = partial(partial(partial(combined_plot, base_line), ax), ax1)
     this_fill_between = partial(partial(partial(combined_fill_between,
       base_line), ax), ax1)
   else:
@@ -278,8 +273,6 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     this_errorbar = ax.errorbar
     this_fill_between = ax.fill_between
     ylabel1 = None
-  if len(fit_data) > 0:
-    this_fit_plot = partial(fit_plot, this_plot)
   if plot_extra is not None:
     ax = plot_extra(ax, title)
   ymin1, ymax1 = None, None
@@ -379,29 +372,54 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
                 ymax1=ymax1, n_majors1=n_majors1)
       fig.savefig(os.path.join(pic_path, title + '-' + str(i) + '.pdf'),
                   dpi=fig.dpi)
+  # Get baseline
+  # if ratio_dict is not None:
+    # for data_of_a_fit, fit in zip(fit_data, fits):
+    #   label = fit.get('label', get_label(fit, title, pretty_label=pretty_label))
+    #   verbose = fit.get('print_fit_parameters', False)
+    #   if 'LO' in label and not 'NLO' in label:
+    #     x = data_of_a_fit[0][1][0]
+    #     y = data_of_a_fit[0][1][1]
+    #     y_err = data_of_a_fit[0][1][2]
+    #     xmin = decide_if_not_none(fit, None, 'extrapolation_minus', min(x),
+    #         data_of_a_fit[0][0], title)
+    #     xmax = decide_if_not_none(fit, None, 'extrapolation_plus', max(x),
+    #         data_of_a_fit[0][0], title)
+    #     degree = decide_if_not_none(fit, None, 'fit_degree', -1,
+    #         data_of_a_fit[0][0], title)
+    #     if degree < 0:
+    #       print 'You have not specified the degree of the polynomial to be fitted. '
+    #       print 'Going to fit a line!'
+    #       degree = 1
+    #     fit_x, fit_y = fit_utils.fit_polynomial(x, y, xmin, xmax, degree,
+    #       y_err=y_err, verbose=verbose)
+    #     base_line = np.array([fit_x, fit_y])
+
+  fit_data = []
+  for d in data:
+    if 'fit' in d[0]:
+      fit_data.append(d)
+
   for data_of_a_fit, fit, color in zip(fit_data, fits, colors):
     label = fit.get('label', get_label(fit, title, pretty_label=pretty_label))
     color = fit.get('color', color)
     verbose = fit.get('print_fit_parameters', False)
-    linestyle = decide_if_not_none(fit, linestyle_decider, 'linestyle', 'solid',
-        data_of_a_fit[0][0], title)
-    x = data_of_a_fit[0][1][0]
-    y = data_of_a_fit[0][1][1]
-    y_err = data_of_a_fit[0][1][2]
-    xmin = decide_if_not_none(fit, None, 'extrapolation_minus', min(x),
-        data_of_a_fit[0][0], title)
-    xmax = decide_if_not_none(fit, None, 'extrapolation_plus', max(x),
-        data_of_a_fit[0][0], title)
-    degree = decide_if_not_none(fit, None, 'fit_degree', -1,
-        data_of_a_fit[0][0], title)
-    if degree < 0:
-      print 'You have not specified the degree of the polynomial to be fitted. '
-      print 'Going to fit a line!'
-      degree = 1
     if verbose:
-      print 'Fit summary for ' + str(label)
-    this_fit_plot(x, y, xmin, xmax, degree, y_err=y_err, verbose=verbose, color=color,
-      label=label, linestyle=linestyle)
+      print 'Plotting fit: ', data_of_a_fit[0]
+    linestyle = decide_if_not_none(fit, linestyle_decider, 'linestyle', 'solid',
+        data_of_a_fit[0], title)
+    fit_x = data_of_a_fit[1][0]
+    fit_y = data_of_a_fit[1][1]
+    if ratio_dict is not None:
+      this_plot = partial(partial(partial(combined_plot, base_line), ax), ax1)
+    else:
+      this_plot = ax.plot
+    hide_label = fit.get('hide_label', False)
+    if hide_label:
+      this_plot(fit_x, fit_y, xmin, xmax, color=color, linestyle=linestyle)
+    else:
+      this_plot(fit_x, fit_y, xmin, xmax, color=color,
+        label=label, linestyle=linestyle)
 
   xticks = plot_dict.get('xticks', None)
   yticks = plot_dict.get('yticks', None)
