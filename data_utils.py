@@ -451,6 +451,17 @@ def test_build_sum():
   os.remove(test_file2)
 
 
+def get_data_index(data, name):
+  if '.dat' not in name:
+    search_name = name + '.dat'
+  else:
+    search_name = name
+  for i, d in enumerate(data):
+    if search_name in d[0]:
+      return i
+  return -1
+
+
 def load_and_clean_files(files, plot_dict=None):
   data = [(filename, np.loadtxt(filename, unpack=True)) for filename in files]
   data = remove_empty_data(data)

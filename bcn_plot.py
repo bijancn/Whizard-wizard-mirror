@@ -222,6 +222,51 @@ def scale_data(item_data, items):
   return item_data
 
 
+def get_object_name(obj, is_fit):
+  if not is_fit:
+    return obj.get('name', '')
+  else:
+    fit_data = obj.get('data', None)
+    if fit_data is not None:
+      name = fit_data[0].get('name', '')
+      if name is not '':
+        name += '_fit'
+    else:
+      name = ''
+    return name
+
+
+def insert_group_entry(groups, data, obj, is_fit=False):
+  name = get_object_name(obj, is_fit)
+  group = obj.get('baseline_group', -1)
+  if group >= 0:
+    index = data_utils.get_data_index(data, name)
+    if obj.get('is_baseline', False):
+      baseline_index = index
+    else:
+      baseline_index = -1
+    if str(group) in groups:
+      groups[str(group)][0].append(index)
+      if baseline_index >= 0:
+        if baseline_index == groups[str(group)][1]:
+          # A baseline index has already been set. More than one
+          # data set want to be baselines!
+          print 'More than one baseline encountered! Please check plot.json.'
+        else:
+          groups[str(group)][1] = baseline_index
+    else:
+      groups[str(group)] = [[index], baseline_index]
+  return groups
+
+
+def create_baseline_groups(data, plot_dict):
+  groups = {}
+  for line in plot_dict.get('lines', []):
+    groups = insert_group_entry(groups, data, line)
+  for fit in plot_dict.get('fits', []):
+    groups = insert_group_entry(groups, data, fit, is_fit=True)
+
+
 def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     label_decider=None, legend_decider=None, marker_decider=None,
     linestyle_decider=None, pretty_label=None, set_extra_settings=None):
@@ -229,6 +274,9 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   data: [(identifier_string, numpy_array),...] where numpy_array has the columns
         x, y and optionally yerror
   """
+  # We are going to use this in the future, but right now the commit bouncer does not
+  # tolerate memory-mooching slacker variables
+  # groups = create_baseline_groups(data, plot_dict)
   mkdirs(pic_path)
   title = plot_dict.get('title', 'plot')
   output_file = plot_dict.get('output_file', '')
