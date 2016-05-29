@@ -349,7 +349,6 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
           alpha=global_opacity)
       plt.hlines(mean, _[:-1], _[1:], label=label, colors=c)
     elif linestyle is not None and linestyle != "None":
-      print 'This plot! '
       this_plot(d[0], d[1], color=c, label=label, linestyle=linestyle)
     else:
       if marker_decider is not None:
@@ -405,9 +404,6 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   for data_of_a_fit, fit, color in zip(fit_data, fits, colors):
     label = fit.get('label', get_label(fit, title, pretty_label=pretty_label))
     color = fit.get('color', color)
-    verbose = fit.get('print_fit_parameters', False)
-    if verbose:
-      print 'Plotting fit: ', data_of_a_fit[0]
     linestyle = decide_if_not_none(fit, linestyle_decider, 'linestyle', 'solid',
         data_of_a_fit[0], title)
     fit_x = data_of_a_fit[1][0]
