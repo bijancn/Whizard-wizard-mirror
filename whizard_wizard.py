@@ -303,6 +303,11 @@ def remove_test_nlo_base():
 
 def fill_scan_runs(proc_name, proc_dict, scans):
   runs = []
+  try:
+    scan_object = proc_dict['scan_object']
+  except KeyError:
+    ut.fatal('Aborting: You want a scan but have not set a scan_object')
+    raise
   for scan in scans:
     start = float(scan['start'])
     stop = float(scan['stop'])
@@ -328,7 +333,7 @@ def fill_scan_runs(proc_name, proc_dict, scans):
     if proc_dict.get('integration_copies', 1) > 1:
       runs += get_process_copies(proc_name, proc_dict, step_range)
     else:
-      runs += [(b, proc_name, proc_dict) for b in step_range]
+      runs += [(str(sr) + '-' + scan_object, proc_name, proc_dict) for sr in step_range]
   return runs
 
 
@@ -362,13 +367,12 @@ def test_fill_runs_basic():
   runs = fill_runs(proc_name, proc_dict)
   nt.eq_(runs, [(0, proc_name, proc_dict), (1, proc_name, proc_dict)])
 
-  proc_dict = {'purpose': 'scan', 'ranges':
+  proc_dict = {'purpose': 'scan', 'scan_object': 'sqrts', 'ranges':
       [{'start': 0.1, 'stop': 0.2, 'stepsize': 0.05, 'type': 'linear'}]}
   runs = fill_runs(proc_name, proc_dict)
-  expectation = [(0.1, proc_name, proc_dict), (0.15, proc_name, proc_dict)]
+  expectation = [('0.1-sqrts', 'test', proc_dict), ('0.15-sqrts', 'test', proc_dict)]
   for r, e in zip(runs, expectation):
-    nt.assert_almost_equal(r[0], e[0], places=4)
-    nt.eq_(r[1:2], e[1:2])
+    nt.eq_(r[0:2], e[0:2])
 
   proc_dict = {'purpose': 'integration'}
   runs = fill_runs(proc_name, proc_dict)
@@ -378,14 +382,13 @@ def test_fill_runs_basic():
   runs = fill_runs(proc_name, proc_dict)
   nt.eq_(runs, [])
 
-  proc_dict = {'purpose': 'scan',
+  proc_dict = {'purpose': 'scan', 'scan_object': 'sqrts',
       'ranges': [{'start': 1, 'stop': 10, 'type': 'logarithmic', 'steps': 2}]}
   runs = fill_runs(proc_name, proc_dict)
-  expectation = [(1, proc_name, proc_dict), (10, proc_name, proc_dict)]
+  expectation = [('1.0-sqrts', 'test', proc_dict), ('10.0-sqrts', 'test', proc_dict)]
   nt.eq_(len(runs), len(expectation))
   for r, e in zip(runs, expectation):
-    nt.assert_almost_equal(r[0], e[0], places=4)
-    nt.eq_(r[1:2], e[1:2])
+    nt.eq_(r[0:2], e[0:2])
 
 
 @nt.raises(Exception)

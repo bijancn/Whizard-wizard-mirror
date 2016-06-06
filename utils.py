@@ -1,3 +1,4 @@
+# encoding=utf-8
 import logging
 import os
 import re
@@ -205,3 +206,46 @@ def test_touch():
   test_file = 'test_touch_foo'
   touch(test_file)
   os.remove(test_file)
+
+
+def pcmd(strg):
+  color = COLOR_SEQ % (30 + YELLOW)
+  return color + strg + RESET_SEQ
+
+
+def perr(strg):
+  color = COLOR_SEQ % (30 + RED)
+  return color + strg + RESET_SEQ
+
+
+def pgood(strg):
+  color = COLOR_SEQ % (30 + GREEN)
+  return color + strg + RESET_SEQ
+
+
+def plog(strg):
+  color = COLOR_SEQ % (30 + BLUE)
+  return color + strg + RESET_SEQ
+
+
+def show_variable(var_name, var):
+  varlist = None
+  print pcmd('test')
+  print perr('test')
+  print pgood('test')
+  print plog('test')
+  if isinstance(var, bool):
+    if var:
+      smb = '✓'
+      text2 = pgood(smb)
+    else:
+      smb = '✗'
+      text2 = perr(smb)
+  else:
+    varlist = str(var)
+    if len(varlist) > 0:
+      text2 = plog(varlist)
+    else:
+      text2 = ''
+  text1 = pcmd(var_name.ljust(17))
+  print(text1 + '  =  ' + text2)

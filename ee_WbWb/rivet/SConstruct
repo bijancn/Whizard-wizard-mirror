@@ -31,11 +31,22 @@ processes = ['proc_lo', 'proc_lo_thresholdparams', 'unity', 'fact_lo',
 processes = ['proc_lo_thresholdparams', 'unity', 'fact_lo',
              'fact_decayonshellprojected_lo']
 for p in list(processes):
-  for mult in ['350', '1000']:
+  for mult in ['350', '10000']:
     processes += [p + mult]
 
-plot_together = ['proc_lo_thresholdparams', 'fact_lo', 'fact_decayonshellprojected_lo']
-# plot_together = []
+plot_together = [{'target': 'plots',
+                  'lines': ['proc_lo_thresholdparams',
+                            'fact_lo',
+                            'fact_decayonshellprojected_lo']},
+              {'target': 'plots350',
+                'lines': ['proc_lo_thresholdparams350',
+                          'fact_lo350',
+                          'fact_decayonshellprojected_lo350']},
+                {'target': 'plots10000',
+                  'lines': ['proc_lo_thresholdparams10000',
+                            'fact_lo10000',
+                            'fact_decayonshellprojected_lo10000']}
+                  ]
 descriptions = [r"\textsc{LO}", r"factorized", r"factorized,decay onshellprojected"]
 plot_targets = ['plots', 'show-MCerrors']
 lo_nlo_lines_and_nlo_band = []
@@ -45,6 +56,8 @@ lo_nlo_lines_and_nlo_band = []
 make_plot_dir = lambda d : d + '/index.html'
 control_plots = map(make_plot_dir, processes)
 plot_targets = map(make_plot_dir, plot_targets)
+for idx, pd in enumerate(plot_together):
+  plot_together[idx]['target'] = make_plot_dir(pd['target'])
 
 
 def main(control_plots):
@@ -82,7 +95,8 @@ def main(control_plots):
           source=lo_nlo_lines_and_nlo_band, CONFIG=configs[0])
 
     if len(plot_together) > 0:
-      env.Plot(target=plot_targets[0], source=plot_together, CONFIG=configs[0],
-          DESCRIPTIONS=descriptions)
+      for plot_dict in plot_together:
+        env.Plot(target=plot_dict['target'], source=plot_dict['lines'],
+            CONFIG=configs[0], DESCRIPTIONS=descriptions)
 
 main(control_plots)

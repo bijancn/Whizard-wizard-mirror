@@ -95,7 +95,7 @@ namespace Rivet {
       _h["BB_Phi"] = bookNLOHisto1D("Phi(b,b)", stdbin, 0, M_PI);
       _h["BB_R"] = bookNLOHisto1D("R(b,b)", stdbin, 0., 5.);
 
-      _h["BW_invMass"] = bookNLOHisto1D("BW-inv", stdbin, 120., 800.);
+      _h["BW_invMass"] = bookNLOHisto1D("BW-inv", stdbin, 120., sqrtS()/GeV);
       _h["BW_invMass_peak"] = bookNLOHisto1D("BW-inv-peak", stdbin, 160., 180.);
 
       _h["jetcount"] = bookNLOHisto1D("jet-count", 4, 0.5, 4.5);
