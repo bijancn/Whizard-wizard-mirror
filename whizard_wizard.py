@@ -301,6 +301,32 @@ def remove_test_nlo_base():
   os.remove('test_nlo_base-template.sin')
 
 
+def get_steps(scan, start, stop):
+  try:
+    steps = scan['steps']
+    stepsize = (stop - start) / steps
+  except KeyError:
+    stepsize = scan['stepsize']
+    steps = (stop - start) / stepsize
+  except KeyError:
+    ut.fatal('Aborting: You have to give either steps or stepsize')
+  return steps, stepsize
+
+
+def get_step_range(scan_type, start, stop, steps, stepsize):
+  if scan_type == 'logarithmic':
+    step_range = logspace(log10(start), log10(stop), num=steps,
+        endpoint=True, base=10.0)
+  elif scan_type == 'logarithmic2':
+    step_range = logspace(log2(start), log2(stop), num=steps,
+        endpoint=True, base=2.0)
+  elif scan_type == 'linear':
+    step_range = arange(start, stop, float(stepsize))
+  else:
+    ut.fatal('Aborting: Unknown scan type')
+  return step_range
+
+
 def fill_scan_runs(proc_name, proc_dict, scans):
   runs = []
   try:
@@ -312,24 +338,8 @@ def fill_scan_runs(proc_name, proc_dict, scans):
     start = float(scan['start'])
     stop = float(scan['stop'])
     scan_type = scan['type']
-    try:
-      steps = scan['steps']
-      stepsize = (stop - start) / steps
-    except KeyError:
-      stepsize = scan['stepsize']
-      steps = (stop - start) / stepsize
-    except KeyError:
-      ut.fatal('Aborting: You have to give either steps or stepsize')
-    if scan_type == 'logarithmic':
-      step_range = logspace(log10(start), log10(stop), num=steps,
-          endpoint=True, base=10.0)
-    elif scan_type == 'logarithmic2':
-      step_range = logspace(log2(start), log2(stop), num=steps,
-          endpoint=True, base=2.0)
-    elif scan_type == 'linear':
-      step_range = arange(start, stop, float(stepsize))
-    else:
-      ut.fatal('Aborting: Unknown scan type')
+    steps, stepsize = get_steps(scan, start, stop)
+    step_range = get_step_range(scan_type, start, stop, steps, stepsize)
     if proc_dict.get('integration_copies', 1) > 1:
       runs += get_process_copies(proc_name, proc_dict, step_range)
     else:
