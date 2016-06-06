@@ -1,0 +1,22 @@
+library = "unity350"
+sqrts = 350 GeV
+$method = "template_unity"
+process unity350 = e1, E1 => Wp, Wm, b, B
+compile
+
+?vis_channels = false
+?use_vamp_equivalences = false
+?vis_history = false
+?vis_diags = false
+
+show(model)
+
+#ITERATIONS
+#SETSCAN
+
+integrate (unity350)
+sample_format = hepmc
+?write_raw = false
+?unweighted = false
+?hepmc_output_cross_section = true
+printf "RES %g %g %g" (sqrts, integral(unity350), error(unity350))

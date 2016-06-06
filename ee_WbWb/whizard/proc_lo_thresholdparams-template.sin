@@ -11,7 +11,14 @@ offshell_strategy = 0
 show(model)
 
 iterations = 3:20000:"gw",3:20000
+#ITERATIONS
+real mass_cut = - 1
+mass_cut = 2
 #SETSCAN
+if (mass_cut > 0) then
+  cuts = all abs (M - mtpole) < mass_cut [Wp, b] and
+         all abs (M - mtpole) < mass_cut [Wm, B]
+endif
 sqrtsstepsize = 0.1 GeV
 sqrtsmin = sqrts - sqrtsstepsize
 sqrtsmax = sqrts + sqrtsstepsize

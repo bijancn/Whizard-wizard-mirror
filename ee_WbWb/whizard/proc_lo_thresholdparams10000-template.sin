@@ -1,16 +1,18 @@
 include("../process_settings_threshold.sin")
 
-library = fact_lo
-process fact_lo = e1, E1 => Wm, Wp, B, b {$restrictions = "3+5~tbar && 4+6~t"}
+library = proc_lo_thresholdparams10000
+$method = "omega"
+process proc_lo_thresholdparams10000 = e1, E1 => Wp, Wm, b, B
 compile
 
-FF = 9        # tree level from signal comp
-offshell_strategy = 0+2+0+0+256
+FF =  10
+offshell_strategy = 0
 
 show(model)
 
 iterations = 3:20000:"gw",3:20000
 #ITERATIONS
+sqrts = 10000 GeV
 real mass_cut = - 1
 #SETSCAN
 if (mass_cut > 0) then
@@ -21,5 +23,5 @@ sqrtsstepsize = 0.1 GeV
 sqrtsmin = sqrts - sqrtsstepsize
 sqrtsmax = sqrts + sqrtsstepsize
 
-integrate (fact_lo)
-printf "RES %g %g %g" (sqrts, integral(fact_lo), error(fact_lo))
+integrate (proc_lo_thresholdparams10000)
+printf "RES %g %g %g" (sqrts, integral(proc_lo_thresholdparams10000), error(proc_lo_thresholdparams10000))

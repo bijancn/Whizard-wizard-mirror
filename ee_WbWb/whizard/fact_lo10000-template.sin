@@ -1,17 +1,17 @@
 include("../process_settings_threshold.sin")
 
-library = fact_onshellprojected_lo
-process fact_onshellprojected_lo = e1, E1 => Wp, Wm, b, B {$restrictions = "3+5~t && 4+6~tbar"}
+library = fact_lo10000
+process fact_lo10000 = e1, E1 => Wm, Wp, B, b {$restrictions = "3+5~tbar && 4+6~t"}
 compile
 
 FF = 9        # tree level from signal comp
-offshell_strategy = 0+2   ! fact
-                    +0+8  ! onshell projected
+offshell_strategy = 0+2+0+0+256
 
 show(model)
 
 iterations = 3:20000:"gw",3:20000
 #ITERATIONS
+sqrts = 10000 GeV
 real mass_cut = - 1
 #SETSCAN
 if (mass_cut > 0) then
@@ -22,5 +22,5 @@ sqrtsstepsize = 0.1 GeV
 sqrtsmin = sqrts - sqrtsstepsize
 sqrtsmax = sqrts + sqrtsstepsize
 
-integrate (fact_onshellprojected_lo)
-printf "RES %g %g %g" (sqrts, integral(fact_onshellprojected_lo), error(fact_onshellprojected_lo))
+integrate (fact_lo10000)
+printf "RES %g %g %g" (sqrts, integral(fact_lo10000), error(fact_lo10000))

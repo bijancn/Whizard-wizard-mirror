@@ -1,7 +1,7 @@
 include("../process_settings_threshold.sin")
 
-library = fact_decayonshellprojected_lo
-process fact_decayonshellprojected_lo = e1, E1 => Wm, Wp, B, b {$restrictions = "3+5~tbar && 4+6~t"}
+library = fact_decayonshellprojected_lo10000
+process fact_decayonshellprojected_lo10000 = e1, E1 => Wm, Wp, B, b {$restrictions = "3+5~tbar && 4+6~t"}
 compile
 
 FF = 9        # tree level from signal comp
@@ -13,6 +13,7 @@ show(model)
 
 iterations = 3:20000:"gw",3:20000
 #ITERATIONS
+sqrts = 10000 GeV
 real mass_cut = - 1
 #SETSCAN
 if (mass_cut > 0) then
@@ -23,5 +24,5 @@ sqrtsstepsize = 0.1 GeV
 sqrtsmin = sqrts - sqrtsstepsize
 sqrtsmax = sqrts + sqrtsstepsize
 
-integrate (fact_decayonshellprojected_lo)
-printf "RES %g %g %g" (sqrts, integral(fact_decayonshellprojected_lo), error(fact_decayonshellprojected_lo))
+integrate (fact_decayonshellprojected_lo10000)
+printf "RES %g %g %g" (sqrts, integral(fact_decayonshellprojected_lo10000), error(fact_decayonshellprojected_lo10000))
