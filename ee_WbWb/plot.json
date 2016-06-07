@@ -176,13 +176,57 @@
     "xminors": true,
     "yminors": true
   },
-  {"title": "Cuts $\\sqrt{s}=10TeV$",
+  {"title": "Cuts $\\sqrt{s}=350~\\mathrm{GeV}$",
+   "output_file": "cuts_350GeV",
+   "legend_location": "lower right",
+   "lines": [
+     {"name": "proc_lo_thresholdparams350-mass_cut",
+       "label": "full LO",
+      "linestyle": "banded"},
+     {"name": "fact_lo350-mass_cut",
+       "label": "factorized"},
+     {"name": "fact_decayonshellprojected_lo350-mass_cut",
+       "label": "factorized, decay onshell projected"}
+   ],
+    "xlabel": "$\\Delta M$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": true,
+    "xlog": true,
+    "xminors": true,
+    "yminors": true
+  },
+  {"title": "Cuts $\\sqrt{s}=10~\\mathrm{TeV}$",
    "output_file": "cuts_10TeV",
-    "lines": [
-      {"name": "proc_lo_thresholdparams10000-mass_cut"},
-      {"name": "fact_lo10000-mass_cut"},
-      {"name": "fact_decayonshellprojected_lo10000-mass_cut"}
-    ],
+   "lines": [
+     {"name": "proc_lo_thresholdparams10000-mass_cut",
+       "label": "full LO",
+      "linestyle": "banded"},
+     {"name": "fact_lo10000-mass_cut",
+       "label": "factorized"},
+     {"name": "fact_decayonshellprojected_lo10000-mass_cut",
+       "label": "factorized, decay onshell projected"}
+   ],
+    "xlabel": "$\\Delta M$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": true,
+    "xlog": true,
+    "xminors": true,
+    "yminors": true
+  },
+  {"title": "Cuts $\\sqrt{s}=800~\\mathrm{GeV}$",
+   "output_file": "cuts_800GeV",
+   "legend_location": "lower right",
+   "lines": [
+     {"name": "proc_lo_thresholdparams-mass_cut",
+       "label": "full LO",
+      "linestyle": "banded"},
+     {"name": "fact_lo-mass_cut",
+       "label": "factorized"},
+     {"name": "fact_decayonshellprojected_lo-mass_cut",
+       "label": "factorized, decay onshell projected"}
+   ],
     "xlabel": "$\\Delta M$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
