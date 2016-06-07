@@ -29,10 +29,84 @@ N_XMINORS_DEFAULT = 5
 N_YMAJORS_DEFAULT = 6
 N_XMAJORS_DEFAULT = 6
 
-# Valid legend locations
-# right         # center left   # upper right    # lower right   # best
-# center        # lower left    # center right   # upper left    # upper center
-# lower center
+
+def set_labels(ax, ax1, xlabel, ylabel, ylabel1):
+  if xlabel is not None:
+    if ax1 is None:
+      ax.set_xlabel(xlabel)
+    else:
+      ax1.set_xlabel(xlabel)
+  if ylabel is not None:
+    ax.set_ylabel(ylabel)
+    if ylabel1 is not None and ax1 is not None:
+      ax1.set_ylabel(ylabel1)
+
+
+def set_major_ticks(ax, ax1, xticks, yticks, xmin, xmax, xmajors, ymin, ymax,
+    ymajors, ymin1, ymax1, ymajors1, xlog, ylog):
+  if xticks is None:
+    if xlog:
+      xticks = np.logspace(math.log10(xmin), math.log10(xmax), num=xmajors)
+    else:
+      xticks = np.linspace(xmin, xmax, xmajors)
+  ax.set_xticks(xticks)
+  ax.set_xticklabels([str(xt) for xt in xticks])
+  if yticks is None:
+    if ylog:
+      yticks = np.logspace(math.log10(ymin), math.log10(ymax), num=ymajors)
+    else:
+      yticks = np.linspace(ymin, ymax, ymajors)
+      print 'yticks: ', yticks
+    if ymin1 is not None and ymax1 is not None and ax1 is not None:
+      if ymajors1 is None:
+        ymajors1 = ymajors
+      yticks1 = np.linspace(ymin1, ymax1, ymajors1)
+      ax1.set_yticks(yticks1)
+  ax.set_yticks(yticks)
+
+
+def set_minor_ticks(ax, ax1, xminors, yminors, xlog, ylog):
+  # TODO: (bcn 2016-03-16) minors are not disabled in log plot
+  if xminors > 0:
+    if xlog:
+      ax.set_xscale('log', subsx=[2, 3, 4, 5, 6, 7, 8, 9])
+    else:
+      minorLocator = AutoMinorLocator(xminors)
+      ax.xaxis.set_minor_locator(minorLocator)
+  if yminors > 0:
+    if ylog:
+      ax.set_yscale('log', subsy=[2, 3, 4, 5, 6, 7, 8, 9])
+    else:
+      minorLocator = AutoMinorLocator(yminors)
+      ax.yaxis.set_minor_locator(minorLocator)
+      if ax1 is not None:
+        minorLocator = AutoMinorLocator(yminors)
+        ax1.yaxis.set_minor_locator(minorLocator)
+
+
+def set_legend(ax, legend_ordering, legend_outside, height_shrinker,
+    legend_columns, legend_location):
+  # Valid legend locations
+  # right         # center left   # upper right    # lower right   # best
+  # center        # lower left    # center right   # upper left    # upper center
+  # lower center
+  handles, labels = ax.get_legend_handles_labels()
+  # reorder if fitting sequence is given
+  if len(legend_ordering) == len(handles):
+    handles = map(handles.__getitem__, legend_ordering)
+    labels = map(labels.__getitem__, legend_ordering)
+  if legend_outside:
+    # Shrink current axis's height by (1.0-height_shrinker) on the bottom
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0 + box.height * (1.0 - height_shrinker),
+                     box.width, box.height * height_shrinker])
+    # Put a legend below current axis
+    ax.legend(handles, labels, loc='upper center',
+        bbox_to_anchor=(0.5, -0.1),
+        fancybox=False, ncol=legend_columns)
+  else:
+    ax.legend(handles, labels, loc=legend_location,
+              fancybox=False, ncol=legend_columns)
 
 
 class Plotter(object):
@@ -40,36 +114,7 @@ class Plotter(object):
     self.title_notset = True
     self.layout_notset = True
 
-  # TODO: (bcn 2016-05-03) legend_outside seems broken with ratio plot
-  def setfig(self, ax, xmin, xmax, ymin, ymax, xlabel, ylabel,
-      title=None, xlog=False, ylog=False,
-      xmajors=N_XMAJORS_DEFAULT, ymajors=N_YMAJORS_DEFAULT,
-      xminors=0, yminors=0,
-      xticks=None, yticks=None, puff=0.05,
-      legend_location='best',
-      legend_columns=1, legend_outside=False, height_shrinker=0.80,
-      legend_hide=False, legend_ordering=[], ax1=None, ylabel1=None,
-      ymin1=None, ymax1=None, n_majors1=None):
-    # label axes and set ranges and scales
-    if xlabel is not None:
-      if ax1 is None:
-        ax.set_xlabel(xlabel)
-      else:
-        ax1.set_xlabel(xlabel)
-    if ylabel is not None:
-      ax.set_ylabel(ylabel)
-      if ylabel1 is not None and ax1 is not None:
-        ax1.set_ylabel(ylabel1)
-    _set_puffed_scale(puff, xmax, xmin, xlog, ax.set_xlim, ax.set_xscale)
-    _set_puffed_scale(puff, ymax, ymin, ylog, ax.set_ylim, ax.set_yscale)
-    if ymin1 is not None and ax1 is not None:
-      _set_puffed_scale(puff, ymax1, ymin1, False, ax1.set_ylim, ax1.set_yscale)
-
-    # title (ensuring no double set)
-    if title is not None and self.title_notset:
-      plt.suptitle(title, y=0.99)
-      self.title_notset = False
-
+  def set_layout(self):
     # tight layout with extra padding
     # pad : padding between the figure edge and the edges of subplots, as a
     #       fraction of the font-size
@@ -85,64 +130,31 @@ class Plotter(object):
       plt.subplots_adjust(hspace=0.01)
       self.layout_notset = False
 
-    # major ticks
-    if xticks is None:
-      if xlog:
-        xticks = np.logspace(math.log10(xmin), math.log10(xmax), num=xmajors)
-      else:
-        xticks = np.linspace(xmin, xmax, xmajors)
-    ax.set_xticks(xticks)
-    ax.set_xticklabels([str(xt) for xt in xticks])
-    if yticks is None:
-      if ylog:
-        yticks = np.logspace(math.log10(ymin), math.log10(ymax), num=ymajors)
-      else:
-        yticks = np.linspace(ymin, ymax, ymajors)
-        print 'yticks: ', yticks
-      if ymin1 is not None and ymax1 is not None and ax1 is not None:
-        if n_majors1 is None:
-          n_majors1 = ymajors
-        yticks1 = np.linspace(ymin1, ymax1, n_majors1)
-        ax1.set_yticks(yticks1)
-    ax.set_yticks(yticks)
-
-    # minor ticks are auto-set to n_minors if requested
-    if xminors > 0:
-      if xlog:
-        ax.set_xscale('log', subsx=[2, 3, 4, 5, 6, 7, 8, 9])
-      else:
-        minorLocator = AutoMinorLocator(xminors)
-        ax.xaxis.set_minor_locator(minorLocator)
-    if yminors > 0:
-      if ylog:
-        ax.set_yscale('log', subsy=[2, 3, 4, 5, 6, 7, 8, 9])
-      else:
-        minorLocator = AutoMinorLocator(yminors)
-        ax.yaxis.set_minor_locator(minorLocator)
-        if ax1 is not None:
-          minorLocator = AutoMinorLocator(yminors)
-          ax1.yaxis.set_minor_locator(minorLocator)
-    # TODO: (bcn 2016-03-16) minors are not disabled in log plot
-
-    # legend
+  # TODO: (bcn 2016-05-03) legend_outside seems broken with ratio plot
+  def setfig(self, ax, xmin, xmax, ymin, ymax, xlabel, ylabel,
+      title=None, xlog=False, ylog=False,
+      xmajors=N_XMAJORS_DEFAULT, ymajors=N_YMAJORS_DEFAULT,
+      xminors=0, yminors=0,
+      xticks=None, yticks=None, puff=0.05,
+      legend_location='best',
+      legend_columns=1, legend_outside=False, height_shrinker=0.80,
+      legend_hide=False, legend_ordering=[], ax1=None, ylabel1=None,
+      ymin1=None, ymax1=None, ymajors1=None):
+    set_labels(ax, ax1, xlabel, ylabel, ylabel1)
+    _set_puffed_scale(puff, xmax, xmin, xlog, ax.set_xlim, ax.set_xscale)
+    _set_puffed_scale(puff, ymax, ymin, ylog, ax.set_ylim, ax.set_yscale)
+    if ymin1 is not None and ax1 is not None:
+      _set_puffed_scale(puff, ymax1, ymin1, False, ax1.set_ylim, ax1.set_yscale)
+    if title is not None and self.title_notset:
+      plt.suptitle(title, y=0.99)
+      self.title_notset = False
+    self.set_layout()
+    set_major_ticks(ax, ax1, xticks, yticks, xmin, xmax, xmajors, ymin, ymax,
+        ymajors, ymin1, ymax1, ymajors1, xlog, ylog)
+    set_minor_ticks(ax, ax1, xminors, yminors, xlog, ylog)
     if not legend_hide:
-      handles, labels = ax.get_legend_handles_labels()
-      # reorder if fitting sequence is given
-      if len(legend_ordering) == len(handles):
-        handles = map(handles.__getitem__, legend_ordering)
-        labels = map(labels.__getitem__, legend_ordering)
-      if legend_outside:
-        # Shrink current axis's height by (1.0-height_shrinker) on the bottom
-        box = ax.get_position()
-        ax.set_position([box.x0, box.y0 + box.height * (1.0 - height_shrinker),
-                         box.width, box.height * height_shrinker])
-        # Put a legend below current axis
-        ax.legend(handles, labels, loc='upper center',
-            bbox_to_anchor=(0.5, -0.1),
-            fancybox=False, ncol=legend_columns)
-      else:
-        ax.legend(handles, labels, loc=legend_location,
-                  fancybox=False, ncol=legend_columns)
+      set_legend(ax, legend_ordering, legend_outside, height_shrinker,
+          legend_columns, legend_location)
 
 
 def check_for_all_sets(found_lines, wanted_lines):
@@ -359,9 +371,9 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
       ymin1 = ratio_dict.get('ymin', None)
       # max([np.amax(d[1][1] / base_line) for d in all_data])
       # min([np.amin(d[1][1] / base_line) for d in all_data])
-      n_majors1 = ratio_dict.get('nmajors', None)
+      ymajors1 = ratio_dict.get('nmajors', None)
     else:
-      n_majors1 = None
+      ymajors1 = None
   if label_decider is not None:
     xlabel, ylabel = label_decider(title)
   else:
@@ -435,7 +447,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
                 legend_outside=many_labels, height_shrinker=0.70,
                 legend_location=legend_location,
                 legend_hide=False, ax1=ax1, ylabel1=ylabel1, ymin1=ymin1,
-                ymax1=ymax1, n_majors1=n_majors1)
+                ymax1=ymax1, ymajors1=ymajors1)
       fig.savefig(os.path.join(pic_path, title + '-' + str(i) + '.pdf'),
                   dpi=fig.dpi)
   # Get baseline
@@ -494,7 +506,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
             xticks=xticks, yticks=yticks,
             legend_outside=many_labels, height_shrinker=0.70,
             legend_location=legend_location, ax1=ax1, ylabel1=ylabel1,
-            ymin1=ymin1, ymax1=ymax1, n_majors1=n_majors1)
+            ymin1=ymin1, ymax1=ymax1, ymajors1=ymajors1)
   output_file = plot_dict.get('output_file', '')
   if output_file is not '':
     # We do not want to have to remember whether the ending has to be supplied
