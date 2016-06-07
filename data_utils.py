@@ -291,14 +291,18 @@ def get_weighted_mean(values, sigma):
 
 
 def average_data_item(item, limits):
-  if sum(l for l in limits) == len(limits) * (len(limits) - 1) / 2:
+  if range(len(limits)) == limits:
     # Equidistant values, no averaging necessary
     return item
   new_y = []
   new_y_err = []
-  for i in range(len(limits) - 1):
-    l_low = limits[i]
-    l_high = limits[i + 1] - 1
+  for i in range(len(limits)):
+    if i < len(limits) - 1:
+      l_low = limits[i]
+      l_high = limits[i + 1] - 1
+    else:
+      l_low = limits[i]
+      l_high = len(item[1][0]) - 1
     if l_low == l_high:
       # There is only one point for this x-value. Nothing to average over.
       new_y_err.append(item[1][2][l_low])
