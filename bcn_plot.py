@@ -56,7 +56,6 @@ def set_major_ticks(ax, ax1, xticks, yticks, xmin, xmax, xmajors, ymin, ymax,
       yticks = np.logspace(math.log10(ymin), math.log10(ymax), num=ymajors)
     else:
       yticks = np.linspace(ymin, ymax, ymajors)
-      print 'yticks: ', yticks
     if ymin1 is not None and ymax1 is not None and ax1 is not None:
       if ymajors1 is None:
         ymajors1 = ymajors
@@ -86,10 +85,6 @@ def set_minor_ticks(ax, ax1, xminors, yminors, xlog, ylog):
 
 def set_legend(ax, legend_ordering, legend_outside, height_shrinker,
     legend_columns, legend_location):
-  # Valid legend locations
-  # right         # center left   # upper right    # lower right   # best
-  # center        # lower left    # center right   # upper left    # upper center
-  # lower center
   handles, labels = ax.get_legend_handles_labels()
   # reorder if fitting sequence is given
   if len(legend_ordering) == len(handles):
@@ -296,63 +291,30 @@ def sanity_check(data):
   return True
 
 
-def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
-    label_decider=None, legend_decider=None, marker_decider=None,
-    linestyle_decider=None, pretty_label=None, set_extra_settings=None):
-  """
-  data: [(identifier_string, numpy_array),...] where numpy_array has the columns
-        x, y and optionally yerror
-  """
-  # We are going to use this in the future, but right now the commit bouncer does not
-  # tolerate memory-mooching slacker variables
-  # groups = create_baseline_groups(data, plot_dict)
-  if not sanity_check(data):
-    return
-  mkdirs(pic_path)
-  title = plot_dict.get('title', 'plot')
-  line_data = []
-  lines = plot_dict.get('lines', [])
-  for line in lines:
-    line_data += [d for d in data if get_name(line) == d[0].replace('.dat', '')]
-  line_data = scale_data(line_data, lines)
-  bands = plot_dict.get('bands', [])
-  band_data = data_utils.get_associated_plot_data(data, bands)
-  fits = plot_dict.get('fits', [])
-  fit_data = data_utils.get_associated_plot_data(data, fits)
-  n_objects = len(line_data) + len(band_data) + len(fit_data)
-  many_labels = n_objects > 6
-  check_for_all_sets(line_data, lines)
-  # check_for_all_sets(band_data, band_lst)
-  if n_objects == 0:
-    print 'You selected no lines or bands. Not building: ' + title
-    return
+def setup_figure(plot_dict, ratio_dict, many_labels):
   try:
     size = (plot_dict['xpagelength'], plot_dict['ypagelength'])
   except KeyError:
     size = (9, 9) if many_labels else (9, 7.5)
-  ratio_dict = plot_dict.get('ratio', None)
-  if ratio_dict is not None:
-    base_line = line_data[0][1]
-    fig = plt.figure(figsize=size)
-    gs = gridspec.GridSpec(2, 1, height_ratios=[2, 1])
-    ax = fig.add_subplot(gs[0])
-    ax1 = fig.add_subplot(gs[1], sharex=ax)
-    ylabel1 = ratio_dict.get('ylabel', 'ratio')
-    this_errorbar = partial(partial(partial(combined_errorbar, base_line), ax), ax1)
-    if len(fit_data) == 0:
-      this_plot = partial(partial(partial(combined_plot, base_line), ax), ax1)
-    this_fill_between = partial(partial(partial(combined_fill_between,
-      base_line), ax), ax1)
+  return plt.figure(figsize=size)
+
+
+def setup_labels(label_decider, title, plot_dict, ratio_dict):
+  label_kwargs = {}
+  if label_decider is not None:
+    label_kwargs['xlabel'], label_kwargs['ylabel'] = label_decider(title)
   else:
-    fig = plt.figure(figsize=size)
-    ax = fig.add_subplot(1, 1, 1)
-    ax1 = None
-    this_plot = ax.plot
-    this_errorbar = ax.errorbar
-    this_fill_between = ax.fill_between
-    ylabel1 = None
-  if plot_extra is not None:
-    ax = plot_extra(ax, title)
+    label_kwargs['xlabel'] = plot_dict.get('xlabel', 'x')
+    label_kwargs['ylabel'] = plot_dict.get('ylabel', 'y')
+  if ratio_dict is not None:
+    label_kwargs['ylabel1'] = ratio_dict.get('ylabel', 'ratio')
+  else:
+    label_kwargs['ylabel1'] = None
+  return label_kwargs
+
+
+def setup_ranges(range_decider, line_data, band_data, title,
+    plot_dict, ratio_dict):
   ymin1, ymax1 = None, None
   if range_decider is not None:
     ymin, ymax, xmin, xmax = range_decider(line_data, title)
@@ -371,142 +333,69 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
       ymin1 = ratio_dict.get('ymin', None)
       # max([np.amax(d[1][1] / base_line) for d in all_data])
       # min([np.amin(d[1][1] / base_line) for d in all_data])
-      ymajors1 = ratio_dict.get('nmajors', None)
+  fig_kwargs = {'xmin': xmin, 'xmax': xmax, 'ymin': ymin, 'ymax': ymax,
+      'ymin1': ymin1, 'ymax1': ymax1}
+  return fig_kwargs
+
+
+def plot_band(data_of_a_band, band, color, title, global_opacity, pretty_label,
+  this_fill_between):
+  label = get_label(band, title, pretty_label=pretty_label)
+  opacity = band.get('opacity', global_opacity)
+  color = band.get('color', color)
+  list_of_y_arrays = [db[1][1] for db in data_of_a_band]
+  list_of_x_arrays = [db[1][0] for db in data_of_a_band]
+  combined_x, list_of_y_arrays = data_utils.remove_uncommon(list_of_x_arrays,
+      list_of_y_arrays)
+  y_array = np.vstack(tuple(list_of_y_arrays))
+  this_fill_between(combined_x, np.amin(y_array, axis=0), np.amax(y_array, axis=0),
+      color=color, label=label, alpha=opacity)
+
+
+def plot_line(ldata, line, color, title, pretty_label, linestyle_decider,
+    marker_decider, this_errorbar, this_plot, this_fill_between, ax,
+    global_opacity, plot_dict, plotter):
+  filename, d = ldata[0], ldata[1]
+  label = get_label(line, title, pretty_label=pretty_label, filename=filename)
+  c = line.get('color', color)
+  if line.get('hide_label', False):
+    label = None
+  linestyle = decide_if_not_none(line, linestyle_decider, 'linestyle', 'solid',
+      filename, title)
+  if linestyle == 'banded':
+    if len(d) > 2:
+      this_fill_between(d[0], d[1] - d[2], d[1] + d[2],
+        color=c, label=label, alpha=global_opacity)
     else:
-      ymajors1 = None
-  if label_decider is not None:
-    xlabel, ylabel = label_decider(title)
+      raise Exception("You have to supply errors for banded linestyle")
+  elif linestyle == 'scatter':
+    # TODO: (bcn 2016-03-31) hacking in a ratio for now #notproud
+    ax.scatter(d[0], d[1] / d[2], c=c, alpha=global_opacity, label=label, marker="+")
+  elif linestyle == 'histogram':
+    # TODO: (bcn 2016-03-31) hacking in a ratio for now #notproud
+    nbins = 10
+    n, _ = np.histogram(d[0], bins=nbins)
+    sy, _ = np.histogram(d[0], bins=nbins, weights=d[1] / d[2])
+    sy2, _ = np.histogram(d[0], bins=nbins, weights=d[1] / d[2] * d[1] / d[2])
+    mean = sy / n
+    std = np.sqrt(sy2 / n - mean * mean)
+    plt.errorbar((_[1:] + _[:-1]) / 2, mean, yerr=std, ecolor=c, fmt="none",
+        alpha=global_opacity)
+    plt.hlines(mean, _[:-1], _[1:], label=label, colors=c)
+  elif linestyle is not None and linestyle != "None":
+    this_plot(d[0], d[1], color=c, label=label, linestyle=linestyle)
   else:
-    xlabel, ylabel = (plot_dict.get('xlabel', 'x'), plot_dict.get('ylabel', 'y'))
-  xlog, ylog = (plot_dict.get('xlog', False), plot_dict.get('ylog', False))
-  xminors = plot_dict.get('xminors', N_XMINORS_DEFAULT)
-  yminors = plot_dict.get('yminors', N_YMINORS_DEFAULT)
-  decide_or_get = partial(decide_if_not_none, plot_dict)
-  legend_location = decide_or_get(legend_decider, 'legend_location', 'best', title)
-  if set_extra_settings is not None:
-    ax = set_extra_settings(ax, title)
-  pl = Plotter()
-  i = 0
-  global_opacity = plot_dict.get('opacity', 0.3)
-  for data_of_a_band, band, color in zip(band_data, bands, colors):
-    label = band.get('label', get_label(band, title, pretty_label=pretty_label))
-    opacity = band.get('opacity', global_opacity)
-    color = band.get('color', color)
-    list_of_y_arrays = [db[1][1] for db in data_of_a_band]
-    list_of_x_arrays = [db[1][0] for db in data_of_a_band]
-    combined_x, list_of_y_arrays = data_utils.remove_uncommon(list_of_x_arrays,
-        list_of_y_arrays)
-    y_array = np.vstack(tuple(list_of_y_arrays))
-    this_fill_between(combined_x, np.amin(y_array, axis=0), np.amax(y_array, axis=0),
-        color=color, label=label, alpha=opacity)
-  for td, line, color in zip(line_data, lines, colors):
-    filename, d = td[0], td[1]
-    label = get_label(line, title, filename=filename, pretty_label=pretty_label)
-    linestyle = decide_if_not_none(line, linestyle_decider, 'linestyle', 'solid',
-        filename, title)
-    c = line.get('color', color)
-    if linestyle == 'banded':
-      if len(d) > 2:
-        this_fill_between(d[0], d[1] - d[2], d[1] + d[2],
-          color=c, label=label, alpha=global_opacity)
-      else:
-        raise Exception("You have to supply errors for banded linestyle")
-    elif linestyle == 'scatter':
-      # TODO: (bcn 2016-03-31) hacking in a ratio for now #notproud
-      ax.scatter(d[0], d[1] / d[2], c=c, alpha=global_opacity, label=label, marker="+")
-    elif linestyle == 'histogram':
-      # TODO: (bcn 2016-03-31) hacking in a ratio for now #notproud
-      nbins = 10
-      n, _ = np.histogram(d[0], bins=nbins)
-      sy, _ = np.histogram(d[0], bins=nbins, weights=d[1] / d[2])
-      sy2, _ = np.histogram(d[0], bins=nbins, weights=d[1] / d[2] * d[1] / d[2])
-      mean = sy / n
-      std = np.sqrt(sy2 / n - mean * mean)
-      plt.errorbar((_[1:] + _[:-1]) / 2, mean, yerr=std, ecolor=c, fmt="none",
-          alpha=global_opacity)
-      plt.hlines(mean, _[:-1], _[1:], label=label, colors=c)
-    elif linestyle is not None and linestyle != "None":
-      this_plot(d[0], d[1], color=c, label=label, linestyle=linestyle)
+    if marker_decider is not None:
+      marker = marker_decider(filename, title)
     else:
-      if marker_decider is not None:
-        marker = marker_decider(filename, title)
-      else:
-        marker = plot_dict.get('marker', '+')
-      if len(d) > 2:
-        print 'This errorbar! '
-        this_errorbar(d[0], d[1], fmt=marker, yerr=d[2], color=c, label=label)
-      else:
-        this_errorbar(d[0], d[1], fmt=marker, color=c, label=label)
-    if plot_dict.get('generate_animated', False):
-      i += 1
-      pl.setfig(ax, title=None,
-                xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax,
-                xminors=xminors, yminors=yminors,
-                xlabel=xlabel,
-                ylabel=ylabel, ylog=ylog, xlog=xlog,
-                legend_outside=many_labels, height_shrinker=0.70,
-                legend_location=legend_location,
-                legend_hide=False, ax1=ax1, ylabel1=ylabel1, ymin1=ymin1,
-                ymax1=ymax1, ymajors1=ymajors1)
-      fig.savefig(os.path.join(pic_path, title + '-' + str(i) + '.pdf'),
-                  dpi=fig.dpi)
-  # Get baseline
-  # if ratio_dict is not None:
-    # for data_of_a_fit, fit in zip(fit_data, fits):
-    #   label = fit.get('label', get_label(fit, title, pretty_label=pretty_label))
-    #   verbose = fit.get('print_fit_parameters', False)
-    #   if 'LO' in label and not 'NLO' in label:
-    #     x = data_of_a_fit[0][1][0]
-    #     y = data_of_a_fit[0][1][1]
-    #     y_err = data_of_a_fit[0][1][2]
-    #     xmin = decide_if_not_none(fit, None, 'extrapolation_minus', min(x),
-    #         data_of_a_fit[0][0], title)
-    #     xmax = decide_if_not_none(fit, None, 'extrapolation_plus', max(x),
-    #         data_of_a_fit[0][0], title)
-    #     degree = decide_if_not_none(fit, None, 'fit_degree', -1,
-    #         data_of_a_fit[0][0], title)
-    #     if degree < 0:
-    #       print 'You have not specified the degree of the polynomial to be fitted. '
-    #       print 'Going to fit a line!'
-    #       degree = 1
-    #     fit_x, fit_y = fit_utils.fit_polynomial(x, y, xmin, xmax, degree,
-    #       y_err=y_err, verbose=verbose)
-    #     base_line = np.array([fit_x, fit_y])
-
-  fit_data = []
-  for d in data:
-    if 'fit' in d[0]:
-      fit_data.append(d)
-
-  for data_of_a_fit, fit, color in zip(fit_data, fits, colors):
-    label = fit.get('label', get_label(fit, title, pretty_label=pretty_label))
-    color = fit.get('color', color)
-    linestyle = decide_if_not_none(fit, linestyle_decider, 'linestyle', 'solid',
-        data_of_a_fit[0], title)
-    fit_x = data_of_a_fit[1][0]
-    fit_y = data_of_a_fit[1][1]
-    if ratio_dict is not None:
-      this_plot = partial(partial(partial(combined_plot, base_line), ax), ax1)
+      marker = plot_dict.get('marker', '+')
+    if len(d) > 2:
+      this_errorbar(d[0], d[1], fmt=marker, yerr=d[2], color=c, label=label)
     else:
-      this_plot = ax.plot
-    hide_label = fit.get('hide_label', False)
-    if hide_label:
-      this_plot(fit_x, fit_y, xmin, xmax, color=color, linestyle=linestyle)
-    else:
-      this_plot(fit_x, fit_y, xmin, xmax, color=color,
-        label=label, linestyle=linestyle)
+      this_errorbar(d[0], d[1], fmt=marker, color=c, label=label)
 
-  xticks = plot_dict.get('xticks', None)
-  yticks = plot_dict.get('yticks', None)
-  pl.setfig(ax, title=title,
-            xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax,
-            xminors=xminors, yminors=yminors,
-            xlabel=xlabel,
-            ylabel=ylabel, ylog=ylog, xlog=xlog,
-            xticks=xticks, yticks=yticks,
-            legend_outside=many_labels, height_shrinker=0.70,
-            legend_location=legend_location, ax1=ax1, ylabel1=ylabel1,
-            ymin1=ymin1, ymax1=ymax1, ymajors1=ymajors1)
+
+def save_fig(fig, title, plot_dict, pic_path):
   output_file = plot_dict.get('output_file', '')
   if output_file is not '':
     # We do not want to have to remember whether the ending has to be supplied
@@ -520,6 +409,113 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   fig.savefig(os.path.join(pic_path, out_file),
               dpi=fig.dpi)
   plt.close(fig)
+
+
+def select_data(data, plot_dict, title):
+  valid = sanity_check(data)
+  line_data = []
+  lines = plot_dict.get('lines', [])
+  for line in lines:
+    line_data += [d for d in data if get_name(line) == d[0].replace('.dat', '')]
+  line_data = scale_data(line_data, lines)
+  bands = plot_dict.get('bands', [])
+  band_data = data_utils.get_associated_plot_data(data, bands)
+  fits = plot_dict.get('fits', [])
+  fit_data = data_utils.get_associated_plot_data(data, fits)
+  n_objects = len(line_data) + len(band_data) + len(fit_data)
+  many_labels = n_objects > 6
+  check_for_all_sets(line_data, lines)
+  # check_for_all_sets(band_data, band_lst)
+  if n_objects == 0:
+    print 'You selected no lines or bands. Not building: ' + title
+    valid = False
+  return valid, line_data, band_data, fit_data, many_labels, lines, bands, fits
+
+
+def setup_extra_kwargs(plot_dict, legend_decider, many_labels, title):
+  extra_kwargs = {}
+  extra_kwargs['height_shrinker'] = 0.70
+  extra_kwargs['xlog'] = plot_dict.get('xlog', False)
+  extra_kwargs['ylog'] = plot_dict.get('ylog', False)
+  extra_kwargs['xminors'] = plot_dict.get('xminors', N_XMINORS_DEFAULT)
+  extra_kwargs['yminors'] = plot_dict.get('yminors', N_YMINORS_DEFAULT)
+  extra_kwargs['xticks'] = plot_dict.get('xticks', None)
+  extra_kwargs['yticks'] = plot_dict.get('yticks', None)
+  extra_kwargs['legend_outside'] = many_labels
+  extra_kwargs['legend_location'] = decide_if_not_none(plot_dict, legend_decider,
+      'legend_location', 'best', title)
+  return extra_kwargs
+
+
+def setup_majors(ratio_dict):
+  kwargs = {}
+  if ratio_dict is not None:
+    kwargs['ymajors1'] = ratio_dict.get('nmajors', None)
+  else:
+    kwargs['ymajors1'] = None
+  return kwargs
+
+
+def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
+    label_decider=None, legend_decider=None, marker_decider=None,
+    linestyle_decider=None, pretty_label=None, set_extra_settings=None):
+  """
+  data: [(identifier_string, numpy_array),...] where numpy_array has the columns
+        x, y and optionally yerror
+  """
+  title = plot_dict.get('title', 'plot')
+  mkdirs(pic_path)
+  valid, line_data, band_data, fit_data, many_labels, lines, bands, fits = \
+      select_data(data, plot_dict, title)
+  if not valid:
+    return
+  # We are going to use this in the future, but right now the commit bouncer does not
+  # tolerate memory-mooching slacker variables
+  # groups = create_baseline_groups(data, plot_dict)
+  ratio_dict = plot_dict.get('ratio', None)
+  fig_kwargs = setup_ranges(range_decider, line_data,
+      band_data, title, plot_dict, ratio_dict)
+  fig = setup_figure(plot_dict, ratio_dict, many_labels)
+  if ratio_dict is not None:
+    base_line = line_data[0][1]
+    gs = gridspec.GridSpec(2, 1, height_ratios=[2, 1])
+    ax = fig.add_subplot(gs[0])
+    ax1 = fig.add_subplot(gs[1], sharex=ax)
+    this_errorbar = partial(partial(partial(combined_errorbar, base_line), ax), ax1)
+    this_plot = partial(partial(partial(combined_plot, base_line), ax), ax1)
+    this_fill_between = partial(partial(partial(combined_fill_between,
+      base_line), ax), ax1)
+    fig_kwargs['ax1'] = ax1
+  else:
+    ax = fig.add_subplot(1, 1, 1)
+    this_plot = ax.plot
+    this_errorbar = ax.errorbar
+    this_fill_between = ax.fill_between
+    fig_kwargs['ax1'] = None
+  if plot_extra is not None:
+    ax = plot_extra(ax, title)
+  fig_kwargs.update(setup_majors(ratio_dict))
+  fig_kwargs.update(setup_labels(label_decider, title, plot_dict, ratio_dict))
+  fig_kwargs.update(setup_extra_kwargs(plot_dict, legend_decider, many_labels, title))
+  if set_extra_settings is not None:
+    ax = set_extra_settings(ax, title)
+  plotter = Plotter()
+  i = 0
+  global_opacity = plot_dict.get('opacity', 0.3)
+  for data_of_a_band, band, color in zip(band_data, bands, colors):
+    plot_band(data_of_a_band, band, color, title, global_opacity, pretty_label,
+        this_fill_between)
+  for ldata, line, color in zip(line_data + fit_data, lines + fits, colors + colors):
+    i += 1
+    plot_line(ldata, line, color, title, pretty_label, linestyle_decider,
+        marker_decider, this_errorbar, this_plot, this_fill_between, ax,
+        global_opacity, plot_dict, plotter)
+    if plot_dict.get('generate_animated', False):
+      plotter.setfig(ax, title=None, legend_hide=False, **fig_kwargs)
+      fig.savefig(os.path.join(pic_path, title + '-' + str(i) + '.pdf'),
+                  dpi=fig.dpi)
+  plotter.setfig(ax, title=title, **fig_kwargs)
+  save_fig(fig, title, plot_dict, pic_path)
 
 
 def get_linecolors_from_cubehelix(N, gamma=0.8, hue=3.0, rot=1.8, start=-0.30):
