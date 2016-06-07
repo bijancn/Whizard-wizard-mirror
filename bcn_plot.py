@@ -267,6 +267,23 @@ def create_baseline_groups(data, plot_dict):
     groups = insert_group_entry(groups, data, fit, is_fit=True)
 
 
+def sanity_check(data):
+  for dat in data:
+    if type(dat[0]) is not str:
+      print 'This is not an identifier_string:', dat[0]
+      print 'Aborting'
+      return False
+    if type(dat[1]) is not np.ndarray:
+      print 'This is not a numpy ndarray:', dat[1], 'in', dat[0]
+      print 'Aborting'
+      return False
+    if len(dat[1].shape) != 2:
+      print 'These are inconsistent shapes:', dat[1].shape, 'in', dat[0]
+      print 'It should be (2, N) or (3, N). Aborting'
+      return False
+  return True
+
+
 def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     label_decider=None, legend_decider=None, marker_decider=None,
     linestyle_decider=None, pretty_label=None, set_extra_settings=None):
@@ -277,9 +294,10 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   # We are going to use this in the future, but right now the commit bouncer does not
   # tolerate memory-mooching slacker variables
   # groups = create_baseline_groups(data, plot_dict)
+  if not sanity_check(data):
+    return
   mkdirs(pic_path)
   title = plot_dict.get('title', 'plot')
-  output_file = plot_dict.get('output_file', '')
   line_data = []
   lines = plot_dict.get('lines', [])
   for line in lines:
@@ -372,7 +390,6 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   for td, line, color in zip(line_data, lines, colors):
     filename, d = td[0], td[1]
     label = get_label(line, title, filename=filename, pretty_label=pretty_label)
-    # linestyle = decide_or_get(linestyle_decider, 'linestyle', None, filename, title)
     linestyle = decide_if_not_none(line, linestyle_decider, 'linestyle', 'solid',
         filename, title)
     c = line.get('color', color)
@@ -478,6 +495,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
             legend_outside=many_labels, height_shrinker=0.70,
             legend_location=legend_location, ax1=ax1, ylabel1=ylabel1,
             ymin1=ymin1, ymax1=ymax1, n_majors1=n_majors1)
+  output_file = plot_dict.get('output_file', '')
   if output_file is not '':
     # We do not want to have to remember whether the ending has to be supplied
     if output_file.endswith('.pdf'):

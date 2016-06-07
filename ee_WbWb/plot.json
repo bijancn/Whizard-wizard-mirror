@@ -176,6 +176,21 @@
     "xminors": true,
     "yminors": true
   },
+  {"title": "Cuts $\\sqrt{s}=10TeV$",
+   "output_file": "cuts_10TeV",
+    "lines": [
+      {"name": "proc_lo_thresholdparams10000-mass_cut"},
+      {"name": "fact_lo10000-mass_cut"},
+      {"name": "fact_decayonshellprojected_lo10000-mass_cut"}
+    ],
+    "xlabel": "$\\Delta M$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": true,
+    "xlog": true,
+    "xminors": true,
+    "yminors": true
+  },
   {"title": "Comparison of onshell projections",
     "lines": [
       {"name": "ttbar_lo_thresholdparams"},

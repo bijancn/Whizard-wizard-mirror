@@ -21,13 +21,7 @@
     "integration_iterations": "3:20000"
   },
   {"process":
-    ["proc_lo_thresholdparams",
-     "fact_lo",
-     "fact_decayonshellprojected_lo",
-     "proc_lo_thresholdparams350",
-     "fact_lo350",
-     "fact_decayonshellprojected_lo350",
-     "proc_lo_thresholdparams10000",
+    ["proc_lo_thresholdparams10000",
      "fact_lo10000",
      "fact_decayonshellprojected_lo10000"
     ],
@@ -37,8 +31,29 @@
     "ranges": [
     {"type": "logarithmic",
       "start": 1,
-      "stop": 100,
-      "steps": 3}
+      "stop": 10000,
+      "steps": 50}
+    ],
+    "nlo_type": "lo",
+    "adaption_iterations": "3:50000",
+    "integration_iterations": "3:20000"
+  },
+  {"process":
+    ["proc_lo_thresholdparams",
+     "fact_lo",
+     "fact_decayonshellprojected_lo",
+     "proc_lo_thresholdparams350",
+     "fact_lo350",
+     "fact_decayonshellprojected_lo350"
+    ],
+    "disabled": true,
+    "purpose": "scan",
+    "scan_object": "mass_cut",
+    "ranges": [
+    {"type": "logarithmic",
+      "start": 1,
+      "stop": 800,
+      "steps": 50}
     ],
     "nlo_type": "lo",
     "adaption_iterations": "3:50000",

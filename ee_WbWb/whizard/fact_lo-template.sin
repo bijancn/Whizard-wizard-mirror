@@ -22,4 +22,8 @@ sqrtsmin = sqrts - sqrtsstepsize
 sqrtsmax = sqrts + sqrtsstepsize
 
 integrate (fact_lo)
-printf "RES %g %g %g" (sqrts, integral(fact_lo), error(fact_lo))
+if (mass_cut > 0) then
+  printf "RES %g %g %g" (mass_cut, integral(fact_lo), error(fact_lo))
+else
+  printf "RES %g %g %g" (sqrts, integral(fact_lo), error(fact_lo))
+endif

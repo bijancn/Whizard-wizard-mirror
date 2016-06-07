@@ -24,4 +24,8 @@ sqrtsmin = sqrts - sqrtsstepsize
 sqrtsmax = sqrts + sqrtsstepsize
 
 integrate (fact_decayonshellprojected_lo)
-printf "RES %g %g %g" (sqrts, integral(fact_decayonshellprojected_lo), error(fact_decayonshellprojected_lo))
+if (mass_cut > 0) then
+  printf "RES %g %g %g" (mass_cut, integral(fact_decayonshellprojected_lo), error(fact_decayonshellprojected_lo))
+else
+  printf "RES %g %g %g" (sqrts, integral(fact_decayonshellprojected_lo), error(fact_decayonshellprojected_lo))
+endif

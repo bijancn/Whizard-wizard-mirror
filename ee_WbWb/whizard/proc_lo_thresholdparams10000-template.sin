@@ -24,4 +24,8 @@ sqrtsmin = sqrts - sqrtsstepsize
 sqrtsmax = sqrts + sqrtsstepsize
 
 integrate (proc_lo_thresholdparams10000)
-printf "RES %g %g %g" (sqrts, integral(proc_lo_thresholdparams10000), error(proc_lo_thresholdparams10000))
+if (mass_cut > 0) then
+  printf "RES %g %g %g" (mass_cut, integral(proc_lo_thresholdparams10000), error(proc_lo_thresholdparams10000))
+else
+  printf "RES %g %g %g" (sqrts, integral(proc_lo_thresholdparams10000), error(proc_lo_thresholdparams10000))
+endif
