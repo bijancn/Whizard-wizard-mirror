@@ -7,7 +7,6 @@ compile
 FF = 9        # tree level from signal comp
 offshell_strategy = 2     ! fact
                     +128  ! decayonshell projected
-                    +256  ! onshell projected width
 
 show(model)
 

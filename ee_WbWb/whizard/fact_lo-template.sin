@@ -5,7 +5,7 @@ process fact_lo = e1, E1 => Wm, Wp, B, b {$restrictions = "3+5~tbar && 4+6~t"}
 compile
 
 FF = 9        # tree level from signal comp
-offshell_strategy = 0+2+0+0+256
+offshell_strategy = 0+2+0+0
 
 show(model)
 
