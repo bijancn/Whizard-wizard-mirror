@@ -275,7 +275,7 @@ def setup_sindarin(proc_dict):
       if template_present:
         if proc_dict['purpose'] == 'integration' or scan or test_soft:
           create_integration_sindarin(integration_sindarin, template_sindarin,
-              proc_dict['adaption_iterations'],
+              proc_dict['process'], proc_dict['adaption_iterations'],
               proc_dict.get('integration_iterations', ' '))
           multiply_sindarins(integration_sindarin, proc_dict,
              proc_dict.get('scale_variation', False), proc_dict['nlo_type'])
@@ -576,7 +576,8 @@ def is_valid_wizard_sindarin(proc_dict, template_sindarin):
   purpose = proc_dict['purpose']
   proc_id = ut.get_process(template_sindarin)
   valid = True
-  if proc_id != template_sindarin.replace('-template.sin', ''):
+  if proc_id != 'PROCESS' and \
+      proc_id != template_sindarin.replace('-template.sin', ''):
     ut.fatal('The process doesnt have the same name as the file')
     valid = False
   if purpose == 'scan' and not ut.grep('#SETSCAN', template_sindarin):
@@ -711,15 +712,37 @@ def replace_iterations(adaption_iterations, integration_iterations):
   return lambda line: line.replace('#ITERATIONS', iterations)
 
 
+def replacements(adaption_iterations, integration_iterations, process):
+  replace_iters = replace_iterations(adaption_iterations,
+      integration_iterations)
+  replace_process = lambda line: line.replace('PROCESS', process)
+  replace_line = lambda line: replace_process(replace_iters(line))
+  return replace_line
+
+
 def create_integration_sindarin(integration_sindarin, template_sindarin,
-    adaption_iterations, integration_iterations):
-  replace_line = replace_iterations(adaption_iterations, integration_iterations)
+    process, adaption_iterations, integration_iterations):
+  replace_line = replacements(adaption_iterations, integration_iterations,
+      process)
   ut.sed(template_sindarin, replace_line, new_file=integration_sindarin)
+
+
+@nt.with_setup(create_test_nlo_base, remove_test_nlo_base)
+def test_create_integration_sindarin():
+  with open('test_integration-template.sin', "w") as test:
+    test.write('process PROCESS = e1, E1 => e2, E2 {#ITERATIONS} integrate (PROCESS)')
+  create_integration_sindarin('test_integration.sin',
+      'test_integration-template.sin', 'test_integration', "3:100", "1:500")
+  with open('test_integration.sin', "r") as test:
+    nt.eq_(test.read(), 'process test_integration = e1, E1 => e2, E2 ' +
+        '{iterations = 3:100:"gw",1:500} integrate (test_integration)')
+  os.remove('test_integration-template.sin')
 
 
 def create_simulation_sindarin(simulation_sindarin, template_sindarin, process,
     adaption_iterations, integration_iterations, n_events):
-  replace_line = replace_iterations(adaption_iterations, integration_iterations)
+  replace_line = replacements(adaption_iterations, integration_iterations,
+      process)
   ut.sed(template_sindarin, replace_line, new_file=simulation_sindarin)
   command = 'n_events = ' + str(n_events) + '\n' \
       + 'checkpoint = n_events / 20' + '\n' \
