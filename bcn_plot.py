@@ -83,7 +83,7 @@ def set_minor_ticks(ax, ax1, xminors, yminors, xlog, ylog):
         ax1.yaxis.set_minor_locator(minorLocator)
 
 
-def set_legend(ax, legend_ordering, legend_outside, height_shrinker,
+def set_legend(fig, ax, ax1, legend_ordering, legend_outside, height_shrinker,
     legend_columns, legend_location):
   handles, labels = ax.get_legend_handles_labels()
   # reorder if fitting sequence is given
@@ -92,13 +92,26 @@ def set_legend(ax, legend_ordering, legend_outside, height_shrinker,
     labels = map(labels.__getitem__, legend_ordering)
   if legend_outside:
     # Shrink current axis's height by (1.0-height_shrinker) on the bottom
-    box = ax.get_position()
-    ax.set_position([box.x0, box.y0 + box.height * (1.0 - height_shrinker),
-                     box.width, box.height * height_shrinker])
-    # Put a legend below current axis
-    ax.legend(handles, labels, loc='upper center',
-        bbox_to_anchor=(0.5, -0.1),
-        fancybox=False, ncol=legend_columns)
+    if ax1 is None:
+      box = ax.get_position()
+      ax.set_position([box.x0, box.y0 + box.height * (1.0 - height_shrinker),
+                       box.width, box.height * height_shrinker])
+      # Put a legend below current axis
+      ax.legend(handles, labels, loc='upper center',
+          bbox_to_anchor=(0.5, -0.1),
+          fancybox=False, ncol=legend_columns)
+    else:
+      box = ax.get_position()
+      reduced_amount = box.height * (1.0 - height_shrinker)
+      ax.set_position([box.x0, box.y0 + box.height * (1.0 - height_shrinker),
+                       box.width, box.height * height_shrinker])
+      box = ax1.get_position()
+      ax1.set_position([box.x0, box.y0 + reduced_amount + box.height * (1.0 -
+        height_shrinker), box.width, box.height * height_shrinker])
+      # Put a legend below current axis (coordinates are relative to ax1)
+      fig.legend(handles, labels, loc='lower center',
+          bbox_to_anchor=(0.5, 0.0),
+          fancybox=False, ncol=legend_columns)
   else:
     ax.legend(handles, labels, loc=legend_location,
               fancybox=False, ncol=legend_columns)
@@ -125,8 +138,7 @@ class Plotter(object):
       plt.subplots_adjust(hspace=0.01)
       self.layout_notset = False
 
-  # TODO: (bcn 2016-05-03) legend_outside seems broken with ratio plot
-  def setfig(self, ax, xmin, xmax, ymin, ymax, xlabel, ylabel,
+  def setfig(self, fig, ax, xmin, xmax, ymin, ymax, xlabel, ylabel,
       title=None, xlog=False, ylog=False,
       xmajors=N_XMAJORS_DEFAULT, ymajors=N_YMAJORS_DEFAULT,
       xminors=0, yminors=0,
@@ -148,7 +160,7 @@ class Plotter(object):
         ymajors, ymin1, ymax1, ymajors1, xlog, ylog)
     set_minor_ticks(ax, ax1, xminors, yminors, xlog, ylog)
     if not legend_hide:
-      set_legend(ax, legend_ordering, legend_outside, height_shrinker,
+      set_legend(fig, ax, ax1, legend_ordering, legend_outside, height_shrinker,
           legend_columns, legend_location)
 
 
@@ -511,10 +523,10 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
         marker_decider, this_errorbar, this_plot, this_fill_between, ax,
         global_opacity, plot_dict, plotter)
     if plot_dict.get('generate_animated', False):
-      plotter.setfig(ax, title=None, legend_hide=False, **fig_kwargs)
+      plotter.setfig(fig, ax, title=None, legend_hide=False, **fig_kwargs)
       fig.savefig(os.path.join(pic_path, title + '-' + str(i) + '.pdf'),
                   dpi=fig.dpi)
-  plotter.setfig(ax, title=title, **fig_kwargs)
+  plotter.setfig(fig, ax, title=title, **fig_kwargs)
   save_fig(fig, title, plot_dict, pic_path)
 
 
