@@ -1,7 +1,7 @@
 include("../process_settings_threshold.sin")
 
-library = fact_onshellprojected_lo10000
-process fact_onshellprojected_lo10000 = e1, E1 => Wm, Wp, B, b {$restrictions = "3+5~tbar && 4+6~t"}
+library = PROCESS
+process PROCESS = e1, E1 => Wm, Wp, B, b {$restrictions = "3+5~tbar && 4+6~t"}
 compile
 
 FF = 9        # tree level from signal comp
@@ -24,9 +24,9 @@ sqrtsstepsize = 0.1 GeV
 sqrtsmin = sqrts - sqrtsstepsize
 sqrtsmax = sqrts + sqrtsstepsize
 
-integrate (fact_onshellprojected_lo10000)
+integrate (PROCESS)
 if (mass_cut > 0) then
-  printf "RES %g %g %g" (mass_cut, integral(fact_onshellprojected_lo10000), error(fact_onshellprojected_lo10000))
+  printf "RES %g %g %g" (mass_cut, integral(PROCESS), error(PROCESS))
 else
-  printf "RES %g %g %g" (sqrts, integral(fact_onshellprojected_lo10000), error(fact_onshellprojected_lo10000))
+  printf "RES %g %g %g" (sqrts, integral(PROCESS), error(PROCESS))
 endif

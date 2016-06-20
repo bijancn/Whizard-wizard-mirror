@@ -1,12 +1,12 @@
 include("../process_settings_threshold.sin")
 
-library = fact_decosproj_boosted_lo10000
-process fact_decosproj_boosted_lo10000 = e1, E1 => Wm, Wp, B, b {$restrictions = "3+5~tbar && 4+6~t"}
+library = PROCESS
+process PROCESS = e1, E1 => Wm, Wp, B, b {$restrictions = "3+5~tbar && 4+6~t"}
 compile
 
 FF = 9        # tree level from signal comp
 offshell_strategy = 2     ! fact
-                   +128  ! decayonshell projected
+                   +128   ! decayonshell projected
                    +512   ! boost momenta
 
 show(model)
@@ -24,9 +24,9 @@ sqrtsstepsize = 0.1 GeV
 sqrtsmin = sqrts - sqrtsstepsize
 sqrtsmax = sqrts + sqrtsstepsize
 
-integrate (fact_decosproj_boosted_lo10000)
+integrate (PROCESS)
 if (mass_cut > 0) then
-  printf "RES %g %g %g" (mass_cut, integral(fact_decosproj_boosted_lo10000), error(fact_decosproj_boosted_lo10000))
+  printf "RES %g %g %g" (mass_cut, integral(PROCESS), error(PROCESS))
 else
-  printf "RES %g %g %g" (sqrts, integral(fact_decosproj_boosted_lo10000), error(fact_decosproj_boosted_lo10000))
+  printf "RES %g %g %g" (sqrts, integral(PROCESS), error(PROCESS))
 endif
