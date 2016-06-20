@@ -1,0 +1,31 @@
+include("../process_settings_threshold.sin")
+
+library = fact_onshellproj_unboosted_lo10t
+process fact_onshellproj_unboosted_lo10t = e1, E1 => Wm, Wp, B, b {$restrictions = "3+5~tbar && 4+6~t"}
+compile
+
+FF = 9        # tree level from signal comp
+offshell_strategy = 2     ! fact
+                   +8     ! onshell projected
+
+show(model)
+
+iterations = 3:20000:"gw",3:20000
+#ITERATIONS
+sqrts = 10000 GeV
+real mass_cut = - 1
+#SETSCAN
+if (mass_cut > 0) then
+  cuts = all abs (M - mtpole) < mass_cut [Wp, b] and
+         all abs (M - mtpole) < mass_cut [Wm, B]
+endif
+sqrtsstepsize = 0.1 GeV
+sqrtsmin = sqrts - sqrtsstepsize
+sqrtsmax = sqrts + sqrtsstepsize
+
+integrate (fact_onshellproj_unboosted_lo10t)
+if (mass_cut > 0) then
+  printf "RES %g %g %g" (mass_cut, integral(fact_onshellproj_unboosted_lo10t), error(fact_onshellproj_unboosted_lo10t))
+else
+  printf "RES %g %g %g" (sqrts, integral(fact_onshellproj_unboosted_lo10t), error(fact_onshellproj_unboosted_lo10t))
+endif
