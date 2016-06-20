@@ -195,7 +195,6 @@ class Whizard():
 
   def run_process(self, (proc_id, proc_name, proc_dict)):
     log('Trying', proc_id, proc_dict)
-    integration_sindarin = proc_name + '-integrate.sin'
     if proc_dict['nlo_type'] == 'nlo':
       beam_type = proc_dict.get('beam_type', 'leptons')
       index = get_grid_index(proc_name, beam_type)
@@ -204,7 +203,6 @@ class Whizard():
       integration_grids = proc_name + '_m1.vg'
     purpose = proc_dict['purpose']
     event_generation = purpose == 'events' or purpose == 'histograms'
-    whizard_options = proc_dict.get('whizard_options', '--no-banner')
     with ut.cd('whizard/'):
       if not os.path.exists(integration_grids) and event_generation:
         ut.logger.error('Didnt find integration grids with name ' + integration_grids +
@@ -213,6 +211,8 @@ class Whizard():
       elif purpose == 'integration':
         ut.logger.info('Generating the following integration grids: ' +
             integration_grids)
+        integration_sindarin = proc_name + '-integrate.sin'
+        whizard_options = proc_dict.get('whizard_options', '--no-banner')
         return self.execute(purpose,
             sindarin=integration_sindarin,
             options=whizard_options)
@@ -228,22 +228,26 @@ class Whizard():
               integration_grids=integration_grids,
               analysis=analysis)
           if return_code == SUCCESS:
-            done = os.path.isfile(os.path.join(runfolder, 'done'))
-            if (done and purpose == 'events'):
-              os.rename(os.path.join(runfolder, runfolder) + '.hepmc',
-                  os.path.join("../rivet", runfolder + '.hepmc'))
-            if (done and purpose == 'test_soft'):
-              ut.mkdirs("../scan-results")
-              soft_log = os.path.join(runfolder, 'soft.log')
-              if os.path.isfile(soft_log):
-                os.rename(soft_log, os.path.join("../scan-results",
-                  runfolder.strip('--1') + '.soft.dat'))
-              else:
-                return FAIL
+            return_code = self.handle_results(runfolder, purpose)
           return return_code
         else:
           ut.logger.info('Skipping ' + runfolder + ' because done is found')
           return SUCCESS
+
+  def handle_results(self, runfolder, purpose):
+    done = os.path.isfile(os.path.join(runfolder, 'done'))
+    if (done and purpose == 'events'):
+      os.rename(os.path.join(runfolder, runfolder) + '.hepmc',
+          os.path.join("../rivet", runfolder + '.hepmc'))
+    if (done and purpose == 'test_soft'):
+      ut.mkdirs("../scan-results")
+      soft_log = os.path.join(runfolder, 'soft.log')
+      if os.path.isfile(soft_log):
+        os.rename(soft_log, os.path.join("../scan-results",
+          runfolder.strip('--1') + '.soft.dat'))
+      else:
+        return FAIL
+    return SUCCESS
 
 
 def setup_sindarins(run_json):
@@ -347,6 +351,17 @@ def fill_scan_runs(proc_name, proc_dict, scans):
   return runs
 
 
+def try_fill_scan_runs(proc_name, proc_dict):
+  try:
+    scans = proc_dict['ranges']
+  # TODO: (bcn 2016-03-30) this should be made impossible in the scheme
+  except KeyError:
+    ut.fatal('Aborting: You want a scan but have not set a ranges array')
+    return []
+  else:
+    return fill_scan_runs(proc_name, proc_dict, scans)
+
+
 def fill_runs(proc_name, proc_dict):
   purpose = proc_dict['purpose']
   if proc_dict.get('disabled', False):
@@ -354,13 +369,7 @@ def fill_runs(proc_name, proc_dict):
   elif purpose == 'events' or purpose == 'histograms':
     runs = [(b, proc_name, proc_dict) for b in range(proc_dict['batches'])]
   elif purpose == 'scan':
-    try:
-      scans = proc_dict['ranges']
-    # TODO: (bcn 2016-03-30) this should be made impossible in the scheme
-    except KeyError:
-      ut.fatal('Aborting: You want a scan but have not set a ranges array')
-    else:
-      runs = fill_scan_runs(proc_name, proc_dict, scans)
+    runs = try_fill_scan_runs(proc_name, proc_dict)
   elif purpose == 'integration' or purpose == 'test_soft':
     runs = [(-1, proc_name, proc_dict)]
   else:
