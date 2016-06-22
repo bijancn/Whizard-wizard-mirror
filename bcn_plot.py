@@ -10,6 +10,10 @@ import data_utils
 from data_utils import get_name
 from functools import partial
 from utils import mkdirs
+try:
+  import mpld3
+except:
+  mpld3 = None
 
 colors = ['#EE3311',  # red
           '#3366FF',  # blue
@@ -170,10 +174,11 @@ def check_for_all_sets(found_lines, wanted_lines):
           ' out of ', len(wanted_lines)
     found_labels = [lbl[0] for lbl in found_lines]
     for l in wanted_lines:
-      if not any([l == os.path.basename(label).replace('.dat', '') for
+      if not any([l['name'] == os.path.basename(label).replace('.dat', '') for
                  label in found_labels]):
         print l, ' not found!'
     print 'The available labels are: ', found_labels
+    print 'The wanted labels are: ', wanted_lines
     sys.exit(1)
 
 
@@ -417,9 +422,19 @@ def save_fig(fig, title, plot_dict, pic_path):
       out_file = output_file + '.pdf'
   else:
     out_file = title + '.pdf'
-  print 'Writing to output: ', os.path.join(pic_path, out_file)
-  fig.savefig(os.path.join(pic_path, out_file),
-              dpi=fig.dpi)
+  print 'Writing to output: ', out_file.replace('.pdf', '')
+  out_path = os.path.join(pic_path, out_file).replace(' ', '_')
+  strip_chars = ['(', ')', ',', ';']
+  for sc in strip_chars:
+    out_path = out_path.replace(sc, '')
+  fig.savefig(out_path, dpi=fig.dpi)
+  if mpld3 is not None:
+    out_path = out_path.replace('.pdf', '.html')
+    with open(out_path, 'w') as fileobj:
+      mpld3.save_html(fig, fileobj, template_type='simple',
+        mpld3_url='../mpld3.v0.2.js', d3_url='../d3.v3.min.js')
+  out_path = out_path.replace('.html', '.svg')
+  fig.savefig(out_path, dpi=fig.dpi)
   plt.close(fig)
 
 

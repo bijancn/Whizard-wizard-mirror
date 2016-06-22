@@ -18,7 +18,7 @@
     "yminors": true
   },
   {"title": "NLO scale variations",
-    "lines": [
+    "disabled_lines": [
     {"name": "proc_nlo_central",
      "label": "$t\\bar t$",
      "color": "#EE3311",
@@ -30,7 +30,7 @@
      "folder": "."
     }
     ],
-    "bands": [
+    "disabled_bands": [
     {"label":"",
       "opacity": 0.1,
       "color": "#3366FF",
@@ -81,15 +81,17 @@
     "xminors": true,
     "yminors": true
   },
-  {"title": "Gauge-dependence of LO cross sections (influence of helicity approximation)",
+  {"title": "Influence of helicity approximation",
+    "output_file": "influence_of_ha_sqrts",
     "lines": [
-      {"name": "proc_lo_thresholdparams"},
-      {"name": "fact_lo"},
-      {"name": "fact_lo_helapprox"},
-      {"name": "fact_onshellprojected_lo"},
-      {"name": "fact_onshellprojected_lo_helapprox"},
-      {"name": "ttbar_lo_thresholdparams"}
+      {"name": "proc_lo_thresholdparams-sqrts"},
+      {"name": "fact_osproj_boosted_ha_lo10t-sqrts"},
+      {"name": "fact_osproj_boosted_lo10t-sqrts"},
+      {"name": "fact_osproj_unboosted_ha_lo-sqrts"},
+      {"name": "fact_osproj_unboosted_lo-sqrts"}
     ],
+    "ratio": {"ylabel": "$\\sigma/\\sigma^{\\text{full}}$",
+      "ymax": 1.15, "ymin": 0.85, "nmajors": 5},
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
@@ -101,15 +103,17 @@
     "xminors": true,
     "yminors": true
   },
-  {"title": "Gauge-dependence of LO cross sections (influence of helicity approximation, zoom)",
+  {"title": "Influence of helicity approximation (zoom)",
+    "output_file": "influence_of_ha_zoom_sqrts",
     "lines": [
-      {"name": "proc_lo_thresholdparams"},
-      {"name": "fact_lo"},
-      {"name": "fact_lo_helapprox"},
-      {"name": "fact_onshellprojected_lo"},
-      {"name": "fact_onshellprojected_lo_helapprox"},
-      {"name": "ttbar_lo_thresholdparams"}
+      {"name": "proc_lo_thresholdparams-sqrts"},
+      {"name": "fact_osproj_boosted_ha_lo10t-sqrts"},
+      {"name": "fact_osproj_boosted_lo10t-sqrts"},
+      {"name": "fact_osproj_unboosted_ha_lo-sqrts"},
+      {"name": "fact_osproj_unboosted_lo-sqrts"}
     ],
+    "ratio": {"ylabel": "$\\sigma/\\sigma^{\\text{full}}$",
+      "ymax": 1.15, "ymin": 0.85, "nmajors": 5},
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
@@ -124,11 +128,11 @@
   },
   {"title": "Gauge-dependence of LO cross sections (zoom)",
     "lines": [
-      {"name": "proc_lo_thresholdparams"},
-      {"name": "fact_lo"},
-      {"name": "fact_onshellprojected_lo"},
-      {"name": "signaldiagram_lo"},
-      {"name": "ttbar_lo_thresholdparams"}
+      {"name": "proc_lo_thresholdparams-sqrts"},
+      {"name": "fact_lo-sqrts"},
+      {"name": "fact_osproj_unboosted_lo-sqrts"},
+      {"name": "signaldiagram_lo-sqrts"},
+      {"name": "ttbar_lo_thresholdparams-sqrts"}
     ],
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
@@ -144,13 +148,12 @@
   },
   {"title": "Gauge-dependence of LO cross sections",
     "lines": [
-      {"name": "proc_lo_thresholdparams"},
-      {"name": "fact_lo"},
-      {"name": "fact_decayonshellprojected_lo"},
-      {"name": "fact_productiononshellprojected_lo"},
-      {"name": "fact_onshellprojected_lo"},
-      {"name": "signaldiagram_lo"},
-      {"name": "ttbar_lo_thresholdparams"}
+      {"name": "proc_lo_thresholdparams-sqrts"},
+      {"name": "fact_lo-sqrts"},
+      {"name": "fact_decosproj_eha_lo10t-sqrts"},
+      {"name": "fact_osproj_unboosted_lo-sqrts"},
+      {"name": "signaldiagram_lo-sqrts"},
+      {"name": "ttbar_lo_thresholdparams-sqrts"}
     ],
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
@@ -166,7 +169,7 @@
   },
   {"title": "Unit matrix element",
     "lines": [
-      {"name": "unity", "linestyle": "solid"}
+      {"name": "unity-sqrts", "linestyle": "solid"}
     ],
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
@@ -188,7 +191,7 @@
        "linestyle": "dashed"},
      {"name": "fact_lo350-mass_cut",
        "label": "factorized"},
-     {"name": "fact_decayonshellprojected_lo350-mass_cut",
+     {"name": "fact_decosproj_unboosted_lo350-mass_cut",
        "label": "factorized, decay onshell projected"}
    ],
     "xlabel": "$\\Delta M$ [GeV]",
@@ -202,23 +205,23 @@
   {"title": "Cuts $\\sqrt{s}=10~\\mathrm{TeV}$",
    "output_file": "cuts_10TeV",
    "lines": [
-     {"name": "proc_lo_thresholdparams10000-mass_cut",
+     {"name": "proc_lo_thresholdparams10t-mass_cut",
        "label": "full LO",
       "linestyle": "banded"},
-     {"name": "fact_onshellproj_unboosted_lo10t-mass_cut",
+     {"name": "fact_osproj_unboosted_lo10t-mass_cut",
       "label": "fact., OS projected, decay unboosted, production boosted)",
        "linestyle": "solid"},
      {"name": "fact_decosproj_eha_lo10t-mass_cut",
       "label": "fact., only decay OS projected, spinsummed",
        "linestyle": "dashed"},
-     {"name": "fact_onshellprojected_lo10000-mass_cut",
+     {"name": "fact_osproj_boosted_lo10t-mass_cut",
       "label": "fact., OS projected, decay boosted, production boosted",
        "linestyle": "dashdot"},
-     {"name": "fact_lo10000-mass_cut",
+     {"name": "fact_lo10t-mass_cut",
        "label": "fact."},
-     {"name": "fact_decayonshellprojected_lo10000-mass_cut",
+     {"name": "fact_decosproj_unboosted_lo10t-mass_cut",
        "label": "fact., only decay OS projected unboosted"},
-     {"name": "fact_decosproj_boosted_lo10000-mass_cut",
+     {"name": "fact_decosproj_boosted_lo10t-mass_cut",
        "label": "fact., only decay OS projected boosted"}
    ],
     "ratio": {"ylabel": "$\\sigma/\\sigma^{\\text{full}}$",
@@ -243,7 +246,7 @@
        "linestyle": "dashed"},
      {"name": "fact_lo-mass_cut",
        "label": "factorized"},
-     {"name": "fact_decayonshellprojected_lo-mass_cut",
+     {"name": "fact_decosproj_unboosted_lo-mass_cut",
        "label": "factorized, decay onshell projected"}
    ],
     "xlabel": "$\\Delta M$ [GeV]",
@@ -256,12 +259,11 @@
   },
   {"title": "Comparison of onshell projections",
     "lines": [
-      {"name": "ttbar_lo_thresholdparams"},
-      {"name": "fact_lo"},
-      {"name": "fact_onshellprojected_lo"},
-      {"name": "fact_productiononshellprojected_lo"},
-      {"name": "fact_decayonshellprojected_lo"},
-      {"name": "fact_lo_widthunprojected"}
+      {"name": "ttbar_lo_thresholdparams-sqrts"},
+      {"name": "fact_lo-sqrts"},
+      {"name": "fact_osproj_unboosted_lo-sqrts"},
+      {"name": "fact_osproj_boosted_lo10t-sqrts"},
+      {"name": "fact_lo_widthunprojected-sqrts"}
     ],
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
@@ -281,9 +283,8 @@
     "lines": [
       {"name": "proc_lo_thresholdparams-sqrts"},
       {"name": "fact_lo-sqrts"},
-      {"name": "fact_onshellprojected_lo-sqrts"},
-      {"name": "fact_productiononshellprojected_lo"},
-      {"name": "fact_decayonshellprojected_lo"},
+      {"name": "fact_osproj_unboosted_lo-sqrts"},
+      {"name": "fact_osproj_boosted_lo10t-sqrts"},
       {"name": "fact_lo_widthunprojected-sqrts"}
     ],
     "ratio": {"ylabel": "$\\sigma/\\sigma^{t\\bar t}$",

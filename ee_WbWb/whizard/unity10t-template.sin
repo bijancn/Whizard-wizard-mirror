@@ -1,7 +1,7 @@
 sqrts = 10000 GeV
-library = "unity10000"
+library = "PROCESS"
 $method = "template_unity"
-process unity10000 = e1, E1 => Wp, Wm, b, B
+process PROCESS = e1, E1 => Wp, Wm, b, B
 compile
 
 ?vis_channels = false
@@ -14,10 +14,10 @@ show(model)
 #ITERATIONS
 #SETSCAN
 
-integrate (unity10000)
+integrate (PROCESS)
 sample_format = hepmc
 ?write_raw = false
 ?unweighted = false
 ?hepmc_output_cross_section = true
-printf "RES %g %g %g" (sqrts, integral(unity10000), error(unity10000))
+printf "RES %g %g %g" (sqrts, integral(PROCESS), error(PROCESS))
 

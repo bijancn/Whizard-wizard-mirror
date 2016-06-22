@@ -1,0 +1,20 @@
+include("../process_settings_threshold.sin")
+
+library = PROCESS
+process PROCESS = e1, E1 => Wm, Wp, B, b {$restrictions = "3+5~tbar && 4+6~t"}
+compile
+
+FF = 9        # tree level from signal comp
+offshell_strategy = 2   ! fact
+                    +64  ! production onshell projected
+
+show(model)
+
+#ITERATIONS
+#SETSCAN
+sqrtsstepsize = 0.1 GeV
+sqrtsmin = sqrts - sqrtsstepsize
+sqrtsmax = sqrts + sqrtsstepsize
+
+integrate (PROCESS)
+printf "RES %g %g %g" (sqrts, integral(PROCESS), error(PROCESS))

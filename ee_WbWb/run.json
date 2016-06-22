@@ -3,16 +3,16 @@
   {"process":
     ["proc_lo_thresholdparams",
      "fact_lo",
-     "fact_decayonshellprojected_lo",
+     "fact_decosproj_unboosted_lo",
      "unity",
      "proc_lo_thresholdparams350",
      "fact_lo350",
-     "fact_decayonshellprojected_lo350",
+     "fact_decosproj_unboosted_lo350",
      "unity350",
-     "proc_lo_thresholdparams10000",
-     "fact_lo10000",
-     "fact_decayonshellprojected_lo10000",
-     "unity10000"
+     "proc_lo_thresholdparams10t",
+     "fact_lo10t",
+     "fact_decosproj_unboosted_lo10t",
+     "unity10t"
     ],
     "disabled": true,
     "purpose": "integration",
@@ -21,13 +21,17 @@
     "integration_iterations": "3:20000"
   },
   {"process":
-    ["proc_lo_thresholdparams10000",
-     "fact_lo10000",
+    ["proc_lo_thresholdparams10t",
+     "fact_lo10t",
      "fact_decosproj_eha_lo10t",
-     "fact_onshellprojected_lo10000",
-     "fact_onshellproj_unboosted_lo10t",
-     "fact_decosproj_boosted_lo10000",
-     "fact_decayonshellprojected_lo10000"
+     "fact_osproj_boosted_lo10t",
+     "fact_osproj_unboosted_lo10t",
+     "fact_decosproj_boosted_lo10t",
+     "fact_decosproj_unboosted_lo10t",
+     "fact_osproj_boosted_ha_lo10t",
+     "fact_osproj_unboosted_ha_lo10t",
+     "fact_decosproj_boosted_ha_lo10t",
+     "fact_decosproj_unboosted_ha_lo10t"
     ],
     "disabled": true,
     "purpose": "scan",
@@ -45,11 +49,11 @@
   {"process":
     ["proc_lo_thresholdparams",
      "fact_lo",
-     "fact_decayonshellprojected_lo",
+     "fact_decosproj_unboosted_lo",
      "fact_decosproj_eha_lo",
      "proc_lo_thresholdparams350",
      "fact_lo350",
-     "fact_decayonshellprojected_lo350",
+     "fact_decosproj_unboosted_lo350",
      "fact_decosproj_eha_lo350"
     ],
     "disabled": true,
@@ -68,16 +72,16 @@
   {"process":
     ["proc_lo_thresholdparams",
      "fact_lo",
-     "fact_decayonshellprojected_lo",
+     "fact_decosproj_unboosted_lo",
      "unity",
      "proc_lo_thresholdparams350",
      "fact_lo350",
-     "fact_decayonshellprojected_lo350",
+     "fact_decosproj_unboosted_lo350",
      "unity350",
-     "proc_lo_thresholdparams10000",
-     "fact_lo10000",
-     "fact_decayonshellprojected_lo10000",
-     "unity10000"
+     "proc_lo_thresholdparams10t",
+     "fact_lo10t",
+     "fact_decosproj_unboosted_lo10t",
+     "unity10t"
     ],
     "disabled": true,
     "purpose": "events",
@@ -135,25 +139,10 @@
     "adaption_iterations": "1:10000",
     "integration_iterations": "1:10000"
   },
-  {"process": ["fact_nlo"],
-    "disabled": true,
-    "purpose": "scan",
-    "nlo_type": "nlo",
-    "scale_variation": true,
-    "adaption_iterations": "5:100000",
-    "integration_iterations": "5:100000",
-    "scan_object": "sqrts",
-    "ranges": [
-    {"type": "linear",
-      "start": 360.0,
-      "stop": 510.0,
-      "stepsize": 10.0
-    }
-    ]
-  },
   {"process": ["signaldiagram_lo", "proc_lo_thresholdparams", "fact_lo",
-      "fact_lo_helapprox", "fact_onshellprojected_lo",
-      "fact_onshellprojected_lo_helapprox", "fact_lo_widthunprojected"],
+    "fact_osproj_boosted_ha_lo10t", "fact_osproj_unboosted_lo",
+    "fact_osproj_boosted_lo10t", "fact_decosproj_eha_lo10t",
+    "fact_lo_widthunprojected", "fact_osproj_unboosted_ha_lo10t"],
     "disabled": true,
     "purpose": "scan",
     "nlo_type": "lo",

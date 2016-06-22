@@ -746,6 +746,7 @@ def test_create_integration_sindarin():
     nt.eq_(test.read(), 'process test_integration = e1, E1 => e2, E2 ' +
         '{iterations = 3:100:"gw",1:500} integrate (test_integration)')
   os.remove('test_integration-template.sin')
+  os.remove('test_integration.sin')
 
 
 def create_simulation_sindarin(simulation_sindarin, template_sindarin, process,
