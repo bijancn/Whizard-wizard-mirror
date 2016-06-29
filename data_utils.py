@@ -84,13 +84,13 @@ def get_name(line):
 
 def get_associated_plot_data(data, special):
   special_data = []
-  list_of_lists = [s.get('data', []) for s in special]
-  for lbl_list in list_of_lists:
+  list_of_data = [s.get('data', []) for s in special]
+  for lbl_list in list_of_data:
     this_special_data = []
     for lbl in lbl_list:
       this_special_data += [d for d in data
           if get_name(lbl) == d[0].replace('.dat', '')]
-      special_data += [this_special_data]
+    special_data += [this_special_data]
   return special_data
 
 

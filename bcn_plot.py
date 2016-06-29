@@ -219,7 +219,7 @@ def combined_errorbar(ax, ax1, base_line, x, y, yerr=None, **kwargs):
 def combined_fill_between(ax, ax1, base_line, x, ymin, ymax, *args, **kwargs):
   ax.fill_between(x, ymin, ymax, *args, **kwargs)
   comb = data_utils.normalize(base_line, x, ymin, yerr=ymax)
-  ax1.fill_between(comb[0], comb[1], comb[2][0], *args, **kwargs)
+  ax1.fill_between(comb[0], comb[1], comb[2], *args, **kwargs)
 
 
 def scale_data(item_data, items):
@@ -468,16 +468,18 @@ def setup_extra_kwargs(plot_dict, legend_decider, many_labels, title):
   extra_kwargs['yminors'] = plot_dict.get('yminors', N_YMINORS_DEFAULT)
   extra_kwargs['xticks'] = plot_dict.get('xticks', None)
   extra_kwargs['yticks'] = plot_dict.get('yticks', None)
-  extra_kwargs['legend_outside'] = many_labels
+  extra_kwargs['legend_outside'] = plot_dict.get('legend_outside', many_labels)
   extra_kwargs['legend_location'] = decide_if_not_none(plot_dict, legend_decider,
       'legend_location', 'best', title)
   return extra_kwargs
 
 
-def setup_majors(ratio_dict):
+def setup_majors(plot_dict, ratio_dict):
   kwargs = {}
+  kwargs['ymajors'] = plot_dict.get('ymajors', None)
+  kwargs['xmajors'] = plot_dict.get('xmajors', None)
   if ratio_dict is not None:
-    kwargs['ymajors1'] = ratio_dict.get('nmajors', None)
+    kwargs['ymajors1'] = ratio_dict.get('ymajors', None)
   else:
     kwargs['ymajors1'] = None
   return kwargs
@@ -536,7 +538,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     fig_kwargs['ax1'] = None
   if plot_extra is not None:
     ax = plot_extra(ax, title)
-  fig_kwargs.update(setup_majors(ratio_dict))
+  fig_kwargs.update(setup_majors(plot_dict, ratio_dict))
   fig_kwargs.update(setup_labels(label_decider, title, plot_dict, ratio_dict))
   fig_kwargs.update(setup_extra_kwargs(plot_dict, legend_decider, many_labels, title))
   if set_extra_settings is not None:
