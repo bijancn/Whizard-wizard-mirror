@@ -85,9 +85,10 @@
     "output_file": "influence_of_ha_sqrts",
     "lines": [
       {"name": "proc_lo_thresholdparams-sqrts"},
+      {"name": "fact_decosproj_eha_lo10t-sqrts"},
       {"name": "fact_osproj_boosted_ha_lo10t-sqrts"},
       {"name": "fact_osproj_boosted_lo10t-sqrts"},
-      {"name": "fact_osproj_unboosted_ha_lo-sqrts"},
+      {"name": "fact_osproj_unboosted_ha_lo10t-sqrts"},
       {"name": "fact_osproj_unboosted_lo-sqrts"}
     ],
     "ratio": {"ylabel": "$\\sigma/\\sigma^{\\text{full}}$",
@@ -107,9 +108,10 @@
     "output_file": "influence_of_ha_zoom_sqrts",
     "lines": [
       {"name": "proc_lo_thresholdparams-sqrts"},
+      {"name": "fact_decosproj_eha_lo10t-sqrts"},
       {"name": "fact_osproj_boosted_ha_lo10t-sqrts"},
       {"name": "fact_osproj_boosted_lo10t-sqrts"},
-      {"name": "fact_osproj_unboosted_ha_lo-sqrts"},
+      {"name": "fact_osproj_unboosted_ha_lo10t-sqrts"},
       {"name": "fact_osproj_unboosted_lo-sqrts"}
     ],
     "ratio": {"ylabel": "$\\sigma/\\sigma^{\\text{full}}$",

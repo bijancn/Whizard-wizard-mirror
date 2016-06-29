@@ -53,7 +53,10 @@ def build_merged_yodas(env, small_yoda_names, final_yoda_names):
     if len(small_yoda) > 1:
       merged_yodas.append(env.MergeYodas(target=yoda, source=small_yoda))
     else:
-      shutil.copyfile(str(small_yoda[0]), yoda)
+      try:
+        shutil.copyfile(str(small_yoda[0]), yoda)
+      except IOError:
+        print 'File not there yet. This should be a builder'
       merged_yodas.append(yoda)
   return merged_yodas
 

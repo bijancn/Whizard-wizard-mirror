@@ -1,0 +1,27 @@
+########################################################################
+#
+# Higgs mass and pythia6 hadronization parameter setting
+#
+# Set a variable ?is_higgs_process in a caller script
+#   logical ?is_higgs_process = true
+# for mH=125.0 GeV
+#   logical ?is_higgs_process = false   
+# for mH=2000 GeV 
+#
+# ##################################################################################
+
+# ##################################################################################
+# Parameters for Pythia hadronization
+# ?ps_isr_active = true 
+# Do we need to set ps_isr_active = true, when isr is set by beams command
+# ##################################################################################
+
+# Process with Higgs
+
+  mH = 2000 GeV
+  wH = 10 GeV
+  ?ps_fsr_active = true
+  ?hadronization_active = true
+  $shower_method = "PYTHIA6"
+  $ps_PYTHIA_PYGIVE = "MSTP(71)=0;MSTJ(28)=2;PMAS(25,1)=2000.0;PMAS(25,2)=10.0;MSTJ(41)=2; MSTU(22)=20; PARJ(21)=0.40000; PARJ(41)=0.11000; PARJ(42)=0.52000; PARJ(81)=0.25000;PARJ(82)=1.90000; MSTJ(11)=3; PARJ(54)=-0.03100; PARJ(55)=-0.00200;PARJ(1)=0.08500; PARJ(3)=0.45000; PARJ(4)=0.02500; PARJ(2)=0.31000;PARJ(11)=0.60000; PARJ(12)=0.40000; PARJ(13)=0.72000; PARJ(14)=0.43000;PARJ(15)=0.08000; PARJ(16)=0.08000; PARJ(17)=0.17000; MSTP(3)=1;MWID(25)=2"
+

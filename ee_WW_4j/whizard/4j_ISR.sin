@@ -1,0 +1,80 @@
+model = SM_CKM
+
+alias uq = u:U
+alias dq = d:D
+alias cq = c:C
+alias sq = s:S
+alias bq = b:B
+
+alias up_type_q = u:c:U:C
+alias down_type_q = d:s:b:D:S:B
+alias quarks = u:d:s:c:b:U:D:S:C:B
+
+alias lepton = e1:e2:e3:E1:E2:E3
+alias neutrino = n1:n2:n3:N1:N2:N3
+alias fermions = quarks:lepton
+
+scale = mW
+
+show (scale)
+
+#   mu = 0 GeV
+#   md = 0 GeV
+  ms = 0 GeV
+  mc = 0 GeV
+  mb = 0 GeV 
+  alphas = 0
+#
+#      e+e- --> mu+mu- and tau+tau-
+#
+polarized e1,E1,e2,E2,e3,E3,n1,N1,n2,N2,n3,N3,u,U,d,D,s,S,c,C,b,B,t,T, "W+", "W-", Z
+
+process jjjj_ISR = e1, E1 => ( cq,down_type_q,uq,down_type_q ) + (uq,bq,uq,dq) + (uq,sq,uq,dq) + ( cq,bq,cq,sq ) + ( cq,dq,cq,sq ) { process_num_id = 250006 }
+
+compile
+
+mH = 2000 GeV
+wH = 10 GeV
+?ps_fsr_active = true
+?hadronization_active = true
+$shower_method = "PYTHIA6"
+$ps_PYTHIA_PYGIVE = "MSTJ(28)=2;PMAS(25,1)=2000.0;PMAS(25,2)=10.0;MSTJ(41)=2; MSTU(22)=20; PARJ(21)=0.40000; PARJ(41)=0.11000; PARJ(42)=0.52000; PARJ(81)=0.25000;PARJ(82)=1.90000; MSTJ(11)=3; PARJ(54)=-0.03100; PARJ(55)=-0.00200;PARJ(1)=0.08500; PARJ(3)=0.45000; PARJ(4)=0.02500; PARJ(2)=0.31000;PARJ(11)=0.60000; PARJ(12)=0.40000; PARJ(13)=0.72000; PARJ(14)=0.43000;PARJ(15)=0.08000; PARJ(16)=0.08000; PARJ(17)=0.17000; MSTP(3)=1;MWID(25)=2"
+
+ mH = 2000.
+ wH = 10.
+ alphas = 1.e-6
+ isr_alpha = 0.0072993
+ isr_mass = 0.000511
+ epa_alpha = 0.0072993
+
+sqrts = 500 GeV
+
+beams = e1, E1 => isr
+# $beam_events_file = "/group/ilc/soft/gcc481/GP/beamdata/lumiee500-hs/lumiee500-run1to20.dat"
+beams_pol_density = @(-1), @(+1)
+?isr_recoil = true
+?keep_remnants = true
+?keep_beams = true
+
+real default_M_cut = 4 GeV
+real default_jet_cut = 10 GeV
+real default_E_cut = 10 GeV
+real default_Q_cut = 4 GeV
+alias uncoloured=lepton:neutrino:photon
+cuts =
+  all M > default_jet_cut [quarks,quarks]
+
+integrate ( jjjj_ISR ) { ?polarized_events = true }
+
+printf "#Total cross section : jjjj_ISR %13e fb" ( integral( jjjj_ISR ) )
+
+show (model)
+
+$sample = "jjjj_ISR-1"
+sample_format = hepmc
+?hepmc_output_cross_section = true
+?write_raw = false
+
+
+n_events = 50000
+simulate ( jjjj_ISR ) { ?polarized_events = true }
