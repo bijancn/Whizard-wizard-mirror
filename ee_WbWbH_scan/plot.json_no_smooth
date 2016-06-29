@@ -1,0 +1,35 @@
+{
+  "plots": [
+  {"title": "$e^+ e^- \\to W^+ W^- b \\bar{b} H$",
+   "output_file": "bwbwh-scan",
+   "lines": [
+   {"name": "proc_lo",
+    "label": "LO",
+    "color": "blue"
+   },
+   {"name": "proc_nlo_central",
+    "label": "NLO",
+    "color": "red"
+   }
+   ],
+   "bands": [
+   {"opacity": 0.2,
+    "label": "",
+    "color": "red",
+    "data":[{"name": "proc_nlo_central"},
+            {"name": "proc_nlo_high"},
+            {"name": "proc_nlo_low"}
+       ]
+     }
+   ],
+   "ratio": {"ylabel": "K-factor",
+        "ymax": 2.0, "ymin": 0.75},
+   "xlabel": "$\\sqrt{s}$[GeV]",
+   "ylabel": "$\\sigma$[fb]",
+   "ylog": false,
+   "xlog": false,
+   "xminors": true,
+   "yminors": true
+  }
+ ]
+}
