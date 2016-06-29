@@ -1,0 +1,18 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+wtop = 0.0
+wZ = 2.5060
+wW = 2.0978
+real dummy = 0.0
+?nlo_fixed_order = true
+?unweighted = false
+?negative_weights = true
+scale = mtop + mH
+mult_call_real = 5
+#ITERATIONS
+library = proc_nlo
+process proc_nlo = e1, E1 => t, T, H { nlo_calculation = "Full" }
+#SETSCAN
+integrate (proc_nlo)
+printf "RES %8e %8e %8e" (sqrts, integral(proc_nlo), error(proc_nlo))

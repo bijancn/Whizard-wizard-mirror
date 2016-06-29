@@ -1,0 +1,27 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+wtop = 1.3705
+wZ = 2.5060
+wW = 2.0978
+
+?check_grid_file = false
+
+?fixed_order_nlo_events = true
+?unweighted = false
+?negative_weights = true
+
+# $fks_mapping_type = "resonances"
+# $resonances_exclude_particles = "t:T"
+
+real dummy = 0.0
+scale = mtop + mH
+#ITERATIONS
+library = proc_nlo
+process proc_nlo = E1, e1 => Wp, Wm, b, B, H {nlo_calculation="Full"}
+#SETSCAN
+
+
+mult_call_real = 50
+integrate (proc_nlo)
+printf "RES %8e %8e %8e" (sqrts, integral(proc_nlo), error(proc_nlo))
