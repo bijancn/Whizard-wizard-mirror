@@ -201,13 +201,13 @@ def get_label(object_dict, title, filename=None, pretty_label=None):
   return object_dict.get('label', label)
 
 
-def combined_plot(base_line, ax, ax1, x, y, *args, **kwargs):
+def combined_plot(ax, ax1, base_line, x, y, *args, **kwargs):
   ax.plot(x, y, *args, **kwargs)
   comb = data_utils.normalize(base_line, x, y)
   ax1.plot(comb[0], comb[1], *args, **kwargs)
 
 
-def combined_errorbar(base_line, ax, ax1, x, y, yerr=None, **kwargs):
+def combined_errorbar(ax, ax1, base_line, x, y, yerr=None, **kwargs):
   ax.errorbar(x, y, yerr=yerr, **kwargs)
   comb = data_utils.normalize(base_line, x, y, yerr=yerr)
   if len(comb[0]) != len(comb[1]):
@@ -216,7 +216,7 @@ def combined_errorbar(base_line, ax, ax1, x, y, yerr=None, **kwargs):
   ax1.errorbar(comb[0], comb[1], yerr=comb[2], **kwargs)
 
 
-def combined_fill_between(base_line, ax, ax1, x, ymin, ymax, *args, **kwargs):
+def combined_fill_between(ax, ax1, base_line, x, ymin, ymax, *args, **kwargs):
   ax.fill_between(x, ymin, ymax, *args, **kwargs)
   comb = data_utils.normalize(base_line, x, ymin, yerr=ymax)
   ax1.fill_between(comb[0], comb[1], comb[2][0], *args, **kwargs)
@@ -351,8 +351,6 @@ def setup_ranges(range_decider, line_data, band_data, title,
     if ratio_dict is not None:
       ymax1 = ratio_dict.get('ymax', None)
       ymin1 = ratio_dict.get('ymin', None)
-      # max([np.amax(d[1][1] / base_line) for d in all_data])
-      # min([np.amin(d[1][1] / base_line) for d in all_data])
   fig_kwargs = {'xmin': xmin, 'xmax': xmax, 'ymin': ymin, 'ymax': ymax,
       'ymin1': ymin1, 'ymax1': ymax1}
   return fig_kwargs
@@ -428,13 +426,13 @@ def save_fig(fig, title, plot_dict, pic_path):
   for sc in strip_chars:
     out_path = out_path.replace(sc, '')
   fig.savefig(out_path, dpi=fig.dpi)
+  out_path = out_path.replace('.pdf', '.svg')
+  fig.savefig(out_path, dpi=fig.dpi)
   if mpld3 is not None:
-    out_path = out_path.replace('.pdf', '.html')
+    out_path = out_path.replace('.svg', '.html')
     with open(out_path, 'w') as fileobj:
       mpld3.save_html(fig, fileobj, template_type='simple',
         mpld3_url='../mpld3.v0.2.js', d3_url='../d3.v3.min.js')
-  out_path = out_path.replace('.html', '.svg')
-  fig.savefig(out_path, dpi=fig.dpi)
   plt.close(fig)
 
 
@@ -504,14 +502,13 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
       band_data, title, plot_dict, ratio_dict)
   fig = setup_figure(plot_dict, ratio_dict, many_labels)
   if ratio_dict is not None:
-    base_line = line_data[0][1]
+    global_base_line = line_data[0][1]
     gs = gridspec.GridSpec(2, 1, height_ratios=[2, 1])
     ax = fig.add_subplot(gs[0])
     ax1 = fig.add_subplot(gs[1], sharex=ax)
-    this_errorbar = partial(partial(partial(combined_errorbar, base_line), ax), ax1)
-    this_plot = partial(partial(partial(combined_plot, base_line), ax), ax1)
-    this_fill_between = partial(partial(partial(combined_fill_between,
-      base_line), ax), ax1)
+    this_errorbar_func = partial(partial(combined_errorbar, ax), ax1)
+    this_plot_func = partial(partial(combined_plot, ax), ax1)
+    this_fill_between_func = partial(partial(combined_fill_between, ax), ax1)
     fig_kwargs['ax1'] = ax1
   else:
     ax = fig.add_subplot(1, 1, 1)
@@ -534,6 +531,18 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
         this_fill_between)
   for ldata, line, color in zip(line_data + fit_data, lines + fits, colors + colors):
     i += 1
+    base_line = line.get('base_line', None)
+    if ratio_dict is not None:
+      if base_line is not None:
+        this_base_line = [d for d in data
+            if get_name(base_line) == d[0].replace('.dat', '')][0][1]
+        this_errorbar = partial(this_errorbar_func, this_base_line)
+        this_plot = partial(this_plot_func, this_base_line)
+        this_fill_between = partial(this_fill_between_func, this_base_line)
+      else:
+        this_errorbar = partial(this_errorbar_func, global_base_line)
+        this_plot = partial(this_plot_func, global_base_line)
+        this_fill_between = partial(this_fill_between_func, global_base_line)
     plot_line(ldata, line, color, title, pretty_label, linestyle_decider,
         marker_decider, this_errorbar, this_plot, this_fill_between, ax,
         global_opacity, plotter)

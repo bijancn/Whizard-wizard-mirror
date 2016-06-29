@@ -1,4 +1,5 @@
 target=~/www/$(basename `pwd`)
+echo "Writing to $target"
 mkdir -p $target
 cp plots/*.pdf $target/
 cp plots/*.svg $target/
