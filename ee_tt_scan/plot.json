@@ -1,0 +1,62 @@
+{
+  "plots": [
+  {"title": "$e^+ e^- \\to t \\bar{t}$",
+   "output_file": "xsection",
+   "lines": [
+   {"name": "proc_lo",
+    "label": "LO",
+    "color": "blue"
+   },
+   {"name": "proc_nlo_central",
+    "label": "NLO",
+    "color": "red"
+   }
+   ],
+   "bands": [
+    {"label": "",
+     "opacity": 0.2,
+     "color": "red",
+     "data":
+      [{"name": "proc_nlo_central"},
+       {"name": "proc_nlo_high"},
+       {"name": "proc_nlo_low"}
+      ]
+    }
+   ],
+   "ratio": {"ylabel": "K-factor",
+      "ymax": 2.0, "ymin": 1.0},
+   "xlabel": "$\\sqrt{s}$[GeV]",
+   "ylabel": "$\\sigma$[fb]",
+   "ylog": false,
+   "xlog": false,
+   "ymin": 0,
+   "ymax": 875,
+   "ymajors": 6,
+   "yminors": 8
+  },
+  {"title": "foo",
+   "lines": [
+   {"name": "proc_lo",
+    "label": "LO",
+    "color": "black"
+   },
+   {"name": "proc_nlo_central_Virtual",
+    "label": "Virtual",
+    "color": "blue"
+   },
+   {"name": "proc_nlo_central_Real",
+    "label": "Real",
+    "color": "red"
+   }
+   ],
+   "ratio": {"ylabel": "ratio",
+      "ymax": 1.0, "ymin": -0.4},
+   "xlabel": "$\\sqrt{s}$[GeV]",
+   "ylabel": "$\\sigma$[fb]",
+   "ylog": false,
+   "xlog": false,
+   "xminors": true,
+   "yminors": true
+  }
+ ]
+}
