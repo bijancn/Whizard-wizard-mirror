@@ -1,7 +1,7 @@
 {
   "plots": [
-  {"title": "$e^+ e^- \\to t \\bar{t}\\;$ and $\\;e^+ e^- \\to W^+ W^+ b \\bar{b}$",
-   "output_file": "tt-scan-combined",
+  {"title": "$e^+ e^- \\to t \\bar{t} H\\;$ and $\\;e^+ e^- \\to W^+ W^+ b \\bar{b} H$",
+   "output_file": "tth-scan-combined",
    "lines": [
    {"name": "proc_lo",
     "label": "LO - offshell",
@@ -12,29 +12,29 @@
     "color": "red"
    },
    {"name": "proc_lo",
-    "folder": "../ee_tt_scan/",
+    "folder": "../ee_tth_scan/",
     "linestyle": "dashed",
     "label": "LO",
     "color": "black",
-    "base_line": {"name": "proc_lo", "folder": "../ee_tt_scan/"}
+    "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
    },
    {"name": "proc_nlo_central",
-    "folder": "../ee_tt_scan/",
+    "folder": "../ee_tth_scan/",
     "linestyle": "dashed",
     "label": "NLO",
     "color": "#109618",
-    "base_line": {"name": "proc_lo", "folder": "../ee_tt_scan/"}
+    "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
    }
    ],
    "bands": [
      {"opacity": 0.4,
        "label": "",
        "color": "#109618",
-       "data":[{"name": "proc_nlo_central", "folder": "../ee_tt_scan/"},
-         {"name": "proc_nlo_high", "folder": "../ee_tt_scan/"},
-         {"name": "proc_nlo_low", "folder": "../ee_tt_scan/"}
+       "data":[{"name": "proc_nlo_central", "folder": "../ee_tth_scan/"},
+         {"name": "proc_nlo_high", "folder": "../ee_tth_scan/"},
+         {"name": "proc_nlo_low", "folder": "../ee_tth_scan/"}
        ],
-       "base_line": {"name": "proc_lo", "folder": "../ee_tt_scan/"}
+       "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
      },
      {"label": "",
        "opacity": 0.2,
@@ -48,21 +48,22 @@
      }
    ],
    "ratio": {"ylabel": "K-factor",
-        "ymax": 2.75, "ymin": 0.75, "ymajors": 5},
+        "ymax": 2.25, "ymin": 0.75, "ymajors": 4},
    "xlabel": "$\\sqrt{s}\\;$ [GeV]",
    "ylabel": "$\\sigma$ [fb]",
    "ymin": 0,
-   "ymax": 875,
+   "ymax": 3.0,
+   "xmin": 400,
    "xmax": 1500,
    "xmajors": 5,
-   "ymajors": 6,
+   "ymajors": 7,
    "yminors": 8,
    "ylog": false,
    "xlog": false,
    "legend_outside": false
    },
-  {"title": "$e^+ e^- \\to t \\bar{t}\\;$ and $\\;e^+ e^- \\to W^+ W^+ b \\bar{b}$",
-   "output_file": "tt-scan-combined-3000",
+  {"title": "$e^+ e^- \\to t \\bar{t} H\\;$ and $\\;e^+ e^- \\to W^+ W^+ b \\bar{b} H$",
+   "output_file": "tth-scan-combined-3000",
    "lines": [
    {"name": "proc_lo",
     "label": "LO - offshell",
@@ -73,29 +74,29 @@
     "color": "red"
    },
    {"name": "proc_lo",
-    "folder": "../ee_tt_scan/",
+    "folder": "../ee_tth_scan/",
     "linestyle": "dashed",
     "label": "LO",
     "color": "black",
-    "base_line": {"name": "proc_lo", "folder": "../ee_tt_scan/"}
+    "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
    },
    {"name": "proc_nlo_central",
-    "folder": "../ee_tt_scan/",
+    "folder": "../ee_tth_scan/",
     "linestyle": "dashed",
     "label": "NLO",
     "color": "#109618",
-    "base_line": {"name": "proc_lo", "folder": "../ee_tt_scan/"}
+    "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
    }
    ],
    "bands": [
      {"opacity": 0.4,
        "label": "",
        "color": "#109618",
-       "data":[{"name": "proc_nlo_central", "folder": "../ee_tt_scan/"},
-         {"name": "proc_nlo_high", "folder": "../ee_tt_scan/"},
-         {"name": "proc_nlo_low", "folder": "../ee_tt_scan/"}
+       "data":[{"name": "proc_nlo_central", "folder": "../ee_tth_scan/"},
+         {"name": "proc_nlo_high", "folder": "../ee_tth_scan/"},
+         {"name": "proc_nlo_low", "folder": "../ee_tth_scan/"}
        ],
-       "base_line": {"name": "proc_lo", "folder": "../ee_tt_scan/"}
+       "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
      },
      {"label": "",
        "opacity": 0.2,
@@ -109,14 +110,15 @@
      }
    ],
    "ratio": {"ylabel": "K-factor",
-        "ymax": 2.75, "ymin": 0.75, "ymajors": 5},
+        "ymax": 2.25, "ymin": 0.75, "ymajors": 4},
    "xlabel": "$\\sqrt{s}\\;$ [GeV]",
    "ylabel": "$\\sigma$ [fb]",
    "ymin": 0,
-   "ymax": 875,
+   "ymax": 3.0,
+   "xmin": 400,
    "xmax": 3000,
    "xmajors": 5,
-   "ymajors": 6,
+   "ymajors": 7,
    "yminors": 8,
    "ylog": false,
    "xlog": false,

@@ -33,7 +33,9 @@ def plot_x_axis(ax, title):
 def main():
   pic_path = os.path.abspath('./plots') + '/'
   data_path = os.path.abspath('./scan-results')
+  data_path2 = os.path.abspath('../ee_tth_scan/scan-results')
   files = glob.glob(data_path + '/*.dat')
+  files += glob.glob(data_path2 + '/*.dat')
   plot_json = load_json('plot.json')
   data = data_utils.load_and_clean_files(files, plot_json.get('smooth', None))
   pool = mp.Pool(processes=3)
