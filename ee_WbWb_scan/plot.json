@@ -1,0 +1,37 @@
+{
+  "plots": [
+  {"title": "$e^+ e^- \\to W^+ W^+ b \\bar{b}$",
+   "output_file": "xsection",
+   "lines": [
+   {"name": "proc_lo",
+    "label": "LO - offshell",
+    "color": "blue"
+   },
+   {"name": "proc_nlo_central",
+    "label": "NLO - offshell",
+    "color": "red"
+   }
+   ],
+   "bands": [
+   {"opacity": 0.2,
+    "label": "",
+    "color": "red",
+    "data":[{"name": "proc_nlo_central"},
+            {"name": "proc_nlo_high"},
+            {"name": "proc_nlo_low"}
+       ]
+     }
+   ],
+   "ratio": {"ylabel": "K-factor",
+        "ymax": 2.8, "ymin": 0.7},
+   "xlabel": "$\\sqrt{s}$[GeV]",
+   "ylabel": "$\\sigma[fb]$",
+   "ymin": 0,
+   "ymax": 875,
+   "ymajors": 6,
+   "yminors": 8,
+   "ylog": false,
+   "xlog": false
+   }
+  ]
+}

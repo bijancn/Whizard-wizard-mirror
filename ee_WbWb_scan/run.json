@@ -1,0 +1,50 @@
+{
+  "processes": [
+  {"process": "proc_lo",
+    "purpose": "scan",
+    "nlo_type": "lo",
+    "whizard_options": "",
+    "scan_object": "sqrts",
+    "ranges": [
+    {"type": "linear",
+      "start": 300,
+      "stop": 400,
+      "stepsize": 5.0
+    }
+    ],
+    "adaption_iterations": "6:25000",
+    "integration_iterations": "3:15000",
+    "batches": 50
+  },
+  {"process": "proc_nlo",
+    "purpose": "scan",
+    "nlo_type": "nlo",
+    "whizard_options": "",
+    "scan_object": "sqrts",
+    "ranges": [
+    {"type": "linear",
+      "start": 300,
+      "stop": 400,
+      "stepsize": 5.0
+    },
+    {"type": "linear",
+      "start": 400,
+      "stop": 600,
+      "stepsize": 10.0
+    },
+    {"type": "linear",
+      "start": 600,
+      "stop": 3000,
+      "stepsize": 25.0
+    }
+    ],
+    "adaption_iterations": "10:40000",
+    "integration_iterations": "5:20000",
+    "batches": 50,
+    "scale_variation": true,
+    "fks_method":"resonances"
+  }
+  ],
+  "whizard": "whizard",
+  "data_output": "./"
+}
