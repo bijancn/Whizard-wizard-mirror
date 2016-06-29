@@ -37,18 +37,6 @@ def main():
   plot_json = load_json('plot.json')
   plot_dict = plot_json['plots']
   data = data_utils.load_and_clean_files(files, plot_json.get('smooth', None))
-  print '*********************************************'
-  print '*********************************************'
-  print '*********************************************'
-  for item in data:
-    # if not 'proc_nlo_central.dat' in item[0]:
-    #   continue
-    print ' Data: ', item[0]
-    for index, x in enumerate(item[1][0]):
-      if x == 800:
-        print 'xsection(800GeV): ' + str(item[1][1][index])
-        + ' +- ' + str(item[1][2][index])
-      print item[1][0][index], ' -> ' , item[1][1][index]
 
   pool = mp.Pool(processes=3)
   plot_this = partial(bcn_plot.plot, data=data, pic_path=pic_path,
