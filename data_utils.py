@@ -221,10 +221,15 @@ def normalize(base_line, x, y, yerr=None):
     error_func = None
   combiner = Combiner(x_gens, y_gens, lengths,
       yerr_generators=yerr_gens, error_func=error_func, operation=divide)
-  return combiner.get_all()
+  tmp = combiner.get_all()
+  try:
+    return tmp[0], tmp[1], tmp[2][0]
+  except:
+    return tmp[0], tmp[1]
 
 
 def test_normalize():
+  # input is smaller than baseline
   test_baseline = (np.array([1., 2.]), np.array([10., 10.]))
   test_x = np.array([1.])
   test_y = np.array([15.])
@@ -232,24 +237,34 @@ def test_normalize():
   np.testing.assert_array_almost_equal(combined_x, test_x)
   np.testing.assert_array_almost_equal(combined_y, np.array([1.5]))
 
-  # test_x = np.array([1., 2.])
-  # test_y = np.array([15., 20.])
-  # test_yerr = np.array([1.5, 2.0])
-  # combined_x, combined_y, combined_yerr = normalize(test_baseline, test_x,
-  #     test_y, yerr=test_yerr)
-  # np.testing.assert_array_almost_equal(combined_x, test_x)
-  # np.testing.assert_array_almost_equal(combined_y, np.array([1.5, 2.0]))
-  # np.testing.assert_array_almost_equal(combined_yerr, np.array([.15, .20]))
+  test_x = np.array([1., 2.])
+  test_y = np.array([15., 20.])
+  test_yerr = np.array([1.5, 2.0])
+  combined_x, combined_y, combined_yerr = normalize(test_baseline, test_x,
+      test_y, yerr=test_yerr)
+  np.testing.assert_array_almost_equal(combined_x, test_x)
+  np.testing.assert_array_almost_equal(combined_y, np.array([1.5, 2.0]))
+  np.testing.assert_array_almost_equal(combined_yerr, np.array([.15, .20]))
 
-  # test_baseline = (np.array([1.]), np.array([10.]))
-  # test_x = np.array([1., 2.])
-  # test_y = np.array([15., 20.])
-  # test_yerr = np.array([15.])
-  # combined_x, combined_y, combined_yerr = normalize(test_baseline,
-  #    test_x, test_y, test_yerr)
-  # np.testing.assert_array_almost_equal(combined_x, np.array([1.]))
-  # np.testing.assert_array_almost_equal(combined_y, np.array([1.5]))
-  # np.testing.assert_array_almost_equal(combined_yerr, np.array([1.5]))
+  test_baseline = (np.array([1.]), np.array([10.]))
+  test_x = np.array([1., 2.])
+  test_y = np.array([15., 20.])
+  test_yerr = np.array([15., 15.])
+  combined_x, combined_y, combined_yerr = normalize(test_baseline,
+     test_x, test_y, test_yerr)
+  np.testing.assert_array_almost_equal(combined_x, np.array([1.]))
+  np.testing.assert_array_almost_equal(combined_y, np.array([1.5]))
+  np.testing.assert_array_almost_equal(combined_yerr, np.array([1.5]))
+
+  test_baseline = (np.array([1., 2., 3.]), np.array([10., 10., 10.]))
+  test_x = np.array([1., 2., 3.])
+  test_y = np.array([0., 20., 0.])
+  test_yerr = np.array([0., 15., 0.])
+  combined_x, combined_y, combined_yerr = normalize(test_baseline,
+     test_x, test_y, test_yerr)
+  np.testing.assert_array_almost_equal(combined_x, np.array([1., 2., 3.]))
+  np.testing.assert_array_almost_equal(combined_y, np.array([0., 2., 0.]))
+  np.testing.assert_array_almost_equal(combined_yerr, np.array([0., 1.5, 0.]))
 
 
 def combine_and_project(data, indices, operation, error_func):
@@ -367,27 +382,30 @@ class Combiner():
       if self.yerrs:
         self.next_yerr_values = [g.next() for g in self.yerr_generators]
 
+  def skip_until_equal_x(self, idx, max_x):
+    while True:
+      next_x = self.x_generators[idx].next()
+      next_y = self.y_generators[idx].next()
+      if self.yerrs:
+        next_yerr = self.yerr_generators[idx].next()
+      if next_x >= max_x:
+        self.next_x_values[idx] = next_x
+        self.next_y_values[idx] = next_y
+        if self.yerrs:
+          self.next_yerr_values[idx] = next_yerr
+        if np.isclose(next_x, max_x):
+          self.invalid = False
+        if next_x > max_x:
+          self.invalid = True
+        break
+
   def fetch_next(self):
     self.get_next_if_valid()
     if self.different_x_values():
       max_x = max(self.next_x_values)
       for idx, x in enumerate(self.next_x_values):
         if x < max_x:
-          while True:
-            next_x = self.x_generators[idx].next()
-            next_y = self.y_generators[idx].next()
-            if self.yerrs:
-              next_yerr = self.yerr_generators[idx].next()
-            if next_x >= max_x:
-              self.next_x_values[idx] = next_x
-              self.next_y_values[idx] = next_y
-              if self.yerrs:
-                self.next_yerr_values[idx] = next_yerr
-              if np.isclose(next_x, max_x):
-                self.invalid = False
-              if next_x > max_x:
-                self.invalid = True
-              break
+          self.skip_until_equal_x(idx, max_x)
 
   def different_x_values(self):
     last_x = self.next_x_values[0]
@@ -407,7 +425,7 @@ class Combiner():
     except StopIteration:
       self.x_arr = np.trim_zeros(self.x_arr)
       if np.all(self.y_arr[:, 1] == 0.):
-        self.y_arr = np.trim_zeros(self.y_arr[:, 0])
+        self.y_arr = self.y_arr[0:len(self.x_arr), 0]
       else:
         self.y_arr.resize(len(self.x_arr), np.shape(self.y_arr)[1])
         self.y_arr = self.y_arr.transpose()

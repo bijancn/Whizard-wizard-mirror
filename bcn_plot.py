@@ -210,6 +210,9 @@ def combined_plot(base_line, ax, ax1, x, y, *args, **kwargs):
 def combined_errorbar(base_line, ax, ax1, x, y, yerr=None, **kwargs):
   ax.errorbar(x, y, yerr=yerr, **kwargs)
   comb = data_utils.normalize(base_line, x, y, yerr=yerr)
+  if len(comb[0]) != len(comb[1]):
+    raise Exception("normalize gave incoherent data: len(x) != len(y): " +
+        str(len(comb[0])) + " != " + str(len(comb[1])))
   ax1.errorbar(comb[0], comb[1], yerr=comb[2], **kwargs)
 
 
@@ -371,7 +374,7 @@ def plot_band(data_of_a_band, band, color, title, global_opacity, pretty_label,
 
 def plot_line(ldata, line, color, title, pretty_label, linestyle_decider,
     marker_decider, this_errorbar, this_plot, this_fill_between, ax,
-    global_opacity, plot_dict, plotter):
+    global_opacity, plotter):
   filename, d = ldata[0], ldata[1]
   label = get_label(line, title, pretty_label=pretty_label, filename=filename)
   c = line.get('color', color)
@@ -402,10 +405,7 @@ def plot_line(ldata, line, color, title, pretty_label, linestyle_decider,
   elif linestyle is not None and linestyle != "None":
     this_plot(d[0], d[1], color=c, label=label, linestyle=linestyle)
   else:
-    if marker_decider is not None:
-      marker = marker_decider(filename, title)
-    else:
-      marker = plot_dict.get('marker', '+')
+    marker = decide_if_not_none(line, marker_decider, 'marker', '+')
     if len(d) > 2:
       this_errorbar(d[0], d[1], fmt=marker, yerr=d[2], color=c, label=label)
     else:
@@ -536,7 +536,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     i += 1
     plot_line(ldata, line, color, title, pretty_label, linestyle_decider,
         marker_decider, this_errorbar, this_plot, this_fill_between, ax,
-        global_opacity, plot_dict, plotter)
+        global_opacity, plotter)
     if plot_dict.get('generate_animated', False):
       plotter.setfig(fig, ax, title=None, legend_hide=False, **fig_kwargs)
       fig.savefig(os.path.join(pic_path, title + '-' + str(i) + '.pdf'),
