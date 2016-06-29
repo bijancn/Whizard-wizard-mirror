@@ -263,6 +263,8 @@ def get_object_name(obj, is_fit):
     return name
 
 
+# TODO: (bcn 2016-06-29) what was the idea for this? different base_lines? I
+# solved this differently, so maybe this is redundant now
 def insert_group_entry(groups, data, obj, is_fit=False):
   name = get_object_name(obj, is_fit)
   group = obj.get('baseline_group', -1)
@@ -481,6 +483,22 @@ def setup_majors(ratio_dict):
   return kwargs
 
 
+def use_local_or_global_base_line(band_or_line, data, this_errorbar_func,
+    this_plot_func, this_fill_between_func, global_base_line):
+  base_line = band_or_line.get('base_line', None)
+  if base_line is not None:
+    this_base_line = [d for d in data
+        if get_name(base_line) == d[0].replace('.dat', '')][0][1]
+    this_errorbar = partial(this_errorbar_func, this_base_line)
+    this_plot = partial(this_plot_func, this_base_line)
+    this_fill_between = partial(this_fill_between_func, this_base_line)
+  else:
+    this_errorbar = partial(this_errorbar_func, global_base_line)
+    this_plot = partial(this_plot_func, global_base_line)
+    this_fill_between = partial(this_fill_between_func, global_base_line)
+  return this_errorbar, this_plot, this_fill_between
+
+
 def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     label_decider=None, legend_decider=None, marker_decider=None,
     linestyle_decider=None, pretty_label=None, set_extra_settings=None):
@@ -494,8 +512,8 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
       select_data(data, plot_dict, title)
   if not valid:
     return
-  # We are going to use this in the future, but right now the commit bouncer does not
-  # tolerate memory-mooching slacker variables
+  # We are going to use this in the future
+  # TODO: (bcn 2016-06-29) Really?
   # groups = create_baseline_groups(data, plot_dict)
   ratio_dict = plot_dict.get('ratio', None)
   fig_kwargs = setup_ranges(range_decider, line_data,
@@ -527,22 +545,18 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   i = 0
   global_opacity = plot_dict.get('opacity', 0.3)
   for data_of_a_band, band, color in zip(band_data, bands, colors):
+    if ratio_dict is not None:
+      this_errorbar, this_plot, this_fill_between = \
+          use_local_or_global_base_line(band, data, this_errorbar_func,
+          this_plot_func, this_fill_between_func, global_base_line)
     plot_band(data_of_a_band, band, color, title, global_opacity, pretty_label,
         this_fill_between)
   for ldata, line, color in zip(line_data + fit_data, lines + fits, colors + colors):
     i += 1
-    base_line = line.get('base_line', None)
     if ratio_dict is not None:
-      if base_line is not None:
-        this_base_line = [d for d in data
-            if get_name(base_line) == d[0].replace('.dat', '')][0][1]
-        this_errorbar = partial(this_errorbar_func, this_base_line)
-        this_plot = partial(this_plot_func, this_base_line)
-        this_fill_between = partial(this_fill_between_func, this_base_line)
-      else:
-        this_errorbar = partial(this_errorbar_func, global_base_line)
-        this_plot = partial(this_plot_func, global_base_line)
-        this_fill_between = partial(this_fill_between_func, global_base_line)
+      this_errorbar, this_plot, this_fill_between = \
+          use_local_or_global_base_line(line, data, this_errorbar_func,
+          this_plot_func, this_fill_between_func, global_base_line)
     plot_line(ldata, line, color, title, pretty_label, linestyle_decider,
         marker_decider, this_errorbar, this_plot, this_fill_between, ax,
         global_opacity, plotter)
