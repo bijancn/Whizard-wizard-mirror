@@ -1,0 +1,22 @@
+alphas_power = 0
+
+sqrts = 800 GeV
+iterations = 5:20*K:"gw", 3:15*K
+
+mZ = 91.1876
+mW = 80.385
+mb = 4.2
+mH =  1.250000000000E+02
+me =  0.0
+mmu = 0.0
+wH =  4.143000000000E-03      ! should be recomputed
+mtop = 173.2
+GF = 1.1663787E-005
+alphas = 0.1185
+
+printf "alpha_em_i = %g" (alpha_em_i)
+printf "ee   = %g" (ee)
+printf "cw   = %g" (cw)
+printf "sw   = %g" (sw)
+printf "v   = %g" (v)
+

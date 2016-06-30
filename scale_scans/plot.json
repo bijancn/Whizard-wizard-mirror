@@ -1,0 +1,48 @@
+{
+  "plots": [
+  {"title": "",
+   "output_file": "tt-mu-scan",
+   "lines": [
+   {"name": "proc_nlo_tt",
+    "label": "$t \\bar{t}$"
+   },
+   {"name": "proc_nlo_WbWb",
+    "label": "$W^+ W^- b \\bar{b}$"
+   },
+   {"name": "proc_nlo_tt",
+    "label": "$t \\bar{t}$",
+    "linestyle": "None"
+   },
+   {"name": "proc_nlo_WbWb",
+    "label": "$W^+ W^- b \\bar{b}$",
+    "linestyle": "None"
+   }
+  ],
+   "xlabel": "$\\mu_R / m_t$",
+   "ylabel": "$\\sigma(\\mu_R) / \\sigma(\\mu_R = \\mu_0)$",
+   "ylog": false,
+   "xlog": true,
+   "xminors": false,
+   "yminors": false,
+   "xticks": [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0]
+  },
+  {"title": "",
+   "output_file": "tth-mu-scan",
+   "lines": [
+   {"name": "proc_nlo_tth",
+    "label": "ttH",
+    "scale_by_point": 1.0
+   },
+   {"name": "proc_nlo_WbWbH",
+    "label": "WbWbH",
+    "scale_by_point": 1.0
+   }
+   ],
+   "xlabel": "$\\mu_R / (m_t + m_H)$",
+   "ylabel": "$\\sigma(\\mu_R) / \\sigma(\\mu_R = \\mu_0)$",
+   "ylog": false,
+   "xlog": true,
+   "xticks": [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0]
+  }
+ ]
+}
