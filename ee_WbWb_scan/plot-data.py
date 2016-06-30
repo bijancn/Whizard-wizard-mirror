@@ -34,8 +34,10 @@ def main():
   pic_path = os.path.abspath('./plots') + '/'
   data_path = os.path.abspath('./scan-results')
   data_path2 = os.path.abspath('../ee_tt_scan/scan-results')
+  data_path3 = os.path.abspath('../scale_scans/scan-results')
   files = glob.glob(data_path + '/*.dat')
   files += glob.glob(data_path2 + '/*.dat')
+  files += glob.glob(data_path3 + '/*.dat')
   plot_json = load_json('plot.json')
   plot_dict = plot_json['plots']
   data = data_utils.load_and_clean_files(files, plot_json)

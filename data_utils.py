@@ -555,3 +555,38 @@ def smooth_data_internal(x_values, y_values, delta):
       x_mean = x
       y_mean = y_values[j]
   return smoothed_x, smoothed_y
+
+
+def scale_data(item_data, items):
+  for i_data, item in zip(item_data, items):
+    scale_by_value = item.get('scale_by_value', 0)
+    scale_by_point = item.get('scale_by_point', None)
+    if scale_by_value > 0 and (scale_by_point is not None):
+      print 'Cannot scale by a fixed value and with reference to a fixed point'
+      print 'at the same time. Not building ' + item[0]
+      return
+    if scale_by_value > 0:
+      scale_by_value = float(scale_by_value)
+      i_data[1][1] /= scale_by_value
+      try:
+        i_data[1][2] /= scale_by_value
+      except IndexError:
+        pass
+    if scale_by_point is not None:
+      scale_by_point = float(scale_by_point)
+      index = np.where(np.isclose(i_data[1][0], scale_by_point))
+      if (len(index[0]) == 0):
+        print 'Cannot scale w.r.t. ' + str(scale_by_point) + '. Not in data!'
+        return
+      elif(len(index[0]) > 1):
+        print 'Cannot scale w.r.t. ' + str(scale_by_point) + '. Not uniqe!'
+        print 'You have the same xvalue more than once in your data. It might be broken!'
+        return
+      else:
+        scale_value = i_data[1][1][index[0][0]]
+        i_data[1][1] /= scale_value
+        try:
+          i_data[1][2] /= scale_value
+        except IndexError:
+          pass
+  return item_data

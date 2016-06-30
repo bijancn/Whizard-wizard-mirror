@@ -70,6 +70,7 @@ def set_major_ticks(ax, ax1, xticks, yticks, xmin, xmax, xmajors, ymin, ymax,
 
 def set_minor_ticks(ax, ax1, xminors, yminors, xlog, ylog):
   # TODO: (bcn 2016-03-16) minors are not disabled in log plot
+  ax.minorticks_off()
   if xminors > 0:
     if xlog:
       ax.set_xscale('log', subsx=[2, 3, 4, 5, 6, 7, 8, 9])
@@ -157,7 +158,7 @@ class Plotter(object):
     if ymin1 is not None and ax1 is not None:
       _set_puffed_scale(puff, ymax1, ymin1, False, ax1.set_ylim, ax1.set_yscale)
     if title is not None and self.title_notset:
-      plt.suptitle(title, y=0.99)
+      plt.suptitle(title, y=0.99, x=0.55)
       self.title_notset = False
     self.set_layout()
     set_major_ticks(ax, ax1, xticks, yticks, xmin, xmax, xmajors, ymin, ymax,
@@ -220,33 +221,6 @@ def combined_fill_between(ax, ax1, base_line, x, ymin, ymax, *args, **kwargs):
   ax.fill_between(x, ymin, ymax, *args, **kwargs)
   comb = data_utils.normalize(base_line, x, ymin, yerr=ymax)
   ax1.fill_between(comb[0], comb[1], comb[2], *args, **kwargs)
-
-
-def scale_data(item_data, items):
-  for i_data, item in zip(item_data, items):
-    scale_by_value = item.get('scale_by_value', 0)
-    scale_by_point = item.get('scale_by_point', None)
-    if scale_by_value > 0 and (scale_by_point is not None):
-      print 'Cannot scale by a fixed value and with reference to a fixed point'
-      print 'at the same time. Not building ' + item[0]
-      return
-    if scale_by_value > 0:
-      i_data[1][1] /= scale_by_value
-      i_data[1][2] /= scale_by_value
-    if scale_by_point is not None:
-      index = np.where(i_data[1][0] == scale_by_point)
-      if (len(index[0]) == 0):
-        print 'Cannot scale w.r.t.' + str(scale_by_point) + '. Not in data!'
-        return
-      elif(len(index[0]) > 1):
-        print 'Cannot scale w.r.t.' + str(scale_by_point) + '. Not uniqe!'
-        print 'You have the same xvalue more than once in your data. It might be broken!'
-        return
-      else:
-        scale_value = i_data[1][1][index[0][0]]
-        i_data[1][1] /= scale_value
-        i_data[1][2] /= scale_value
-  return item_data
 
 
 def get_object_name(obj, is_fit):
@@ -444,7 +418,7 @@ def select_data(data, plot_dict, title):
   lines = plot_dict.get('lines', [])
   for line in lines:
     line_data += [d for d in data if get_name(line) == d[0].replace('.dat', '')]
-  line_data = scale_data(line_data, lines)
+  line_data = data_utils.scale_data(line_data, lines)
   bands = plot_dict.get('bands', [])
   band_data = data_utils.get_associated_plot_data(data, bands)
   fits = plot_dict.get('fits', [])
@@ -476,12 +450,12 @@ def setup_extra_kwargs(plot_dict, legend_decider, many_labels, title):
 
 def setup_majors(plot_dict, ratio_dict):
   kwargs = {}
-  kwargs['ymajors'] = plot_dict.get('ymajors', None)
-  kwargs['xmajors'] = plot_dict.get('xmajors', None)
+  kwargs['ymajors'] = plot_dict.get('ymajors', N_YMAJORS_DEFAULT)
+  kwargs['xmajors'] = plot_dict.get('xmajors', N_XMAJORS_DEFAULT)
   if ratio_dict is not None:
-    kwargs['ymajors1'] = ratio_dict.get('ymajors', None)
+    kwargs['ymajors1'] = ratio_dict.get('ymajors', N_YMAJORS_DEFAULT)
   else:
-    kwargs['ymajors1'] = None
+    kwargs['ymajors1'] = N_YMAJORS_DEFAULT
   return kwargs
 
 
@@ -499,6 +473,17 @@ def use_local_or_global_base_line(band_or_line, data, this_errorbar_func,
     this_plot = partial(this_plot_func, global_base_line)
     this_fill_between = partial(this_fill_between_func, global_base_line)
   return this_errorbar, this_plot, this_fill_between
+
+
+def plot_extra_lines(ax, ax1, plot_dict, global_opacity):
+  extra_lines = plot_dict.get('extra_lines', None)
+  if extra_lines is not None:
+    for exline in extra_lines:
+      extype = exline.get('type', None)
+      if extype == "vertical":
+        ax.axvline(exline['value'], color=exline['color'], alpha=global_opacity)
+      elif extype == "horizontal":
+        ax.axhline(exline['value'], color=exline['color'], alpha=global_opacity)
 
 
 def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
@@ -529,15 +514,17 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     this_errorbar_func = partial(partial(combined_errorbar, ax), ax1)
     this_plot_func = partial(partial(combined_plot, ax), ax1)
     this_fill_between_func = partial(partial(combined_fill_between, ax), ax1)
-    fig_kwargs['ax1'] = ax1
   else:
     ax = fig.add_subplot(1, 1, 1)
     this_plot = ax.plot
     this_errorbar = ax.errorbar
     this_fill_between = ax.fill_between
-    fig_kwargs['ax1'] = None
+    ax1 = None
+  fig_kwargs['ax1'] = ax1
+  global_opacity = plot_dict.get('opacity', 0.3)
   if plot_extra is not None:
     ax = plot_extra(ax, title)
+  plot_extra_lines(ax, ax1, plot_dict, global_opacity)
   fig_kwargs.update(setup_majors(plot_dict, ratio_dict))
   fig_kwargs.update(setup_labels(label_decider, title, plot_dict, ratio_dict))
   fig_kwargs.update(setup_extra_kwargs(plot_dict, legend_decider, many_labels, title))
@@ -545,7 +532,6 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     ax = set_extra_settings(ax, title)
   plotter = Plotter()
   i = 0
-  global_opacity = plot_dict.get('opacity', 0.3)
   for data_of_a_band, band, color in zip(band_data, bands, colors):
     if ratio_dict is not None:
       this_errorbar, this_plot, this_fill_between = \
