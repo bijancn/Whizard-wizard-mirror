@@ -491,13 +491,12 @@ def load_and_clean_files(files, plot_dict=None):
   data = average_copies(data)
   data = build_nlo_sums(data)
   if plot_dict is not None:
-    for plot in plot_dict:
-      smooth_dict = plot.get('smooth', None)
-      fit_dict = plot.get('fits', None)
-      if smooth_dict is not None:
-        data = build_smooth(data, smooth_dict)
-      if fit_dict is not None:
-        data = build_fits(data, fit_dict)
+    smooth_dict = plot_dict.get('smooth', None)
+    fit_dict = plot_dict.get('fits', None)
+    if smooth_dict is not None:
+      data = build_smooth(data, smooth_dict)
+    if fit_dict is not None:
+      data = build_fits(data, fit_dict)
   data = remove_empty_data(data)
   return data
 

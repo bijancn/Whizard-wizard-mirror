@@ -38,7 +38,7 @@ def main():
   files += glob.glob(data_path2 + '/*.dat')
   plot_json = load_json('plot.json')
   plot_dict = plot_json['plots']
-  data = data_utils.load_and_clean_files(files, plot_json.get('smooth', None))
+  data = data_utils.load_and_clean_files(files, plot_json)
 
   pool = mp.Pool(processes=3)
   plot_this = partial(bcn_plot.plot, data=data, pic_path=pic_path,

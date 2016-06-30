@@ -124,5 +124,14 @@
    "xlog": false,
    "legend_outside": false
    }
-  ]
+  ],
+  "smooth": [
+  {"window_size": 5,
+   "poly_order": 1,
+   "data": [{"name": "proc_nlo_central"},
+            {"name": "proc_nlo_low"},
+            {"name": "proc_nlo_high"}
+   ]
+  }
+ ]
 }
