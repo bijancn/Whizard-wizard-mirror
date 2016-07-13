@@ -139,6 +139,42 @@
     "adaption_iterations": "1:10000",
     "integration_iterations": "1:10000"
   },
+  {"process": ["fact_decosproj_eha_lo10t",
+    "ll_fact_decosproj_eha_lo", "ll"],
+    "disabled": true,
+    "purpose": "scan",
+    "nlo_type": "lo",
+    "scan_object": "sqrts",
+    "ranges": [
+    {"type": "linear",
+      "start": 330.0,
+      "stop": 340.0,
+      "stepsize": 1.0
+    },
+    {"type": "linear",
+      "start": 340.0,
+      "stop": 350.0,
+      "stepsize": 0.2
+    },
+    {"type": "linear",
+      "start": 350.0,
+      "stop": 360.0,
+      "stepsize": 1.0
+    },
+    {"type": "linear",
+      "start": 300.0,
+      "stop": 330.0,
+      "stepsize": 5.0
+    },
+    {"type": "linear",
+      "start": 360.0,
+      "stop": 500.0,
+      "stepsize": 5.0
+    }
+    ],
+    "adaption_iterations": "3:20000",
+    "integration_iterations": "3:20000"
+  },
   {"process": ["signaldiagram_lo", "proc_lo_thresholdparams", "fact_lo",
     "fact_osproj_boosted_ha_lo10t", "fact_osproj_unboosted_lo",
     "fact_osproj_boosted_lo10t", "fact_decosproj_eha_lo10t",

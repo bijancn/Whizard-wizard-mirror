@@ -1,8 +1,8 @@
 include("../process_settings_threshold.sin")
 
-library = ttbar_lo_thresholdparams
+library = proc_lo_thresholdparams
 $method = "omega"
-process ttbar_lo_thresholdparams = e1, E1 => t, T
+process proc_lo_thresholdparams = e1, E1 => t, T
 compile
 
 FF =  10
@@ -16,5 +16,5 @@ sqrtsstepsize = 0.1 GeV
 sqrtsmin = sqrts - sqrtsstepsize
 sqrtsmax = sqrts + sqrtsstepsize
 
-integrate (ttbar_lo_thresholdparams)
-printf "RES %g %g %g" (sqrts, integral(ttbar_lo_thresholdparams), error(ttbar_lo_thresholdparams))
+integrate (proc_lo_thresholdparams)
+printf "RES %g %g %g" (sqrts, integral(proc_lo_thresholdparams), error(proc_lo_thresholdparams))

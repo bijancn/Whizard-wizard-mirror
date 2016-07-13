@@ -13,7 +13,7 @@ import bcn_plot
 import data_utils
 from utils import load_json
 
-parallel = False
+parallel = True
 
 
 def ls_decider(lbl, title):

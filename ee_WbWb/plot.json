@@ -1,5 +1,23 @@
 {
   "plots": [
+  {"title": "Resummed",
+    "lines": [
+      {"name": "ll_fact_decosproj_eha_lo-sqrts"},
+      {"name": "ll-sqrts"},
+      {"name": "fact_decosproj_eha_lo10t-sqrts", "linestyle": "solid"}
+    ],
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "xminors": true,
+    "xmin": 340.0,
+    "xmax": 350.0,
+    "ymin": 0.0,
+    "ymax": 1200.0,
+    "yminors": true
+  },
   {"title": "Effectiveness of subtraction in the soft limit (histogram)",
     "disabled_lines": [
       "fact_nlo.soft",
@@ -51,7 +69,7 @@
     }
     ],
     "ratio": {"ylabel": "Ratio",
-      "ymax": 1.05, "ymin": 0.95, "nmajors": 3},
+      "ymax": 1.05, "ymin": 0.95, "ymajors": 3},
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
@@ -92,7 +110,7 @@
       {"name": "fact_osproj_unboosted_lo-sqrts"}
     ],
     "ratio": {"ylabel": "$\\sigma/\\sigma^{\\text{full}}$",
-      "ymax": 1.15, "ymin": 0.85, "nmajors": 5},
+      "ymax": 1.15, "ymin": 0.85, "ymajors": 5},
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
@@ -115,7 +133,7 @@
       {"name": "fact_osproj_unboosted_lo-sqrts"}
     ],
     "ratio": {"ylabel": "$\\sigma/\\sigma^{\\text{full}}$",
-      "ymax": 1.15, "ymin": 0.85, "nmajors": 5},
+      "ymax": 1.15, "ymin": 0.85, "ymajors": 5},
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
@@ -187,7 +205,7 @@
    "lines": [
      {"name": "proc_lo_thresholdparams350-mass_cut",
        "label": "full LO",
-      "linestyle": "banded"},
+      "linestyle": "solid"},
      {"name": "fact_decosproj_eha_lo350-mass_cut",
       "label": "factorized, decay onshell projected, spinsummed",
        "linestyle": "dashed"},
@@ -196,6 +214,8 @@
      {"name": "fact_decosproj_unboosted_lo350-mass_cut",
        "label": "factorized, decay onshell projected"}
    ],
+    "ratio": {"ylabel": "$\\sigma/\\sigma^{\\text{full}}$",
+      "ymax": 1.05, "ymin": 0.95, "ymajors": 5},
     "xlabel": "$\\Delta M$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
@@ -227,7 +247,7 @@
        "label": "fact., only decay OS projected boosted"}
    ],
     "ratio": {"ylabel": "$\\sigma/\\sigma^{\\text{full}}$",
-      "ymax": 1.15, "ymin": 0.85, "nmajors": 5},
+      "ymax": 1.15, "ymin": 0.85, "ymajors": 5},
     "xlabel": "$\\Delta M$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
@@ -281,6 +301,32 @@
     "xpagelength": 9,
     "ypagelength": 7.5
   },
+  {"title": "High $\\sqrt{s}$ behavior",
+   "output_file": "high_sqrts_behavior",
+    "lines": [
+      {"name": "proc_lo_thresholdparams-sqrts", "label": "$W^+ b W^- \\bar b$",
+        "linestyle": "solid"},
+      {"name": "proc_lo_thresholdparams-sqrts", "label": "$t\\bar t$",
+        "folder": "../ee_tt", "linestyle": "solid"},
+      {"name": "signaldiagram_lo-sqrts", "label": "signal diagram, offshell evaluated"},
+      {"name": "fact_lo-sqrts", "label": "factorized, off-shell evaluated"},
+      {"name": "fact_decosproj_eha_lo10t-sqrts", "label":
+        "factorized, on-shell evaluated", "linestyle": "dashed"}
+    ],
+    "ratio": {"ylabel": "$\\sigma/\\sigma^{W^+ b W^- \\bar b}$",
+      "ymax": 1.10, "ymin": 0.80, "ymajors": 7},
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": true,
+    "xlog": true,
+    "ymin": 1,
+    "ymax": 10000,
+    "xmin": 340,
+    "xmax": 50000,
+    "xminors": true,
+    "yminors": true
+  },
   {"title": "Comparison of onshell projections (zoom)",
     "lines": [
       {"name": "proc_lo_thresholdparams-sqrts"},
@@ -290,7 +336,7 @@
       {"name": "fact_lo_widthunprojected-sqrts"}
     ],
     "ratio": {"ylabel": "$\\sigma/\\sigma^{t\\bar t}$",
-      "ymax": 1.15, "ymin": 0.85, "nmajors": 5},
+      "ymax": 1.15, "ymin": 0.85, "ymajors": 5},
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "legend_location": "upper left",
