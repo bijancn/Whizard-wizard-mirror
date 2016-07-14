@@ -12,6 +12,7 @@ import jsonschema
 from mpi4py import MPI
 from numpy import logspace, arange, log2
 import nose.tools as nt
+import data_utils as dt
 import utils as ut
 # from termcolor import colored
 
@@ -75,18 +76,18 @@ def expand_process(run_json):
 
 
 def test_expand_process():
-  test_proc_dict = {'processes': [{'process': 'test_A'}, {'process': 'test_B'}]}
+  test_proc_dict = {'processes': [{'process': ['test_A']}, {'process': ['test_B']}]}
   result = expand_process(test_proc_dict)
   nt.eq_(result, test_proc_dict)
 
   test_proc_dict = {'processes': [{'process': ['test_A', 'test_B'],
-      'purpose': 'scan'}, {'process': 'test_B'}]}
+      'purpose': 'scan'}, {'process': ['test_B']}]}
   result = expand_process(test_proc_dict)
   expected = {'processes': [
       {'process': 'test_B'},
       {'process': 'test_A', 'purpose': 'scan'},
       {'process': 'test_B', 'purpose': 'scan'}]}
-  nt.eq_(result, expected)
+  nt.eq_(set(result), set(expected))
 
 
 def log(action, batch, proc_dict):
@@ -97,6 +98,19 @@ def log(action, batch, proc_dict):
 # TODO: (bcn 2016-03-30) slim the Whizard. would be nice to only have
 # information and data how to run Whizard here
 SUCCESS, FAIL = range(2)
+
+
+def prepare_scan_sindarin(proc_name, proc_id, proc_dict, runfolder, sindarin):
+  scans = str(proc_id).split('--')
+  scan_expression = ''
+  for scan in scans:
+    scan_value, scan_object = scan.split('-')[0:2]
+    scan_expression += scan_object + " = " + scan_value + "\n"
+  replace_line = lambda line: line.replace('#SETSCAN',
+    scan_expression).replace('include("', 'include("../')
+  integration_sindarin = proc_name + '-integrate.sin'
+  ut.sed(integration_sindarin, replace_line,
+      new_file=os.path.join(runfolder, sindarin))
 
 
 class Whizard():
@@ -166,16 +180,7 @@ class Whizard():
         change_sindarin_for_event_gen(sindarin, runfolder, proc_id, proc_dict)
         return _exe(purpose)
     elif purpose == 'scan':
-      if '-' in str(proc_id):
-        scan_value = str(proc_id).split('-')[0]
-      else:
-        scan_value = str(proc_id)
-      scan_expression = proc_dict['scan_object'] + " = " + scan_value
-      replace_line = lambda line: line.replace('#SETSCAN',
-        scan_expression).replace('include("', 'include("../')
-      integration_sindarin = proc_name + '-integrate.sin'
-      ut.sed(integration_sindarin, replace_line,
-          new_file=os.path.join(runfolder, sindarin))
+      prepare_scan_sindarin(proc_name, proc_id, proc_dict, runfolder, sindarin)
       with ut.cd(runfolder):
         set_seed(sindarin, runfolder)
         return _exe(purpose)
@@ -305,12 +310,12 @@ def remove_test_nlo_base():
   os.remove('test_nlo_base-template.sin')
 
 
-def get_steps(scan, start, stop):
+def get_steps(rnge, start, stop):
   try:
-    steps = scan['steps']
+    steps = rnge['steps']
     stepsize = (stop - start) / steps
   except KeyError:
-    stepsize = scan['stepsize']
+    stepsize = rnge['stepsize']
     steps = (stop - start) / stepsize
   except KeyError:
     ut.fatal('Aborting: You have to give either steps or stepsize')
@@ -331,35 +336,54 @@ def get_step_range(scan_type, start, stop, steps, stepsize):
   return step_range
 
 
-def fill_scan_runs(proc_name, proc_dict, scans):
-  runs = []
-  try:
-    scan_object = proc_dict['scan_object']
-  except KeyError:
-    ut.fatal('Aborting: You want a scan but have not set a scan_object')
-    raise
-  for scan in scans:
-    start = float(scan['start'])
-    stop = float(scan['stop'])
-    scan_type = scan['type']
-    steps, stepsize = get_steps(scan, start, stop)
-    step_range = get_step_range(scan_type, start, stop, steps, stepsize)
-    if proc_dict.get('integration_copies', 1) > 1:
-      runs += get_process_copies(proc_name, proc_dict, step_range)
-    else:
-      runs += [(str(sr) + '-' + scan_object, proc_name, proc_dict) for sr in step_range]
+def fill_with_copies(proc_name, proc_dict, scan_object, step_range):
+  n_copies = proc_dict.get('integration_copies', 1)
+  if n_copies > 1:
+    runs = []
+    for i_copy in range(n_copies):
+      runs += [(str(sr) + '-' + scan_object + '-' +
+        str(i_copy), proc_name, proc_dict) for sr in step_range]
+  else:
+    runs = [(str(sr) + '-' + scan_object, proc_name, proc_dict) for sr in step_range]
   return runs
 
 
-def try_fill_scan_runs(proc_name, proc_dict):
+def fill_scan_runs(proc_name, proc_dict, scan):
+  runs = []
   try:
-    scans = proc_dict['ranges']
+    scan_object = scan['scan_object']
+  except KeyError:
+    ut.fatal('Aborting: You want a scan but have not set a scan_object')
+    raise
+  ranges = scan['ranges']
+  for rnge in ranges:
+    start = float(rnge['start'])
+    stop = float(rnge['stop'])
+    range_type = rnge['type']
+    steps, stepsize = get_steps(rnge, start, stop)
+    step_range = get_step_range(range_type, start, stop, steps, stepsize)
+    runs += fill_with_copies(proc_name, proc_dict, scan_object, step_range)
+  return runs
+
+
+def fill_all_scan_runs(proc_name, proc_dict):
+  try:
+    scans = proc_dict['scans']
   # TODO: (bcn 2016-03-30) this should be made impossible in the scheme
   except KeyError:
-    ut.fatal('Aborting: You want a scan but have not set a ranges array')
+    ut.fatal('Aborting: You want a scan but have not set a scans array')
     return []
   else:
-    return fill_scan_runs(proc_name, proc_dict, scans)
+    list_of_scans = [fill_scan_runs(proc_name, proc_dict, scan) for scan in scans]
+    full_combination = [sa for sa in dt.Scan_all(list_of_scans)]
+    runs = []
+    for scan in full_combination:
+      proc_id = ''
+      for part in scan:
+        proc_id += part[0] + '--'
+      proc_id = proc_id[:-2]
+      runs += [(proc_id, scan[0][1], scan[0][2])]
+    return runs
 
 
 def fill_runs(proc_name, proc_dict):
@@ -369,7 +393,7 @@ def fill_runs(proc_name, proc_dict):
   elif purpose == 'events' or purpose == 'histograms':
     runs = [(b, proc_name, proc_dict) for b in range(proc_dict['batches'])]
   elif purpose == 'scan':
-    runs = try_fill_scan_runs(proc_name, proc_dict)
+    runs = fill_all_scan_runs(proc_name, proc_dict)
   elif purpose == 'integration' or purpose == 'test_soft':
     runs = [(-1, proc_name, proc_dict)]
   else:
@@ -386,8 +410,8 @@ def test_fill_runs_basic():
   runs = fill_runs(proc_name, proc_dict)
   nt.eq_(runs, [(0, proc_name, proc_dict), (1, proc_name, proc_dict)])
 
-  proc_dict = {'purpose': 'scan', 'scan_object': 'sqrts', 'ranges':
-      [{'start': 0.1, 'stop': 0.2, 'stepsize': 0.05, 'type': 'linear'}]}
+  proc_dict = {'purpose': 'scan', 'scans': [{'scan_object': 'sqrts', 'ranges':
+      [{'start': 0.1, 'stop': 0.2, 'stepsize': 0.05, 'type': 'linear'}]}]}
   runs = fill_runs(proc_name, proc_dict)
   expectation = [('0.1-sqrts', 'test', proc_dict), ('0.15-sqrts', 'test', proc_dict)]
   for r, e in zip(runs, expectation):
@@ -401,8 +425,8 @@ def test_fill_runs_basic():
   runs = fill_runs(proc_name, proc_dict)
   nt.eq_(runs, [])
 
-  proc_dict = {'purpose': 'scan', 'scan_object': 'sqrts',
-      'ranges': [{'start': 1, 'stop': 10, 'type': 'logarithmic', 'steps': 2}]}
+  proc_dict = {'purpose': 'scan', 'scans': [{'scan_object': 'sqrts',
+      'ranges': [{'start': 1, 'stop': 10, 'type': 'logarithmic', 'steps': 2}]}]}
   runs = fill_runs(proc_name, proc_dict)
   expectation = [('1.0-sqrts', 'test', proc_dict), ('10.0-sqrts', 'test', proc_dict)]
   nt.eq_(len(runs), len(expectation))
@@ -436,13 +460,6 @@ def get_scale_suffixes():
 
 def append_scale_suffixes(proc_name):
   return [proc_name + '_' + s for s in get_scale_suffixes()]
-
-
-def get_process_copies(proc_name, proc_dict, step_range):
-  runs = []
-  for i_copy in range(proc_dict.get('integration_copies', 1)):
-    runs += [(str(b) + '-' + str(i_copy), proc_name, proc_dict) for b in step_range]
-  return runs
 
 
 def test_append_scale_suffixes():

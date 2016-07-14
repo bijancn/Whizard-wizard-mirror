@@ -1,6 +1,6 @@
 {
   "processes": [
-  {"process": "proc_lo",
+  {"process": ["proc_lo"],
     "purpose": "integration",
     "nlo_type": "lo",
     "batches": 100,

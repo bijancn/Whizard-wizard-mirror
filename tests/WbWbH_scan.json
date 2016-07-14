@@ -1,35 +1,37 @@
 {
   "processes": [
-  {"process": "proc_lo_WbWbH",
+  {"process": ["proc_lo_WbWbH"],
     "purpose": "scan",
     "nlo_type": "lo",
     "only_sindarins": true,
     "whizard_options": "",
-    "scan_object": "sqrts",
-    "ranges": [
-    {"type": "linear",
-      "start": 300,
-      "stop": 900,
-      "stepsize": 10.0
-    }
-    ],
+    "scans": [
+      {"scan_object": "sqrts",
+      "ranges": [
+      {"type": "linear",
+        "start": 300,
+        "stop": 900,
+        "stepsize": 10.0
+      }
+      ]}],
     "adaption_iterations": "6:25000",
     "integration_iterations": "3:15000"
   },
-  {"process": "proc_nlo_WbWbH",
+  {"process": ["proc_nlo_WbWbH"],
     "purpose": "scan",
     "nlo_type": "nlo",
     "only_sindarins": true,
     "disabled": true,
     "whizard_options": "",
-    "scan_object": "sqrts",
-    "ranges": [
-    {"type": "linear",
-      "start": 300,
-      "stop": 900,
-      "stepsize": 10.0
-    }
-    ],
+    "scans": [
+      {"scan_object": "sqrts",
+      "ranges": [
+      {"type": "linear",
+        "start": 300,
+        "stop": 900,
+        "stepsize": 10.0
+      }
+      ]}],
     "adaption_iterations": "6:20000",
     "integration_iterations": "3:15000",
     "scale_variation": true,

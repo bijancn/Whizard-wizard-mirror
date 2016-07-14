@@ -35,12 +35,14 @@
     ],
     "disabled": true,
     "purpose": "scan",
-    "scan_object": "mass_cut",
-    "ranges": [
-    {"type": "logarithmic",
-      "start": 1,
-      "stop": 10000,
-      "steps": 50}
+    "scans": [
+      {"scan_object": "mass_cut",
+      "ranges": [
+      {"type": "logarithmic",
+        "start": 1,
+        "stop": 10000,
+        "steps": 50}
+      ]}
     ],
     "nlo_type": "lo",
     "adaption_iterations": "3:50000",

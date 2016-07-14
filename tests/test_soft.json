@@ -1,6 +1,6 @@
 {
   "processes": [
-  {"process": "proc_nlo",
+  {"process": ["proc_nlo"],
     "purpose": "test_soft",
     "nlo_type": "lo",
     "batches": 100,
