@@ -343,6 +343,77 @@ def average_copies(data):
   return data
 
 
+class Scan_all():
+  def __init__(self, input_lsts):
+    if any([type(il) != list for il in input_lsts]):
+      raise TypeError("Wrong input. Need a list of lists")
+    self.dimension = len(input_lsts)
+    self.lengths = [len(il) for il in input_lsts]
+    self.values = input_lsts
+    self.index_vec = [0 for _ in input_lsts]
+    self.index_vec[0] = -1
+
+  def __str__(self):
+    string = 'Scanner:\n'
+    string += ' dimension: ' + str(self.dimension)
+    string += ' lengths:   ' + str(self.lengths)
+    string += ' values:    ' + str(self.values)
+    string += ' index_vec: ' + str(self.index_vec)
+    return string
+
+  def __iter__(self):
+    return self
+
+  # -> -> -> -> -\
+  # \> -> -> -> -\
+  # \> -> -> -> X
+  def next(self):
+    self.index_vec[0] += 1      # move along chain
+    for k in range(self.dimension):
+      over_flow = self.index_vec[k] == self.lengths[k]
+      if over_flow:
+        self.reset_and_move_to_next_chain(k)
+    return [self.values[d][idx] for d, idx in enumerate(self.index_vec)]
+
+  def reset_and_move_to_next_chain(self, k):
+    self.index_vec[k] = 0
+    if k + 1 < self.dimension:
+      self.index_vec[k + 1] += 1
+    else:
+      raise StopIteration
+
+
+@nt.raises(TypeError)
+def test_scan_all_fail():
+  test_input = [0.1, 0.2]
+  scanner = Scan_all(test_input)
+  for s in scanner:
+    pass
+
+
+def test_scan_all():
+  test_input = [[1, 2]]
+  scanner = Scan_all(test_input)
+  expectation = [[1], [2]]
+  for (s, e) in zip(scanner, expectation):
+    nt.eq_(s, e)
+
+  test_input = [[1, 2], ['a', 'b', 'c']]
+  scanner = Scan_all(test_input)
+  expectation = [[1, 'a'], [2, 'a'], [1, 'b'], [2, 'b'], [1, 'c'], [2, 'c']]
+  for (s, e) in zip(scanner, expectation):
+    nt.eq_(s, e)
+
+  test_input = [[1, 2], ['a', 'b', 'c'], [0.1, 0.2]]
+  scanner = Scan_all(test_input)
+  expectation = [[1, 'a', 0.1], [2, 'a', 0.1], [1, 'b', 0.1],
+                 [2, 'b', 0.1], [1, 'c', 0.1], [2, 'c', 0.1],
+                 [1, 'a', 0.2], [2, 'a', 0.2], [1, 'b', 0.2],
+                 [2, 'b', 0.2], [1, 'c', 0.2], [2, 'c', 0.2]]
+  for (s, e) in zip(scanner, expectation):
+    nt.eq_(s, e)
+
+
 class Combiner():
   def __init__(self, x_generators, y_generators, lengths,
       yerr_generators=None, error_func=None, operation=lambda x: x):

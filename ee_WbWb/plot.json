@@ -4,6 +4,7 @@
     "lines": [
       {"name": "ll_fact_decosproj_eha_lo-sqrts"},
       {"name": "ll-sqrts"},
+      {"name": "ll_old-sqrts"},
       {"name": "fact_decosproj_eha_lo10t-sqrts", "linestyle": "solid"}
     ],
     "xlabel": "$\\sqrt{s}$ [GeV]",
