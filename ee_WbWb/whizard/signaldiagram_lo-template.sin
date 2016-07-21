@@ -1,8 +1,8 @@
 include("../process_settings_threshold.sin")
 
-library = signaldiagram_lo
+library = PROCESS
 $method = "omega"
-process signaldiagram_lo = e1, E1 => Wp, Wm, b, B {$restrictions = "3+5~t && 4+6~tbar"}
+process PROCESS = e1, E1 => Wp, Wm, b, B {$restrictions = "3+5~t && 4+6~tbar"}
 compile
 
 FF =  10
@@ -16,5 +16,5 @@ sqrtsstepsize = 0.1 GeV
 sqrtsmin = sqrts - sqrtsstepsize
 sqrtsmax = sqrts + sqrtsstepsize
 
-integrate (signaldiagram_lo)
-printf "RES %g %g %g" (sqrts, integral(signaldiagram_lo), error(signaldiagram_lo))
+integrate (PROCESS)
+printf "RES %g %g %g" (sqrts, integral(PROCESS), error(PROCESS))

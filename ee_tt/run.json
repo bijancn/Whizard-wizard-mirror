@@ -13,11 +13,26 @@
     "events_per_batch":100000,
     "analysis": "WHIZARD_tt_NLO"
   },
+  {"process": ["proc_powheg", "proc_powheg_damped"],
+    "disabled": true,
+    "purpose": "integration",
+    "nlo_type": "lo",
+    "adaption_iterations": "5:1000",
+    "integration_iterations": "5:1000"
+  },
+  {"process": ["proc_powheg", "proc_powheg_damped"],
+    "disabled": true,
+    "purpose": "events",
+    "nlo_type": "lo",
+    "adaption_iterations": "5:1000",
+    "integration_iterations": "5:1000",
+    "events_per_batch": 10000,
+    "batches": 5
+  },
   {"process": ["proc_nlo"],
     "disabled": true,
     "purpose": "histograms",
     "nlo_type": "nlo",
-    "whizard_options":"--rebuild-library",
     "adaption_iterations": "3:5000",
     "integration_iterations": "3:5000",
     "batches": 5

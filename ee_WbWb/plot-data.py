@@ -68,6 +68,9 @@ def main():
   files = glob.glob(data_path + '/*.dat')
   files += glob.glob(data_path2 + '/*.dat')
   data = data_utils.load_and_clean_files(files)
+  for idx, item in enumerate(data):
+    if 'Analytic' in item[0]:
+      data[idx][1][1] *= 1000
   plot_this = partial(bcn_plot.plot, data=data, pic_path=pic_path,
       linestyle_decider=ls_decider, pretty_label=pretty_label)
   plot_json = load_json('plot.json')

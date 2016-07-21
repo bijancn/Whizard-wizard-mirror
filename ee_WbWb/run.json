@@ -35,15 +35,16 @@
     ],
     "disabled": true,
     "purpose": "scan",
-    "scans": [
-      {"scan_object": "mass_cut",
-      "ranges": [
-      {"type": "logarithmic",
-        "start": 1,
-        "stop": 10000,
-        "steps": 50}
-      ]}
-    ],
+    "scans": [{
+      "scans": [
+        {"scan_object": "mass_cut",
+        "ranges": [
+        {"type": "logarithmic",
+          "start": 1,
+          "stop": 10000,
+          "steps": 50}
+        ]}
+      ]}],
     "nlo_type": "lo",
     "adaption_iterations": "3:50000",
     "integration_iterations": "3:20000"
@@ -60,13 +61,14 @@
     ],
     "disabled": true,
     "purpose": "scan",
-    "scan_object": "mass_cut",
-    "ranges": [
-    {"type": "logarithmic",
-      "start": 1,
-      "stop": 800,
-      "steps": 50}
-    ],
+    "scans": [{
+      "scan_object": "mass_cut",
+      "ranges": [
+      {"type": "logarithmic",
+        "start": 1,
+        "stop": 800,
+        "steps": 50}
+      ]}],
     "nlo_type": "lo",
     "adaption_iterations": "3:50000",
     "integration_iterations": "3:20000"
@@ -118,62 +120,119 @@
     "nlo_type": "nlo",
     "adaption_iterations": "5:100000",
     "integration_iterations": "5:100000",
-    "scan_object": "sqrts",
-    "ranges": [
-    {"type": "linear",
-      "start": 360.0,
-      "stop": 510.0,
-      "stepsize": 10.0
-    }
-    ]
+    "scans": [{
+      "scan_object": "sqrts",
+      "ranges": [
+      {"type": "linear",
+        "start": 360.0,
+        "stop": 510.0,
+        "stepsize": 10.0
+      }
+      ]}]
   },
   {"process": ["unity"],
     "disabled": true,
     "purpose": "scan",
     "nlo_type": "lo",
-    "scan_object": "sqrts",
-    "ranges": [
-    {"type": "logarithmic",
-      "start": 1000,
-      "stop": 1000000,
-      "steps": 4}
-    ],
+    "scans": [{
+      "scan_object": "sqrts",
+      "ranges": [
+      {"type": "logarithmic",
+        "start": 1000,
+        "stop": 1000000,
+        "steps": 4}
+      ]}],
     "adaption_iterations": "1:10000",
     "integration_iterations": "1:10000"
   },
-  {"process": ["fact_decosproj_eha_lo10t",
-    "ll_fact_decosproj_eha_lo", "ll"],
+  {"process": ["fact_decosproj_eha_lo10t", "signaldiagram_lo_thresholdmethod",
+    "ll_fact_decosproj_eha_lo", "ll", "ll_old"],
     "disabled": true,
     "purpose": "scan",
+    "whizard_options": "--no-banner -r",
     "nlo_type": "lo",
-    "scan_object": "sqrts",
-    "ranges": [
-    {"type": "linear",
-      "start": 330.0,
-      "stop": 340.0,
-      "stepsize": 1.0
-    },
-    {"type": "linear",
-      "start": 340.0,
-      "stop": 350.0,
-      "stepsize": 0.2
-    },
-    {"type": "linear",
-      "start": 350.0,
-      "stop": 360.0,
-      "stepsize": 1.0
-    },
-    {"type": "linear",
-      "start": 300.0,
-      "stop": 330.0,
-      "stepsize": 5.0
-    },
-    {"type": "linear",
-      "start": 360.0,
-      "stop": 500.0,
-      "stepsize": 5.0
-    }
-    ],
+    "scans": [{
+      "scan_object": "sqrts",
+      "ranges": [
+      {"type": "linear",
+        "start": 330.0,
+        "stop": 340.0,
+        "stepsize": 1.0
+      },
+      {"type": "linear",
+        "start": 340.0,
+        "stop": 350.0,
+        "stepsize": 0.2
+      },
+      {"type": "linear",
+        "start": 350.0,
+        "stop": 360.0,
+        "stepsize": 1.0
+      },
+      {"type": "linear",
+        "start": 300.0,
+        "stop": 330.0,
+        "stepsize": 5.0
+      },
+      {"type": "linear",
+        "start": 360.0,
+        "stop": 500.0,
+        "stepsize": 5.0
+      }
+      ]},
+      {"scan_object": "mass_cut",
+       "export_type": "separate",
+       "ranges": [{"type": "explicit",
+        "range": [15, 100]}]
+      }
+      ],
+    "adaption_iterations": "3:20000",
+    "integration_iterations": "3:20000"
+  },
+  {"process": ["master_threshold"],
+    "disabled": true,
+    "purpose": "scan",
+    "whizard_options": "--no-banner -r",
+    "nlo_type": "lo",
+    "scans": [{
+      "scan_object": "sqrts",
+      "ranges": [
+      {"type": "linear",
+        "start": 330.0,
+        "stop": 340.0,
+        "stepsize": 1.0
+      },
+      {"type": "linear",
+        "start": 340.0,
+        "stop": 350.0,
+        "stepsize": 0.2
+      },
+      {"type": "linear",
+        "start": 350.0,
+        "stop": 360.0,
+        "stepsize": 1.0
+      },
+      {"type": "linear",
+        "start": 300.0,
+        "stop": 330.0,
+        "stepsize": 5.0
+      },
+      {"type": "linear",
+        "start": 360.0,
+        "stop": 500.0,
+        "stepsize": 5.0
+      }
+      ]},
+      {"scan_object": "FF",
+       "export_type": "separate",
+       "ranges": [{"type": "explicit",
+        "range": [7, 9]}]
+      },
+      {"scan_object": "offshell_strategy",
+       "export_type": "separate",
+       "ranges": [{"type": "explicit",
+        "range": [0, 2, 4, 1190]}]
+      }],
     "adaption_iterations": "3:20000",
     "integration_iterations": "3:20000"
   },

@@ -311,18 +311,22 @@ def remove_test_nlo_base():
 
 
 def get_steps(rnge, start, stop):
+  steps, stepsize, given_range = None, None, None
   try:
     steps = rnge['steps']
     stepsize = (stop - start) / steps
   except KeyError:
-    stepsize = rnge['stepsize']
-    steps = (stop - start) / stepsize
+    try:
+      stepsize = rnge['stepsize']
+      steps = (stop - start) / stepsize
+    except KeyError:
+      given_range = rnge['range']
   except KeyError:
-    ut.fatal('Aborting: You have to give either steps or stepsize')
-  return steps, stepsize
+    ut.fatal('Aborting: You have to give either steps, stepsize or explicit range')
+  return steps, stepsize, given_range
 
 
-def get_step_range(scan_type, start, stop, steps, stepsize):
+def get_step_range(scan_type, start, stop, steps, stepsize, given_range):
   if scan_type == 'logarithmic':
     step_range = logspace(log10(start), log10(stop), num=steps,
         endpoint=True, base=10.0)
@@ -331,6 +335,8 @@ def get_step_range(scan_type, start, stop, steps, stepsize):
         endpoint=True, base=2.0)
   elif scan_type == 'linear':
     step_range = arange(start, stop, float(stepsize))
+  elif scan_type == 'explicit':
+    step_range = given_range
   else:
     ut.fatal('Aborting: Unknown scan type')
   return step_range
@@ -357,11 +363,12 @@ def fill_scan_runs(proc_name, proc_dict, scan):
     raise
   ranges = scan['ranges']
   for rnge in ranges:
-    start = float(rnge['start'])
-    stop = float(rnge['stop'])
+    start = float(rnge.get('start', 0.0))
+    stop = float(rnge.get('stop', 0.0))
     range_type = rnge['type']
-    steps, stepsize = get_steps(rnge, start, stop)
-    step_range = get_step_range(range_type, start, stop, steps, stepsize)
+    steps, stepsize, given_range = get_steps(rnge, start, stop)
+    step_range = get_step_range(range_type, start, stop, steps, stepsize,
+        given_range)
     runs += fill_with_copies(proc_name, proc_dict, scan_object, step_range)
   return runs
 
