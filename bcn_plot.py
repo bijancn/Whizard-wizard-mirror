@@ -68,7 +68,7 @@ def set_major_ticks(ax, ax1, xticks, yticks, xmin, xmax, xmajors, ymin, ymax,
   ax.set_yticks(yticks)
 
 
-def set_minor_ticks(ax, ax1, xminors, yminors, xlog, ylog):
+def set_minor_ticks(ax, ax1, xminors, yminors, yminors1, xlog, ylog):
   # TODO: (bcn 2016-03-16) minors are not disabled in log plot
   ax.minorticks_off()
   if xminors > 0:
@@ -81,11 +81,11 @@ def set_minor_ticks(ax, ax1, xminors, yminors, xlog, ylog):
     if ylog:
       ax.set_yscale('log', subsy=[2, 3, 4, 5, 6, 7, 8, 9])
     else:
-      minorLocator = AutoMinorLocator(yminors)
+      minorLocator = AutoMinorLocator(yminors + 1)
       ax.yaxis.set_minor_locator(minorLocator)
-      if ax1 is not None:
-        minorLocator = AutoMinorLocator(yminors)
-        ax1.yaxis.set_minor_locator(minorLocator)
+  if yminors1 > 0 and ax1 is not None:
+    minorLocator = AutoMinorLocator(yminors1 + 1)
+    ax1.yaxis.set_minor_locator(minorLocator)
 
 
 def set_legend(fig, ax, ax1, legend_ordering, legend_outside, height_shrinker,
@@ -146,7 +146,7 @@ class Plotter(object):
   def setfig(self, fig, ax, xmin, xmax, ymin, ymax, xlabel, ylabel,
       title=None, xlog=False, ylog=False,
       xmajors=N_XMAJORS_DEFAULT, ymajors=N_YMAJORS_DEFAULT,
-      xminors=0, yminors=0,
+      xminors=0, yminors=0, yminors1=0,
       xticks=None, yticks=None, puff=0.05,
       legend_location='best',
       legend_columns=1, legend_outside=False, height_shrinker=0.80,
@@ -163,7 +163,7 @@ class Plotter(object):
     self.set_layout()
     set_major_ticks(ax, ax1, xticks, yticks, xmin, xmax, xmajors, ymin, ymax,
         ymajors, ymin1, ymax1, ymajors1, xlog, ylog)
-    set_minor_ticks(ax, ax1, xminors, yminors, xlog, ylog)
+    set_minor_ticks(ax, ax1, xminors, yminors, yminors1, xlog, ylog)
     if not legend_hide:
       set_legend(fig, ax, ax1, legend_ordering, legend_outside, height_shrinker,
           legend_columns, legend_location)
@@ -434,18 +434,16 @@ def select_data(data, plot_dict, title):
 
 
 def setup_extra_kwargs(plot_dict, legend_decider, many_labels, title):
-  extra_kwargs = {}
-  extra_kwargs['height_shrinker'] = 0.70
-  extra_kwargs['xlog'] = plot_dict.get('xlog', False)
-  extra_kwargs['ylog'] = plot_dict.get('ylog', False)
-  extra_kwargs['xminors'] = plot_dict.get('xminors', N_XMINORS_DEFAULT)
-  extra_kwargs['yminors'] = plot_dict.get('yminors', N_YMINORS_DEFAULT)
-  extra_kwargs['xticks'] = plot_dict.get('xticks', None)
-  extra_kwargs['yticks'] = plot_dict.get('yticks', None)
-  extra_kwargs['legend_outside'] = plot_dict.get('legend_outside', many_labels)
-  extra_kwargs['legend_location'] = decide_if_not_none(plot_dict, legend_decider,
+  kwargs = {}
+  kwargs['height_shrinker'] = 0.70
+  kwargs['xlog'] = plot_dict.get('xlog', False)
+  kwargs['ylog'] = plot_dict.get('ylog', False)
+  kwargs['xticks'] = plot_dict.get('xticks', None)
+  kwargs['yticks'] = plot_dict.get('yticks', None)
+  kwargs['legend_outside'] = plot_dict.get('legend_outside', many_labels)
+  kwargs['legend_location'] = decide_if_not_none(plot_dict, legend_decider,
       'legend_location', 'best', title)
-  return extra_kwargs
+  return kwargs
 
 
 def setup_majors(plot_dict, ratio_dict):
@@ -456,6 +454,17 @@ def setup_majors(plot_dict, ratio_dict):
     kwargs['ymajors1'] = ratio_dict.get('ymajors', N_YMAJORS_DEFAULT)
   else:
     kwargs['ymajors1'] = N_YMAJORS_DEFAULT
+  return kwargs
+
+
+def setup_minors(plot_dict, ratio_dict):
+  kwargs = {}
+  kwargs['xminors'] = plot_dict.get('xminors', N_XMINORS_DEFAULT)
+  kwargs['yminors'] = plot_dict.get('yminors', N_YMINORS_DEFAULT)
+  if ratio_dict is not None:
+    kwargs['yminors1'] = ratio_dict.get('yminors', N_YMINORS_DEFAULT)
+  else:
+    kwargs['yminors1'] = N_YMINORS_DEFAULT
   return kwargs
 
 
@@ -526,6 +535,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     ax = plot_extra(ax, title)
   plot_extra_lines(ax, ax1, plot_dict, global_opacity)
   fig_kwargs.update(setup_majors(plot_dict, ratio_dict))
+  fig_kwargs.update(setup_minors(plot_dict, ratio_dict))
   fig_kwargs.update(setup_labels(label_decider, title, plot_dict, ratio_dict))
   fig_kwargs.update(setup_extra_kwargs(plot_dict, legend_decider, many_labels, title))
   if set_extra_settings is not None:
