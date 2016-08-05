@@ -198,6 +198,11 @@
       "scan_object": "sqrts",
       "ranges": [
       {"type": "linear",
+        "start": 300.0,
+        "stop": 330.0,
+        "stepsize": 5.0
+      },
+      {"type": "linear",
         "start": 330.0,
         "stop": 340.0,
         "stepsize": 1.0
@@ -213,33 +218,38 @@
         "stepsize": 1.0
       },
       {"type": "linear",
-        "start": 300.0,
-        "stop": 330.0,
-        "stepsize": 5.0
-      },
-      {"type": "linear",
         "start": 360.0,
         "stop": 500.0,
         "stepsize": 5.0
-      }
+      },
+      {"type": "linear",
+      "start": 500,
+      "stop": 10000,
+      "steps": 20}
       ]},
       {"scan_object": "FF",
        "export_type": "separate",
        "ranges": [{"type": "explicit",
-        "range": [7, 9]}]
+        "range": [9]}]
       },
       {"scan_object": "offshell_strategy",
        "export_type": "separate",
        "ranges": [{"type": "explicit",
-        "range": [0, 2, 4, 1190]}]
+        "range": [0, 2, 4, 162, 226, 674, 738, 1186, 1190, 1250, 1698, 1762]}]
       }],
     "adaption_iterations": "3:20000",
     "integration_iterations": "3:20000"
   },
-  {"process": ["signaldiagram_lo", "proc_lo_thresholdparams", "fact_lo",
-    "fact_osproj_boosted_ha_lo10t", "fact_osproj_unboosted_lo",
-    "fact_osproj_boosted_lo10t", "fact_decosproj_eha_lo10t",
-    "fact_lo_widthunprojected", "fact_osproj_unboosted_ha_lo10t"],
+  {"process": [
+    "signaldiagram_lo",
+    "proc_lo_thresholdparams",
+    "fact_lo",
+    "fact_osproj_boosted_ha_lo10t",
+    "fact_osproj_unboosted_lo",
+    "fact_osproj_boosted_lo10t",
+    "fact_decosproj_eha_lo10t",
+    "fact_lo_widthunprojected",
+    "fact_osproj_unboosted_ha_lo10t"],
     "disabled": true,
     "purpose": "scan",
     "nlo_type": "lo",

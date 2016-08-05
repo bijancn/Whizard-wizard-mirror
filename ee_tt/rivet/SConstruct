@@ -20,7 +20,6 @@ env['NUMTHREADS'] = '4'
 env['ANALYSIS'] = base_analysis
 configs = [base_analysis, base_analysis + '-show-MCerrors']
 configs = [c + '.plot' for c in configs]
-configs = ['WHIZARD_threshold.plot']
 processes = ['proc_lo']
 
 plot_together = [{'target': 'plots',

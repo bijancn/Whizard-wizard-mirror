@@ -57,7 +57,10 @@ def set_major_ticks(ax, ax1, xticks, yticks, xmin, xmax, xmajors, ymin, ymax,
   ax.set_xticklabels([str(xt) for xt in xticks])
   if yticks is None:
     if ylog:
-      yticks = np.logspace(math.log10(ymin), math.log10(ymax), num=ymajors)
+      if ymin <= 0:
+        raise Exception("You should set ymin > 0 in a log plot")
+      else:
+        yticks = np.logspace(math.log10(ymin), math.log10(ymax), num=ymajors)
     else:
       yticks = np.linspace(ymin, ymax, ymajors)
     if ymin1 is not None and ymax1 is not None and ax1 is not None:
