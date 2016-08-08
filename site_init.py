@@ -42,9 +42,11 @@ def build_scale_variation_yodas(scale_variation_yodas, env):
 def build_yodas_from_hepmcs(env, proc_list):
   hepmcs = [glob(p + '-*.hepmc') for p in proc_list]
   print 'Building Yodas from these hepmcs:', hepmcs
+  return_yodas = []
   for h in hepmcs:
     for hh in h:
-      env.Yoda(hh)
+      return_yodas += [env.Yoda(hh)]
+  return return_yodas
 
 
 def build_merged_yodas(env, small_yoda_names, final_yoda_names):

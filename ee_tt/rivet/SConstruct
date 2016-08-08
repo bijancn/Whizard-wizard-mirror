@@ -39,10 +39,11 @@ for idx, pd in enumerate(plot_together):
 
 
 def main(control_plots):
-  env.Analysis("RivetAnalysis", analysiss)
+  analysis = env.Analysis("RivetAnalysis", analysiss)
 
   print 'processes: ', processes
-  build_yodas_from_hepmcs(env, processes)
+  yodas = build_yodas_from_hepmcs(env, processes)
+  Depends(yodas, analysis)
   small_yoda_names = su.get_yodas_from_proc_list(processes)
   print 'small_yoda_names: ', small_yoda_names
   n_yodas = len(sum(small_yoda_names, []))
