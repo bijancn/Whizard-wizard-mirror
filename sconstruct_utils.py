@@ -3,6 +3,10 @@ import re
 from glob import glob
 
 
+def nlo_process(ps):
+  return [ps + '_Born', ps + '_Real', ps + '_Virtual']
+
+
 def filter_existing_processes(proc_list, suffix):
   return filter(lambda p: os.path.isfile(p + '-0.' + suffix), proc_list)
 
@@ -33,6 +37,20 @@ def get_final_yoda_names(base_names):
   return results
 
 
+def find_nlo_yodas(merged_yodas):
+  nlo_yodas = {}
+  for yoda in merged_yodas:
+    for comp in ['Born', 'Real', 'Virtual']:
+      if '_' + comp in str(yoda[0]):
+        target = str(yoda[0]).replace('_' + comp, '')
+        try:
+          nlo_yodas[target].append(yoda[0])
+        except KeyError:
+          nlo_yodas[target] = [yoda[0]]
+        break
+  return nlo_yodas
+
+
 # TODO: (bcn 2016-05-26) Add test
 
 def find_scale_variation_yodas(merged_yodas):
@@ -44,16 +62,16 @@ def find_scale_variation_yodas(merged_yodas):
       'proc_nlo_central_yodas': [],
       'proc_nlo_high_yodas': []}
   for yoda in merged_yodas:
-      if 'nlo_low' in str(yoda):
-        scale_variation_yodas['nlo_low'].append(yoda)
-      elif 'nlo_central' in str(yoda):
-        scale_variation_yodas['proc_nlo_central'].append(yoda)
-      elif 'nlo_high' in str(yoda):
-        scale_variation_yodas['proc_nlo_high'].append(yoda)
-      elif 'lo_low' in str(yoda):
-        scale_variation_yodas['proc_lo_low'].append(yoda)
-      elif 'lo_central' in str(yoda):
-        scale_variation_yodas['proc_lo_central'].append(yoda)
-      elif 'lo_high' in str(yoda):
-        scale_variation_yodas['proc_lo_high'].append(yoda)
+    if 'nlo_low' in str(yoda):
+      scale_variation_yodas['nlo_low'].append(yoda)
+    elif 'nlo_central' in str(yoda):
+      scale_variation_yodas['proc_nlo_central'].append(yoda)
+    elif 'nlo_high' in str(yoda):
+      scale_variation_yodas['proc_nlo_high'].append(yoda)
+    elif 'lo_low' in str(yoda):
+      scale_variation_yodas['proc_lo_low'].append(yoda)
+    elif 'lo_central' in str(yoda):
+      scale_variation_yodas['proc_lo_central'].append(yoda)
+    elif 'lo_high' in str(yoda):
+      scale_variation_yodas['proc_lo_high'].append(yoda)
   return scale_variation_yodas

@@ -39,6 +39,14 @@ def build_scale_variation_yodas(scale_variation_yodas, env):
   return final_nlo_yodas
 
 
+def build_nlo_yodas(yoda_dict, env):
+  final_nlo_yodas = []
+  for key in yoda_dict:
+    env.MergeYodasNoScale(target=key, source=yoda_dict[key])
+    final_nlo_yodas.append(key)
+  return final_nlo_yodas
+
+
 def build_yodas_from_hepmcs(env, proc_list):
   hepmcs = [glob(p + '-*.hepmc') for p in proc_list]
   print 'Building Yodas from these hepmcs:', hepmcs
