@@ -82,15 +82,16 @@ def get_name(line):
     return path
 
 
-def get_associated_plot_data(data, special):
+def get_associated_plot_data(data, special, suffix=""):
   special_data = []
   list_of_data = [s.get('data', []) for s in special]
+  print 'list_of_data: ', list_of_data
   for lbl_list in list_of_data:
     this_special_data = []
     for lbl in lbl_list:
       this_special_data += [d for d in data
-          if get_name(lbl) == d[0].replace('.dat', '')]
-    special_data += [this_special_data]
+          if get_name(lbl) + suffix == d[0].replace('.dat', '')]
+    special_data += this_special_data
   return special_data
 
 
@@ -149,9 +150,9 @@ def build_smooth(data, smooths):
 def build_fits(data, fits):
   fit_data = get_associated_plot_data(data, fits)
   for data_of_a_fit, fit in zip(fit_data, fits):
-    x = data_of_a_fit[0][1][0]
-    y = data_of_a_fit[0][1][1]
-    y_err = data_of_a_fit[0][1][2]
+    x = data_of_a_fit[1][0]
+    y = data_of_a_fit[1][1]
+    y_err = data_of_a_fit[1][2]
     xmin = fit.get('extrapolation_minus', min(x))
     xmax = fit.get('extrapolation_plus', max(x))
     degree = fit.get('fit_degree', -1)
@@ -162,8 +163,7 @@ def build_fits(data, fits):
       degree = 1
     fit_x, fit_y = fit_utils.fit_polynomial(x, y, xmin, xmax, degree,
       y_err=y_err, verbose=verbose)
-    fit_name = data_of_a_fit[0][0].replace('.dat', '_fit.dat')
-    print 'Appending Fit data:' + fit_name
+    fit_name = data_of_a_fit[0].replace('.dat', '_fit.dat')
     data.append((fit_name, np.array((fit_x, fit_y))))
   return data
 
@@ -555,19 +555,22 @@ def get_data_index(data, name):
   return -1
 
 
-def load_and_clean_files(files, plot_dict=None):
+def load_and_clean_files(files, plot_json=None):
   data = [(filename, np.loadtxt(filename, unpack=True)) for filename in files]
   data = remove_empty_data(data)
   data = sort_data(data)
   data = average_copies(data)
   data = build_nlo_sums(data)
+  plot_dict = plot_json.get('plots', None)
+  data = scale_data(data, plot_dict[0])
   if plot_dict is not None:
-    smooth_dict = plot_dict.get('smooth', None)
-    fit_dict = plot_dict.get('fits', None)
-    if smooth_dict is not None:
-      data = build_smooth(data, smooth_dict)
-    if fit_dict is not None:
-      data = build_fits(data, fit_dict)
+    for plot in plot_dict:
+      smooth_dict = plot.get('smooth', None)
+      fit_dict = plot.get('fits', None)
+      if smooth_dict is not None:
+        data = build_smooth(data, smooth_dict)
+      if fit_dict is not None:
+        data = build_fits(data, fit_dict)
   data = remove_empty_data(data)
   return data
 
@@ -628,14 +631,11 @@ def smooth_data_internal(x_values, y_values, delta):
   return smoothed_x, smoothed_y
 
 
-def scale_data(item_data, items):
-  for i_data, item in zip(item_data, items):
-    scale_by_value = item.get('scale_by_value', 0)
-    scale_by_point = item.get('scale_by_point', None)
-    if scale_by_value > 0 and (scale_by_point is not None):
-      print 'Cannot scale by a fixed value and with reference to a fixed point'
-      print 'at the same time. Not building ' + item[0]
-      return
+def scale_data(item_data, plot_dict):
+  scale_by_value = plot_dict.get('scale_by_value', 0)
+  scale_by_point = plot_dict.get('scale_by_point', None)
+  scale_by_x = plot_dict.get('scale_by_x', 0.0)
+  for i_data in item_data:
     if scale_by_value > 0:
       scale_by_value = float(scale_by_value)
       i_data[1][1] /= scale_by_value
@@ -660,4 +660,13 @@ def scale_data(item_data, items):
           i_data[1][2] /= scale_value
         except IndexError:
           pass
+    if scale_by_x:
+      x = i_data[1][0]
+      y = i_data[1][1]
+      if len(x) != len(y):
+        print 'Cannot scale by x: x and y array have different lengths!'
+        return
+      i_data[1][1] *= pow(i_data[1][0], scale_by_x)
+      i_data[1][2] *= pow(i_data[1][0], scale_by_x)
+
   return item_data

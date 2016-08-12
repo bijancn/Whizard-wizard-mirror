@@ -36,11 +36,11 @@ def main():
   files = glob.glob(data_path + '/*.dat')
   plot_json = load_json('plot.json')
   plot_dict = plot_json['plots']
-  data = data_utils.load_and_clean_files(files, plot_dict)
-  for item in data:
-    print 'Central value of: ', item[0]
-    print str(item[1][1][10]) + ' +- ' + str(item[1][2][10])
-  pool = mp.Pool(processes=3)
+  data = data_utils.load_and_clean_files(files, plot_json)
+  # for item in data:
+  #   print 'Central value of: ', item[0]
+  #   print str(item[1][1][10]) + ' +- ' + str(item[1][2][10])
+  pool = mp.Pool(processes=1)
   plot_this = partial(bcn_plot.plot,
                       plot_extra=plot_x_axis, data=data, pic_path=pic_path,
                       linestyle_decider=ls_decider, pretty_label=pretty_label)

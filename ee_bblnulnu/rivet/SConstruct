@@ -16,7 +16,7 @@ env['NUMTHREADS'] = '4'
 
 dirify = lambda d : d + '/index.html'
 
-processes = ['proc_lo',
+processes =  ['proc_lo',
              'proc_nlo_low_Born', 'proc_nlo_low_Real', 'proc_nlo_low_Virtual', 'proc_nlo_low_Mismatch', 
              'proc_nlo_central_Born', 'proc_nlo_central_Real', 'proc_nlo_central_Virtual', 'proc_nlo_central_Mismatch',
              'proc_nlo_high_Born', 'proc_nlo_high_Real', 'proc_nlo_high_Virtual', 'proc_nlo_high_Mismatch']

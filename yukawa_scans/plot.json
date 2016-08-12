@@ -1,43 +1,42 @@
 {
   "plots": [
-  {"title": "$e^+ e^- \\to t \\bar{t}H, \\quad \\sqrt{s} = 800 GeV$",
+  {"title": "$e^+ e^- \\to t \\bar{t}H, \\quad \\sqrt{s} = 800\\, \\rm{GeV}$",
    "output_file": "tth-yt-scan",
    "lines": [
    {"name": "proc_lo_tth",
     "label": "ttH - LO",
     "color": "blue",
-    "linestyle": "None",
-    "baseline_group": 1
+    "linestyle": "None"
    },
    {"name": "proc_nlo_tth",
     "label": "ttH - NLO",
     "color": "red",
-    "linestyle": "None",
-    "baseline_group": 1
+    "linestyle": "None"
    }
    ],
    "fits": [
    {"label": "Fit - ttH - NLO",
+    "hide_label": true,
     "color": "red",
     "linestyle": "solid",
     "fit_degree": 1,
     "print_fit_parameters": true,
-    "baseline_group": 1,
-    "is_baseline": true,
+    "base_line": {"name": "proc_lo_tth_fit"},
     "data": [{"name": "proc_nlo_tth"}
     ]
     },
    {"label": "Fit - ttH - LO",
+    "hide_label": true,
     "color": "blue",
     "linestyle": "solid",
     "print_fit_parameters": true, 
     "fit_degree": 1,
-    "baseline_group": 1,
+    "base_line": {"name": "proc_lo_tth_fit"},
     "data": [{"name": "proc_lo_tth"}
     ]
     }
    ],
-   "ratio": {"ylabel": "",
+   "ratio": {"ylabel": "K-factor",
       "ymax": 1.02, "ymin": 0.96,
       "ymajors": 4,
       "yticks": [0.96, 0.98, 1.0, 1.02]},
@@ -54,8 +53,8 @@
    "xticks": [0.9, 0.95, 1.0, 1.05, 1.1],
    "xminors": 4
    },
-   {"title": "bar",
-    "output_file": "check",
+   {"title": "$e^+ e^- \\to W^+ W^- b \\bar{b}H, \\quad \\sqrt{s} = 800 GeV$",
+    "output_file": "WbWbH-yt-scan",
     "lines": [ 
    {"name": "proc_lo_WbWbH",
     "label": "WbWbH - LO",
@@ -70,23 +69,27 @@
    ],
    "fits": [
    {"label": "Fit - WbWbH - NLO",
+    "hide_label": true,
     "color": "red",
     "linestyle": "solid",
     "fit_degree": 1,
     "print_fit_parameters": true,
+    "base_line": {"name": "proc_lo_WbWbH_fit"},
     "data": [{"name": "proc_nlo_WbWbH"}
     ]
     },
    {"label": "Fit - WbWbH - LO",
+    "hide_label": true,
     "color": "blue",
     "linestyle": "solid",
     "print_fit_parameters": true, 
     "fit_degree": 1,
+    "base_line": {"name": "proc_lo_WbWbH_fit"},
     "data": [{"name": "proc_lo_WbWbH"}
     ]
     }
    ],
-   "ratio": {"ylabel": "",
+   "ratio": {"ylabel": "K-factor",
       "ymax": 1.02, "ymin": 0.96,
       "ymajors": 4,
       "yticks": [0.96, 0.98, 1.0, 1.02]},

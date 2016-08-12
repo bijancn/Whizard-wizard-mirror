@@ -425,7 +425,7 @@ def select_data(data, plot_dict, title):
   bands = plot_dict.get('bands', [])
   band_data = data_utils.get_associated_plot_data(data, bands)
   fits = plot_dict.get('fits', [])
-  fit_data = data_utils.get_associated_plot_data(data, fits)
+  fit_data = data_utils.get_associated_plot_data(data, fits, suffix='_fit')
   n_objects = len(line_data) + len(band_data) + len(fit_data)
   many_labels = n_objects > 6
   check_for_all_sets(line_data, lines)
@@ -506,7 +506,8 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
         x, y and optionally yerror
   """
   title = plot_dict.get('title', 'plot')
-  mkdirs(pic_path)
+  if not os.path.isdir(pic_path):
+     mkdirs(pic_path)
   valid, line_data, band_data, fit_data, many_labels, lines, bands, fits = \
       select_data(data, plot_dict, title)
   if not valid:
