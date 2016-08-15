@@ -1,5 +1,9 @@
 Steering with `run.json`
 ================================================================================
+<script
+  src="http://lbovet.github.io/docson/widget.js"
+  data-schema="https://bitbucket.org/bijancn/run-scripts/raw/master/run-schema.json">
+</script>
 
 `processes`
 --------------------------------------------------------------------------------
@@ -32,3 +36,11 @@ General behavior
   `processname-template.sin` with a line `#ITERATIONS` and potentially
   `#SETSCAN`. For a `scan`, it is mandatory to give a template.
   It is assumed that the process name in sindarin is the same as `processname`
+
+Plotting with `plot.json`
+================================================================================
+
+<script
+  src="http://lbovet.github.io/docson/widget.js"
+  data-schema="https://bitbucket.org/bijancn/run-scripts/raw/master/plot-schema.json">
+</script>
