@@ -1,0 +1,58 @@
+{
+  "$schema": "json-schema.org/draft-04/schema#",
+  "definitions": {
+    "line_core": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "folder": { "type": "string" }
+      }
+    }
+  }
+  "type": "object",
+  "properties": {
+    "plots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "output_file": { "type": "string" },
+          "lines": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {"$ref": "#/definitions/line_core"},
+                {"properties": {
+                  "label": { "type": "string" },
+                  "linestyle": { "type": "string" },
+                  "base_line": { "$ref": "#/definitions/line_core" },
+                  "color": { "type": "string" }
+                } }
+              ]
+            }
+          }
+        }
+      },
+      "required": [
+        "1"
+      ]
+    },
+    "smooth": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "window_size": { "type": "number" },
+          "poly_order": { "type": "number" }
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/line_core" }
+          }
+        }
+      }
+    },
+    "data_output": { "type": "string" }
+  },
+  "required": [ "plots" ]
+}

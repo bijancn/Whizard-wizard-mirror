@@ -1,26 +1,21 @@
 Steering with `run.json`
 ================================================================================
+Run schema that shows which values can be used are found 
+[here](http://desy.de/~bcho/docson/#run-schema.json) (because Bitbucket does not allow custom HTML/Javascript).
 
-`processes`
---------------------------------------------------------------------------------
-This is an array of processes. Each process object can have the following values
+Some extra comments below:
 
 ### Possible values for `purpose` ###
 - `disabled`: Do nothing
-- `integrate`: Produce the integration grid for `events` or `histograms`
+- `integration`: Produce the integration grid for `events` or `histograms`
 - `events`: Produce `.hepmc`s and move them to the `rivet` folder
 - `histograms`: Setup FIFOs and directly produce `yodas` with rivet
-- `scan`: Define a `scan_object` within the `process` object together with
-  `start`, `stop` and `stepsize`
-
-### Values that depend on the `purpose` ###
+- `scan`: Setup a scan over values, see `scan_object`,
 
 ### General values ###
 - `whizard_options`: (optional) argument to Whizard. Default is '--no-banner'
 
-More general values
---------------------------------------------------------------------------------
-These apply for all processes:
+### For all processes ###
 - `whizard`: (optional) Allows to set an absolute path to your Whizard binary.
   Default is `whizard` which works with an installed Whizard.
 - `data_output`: Select a folder where to put the results (NOT FUNCTIONAL YET)
@@ -32,3 +27,8 @@ General behavior
   `processname-template.sin` with a line `#ITERATIONS` and potentially
   `#SETSCAN`. For a `scan`, it is mandatory to give a template.
   It is assumed that the process name in sindarin is the same as `processname`
+
+Plotting with `plot.json`
+================================================================================
+Plot schema that shows which values can be used are found 
+[here](http://desy.de/~bcho/docson/#plot-schema.json) (because Bitbucket does not allow custom HTML/Javascript).

@@ -1,0 +1,27 @@
+include("../process_settings_threshold.sin")
+
+library = PROCESS
+process PROCESS = e1, E1 => Wm, Wp, B, b
+compile
+
+nrqcd_order = 0
+FF = 1
+offshell_strategy = 0
+
+show(model)
+
+iterations = 3:20000:"gw",3:20000
+#ITERATIONS
+sqrts = 800 GeV
+real mass_cut = - 1
+#SETSCAN
+if (mass_cut > 0) then
+  cuts = all abs (M - mtpole) < mass_cut [Wp, b] and
+         all abs (M - mtpole) < mass_cut [Wm, B]
+endif
+sqrtsstepsize = 0.1 GeV
+sqrtsmin = sqrts - sqrtsstepsize
+sqrtsmax = sqrts + sqrtsstepsize
+
+integrate (PROCESS)
+printf "RES %g %g %g" (sqrts, integral(PROCESS), error(PROCESS))

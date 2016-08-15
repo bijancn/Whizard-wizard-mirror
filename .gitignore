@@ -39,6 +39,12 @@ whizard_uu_lo
 whizard_uu_powheg
 */whizard/*-[0-9]*/
 */whizard/*-integrate.sin
+*/whizard/*_Born.sin
+*/whizard/*_Real.sin
+*/whizard/*_Virtual.sin
+*/whizard/*_nlo.sin
+*/whizard/*_powheg.sin
+*/whizard/*_damped.sin
 .sconsign.dblite
 */rivet/*/
 *-[0-9]*/
@@ -52,5 +58,3 @@ ee_threshold/fixedorder_*
 ee_threshold/matched_*
 ee_threshold/nloop_*
 ee_threshold/resum_*
-top_decay/whizard/proc_nlo-integrate.sin
-top_decay/whizard/proc_lo-integrate.sin
