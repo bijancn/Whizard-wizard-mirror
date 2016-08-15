@@ -10,6 +10,11 @@ from termcolor import colored
 
 modified = re.compile('^(?:M|A)(\s+)(?P<name>.*)')
 
+EXTRA_COMMANDS = [
+    "cp plot-schema.json ~/www/docson",
+    "cp run-schema.json ~/www/docson"
+]
+
 CHECKS = [
     {
         'output': 'Checking for debugging statements...',
@@ -103,6 +108,10 @@ def main(all_files, syntax_only):
 
     result = 0
 
+    for command in EXTRA_COMMANDS:
+      process = subprocess.Popen(command,
+          stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+      out, err = process.communicate()
     print 'files to be checked =    ', files
     for check in CHECKS:
       result = check_files(files, check) or result

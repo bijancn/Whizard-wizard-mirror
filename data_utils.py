@@ -83,15 +83,19 @@ def get_name(line):
 
 
 def get_associated_plot_data(data, special, suffix=""):
+  """This returns a list of lists of data tuples.
+
+  This list of list is important for bands because you have to know which lines
+  belong to a set.
+  """
   special_data = []
   list_of_data = [s.get('data', []) for s in special]
-  print 'list_of_data: ', list_of_data
   for lbl_list in list_of_data:
     this_special_data = []
     for lbl in lbl_list:
       this_special_data += [d for d in data
           if get_name(lbl) + suffix == d[0].replace('.dat', '')]
-    special_data += this_special_data
+    special_data += [this_special_data]
   return special_data
 
 
@@ -562,15 +566,16 @@ def load_and_clean_files(files, plot_json=None):
   data = average_copies(data)
   data = build_nlo_sums(data)
   plot_dict = plot_json.get('plots', None)
+  #  TODO: (bcn 2016-08-15) this allows to overwrite the data according to the
+  #  first plot?? I think I would prefer a suffix construction here as well
   data = scale_data(data, plot_dict[0])
-  if plot_dict is not None:
-    for plot in plot_dict:
-      smooth_dict = plot.get('smooth', None)
-      fit_dict = plot.get('fits', None)
-      if smooth_dict is not None:
-        data = build_smooth(data, smooth_dict)
-      if fit_dict is not None:
-        data = build_fits(data, fit_dict)
+  if plot_json is not None:
+    smooth_dict = plot_json.get('smooth', None)
+    fit_dict = plot_json.get('fits', None)
+    if smooth_dict is not None:
+      data = build_smooth(data, smooth_dict)
+    if fit_dict is not None:
+      data = build_fits(data, fit_dict)
   data = remove_empty_data(data)
   return data
 

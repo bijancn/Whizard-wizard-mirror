@@ -388,7 +388,9 @@ def select_data(data, plot_dict, title):
   lines = plot_dict.get('lines', [])
   for line in lines:
     line_data += [d for d in data if get_name(line) == d[0].replace('.dat', '')]
-  line_data = data_utils.scale_data(line_data, lines)
+  #  TODO: (bcn 2016-08-15) I don't see how you would scale the lines in a plot
+  #  without this but it does not work with the new scale_data function
+  # line_data = data_utils.scale_data(line_data, lines)
   bands = plot_dict.get('bands', [])
   band_data = data_utils.get_associated_plot_data(data, bands)
   fits = plot_dict.get('fits', [])
@@ -473,15 +475,11 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
         x, y and optionally yerror
   """
   title = plot_dict.get('title', 'plot')
-  if not os.path.isdir(pic_path):
-     mkdirs(pic_path)
+  mkdirs(pic_path)
   valid, line_data, band_data, fit_data, many_labels, lines, bands, fits = \
       select_data(data, plot_dict, title)
   if not valid:
     return
-  # We are going to use this in the future
-  # TODO: (bcn 2016-06-29) Really?
-  # groups = create_baseline_groups(data, plot_dict)
   ratio_dict = plot_dict.get('ratio', None)
   fig_kwargs = setup_ranges(range_decider, line_data,
       band_data, title, plot_dict, ratio_dict)

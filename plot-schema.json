@@ -7,8 +7,17 @@
         "name": { "type": "string" },
         "folder": { "type": "string" }
       }
+    },
+    "plot_element": {
+      "type": "object",
+      "properties": {
+        "opacity": { "type": "number" },
+        "label": { "type": "string" },
+        "color": { "type": "string" },
+        "base_line": { "$ref": "#/definitions/line_core" }
+      }
     }
-  }
+  },
   "type": "object",
   "properties": {
     "plots": {
@@ -23,11 +32,23 @@
             "items": {
               "allOf": [
                 {"$ref": "#/definitions/line_core"},
+                {"$ref": "#/definitions/plot_element"},
                 {"properties": {
-                  "label": { "type": "string" },
-                  "linestyle": { "type": "string" },
-                  "base_line": { "$ref": "#/definitions/line_core" },
-                  "color": { "type": "string" }
+                  "linestyle": { "type": "string" }
+                } }
+              ]
+            }
+          },
+          "bands": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {"$ref": "#/definitions/plot_element"},
+                {"properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/line_core"}
+                  }
                 } }
               ]
             }
@@ -44,7 +65,7 @@
         "type": "object",
         "properties": {
           "window_size": { "type": "number" },
-          "poly_order": { "type": "number" }
+          "poly_order": { "type": "number" },
           "data": {
             "type": "array",
             "items": { "$ref": "#/definitions/line_core" }
@@ -52,7 +73,21 @@
         }
       }
     },
-    "data_output": { "type": "string" }
-  },
-  "required": [ "plots" ]
+    "fits": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "fit_degree": { "type": "number" },
+          "print_fit_parameters": { "type": "boolean" },
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/line_core" }
+          }
+        }
+      }
+    },
+    "data_output": { "type": "string" },
+    "required": [ "plots" ]
+  }
 }
