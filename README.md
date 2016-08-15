@@ -1,30 +1,21 @@
 Steering with `run.json`
 ================================================================================
-<script
-  src="http://lbovet.github.io/docson/widget.js"
-  data-schema="https://bitbucket.org/bijancn/run-scripts/raw/master/run-schema.json">
-</script>
+Run schema that shows which values can be used are found 
+[here](http://desy.de/~bcho/docson/#run-schema.json) (because Bitbucket does not allow custom HTML/Javascript).
 
-`processes`
---------------------------------------------------------------------------------
-This is an array of processes. Each process object can have the following values
+Some extra comments below:
 
 ### Possible values for `purpose` ###
 - `disabled`: Do nothing
-- `integrate`: Produce the integration grid for `events` or `histograms`
+- `integration`: Produce the integration grid for `events` or `histograms`
 - `events`: Produce `.hepmc`s and move them to the `rivet` folder
 - `histograms`: Setup FIFOs and directly produce `yodas` with rivet
-- `scan`: Define a `scan_object` within the `process` object together with
-  `start`, `stop` and `stepsize`
-
-### Values that depend on the `purpose` ###
+- `scan`: Setup a scan over values, see `scan_object`,
 
 ### General values ###
 - `whizard_options`: (optional) argument to Whizard. Default is '--no-banner'
 
-More general values
---------------------------------------------------------------------------------
-These apply for all processes:
+### For all processes ###
 - `whizard`: (optional) Allows to set an absolute path to your Whizard binary.
   Default is `whizard` which works with an installed Whizard.
 - `data_output`: Select a folder where to put the results (NOT FUNCTIONAL YET)
@@ -39,8 +30,5 @@ General behavior
 
 Plotting with `plot.json`
 ================================================================================
-
-<script
-  src="http://lbovet.github.io/docson/widget.js"
-  data-schema="https://bitbucket.org/bijancn/run-scripts/raw/master/plot-schema.json">
-</script>
+Plot schema that shows which values can be used are found 
+[here](http://desy.de/~bcho/docson/#plot-schema.json) (because Bitbucket does not allow custom HTML/Javascript).
