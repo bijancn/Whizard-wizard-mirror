@@ -6,7 +6,8 @@
       "properties": {
         "name": { "type": "string" },
         "folder": { "type": "string" }
-      }
+      },
+      "required": ["name"]
     },
     "plot_element": {
       "type": "object",
@@ -16,6 +17,16 @@
         "color": { "type": "string" },
         "base_line": { "$ref": "#/definitions/line_core" }
       }
+    },
+    "y_properties": {
+      "type": "object",
+      "properties": {
+        "ymin": { "type": "number" },
+        "ymax": { "type": "number" },
+        "ylog": { "type": "boolean" },
+        "ylabel": { "type": "string" },
+        "ymajors": { "type": "number" }
+      }
     }
   },
   "type": "object",
@@ -24,36 +35,49 @@
       "type": "array",
       "items": {
         "type": "object",
-        "properties": {
-          "title": { "type": "string" },
-          "output_file": { "type": "string" },
-          "lines": {
-            "type": "array",
-            "items": {
-              "allOf": [
-                {"$ref": "#/definitions/line_core"},
-                {"$ref": "#/definitions/plot_element"},
-                {"properties": {
-                  "linestyle": { "type": "string" }
-                } }
-              ]
-            }
-          },
-          "bands": {
-            "type": "array",
-            "items": {
-              "allOf": [
-                {"$ref": "#/definitions/plot_element"},
-                {"properties": {
-                  "data": {
-                    "type": "array",
-                    "items": {"$ref": "#/definitions/line_core"}
-                  }
-                } }
-              ]
-            }
-          }
-        }
+        "allOf": [
+          {"type": "object",
+            "properties": {
+              "title": { "type": "string" },
+              "output_file": { "type": "string" },
+              "lines": {
+                "type": "array",
+                "items": {
+                  "allOf": [
+                    {"$ref": "#/definitions/line_core"},
+                    {"$ref": "#/definitions/plot_element"},
+                    {"type": "object", "properties": {
+                      "linestyle": { "type": "string" }
+                    } }
+                  ]
+                }
+              },
+              "bands": {
+                "type": "array",
+                "items": {
+                  "allOf": [
+                    {"$ref": "#/definitions/plot_element"},
+                    {"properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {"$ref": "#/definitions/line_core"}
+                      }
+                    } }
+                  ]
+                }
+              },
+              "xmin": { "type": "number" },
+              "xmax": { "type": "number" },
+              "xmajors": { "type": "number" },
+              "xminors": { "type": "number" },
+              "yminors": { "type": "number" },
+              "xlog": { "type": "boolean" },
+              "legend_outside": { "type": "boolean" },
+              "xlabel": { "type": "string" },
+              "ratio": { "$ref": "#/definitions/y_properties" }
+            }},
+            { "$ref": "#/definitions/y_properties" }
+        ]
       },
       "required": [
         "1"
@@ -87,7 +111,7 @@
         }
       }
     },
-    "data_output": { "type": "string" },
-    "required": [ "plots" ]
-  }
+    "data_output": { "type": "string" }
+  },
+  "required": [ "plots" ]
 }

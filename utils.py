@@ -195,7 +195,7 @@ def load_json(json_file):
   except IOError:
     fatal('json not found: ' + json_file)
   except ValueError:
-    fatal('json seems invalid. Check it on http://jsonlint.com/')
+    fatal('json (' + json_file + ') seems invalid. Check it on http://jsonlint.com/')
 
 
 def retrieve_and_validate_json(process_folder, json_name='run.json',
