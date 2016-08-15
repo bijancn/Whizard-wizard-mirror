@@ -9,8 +9,8 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 import bcn_plot
-from utils import load_json
-import data_utils
+import utils as ut
+import data_utils as dt
 
 
 def ls_decider(lbl, title):
@@ -38,8 +38,9 @@ def main():
   files = glob.glob(data_path + '/*.dat')
   files += glob.glob(data_path2 + '/*.dat')
   files += glob.glob(data_path3 + '/*.dat')
-  plot_json = load_json('plot.json')
-  data = data_utils.load_and_clean_files(files, plot_json)
+  plot_json = ut.retrieve_and_validate_json('./', json_name='plot.json',
+      schema_name='../plot-schema.json')
+  data = dt.load_and_clean_files(files, plot_json)
   pool = mp.Pool(processes=3)
   plot_this = partial(bcn_plot.plot, plot_extra=plot_x_axis, data=data,
       pic_path=pic_path, linestyle_decider=ls_decider, pretty_label=pretty_label)
