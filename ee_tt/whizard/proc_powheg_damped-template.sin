@@ -1,0 +1,23 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+?fixed_order_nlo_events = false
+?combined_nlo_integration = true
+$loop_me_method = "openloops"
+?powheg_matching = true
+powheg_grid_size_xi = 5
+powheg_grid_size_y = 5
+powheg_grid_sampling_points = 5000000
+powheg_pt_min = 1
+?powheg_use_singular_jacobian = false
+?powheg_use_damping = true
+powheg_damping_scale = 1 GeV
+wtop = 0.0
+
+library = PROCESS
+process PROCESS = E1, e1 => t, T {nlo_calculation="Full"}
+
+#ITERATIONS
+#SETSCAN
+
+integrate (PROCESS)
