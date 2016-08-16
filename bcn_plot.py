@@ -465,7 +465,7 @@ def try_update(new_dict, reference_dict, key):
   return new_dict
 
 
-def plot_extra_lines_and_texts(axes, plot_dict, global_opacity):
+def plot_extra_lines_and_texts(ax, plot_dict, global_opacity):
   extra_lines = plot_dict.get('extra_lines', [])
   extra_texts = plot_dict.get('extra_texts', [])
   for extra in extra_lines + extra_texts:
@@ -474,18 +474,17 @@ def plot_extra_lines_and_texts(axes, plot_dict, global_opacity):
     kwargs = {}
     kwargs['alpha'] = extra.get('opacity', global_opacity)
     kwargs['color'] = extra.get('color', 'black')
-    for ax in axes:
-      if extype == "vertical":
-        ax.axvline(extra['value'], **kwargs)
-      elif extype == "horizontal":
-        ax.axhline(extra['value'], **kwargs)
-      elif extext is not None:
-        kwargs = try_update(kwargs, extra, 'fontsize')
-        kwargs = try_update(kwargs, extra, 'verticalalignment')
-        kwargs = try_update(kwargs, extra, 'horizontalalignment')
-        ax.text(extra['x'], extra['y'], extext, **kwargs)
-      else:
-        print 'Cannot draw this extra object:', extra
+    if extype == "vertical":
+      ax.axvline(extra['value'], **kwargs)
+    elif extype == "horizontal":
+      ax.axhline(extra['value'], **kwargs)
+    elif extext is not None:
+      kwargs = try_update(kwargs, extra, 'fontsize')
+      kwargs = try_update(kwargs, extra, 'verticalalignment')
+      kwargs = try_update(kwargs, extra, 'horizontalalignment')
+      ax.text(extra['x'], extra['y'], extext, **kwargs)
+    else:
+      print 'Cannot draw this extra object:', extra
 
 
 def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
@@ -514,6 +513,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     this_plot_func = partial(partial(combined_plot, ax), ax1)
     this_fill_between_func = partial(partial(combined_fill_between, ax), ax1)
     axes = [ax, ax1]
+    dicts = [plot_dict, ratio_dict]
   else:
     ax = fig.add_subplot(1, 1, 1)
     this_plot = ax.plot
@@ -521,11 +521,13 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     this_fill_between = ax.fill_between
     ax1 = None
     axes = [ax]
+    dicts = [plot_dict]
   fig_kwargs['ax1'] = ax1
   global_opacity = plot_dict.get('opacity', 0.3)
   if plot_extra is not None:
     ax = plot_extra(ax, title)
-  plot_extra_lines_and_texts(axes, plot_dict, global_opacity)
+  for axx, dictt in zip(axes, dicts):
+    plot_extra_lines_and_texts(axx, dictt, global_opacity)
   fig_kwargs.update(setup_majors(plot_dict, ratio_dict))
   fig_kwargs.update(setup_minors(plot_dict, ratio_dict))
   fig_kwargs.update(setup_labels(label_decider, title, plot_dict, ratio_dict))

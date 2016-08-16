@@ -1,177 +1,204 @@
 {
   "plots": [
-  {"title": "$e^+ e^- \\to t \\bar{t} H\\;$ and $\\;e^+ e^- \\to W^+ W^- b \\bar{b} H$",
-   "output_file": "tth-scan-combined",
-   "lines": [
-   {"name": "proc_lo",
-    "label": "LO - offshell",
-    "color": "blue"
-   },
-   {"name": "proc_nlo_central",
-    "label": "NLO - offshell",
-    "color": "red"
-   },
-   {"name": "proc_lo",
-    "folder": "../ee_tth_scan/",
-    "linestyle": "dashed",
-    "label": "LO",
-    "color": "black",
-    "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
-   },
-   {"name": "proc_nlo_central",
-    "folder": "../ee_tth_scan/",
-    "linestyle": "dashed",
-    "label": "NLO",
-    "color": "#109618",
-    "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
-   }
-   ],
-   "bands": [
-     {"opacity": 0.4,
-       "label": "",
-       "color": "#109618",
-       "data":[{"name": "proc_nlo_central", "folder": "../ee_tth_scan/"},
-         {"name": "proc_nlo_high", "folder": "../ee_tth_scan/"},
-         {"name": "proc_nlo_low", "folder": "../ee_tth_scan/"}
-       ],
-       "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
-     },
-     {"label": "",
-       "opacity": 0.2,
-       "color": "red",
-       "data":
-         [{"name": "proc_nlo_central"},
-         {"name": "proc_nlo_high"},
-         {"name": "proc_nlo_low"}
-         ],
-       "base_line": {"name": "proc_lo"}
-     }
-   ],
-   "ratio": {"ylabel": "K-factor",
+    {"title": "$e^+ e^- \\to t \\bar{t} H\\;$ and $\\;e^+ e^- \\to W^+ W^- b \\bar{b} H$",
+      "output_file": "tth-scan-combined",
+      "lines": [
+        {"name": "proc_lo",
+          "label": "LO - offshell",
+          "color": "blue"
+        },
+        {"name": "proc_nlo_central",
+          "label": "NLO - offshell",
+          "color": "red"
+        },
+        {"name": "proc_lo",
+          "folder": "../ee_tth_scan/",
+          "linestyle": "dashed",
+          "label": "LO",
+          "color": "black",
+          "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
+        },
+        {"name": "proc_nlo_central",
+          "folder": "../ee_tth_scan/",
+          "linestyle": "dashed",
+          "label": "NLO",
+          "color": "#109618",
+          "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
+        }
+      ],
+      "bands": [
+        {"opacity": 0.4,
+          "label": "",
+          "color": "#109618",
+          "data":[{"name": "proc_nlo_central", "folder": "../ee_tth_scan/"},
+            {"name": "proc_nlo_high", "folder": "../ee_tth_scan/"},
+            {"name": "proc_nlo_low", "folder": "../ee_tth_scan/"}
+          ],
+          "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
+        },
+        {"label": "",
+          "opacity": 0.2,
+          "color": "red",
+          "data":
+          [{"name": "proc_nlo_central"},
+            {"name": "proc_nlo_high"},
+            {"name": "proc_nlo_low"}
+          ],
+          "base_line": {"name": "proc_lo"}
+        }
+      ],
+      "extra_texts": [
+        { "x": 800,
+          "y": 0.5,
+          "color": "gray",
+          "opacity": 1.0,
+          "verticalalignment": "center",
+          "horizontalalignment": "center",
+          "text": "\\textsc{Whizard+OpenLoops}"}
+      ],
+      "ratio": {"ylabel": "K-factor",
         "ymax": 2.25, "ymin": 0.75, "ymajors": 4},
-   "xlabel": "$\\sqrt{s}\\;$ [GeV]",
-   "ylabel": "$\\sigma$ [fb]",
-   "ymin": 0,
-   "ymax": 3.0,
-   "xmin": 400,
-   "xmax": 1500,
-   "xmajors": 5,
-   "ymajors": 7,
-   "yminors": 8,
-   "ylog": false,
-   "xlog": false,
-   "legend_outside": false
-   },
-  {"title": "$e^+ e^- \\to t \\bar{t} H\\;$ and $\\;e^+ e^- \\to W^+ W^- b \\bar{b} H$",
-   "output_file": "tth-scan-combined-3000",
-   "lines": [
-   {"name": "proc_lo",
-    "label": "LO - offshell",
-    "color": "blue"
-   },
-   {"name": "proc_nlo_central",
-    "label": "NLO - offshell",
-    "color": "red"
-   },
-   {"name": "proc_lo",
-    "folder": "../ee_tth_scan/",
-    "linestyle": "dashed",
-    "label": "LO",
-    "color": "black",
-    "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
-   },
-   {"name": "proc_nlo_central",
-    "folder": "../ee_tth_scan/",
-    "linestyle": "dashed",
-    "label": "NLO",
-    "color": "#109618",
-    "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
-   }
-   ],
-   "bands": [
-     {"opacity": 0.4,
-       "label": "",
-       "color": "#109618",
-       "data":[{"name": "proc_nlo_central", "folder": "../ee_tth_scan/"},
-         {"name": "proc_nlo_high", "folder": "../ee_tth_scan/"},
-         {"name": "proc_nlo_low", "folder": "../ee_tth_scan/"}
-       ],
-       "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
-     },
-     {"label": "",
-       "opacity": 0.2,
-       "color": "red",
-       "data":
-         [{"name": "proc_nlo_central"},
-         {"name": "proc_nlo_high"},
-         {"name": "proc_nlo_low"}
-         ],
-       "base_line": {"name": "proc_lo"}
-     }
-   ],
-   "ratio": {"ylabel": "K-factor",
+        "xlabel": "$\\sqrt{s}\\;$ [GeV]",
+        "ylabel": "$\\sigma$ [fb]",
+        "ymin": 0,
+        "ymax": 3.0,
+        "xmin": 400,
+        "xmax": 1500,
+        "xmajors": 5,
+        "ymajors": 7,
+        "yminors": 8,
+        "ylog": false,
+        "xlog": false,
+        "legend_outside": false
+    },
+    {"title": "$e^+ e^- \\to t \\bar{t} H\\;$ and $\\;e^+ e^- \\to W^+ W^- b \\bar{b} H$",
+      "output_file": "tth-scan-combined-3000",
+      "lines": [
+        {"name": "proc_lo",
+          "label": "LO - offshell",
+          "color": "blue"
+        },
+        {"name": "proc_nlo_central",
+          "label": "NLO - offshell",
+          "color": "red"
+        },
+        {"name": "proc_lo",
+          "folder": "../ee_tth_scan/",
+          "linestyle": "dashed",
+          "label": "LO",
+          "color": "black",
+          "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
+        },
+        {"name": "proc_nlo_central",
+          "folder": "../ee_tth_scan/",
+          "linestyle": "dashed",
+          "label": "NLO",
+          "color": "#109618",
+          "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
+        }
+      ],
+      "bands": [
+        {"opacity": 0.4,
+          "label": "",
+          "color": "#109618",
+          "data":[{"name": "proc_nlo_central", "folder": "../ee_tth_scan/"},
+            {"name": "proc_nlo_high", "folder": "../ee_tth_scan/"},
+            {"name": "proc_nlo_low", "folder": "../ee_tth_scan/"}
+          ],
+          "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
+        },
+        {"label": "",
+          "opacity": 0.2,
+          "color": "red",
+          "data":
+          [{"name": "proc_nlo_central"},
+            {"name": "proc_nlo_high"},
+            {"name": "proc_nlo_low"}
+          ],
+          "base_line": {"name": "proc_lo"}
+        }
+      ],
+      "extra_texts": [
+        { "x": 1050,
+          "y": 0.5,
+          "color": "gray",
+          "opacity": 1.0,
+          "verticalalignment": "center",
+          "horizontalalignment": "center",
+          "text": "\\textsc{Whizard+OpenLoops}"}
+      ],
+      "ratio": {"ylabel": "K-factor",
         "ymax": 2.25, "ymin": 0.75, "ymajors": 4},
-   "xlabel": "$\\sqrt{s}\\;$ [GeV]",
-   "ylabel": "$\\sigma$ [fb]",
-   "ymin": 0,
-   "ymax": 3.0,
-   "xmin": 400,
-   "xmax": 3000,
-   "xmajors": 5,
-   "ymajors": 7,
-   "yminors": 8,
-   "ylog": false,
-   "xlog": false,
-   "legend_outside": false
-   },
-   {"title": "$e^+ e^- \\to t \\bar{t} H\\;$ and $\\;e^+ e^- \\to W^+ W^- b \\bar{b} H$ at $\\sqrt{s}=800 \\text{GeV}$",
-     "output_file": "tth-mu-scan",
-     "lines": [
-       {"name": "proc_nlo_tth_scale_smooth",
-         "folder": "../scale_scans",
-         "label": "$t \\bar{t} H$"
-       },
-       {"name": "proc_nlo_WbWbH_scale_smooth",
-         "folder": "../scale_scans",
-         "label": "$W^+ W^- b \\bar{b}H$"
-       }
-     ],
-     "extra_lines": [
-       {"type": "vertical", "value": 2.0, "color": "gray" },
-       {"type": "vertical", "value": 0.5, "color": "gray" }
-     ],
-     "xlabel": "$\\mu_R / (m_t + m_H)$",
-     "ylabel": "$\\sigma(\\mu_R) / \\sigma(\\mu_R = \\mu_0)$",
-     "ylog": false,
-     "xlog": true,
-     "xminors": 0,
-     "yminors": 5,
-     "ymin": 0.90,
-     "ymax": 1.05,
-     "ymajors": 7,
-     "xticks": [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0]
-   }
+        "xlabel": "$\\sqrt{s}\\;$ [GeV]",
+        "ylabel": "$\\sigma$ [fb]",
+        "ymin": 0,
+        "ymax": 3.0,
+        "xmin": 400,
+        "xmax": 3000,
+        "xmajors": 5,
+        "ymajors": 7,
+        "yminors": 8,
+        "ylog": false,
+        "xlog": false,
+        "legend_outside": false
+    },
+    {"title": "$e^+ e^- \\to t \\bar{t} H\\;$ and $\\;e^+ e^- \\to W^+ W^- b \\bar{b} H$ at $\\sqrt{s}=800 \\text{GeV}$",
+      "output_file": "tth-mu-scan",
+      "lines": [
+        {"name": "proc_nlo_tth_scale_smooth",
+          "folder": "../scale_scans",
+          "label": "$t \\bar{t} H$"
+        },
+        {"name": "proc_nlo_WbWbH_scale_smooth",
+          "folder": "../scale_scans",
+          "label": "$W^+ W^- b \\bar{b}H$"
+        }
+      ],
+      "extra_lines": [
+        {"type": "vertical", "value": 2.0, "color": "gray" },
+        {"type": "vertical", "value": 0.5, "color": "gray" }
+      ],
+      "extra_texts": [
+        { "x": 4.0,
+          "y": 0.91,
+          "color": "gray",
+          "opacity": 1.0,
+          "verticalalignment": "center",
+          "horizontalalignment": "center",
+          "text": "\\textsc{Whizard+OpenLoops}"}
+      ],
+      "xlabel": "$\\mu_R / (m_t + m_H)$",
+      "ylabel": "$\\sigma(\\mu_R) / \\sigma(\\mu_R = \\mu_0)$",
+      "ylog": false,
+      "xlog": true,
+      "xminors": 0,
+      "yminors": 5,
+      "ymin": 0.90,
+      "ymax": 1.05,
+      "ymajors": 7,
+      "xticks": [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0]
+    }
   ],
   "scalings": [
-  {"scale_by_point": 1.0,
-   "data": [{"name": "proc_nlo_tth", "folder": "../scale_scans"},
-            {"name": "proc_nlo_WbWbH", "folder": "../scale_scans"}
-   ]
-  }
- ],
+    {"scale_by_point": 1.0,
+      "data": [{"name": "proc_nlo_tth", "folder": "../scale_scans"},
+        {"name": "proc_nlo_WbWbH", "folder": "../scale_scans"}
+      ]
+    }
+  ],
   "smooth": [
-  {"window_size": 5,
-   "poly_order": 1,
-   "data": [{"name": "proc_nlo_central"},
-            {"name": "proc_nlo_low"},
-            {"name": "proc_nlo_high"}
-   ]
-  },
-  {"window_size": 3,
-   "poly_order": 1,
-   "data": [{"name": "proc_nlo_tth_scale", "folder": "../scale_scans"},
-            {"name": "proc_nlo_WbWbH_scale", "folder": "../scale_scans"}
-   ]
-  }
- ]
+    {"window_size": 5,
+      "poly_order": 1,
+      "data": [{"name": "proc_nlo_central"},
+        {"name": "proc_nlo_low"},
+        {"name": "proc_nlo_high"}
+      ]
+    },
+    {"window_size": 3,
+      "poly_order": 1,
+      "data": [{"name": "proc_nlo_tth_scale", "folder": "../scale_scans"},
+        {"name": "proc_nlo_WbWbH_scale", "folder": "../scale_scans"}
+      ]
+    }
+  ]
 }

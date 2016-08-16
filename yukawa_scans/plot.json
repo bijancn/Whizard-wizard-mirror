@@ -82,6 +82,15 @@
           "base_line": { "name": "proc_lo_WbWbH_fit" }
         }
       ],
+      "extra_texts": [
+        { "x": 1.05,
+          "y": 1.9,
+          "color": "gray",
+          "opacity": 1.0,
+          "verticalalignment": "center",
+          "horizontalalignment": "center",
+          "text": "\\textsc{Whizard+OpenLoops}"}
+      ],
       "ratio": {"ylabel": "K-factor",
         "ymax": 1.02, "ymin": 0.96,
         "ymajors": 4,
