@@ -37,6 +37,23 @@
         }
       }
     },
+    "extra_text": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "`text` to be displayed. Can contain (escaped) latex."
+        },
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "fontsize": { "type": "number" },
+        "opacity": { "type": "number" },
+        "verticalalignment" : { "type": "string" },
+        "horizontalalignment" : { "type": "string" },
+        "color" : { "type": "string" }
+      },
+      "required": [ "text", "x", "y" ]
+    },
     "line": {
       "allOf": [
         {"$ref": "#/definitions/line_core"},
@@ -101,6 +118,10 @@
               "type": "array",
               "items": {"type": "number"}
             },
+            "extra_texts": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/extra_text"}
+            },
             "extra_lines": {
               "type": "array",
               "items": {
@@ -118,7 +139,8 @@
                 }
               }
             },
-            "ratio": { "$ref": "#/definitions/y_properties" }
+            "ratio": { "$ref": "#/definitions/y_properties" },
+            "opacity": { "type": "number" }
           }
         },
         { "$ref": "#/definitions/y_properties" }
@@ -134,6 +156,7 @@
         "xminors": {},
         "xlog": {},
         "legend_outside": {},
+        "extra_texts": {},
         "extra_lines": {},
         "xticks": {},
         "xlabel": {},

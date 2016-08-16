@@ -456,15 +456,36 @@ def use_local_or_global_base_line(band_or_line, data, this_errorbar_func,
   return this_errorbar, this_plot, this_fill_between
 
 
-def plot_extra_lines(ax, ax1, plot_dict, global_opacity):
-  extra_lines = plot_dict.get('extra_lines', None)
-  if extra_lines is not None:
-    for exline in extra_lines:
-      extype = exline.get('type', None)
+#  TODO: (bcn 2016-08-16) could this be done better with `update`?
+def try_update(new_dict, reference_dict, key):
+  try:
+    new_dict[key] = reference_dict[key]
+  except KeyError:
+    pass
+  return new_dict
+
+
+def plot_extra_lines_and_texts(axes, plot_dict, global_opacity):
+  extra_lines = plot_dict.get('extra_lines', [])
+  extra_texts = plot_dict.get('extra_texts', [])
+  for extra in extra_lines + extra_texts:
+    extype = extra.get('type', None)
+    extext = extra.get('text', None)
+    kwargs = {}
+    kwargs['alpha'] = extra.get('opacity', global_opacity)
+    kwargs['color'] = extra.get('color', 'black')
+    for ax in axes:
       if extype == "vertical":
-        ax.axvline(exline['value'], color=exline['color'], alpha=global_opacity)
+        ax.axvline(extra['value'], **kwargs)
       elif extype == "horizontal":
-        ax.axhline(exline['value'], color=exline['color'], alpha=global_opacity)
+        ax.axhline(extra['value'], **kwargs)
+      elif extext is not None:
+        kwargs = try_update(kwargs, extra, 'fontsize')
+        kwargs = try_update(kwargs, extra, 'verticalalignment')
+        kwargs = try_update(kwargs, extra, 'horizontalalignment')
+        ax.text(extra['x'], extra['y'], extext, **kwargs)
+      else:
+        print 'Cannot draw this extra object:', extra
 
 
 def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
@@ -492,17 +513,19 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     this_errorbar_func = partial(partial(combined_errorbar, ax), ax1)
     this_plot_func = partial(partial(combined_plot, ax), ax1)
     this_fill_between_func = partial(partial(combined_fill_between, ax), ax1)
+    axes = [ax, ax1]
   else:
     ax = fig.add_subplot(1, 1, 1)
     this_plot = ax.plot
     this_errorbar = ax.errorbar
     this_fill_between = ax.fill_between
     ax1 = None
+    axes = [ax]
   fig_kwargs['ax1'] = ax1
   global_opacity = plot_dict.get('opacity', 0.3)
   if plot_extra is not None:
     ax = plot_extra(ax, title)
-  plot_extra_lines(ax, ax1, plot_dict, global_opacity)
+  plot_extra_lines_and_texts(axes, plot_dict, global_opacity)
   fig_kwargs.update(setup_majors(plot_dict, ratio_dict))
   fig_kwargs.update(setup_minors(plot_dict, ratio_dict))
   fig_kwargs.update(setup_labels(label_decider, title, plot_dict, ratio_dict))
