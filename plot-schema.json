@@ -150,6 +150,36 @@
       "items": { "$ref": "#/definitions/plot"},
       "required": [ "1" ]
     },
+    "scalings": {
+      "type": "array",
+      "description": "For each `line_core` in `data` it will create a scaled version",
+      "items": {
+        "type": "object",
+        "properties": {
+          "scale_by_point": {
+            "type": "number",
+            "description": "y-values (and errors) will be divided by the `y` value of the point with `x == scale_by_point`"
+          },
+          "scale_by_value": {
+            "type": "number",
+            "description": "y-values (and errors) will be divided by `scale_by_value`"
+          },
+          "scale_by_x": {
+            "type": "number",
+            "description": "y-values (and errors) will be multiplied at each point with `x**scale_by_x`"
+          },
+          "suffix": {
+            "type": "string",
+            "description": "Not supported yet. Default is `_scale`."
+          },
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/line_core" }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
     "smooth": {
       "type": "array",
       "description": "For each `line_core` in `data` it will create a smoothed version",
@@ -176,7 +206,12 @@
       "items": {
         "type": "object",
         "properties": {
-          "fit_degree": { "type": "number" },
+          "fit_degree": {
+            "type": "number",
+            "minimum": 0.0
+          },
+          "extrapolation_minus": { "type": "number" },
+          "extrapolation_plus": { "type": "number" },
           "print_fit_parameters": { "type": "boolean" },
           "suffix": {
             "type": "string",

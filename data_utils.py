@@ -117,43 +117,48 @@ def build_nlo_sums(data):
         combined_x, combined_y, combined_yerr = build_sum(data, indices)
         combined_name = item[0].replace('_Born', '')
         array = np.array((combined_x, combined_y, combined_yerr))
-        print 'Appending ' + combined_name + ' to data'
+        print 'Appending ' + combined_name
         data.append((combined_name, array))
       except StopIteration:
         pass
   return data
 
 
-def build_smooth(data, smooths):
-  smooth_data = get_associated_plot_data(data, smooths)
-  for data_of_a_smooth, smooth in zip(smooth_data, smooths):
-    for i, item in enumerate(data_of_a_smooth):
-      x_start = smooth.get('start_at', item[1][0][0])
-      if x_start != item[1][0][0]:
-        i_start = min(enumerate(item[1][0]), key=lambda x: abs(x[1] - x_start))
-        x = item[1][0][i_start[0]:]
-        y = item[1][1][i_start[0]:]
+def build_smooth(data, plot_json):
+  smooth_dict = plot_json.get('smooth', None)
+  if smooth_dict is None:
+    return data
+  smooth_data = get_associated_plot_data(data, smooth_dict)
+  for data_of_a_smooth, smooth in zip(smooth_data, smooth_dict):
+    for this_data in data_of_a_smooth:
+      x_start = smooth.get('start_at', this_data[1][0][0])
+      if x_start != this_data[1][0][0]:
+        i_start = min(enumerate(this_data[1][0]), key=lambda x: abs(x[1] - x_start))
+        x = this_data[1][0][i_start[0]:]
+        y = this_data[1][1][i_start[0]:]
       else:
-        x = item[1][0]
-        y = item[1][1]
-      smooth_x, smooth_y = smooth_data_sg(
-          x, y,
+        x = this_data[1][0]
+        y = this_data[1][1]
+      smooth_x, smooth_y = smooth_data_sg(x, y,
           window_size=smooth.get('window_size', 0),
-          poly_order=smooth.get('poly_order', 3)
-      )
-      if x_start != item[1][0][0]:
-        non_smooth_x = np.array(item[1][0][0 : i_start[0] - 1])
-        non_smooth_y = np.array(item[1][1][0 : i_start[0] - 1])
+          poly_order=smooth.get('poly_order', 3))
+      if x_start != this_data[1][0][0]:
+        non_smooth_x = np.array(this_data[1][0][0 : i_start[0] - 1])
+        non_smooth_y = np.array(this_data[1][1][0 : i_start[0] - 1])
         smooth_x = np.concatenate((non_smooth_x, smooth_x))
         smooth_y = np.concatenate((non_smooth_y, smooth_y))
-      smooth_name = item[0].replace('.dat', '_smooth.dat')
+      smooth_name = this_data[0].replace('.dat', '_smooth.dat')
+      print 'Appending ' + smooth_name
       data.append((smooth_name, np.array((smooth_x, smooth_y))))
   return data
 
 
-def build_fits(data, fits):
-  fit_data = get_associated_plot_data(data, fits)
-  for data_of_a_fit, fit in zip(fit_data, fits):
+def build_fits(data, plot_json):
+  fit_dict = plot_json.get('fits', None)
+  if fit_dict is None:
+    return data
+  fit_data = get_associated_plot_data(data, fit_dict)
+  for data_of_a_fit, fit in zip(fit_data, fit_dict):
     x = data_of_a_fit[1][0]
     y = data_of_a_fit[1][1]
     y_err = data_of_a_fit[1][2]
@@ -168,6 +173,7 @@ def build_fits(data, fits):
     fit_x, fit_y = fit_utils.fit_polynomial(x, y, xmin, xmax, degree,
       y_err=y_err, verbose=verbose)
     fit_name = data_of_a_fit[0].replace('.dat', '_fit.dat')
+    print 'Appending ' + fit_name
     data.append((fit_name, np.array((fit_x, fit_y))))
   return data
 
@@ -565,17 +571,18 @@ def load_and_clean_files(files, plot_json=None):
   data = sort_data(data)
   data = average_copies(data)
   data = build_nlo_sums(data)
-  plot_dict = plot_json.get('plots', None)
-  #  TODO: (bcn 2016-08-15) this allows to overwrite the data according to the
-  #  first plot?? I think I would prefer a suffix construction here as well
-  data = scale_data(data, plot_dict[0])
+  # TODO: (bcn 2016-08-15) The problem is that the fit/smooth has to be done
+  # after scaling and scaling can be different for different plots
+  #
+  # What we really want are composable data transformations, likely represented
+  # in a list (has order)
+  #
+  # For now we can probably work with scaling first and then combining suffixes
+  # like proc_scale_smooth
   if plot_json is not None:
-    smooth_dict = plot_json.get('smooth', None)
-    fit_dict = plot_json.get('fits', None)
-    if smooth_dict is not None:
-      data = build_smooth(data, smooth_dict)
-    if fit_dict is not None:
-      data = build_fits(data, fit_dict)
+    data = build_scaled(data, plot_json)
+    data = build_smooth(data, plot_json)
+    data = build_fits(data, plot_json)
   data = remove_empty_data(data)
   return data
 
@@ -613,6 +620,7 @@ def smooth_data_sg(x_values, y_values, window_size=0, poly_order=3):
     return x_values, y_values
 
 
+#  TODO: (bcn 2016-08-16) is this art or can it go?
 def smooth_data_internal(x_values, y_values, delta):
   smoothed_x = []
   smoothed_y = []
@@ -636,42 +644,69 @@ def smooth_data_internal(x_values, y_values, delta):
   return smoothed_x, smoothed_y
 
 
-def scale_data(item_data, plot_dict):
-  scale_by_value = plot_dict.get('scale_by_value', 0)
-  scale_by_point = plot_dict.get('scale_by_point', None)
-  scale_by_x = plot_dict.get('scale_by_x', 0.0)
-  for i_data in item_data:
-    if scale_by_value > 0:
-      scale_by_value = float(scale_by_value)
-      i_data[1][1] /= scale_by_value
-      try:
-        i_data[1][2] /= scale_by_value
-      except IndexError:
-        pass
-    if scale_by_point is not None:
-      scale_by_point = float(scale_by_point)
-      index = np.where(np.isclose(i_data[1][0], scale_by_point))
-      if (len(index[0]) == 0):
-        print 'Cannot scale w.r.t. ' + str(scale_by_point) + '. Not in data!'
-        return
-      elif(len(index[0]) > 1):
-        print 'Cannot scale w.r.t. ' + str(scale_by_point) + '. Not uniqe!'
-        print 'You have the same xvalue more than once in your data. It might be broken!'
-        return
-      else:
-        scale_value = i_data[1][1][index[0][0]]
-        i_data[1][1] /= scale_value
-        try:
-          i_data[1][2] /= scale_value
-        except IndexError:
-          pass
-    if scale_by_x:
-      x = i_data[1][0]
-      y = i_data[1][1]
-      if len(x) != len(y):
-        print 'Cannot scale by x: x and y array have different lengths!'
-        return
-      i_data[1][1] *= pow(i_data[1][0], scale_by_x)
-      i_data[1][2] *= pow(i_data[1][0], scale_by_x)
+def build_scaled(data, plot_json):
+  scale_dict = plot_json.get('scalings', None)
+  if scale_dict is None:
+    return data
+  scale_data = get_associated_plot_data(data, scale_dict)
+  for data_of_a_scaling, scale in zip(scale_data, scale_dict):
+    scale_by_value = scale.get('scale_by_value', None)
+    scale_by_point = scale.get('scale_by_point', None)
+    scale_by_x = scale.get('scale_by_x', None)
+    for this_data in data_of_a_scaling:
+      scaled_name = this_data[0].replace('.dat', '_scale.dat')
+      for sc, sc_func in zip([scale_by_value, scale_by_point, scale_by_x],
+          [add_scaled_by_value, add_scaled_by_point, add_scaled_by_x]):
+        if sc is not None:
+          this_scale_data = sc_func(sc, this_data)
+          if this_scale_data is not None:
+            print 'Appending ' + scaled_name
+            data.append((scaled_name, this_scale_data))
+  return data
 
-  return item_data
+
+def add_scaled_by_point(scale_by_point, this_data):
+  x = this_data[1][0]
+  scale_by_point = float(scale_by_point)
+  index = np.where(np.isclose(x, scale_by_point))
+  #  TODO: (bcn 2016-08-16) index[0] ?
+  if (len(index[0]) == 0):
+    print 'Cannot scale w.r.t. ' + str(scale_by_point) + '. Not in data!'
+    return None
+  elif(len(index[0]) > 1):
+    print 'Cannot scale w.r.t. ' + str(scale_by_point) + '. Not uniqe!'
+    print 'You have the same xvalue more than once in your data. It might be broken!'
+    return None
+  else:
+    scale_value = this_data[1][1][index[0][0]]
+    new_y = this_data[1][1] / scale_value
+    try:
+      new_y_err = this_data[1][2] / scale_value
+      return np.array((x, new_y, new_y_err))
+    except IndexError:
+      return np.array((x, new_y))
+
+
+def add_scaled_by_x(scale_by_x, this_data):
+  x = this_data[1][0]
+  y = this_data[1][1]
+  if len(x) != len(y):
+    print 'Cannot scale by x: x and y array have different lengths!'
+    return None
+  new_y = this_data[1][1] * pow(this_data[1][0], scale_by_x)
+  try:
+    new_y_err = this_data[1][2] * pow(this_data[1][0], scale_by_x)
+    return np.array((x, new_y, new_y_err))
+  except IndexError:
+    return np.array((x, new_y))
+
+
+def add_scaled_by_value(scale_by_value, this_data):
+  x = this_data[1][0]
+  scale_by_value = float(scale_by_value)
+  new_y = this_data[1][1] / scale_by_value
+  try:
+    new_y_err = this_data[1][2] / scale_by_value
+    return np.array((x, new_y, new_y_err))
+  except IndexError:
+    return np.array((x, new_y))

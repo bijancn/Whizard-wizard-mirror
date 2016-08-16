@@ -124,34 +124,41 @@
    "xlog": false,
    "legend_outside": false
    },
-  {"title": "$e^+ e^- \\to t \\bar{t} H\\;$ and $\\;e^+ e^- \\to W^+ W^- b \\bar{b} H$ at $\\sqrt{s}=800 \\text{GeV}$",
-   "output_file": "tth-mu-scan",
-   "lines": [
-   {"name": "proc_nlo_tth_smooth",
-    "folder": "../scale_scans",
-    "label": "$t \\bar{t} H$"
-   },
-   {"name": "proc_nlo_WbWbH_smooth",
-    "folder": "../scale_scans",
-    "label": "$W^+ W^- b \\bar{b}H$"
+   {"title": "$e^+ e^- \\to t \\bar{t} H\\;$ and $\\;e^+ e^- \\to W^+ W^- b \\bar{b} H$ at $\\sqrt{s}=800 \\text{GeV}$",
+     "output_file": "tth-mu-scan",
+     "lines": [
+       {"name": "proc_nlo_tth_scale_smooth",
+         "folder": "../scale_scans",
+         "label": "$t \\bar{t} H$"
+       },
+       {"name": "proc_nlo_WbWbH_scale_smooth",
+         "folder": "../scale_scans",
+         "label": "$W^+ W^- b \\bar{b}H$"
+       }
+     ],
+     "extra_lines": [
+       {"type": "vertical", "value": 2.0, "color": "gray" },
+       {"type": "vertical", "value": 0.5, "color": "gray" }
+     ],
+     "xlabel": "$\\mu_R / (m_t + m_H)$",
+     "ylabel": "$\\sigma(\\mu_R) / \\sigma(\\mu_R = \\mu_0)$",
+     "ylog": false,
+     "xlog": true,
+     "xminors": 0,
+     "yminors": 5,
+     "ymin": 0.90,
+     "ymax": 1.05,
+     "ymajors": 7,
+     "xticks": [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0]
    }
-   ],
-  "extra_lines": [
-     {"type": "vertical", "value": 2.0, "color": "gray" },
-     {"type": "vertical", "value": 0.5, "color": "gray" }
   ],
-   "xlabel": "$\\mu_R / (m_t + m_H)$",
-   "ylabel": "$\\sigma(\\mu_R) / \\sigma(\\mu_R = \\mu_0)$",
-   "ylog": false,
-   "xlog": true,
-   "xminors": 0,
-   "yminors": 5,
-   "ymin": 0.90,
-   "ymax": 1.05,
-   "ymajors": 7,
-   "xticks": [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0]
+  "scalings": [
+  {"scale_by_point": 1.0,
+   "data": [{"name": "proc_nlo_tth", "folder": "../scale_scans"},
+            {"name": "proc_nlo_WbWbH", "folder": "../scale_scans"}
+   ]
   }
-  ],
+ ],
   "smooth": [
   {"window_size": 5,
    "poly_order": 1,
@@ -162,8 +169,8 @@
   },
   {"window_size": 3,
    "poly_order": 1,
-   "data": [{"name": "proc_nlo_tth", "folder": "../scale_scans"},
-            {"name": "proc_nlo_WbWbH", "folder": "../scale_scans"}
+   "data": [{"name": "proc_nlo_tth_scale", "folder": "../scale_scans"},
+            {"name": "proc_nlo_WbWbH_scale", "folder": "../scale_scans"}
    ]
   }
  ]
