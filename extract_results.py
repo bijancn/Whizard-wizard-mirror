@@ -38,6 +38,8 @@ def main():
               proc_regexs = new
             else:
               proc_regexs = [pr + '-*-' + scan['scan_object'] for pr in proc_regexs]
+            if p[2].get('integration_copies', 0) > 0:
+              proc_regexs = [pr + '-*' for pr in proc_regexs]
           process_names += proc_regexs
       process_names = list(set(process_names))
       runfolders = ['whizard/' + p for p in process_names]
