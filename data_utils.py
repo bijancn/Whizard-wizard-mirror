@@ -159,22 +159,19 @@ def build_fits(data, plot_json):
     return data
   fit_data = get_associated_plot_data(data, fit_dict)
   for data_of_a_fit, fit in zip(fit_data, fit_dict):
-    x = data_of_a_fit[1][0]
-    y = data_of_a_fit[1][1]
-    y_err = data_of_a_fit[1][2]
-    xmin = fit.get('extrapolation_minus', min(x))
-    xmax = fit.get('extrapolation_plus', max(x))
-    degree = fit.get('fit_degree', -1)
+    degree = fit['fit_degree']
     verbose = fit.get('print_fit_parameters', False)
-    if degree < 0:
-      print 'You have not specified the degree of the polynomial to be fitted. '
-      print 'Going to fit a line!'
-      degree = 1
-    fit_x, fit_y = fit_utils.fit_polynomial(x, y, xmin, xmax, degree,
-      y_err=y_err, verbose=verbose)
-    fit_name = data_of_a_fit[0].replace('.dat', '_fit.dat')
-    print 'Appending ' + fit_name
-    data.append((fit_name, np.array((fit_x, fit_y))))
+    for this_data in data_of_a_fit:
+      x = this_data[1][0]
+      xmin = fit.get('extrapolation_minus', min(x))
+      xmax = fit.get('extrapolation_plus', max(x))
+      y = this_data[1][1]
+      y_err = this_data[1][2]
+      fit_x, fit_y = fit_utils.fit_polynomial(x, y, xmin, xmax, degree,
+        y_err=y_err, verbose=verbose)
+      fit_name = this_data[0].replace('.dat', '_fit.dat')
+      print 'Appending ' + fit_name
+      data.append((fit_name, np.array((fit_x, fit_y))))
   return data
 
 

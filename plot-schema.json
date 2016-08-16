@@ -14,6 +14,10 @@
       "properties": {
         "opacity": { "type": "number" },
         "label": { "type": "string" },
+        "hide_label": {
+          "type": "boolean",
+          "description": "Remove the label from the legend completely"
+        },
         "color": { "type": "string" },
         "base_line": { "$ref": "#/definitions/line_core" }
       }
@@ -44,6 +48,7 @@
         "folder": {},
         "opacity": {},
         "label": {},
+        "hide_label": {},
         "color": {},
         "base_line": {},
         "linestyle": {}
@@ -63,6 +68,7 @@
       "properties": {
         "opacity": {},
         "label": {},
+        "hide_label": {},
         "color": {},
         "base_line": {},
         "data": {}
@@ -222,7 +228,8 @@
             "items": { "$ref": "#/definitions/line_core" }
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "required": [ "fit_degree" ]
       }
     },
     "data_output": {

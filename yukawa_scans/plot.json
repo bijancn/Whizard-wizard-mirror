@@ -1,110 +1,105 @@
 {
   "plots": [
-  {"title": "$e^+ e^- \\to t \\bar{t}H, \\quad \\sqrt{s} = 800\\, \\rm{GeV}$",
-   "output_file": "tth-yt-scan",
-   "lines": [
-   {"name": "proc_lo_tth",
-    "label": "ttH - LO",
-    "color": "blue",
-    "linestyle": "None"
-   },
-   {"name": "proc_nlo_tth",
-    "label": "ttH - NLO",
-    "color": "red",
-    "linestyle": "None"
-   }
-   ],
-   "fits": [
-   {"label": "Fit - ttH - NLO",
-    "hide_label": true,
-    "color": "red",
-    "linestyle": "solid",
-    "fit_degree": 1,
-    "print_fit_parameters": true,
-    "base_line": {"name": "proc_lo_tth_fit"},
-    "data": [{"name": "proc_nlo_tth"}
-    ]
+    { "title": "$e^+ e^- \\to t \\bar{t}H, \\quad \\sqrt{s} = 800\\, \\rm{GeV}$",
+      "output_file": "tth-yt-scan",
+      "lines": [
+        { "name": "proc_lo_tth",
+          "label": "ttH - LO",
+          "color": "blue",
+          "linestyle": "None"
+        },
+        { "name": "proc_nlo_tth",
+          "label": "ttH - NLO",
+          "color": "red",
+          "linestyle": "None"
+        },
+        { "name": "proc_nlo_tth_fit",
+          "label": "Fit - ttH - NLO",
+          "hide_label": true,
+          "color": "red",
+          "linestyle": "solid",
+          "base_line": { "name": "proc_lo_tth_fit" }
+        },
+        { "name": "proc_lo_tth_fit",
+          "label": "Fit - ttH - LO",
+          "hide_label": true,
+          "color": "blue",
+          "linestyle": "solid",
+          "base_line": { "name": "proc_lo_tth_fit" }
+        }
+      ],
+      "ratio": {"ylabel": "K-factor",
+        "ymax": 1.02, "ymin": 0.96,
+        "ymajors": 4,
+        "yticks": [0.96, 0.98, 1.0, 1.02]},
+        "xlabel": "$y_t / m_t$",
+        "ylabel": "$\\sigma[fb]$",
+        "ylog": false,
+        "xlog": false,
+        "xminors": false,
+        "yminors": false,
+        "ymax": 3.0,
+        "ymin": 1.8,
+        "yticks": [1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0],
+        "yminors": 1,
+        "xticks": [0.9, 0.95, 1.0, 1.05, 1.1],
+        "xminors": 4
     },
-   {"label": "Fit - ttH - LO",
-    "hide_label": true,
-    "color": "blue",
-    "linestyle": "solid",
-    "print_fit_parameters": true, 
-    "fit_degree": 1,
-    "base_line": {"name": "proc_lo_tth_fit"},
-    "data": [{"name": "proc_lo_tth"}
-    ]
+    {"title": "$e^+ e^- \\to W^+ W^- b \\bar{b}H, \\quad \\sqrt{s} = 800\\, \\rm{GeV}$",
+      "output_file": "WbWbH-yt-scan",
+      "lines": [
+        {"name": "proc_lo_WbWbH",
+          "label": "WbWbH - LO",
+          "color": "blue",
+          "linestyle": "None"
+        },
+        {"name": "proc_nlo_WbWbH",
+          "label": "WbWbH - NLO",
+          "linestyle": "None",
+          "color": "red"
+        },
+        { "name": "proc_nlo_WbWbH_fit",
+          "label": "Fit - WbWbH - NLO",
+          "hide_label": true,
+          "color": "red",
+          "linestyle": "solid",
+          "base_line": { "name": "proc_lo_WbWbH_fit" }
+        },
+        { "name": "proc_lo_WbWbH_fit",
+          "label": "Fit - WbWbH - LO",
+          "hide_label": true,
+          "color": "blue",
+          "linestyle": "solid",
+          "base_line": { "name": "proc_lo_WbWbH_fit" }
+        }
+      ],
+      "ratio": {"ylabel": "K-factor",
+        "ymax": 1.02, "ymin": 0.96,
+        "ymajors": 4,
+        "yticks": [0.96, 0.98, 1.0, 1.02]},
+        "xlabel": "$y_t / m_t$",
+        "ylabel": "$\\sigma[fb]$",
+        "ylog": false,
+        "xlog": false,
+        "xminors": false,
+        "yminors": false,
+        "ymax": 3.0,
+        "ymin": 1.8,
+        "yticks": [1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0],
+        "yminors": 1,
+        "xticks": [0.9, 0.95, 1.0, 1.05, 1.1],
+        "xminors": 4
     }
-   ],
-   "ratio": {"ylabel": "K-factor",
-      "ymax": 1.02, "ymin": 0.96,
-      "ymajors": 4,
-      "yticks": [0.96, 0.98, 1.0, 1.02]},
-   "xlabel": "$y_t / m_t$",
-   "ylabel": "$\\sigma[fb]$",
-   "ylog": false,
-   "xlog": false,
-   "xminors": false,
-   "yminors": false,
-   "ymax": 3.0,
-   "ymin": 1.8,
-   "yticks": [1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0],
-   "yminors": 1,
-   "xticks": [0.9, 0.95, 1.0, 1.05, 1.1],
-   "xminors": 4
-   },
-   {"title": "$e^+ e^- \\to W^+ W^- b \\bar{b}H, \\quad \\sqrt{s} = 800 GeV$",
-    "output_file": "WbWbH-yt-scan",
-    "lines": [ 
-   {"name": "proc_lo_WbWbH",
-    "label": "WbWbH - LO",
-    "color": "blue",
-    "linestyle": "None"
-   },
-   {"name": "proc_nlo_WbWbH",
-    "label": "WbWbH - NLO",
-    "linestyle": "None",
-    "color": "red"
-   }
-   ],
-   "fits": [
-   {"label": "Fit - WbWbH - NLO",
-    "hide_label": true,
-    "color": "red",
-    "linestyle": "solid",
-    "fit_degree": 1,
-    "print_fit_parameters": true,
-    "base_line": {"name": "proc_lo_WbWbH_fit"},
-    "data": [{"name": "proc_nlo_WbWbH"}
-    ]
-    },
-   {"label": "Fit - WbWbH - LO",
-    "hide_label": true,
-    "color": "blue",
-    "linestyle": "solid",
-    "print_fit_parameters": true, 
-    "fit_degree": 1,
-    "base_line": {"name": "proc_lo_WbWbH_fit"},
-    "data": [{"name": "proc_lo_WbWbH"}
-    ]
+  ],
+  "fits": [
+    { "fit_degree": 1,
+      "print_fit_parameters": true,
+      "data": [
+        {"name": "proc_lo_tth"},
+        {"name": "proc_nlo_tth"},
+        {"name": "proc_lo_WbWbH"},
+        {"name": "proc_nlo_WbWbH"}
+      ]
     }
-   ],
-   "ratio": {"ylabel": "K-factor",
-      "ymax": 1.02, "ymin": 0.96,
-      "ymajors": 4,
-      "yticks": [0.96, 0.98, 1.0, 1.02]},
-   "xlabel": "$y_t / m_t$",
-   "ylabel": "$\\sigma[fb]$",
-   "ylog": false,
-   "xlog": false,
-   "xminors": false,
-   "yminors": false,
-   "ymax": 3.0,
-   "ymin": 1.8,
-   "yticks": [1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0],
-   "yminors": 1,
-   "xticks": [0.9, 0.95, 1.0, 1.05, 1.1],
-   "xminors": 4
-  }
- ]
+  ]
 }

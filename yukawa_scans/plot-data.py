@@ -9,8 +9,8 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 import bcn_plot
-from utils import load_json
-import data_utils
+import utils as ut
+import data_utils as dt
 
 
 def ls_decider(lbl, title):
@@ -34,16 +34,13 @@ def main():
   pic_path = os.path.abspath('./plots') + '/'
   data_path = os.path.abspath('./scan-results')
   files = glob.glob(data_path + '/*.dat')
-  plot_json = load_json('plot.json')
-  plot_dict = plot_json['plots']
-  data = data_utils.load_and_clean_files(files, plot_json)
-  # for item in data:
-  #   print 'Central value of: ', item[0]
-  #   print str(item[1][1][10]) + ' +- ' + str(item[1][2][10])
-  pool = mp.Pool(processes=1)
-  plot_this = partial(bcn_plot.plot,
-                      plot_extra=plot_x_axis, data=data, pic_path=pic_path,
-                      linestyle_decider=ls_decider, pretty_label=pretty_label)
-  pool.map(plot_this, plot_dict)
+  plot_json = ut.retrieve_and_validate_json('./', json_name='plot.json',
+      schema_name='../plot-schema.json')
+  data = dt.load_and_clean_files(files, plot_json)
+  pool = mp.Pool(processes=3)
+  plot_this = partial(bcn_plot.plot, plot_extra=plot_x_axis, data=data,
+      pic_path=pic_path, linestyle_decider=ls_decider,
+      pretty_label=pretty_label)
+  pool.map(plot_this, plot_json['plots'])
 
 main()
