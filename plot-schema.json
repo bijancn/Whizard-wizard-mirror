@@ -25,7 +25,12 @@
         "ymax": { "type": "number" },
         "ylog": { "type": "boolean" },
         "ylabel": { "type": "string" },
-        "ymajors": { "type": "number" }
+        "yminors": { "type": "number" },
+        "ymajors": { "type": "number" },
+        "yticks": {
+          "type": "array",
+          "items": {"type": "number"}
+        }
       }
     },
     "line": {
@@ -33,7 +38,17 @@
         {"$ref": "#/definitions/line_core"},
         {"$ref": "#/definitions/plot_element"},
         {"type": "object", "properties": { "linestyle": { "type": "string" } } }
-      ]
+      ],
+      "properties": {
+        "name": {},
+        "folder": {},
+        "opacity": {},
+        "label": {},
+        "color": {},
+        "base_line": {},
+        "linestyle": {}
+      },
+      "additionalProperties": false
     },
     "band": {
       "allOf": [
@@ -45,6 +60,14 @@
           }
         } }
       ],
+      "properties": {
+        "opacity": {},
+        "label": {},
+        "color": {},
+        "base_line": {},
+        "data": {}
+      },
+      "additionalProperties": false,
       "required": ["data"]
     },
     "plot": {
@@ -65,15 +88,59 @@
             "xmax": { "type": "number" },
             "xmajors": { "type": "number" },
             "xminors": { "type": "number" },
-            "yminors": { "type": "number" },
             "xlog": { "type": "boolean" },
             "legend_outside": { "type": "boolean" },
             "xlabel": { "type": "string" },
+            "xticks": {
+              "type": "array",
+              "items": {"type": "number"}
+            },
+            "extra_lines": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "description": "`vertical` or `horizontal`"
+                  },
+                  "value": {
+                    "type": "number",
+                    "description": "Where to draw the lines"
+                  },
+                  "color" : { "type": "string" }
+                }
+              }
+            },
             "ratio": { "$ref": "#/definitions/y_properties" }
           }
         },
         { "$ref": "#/definitions/y_properties" }
-      ]
+      ],
+      "properties": {
+        "title": {},
+        "output_file": {},
+        "lines": {},
+        "bands": {},
+        "xmin": {},
+        "xmax": {},
+        "xmajors": {},
+        "xminors": {},
+        "xlog": {},
+        "legend_outside": {},
+        "extra_lines": {},
+        "xticks": {},
+        "xlabel": {},
+        "ratio": {},
+        "ylabel": {},
+        "ylog": {},
+        "ymajors": {},
+        "yminors": {},
+        "ymin": {},
+        "ymax": {},
+        "yticks": {}
+      },
+      "additionalProperties": false
     }
   },
   "type": "object",

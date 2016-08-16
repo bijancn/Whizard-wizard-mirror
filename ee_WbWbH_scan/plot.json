@@ -129,13 +129,11 @@
    "lines": [
    {"name": "proc_nlo_tth_smooth",
     "folder": "../scale_scans",
-    "label": "$t \\bar{t} H$",
-    "scale_by_point": 1.0
+    "label": "$t \\bar{t} H$"
    },
    {"name": "proc_nlo_WbWbH_smooth",
     "folder": "../scale_scans",
-    "label": "$W^+ W^- b \\bar{b}H$",
-    "scale_by_point": 1.0
+    "label": "$W^+ W^- b \\bar{b}H$"
    }
    ],
   "extra_lines": [
