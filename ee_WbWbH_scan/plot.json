@@ -7,7 +7,7 @@
           "label": "LO - offshell",
           "color": "blue"
         },
-        {"name": "proc_nlo_central",
+        {"name": "proc_nlo_central-sqrts",
           "label": "NLO - offshell",
           "color": "red"
         },
@@ -40,9 +40,9 @@
           "opacity": 0.2,
           "color": "red",
           "data":
-          [{"name": "proc_nlo_central"},
-            {"name": "proc_nlo_high"},
-            {"name": "proc_nlo_low"}
+          [{"name": "proc_nlo_central-sqrts"},
+            {"name": "proc_nlo_high-sqrts"},
+            {"name": "proc_nlo_low-sqrts"}
           ],
           "base_line": {"name": "proc_lo"}
         }
@@ -78,7 +78,7 @@
           "label": "LO - offshell",
           "color": "blue"
         },
-        {"name": "proc_nlo_central",
+        {"name": "proc_nlo_central-sqrts",
           "label": "NLO - offshell",
           "color": "red"
         },
@@ -111,9 +111,9 @@
           "opacity": 0.2,
           "color": "red",
           "data":
-          [{"name": "proc_nlo_central"},
-            {"name": "proc_nlo_high"},
-            {"name": "proc_nlo_low"}
+          [{"name": "proc_nlo_central-sqrts"},
+            {"name": "proc_nlo_high-sqrts"},
+            {"name": "proc_nlo_low-sqrts"}
           ],
           "base_line": {"name": "proc_lo"}
         }
