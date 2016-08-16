@@ -5,6 +5,7 @@ import re
 import shutil
 import tempfile
 import json
+import jsonschema
 
 BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
 
@@ -194,7 +195,29 @@ def load_json(json_file):
   except IOError:
     fatal('json not found: ' + json_file)
   except ValueError:
-    fatal('json seems invalid. Check it on http://jsonlint.com/')
+    fatal('json (' + json_file + ') seems invalid. Check it on http://jsonlint.com/')
+
+
+def retrieve_and_validate_json(process_folder, json_name='run.json',
+    schema_name='../run-schema.json'):
+  json_file = os.path.join(process_folder, json_name)
+  schema_file = os.path.join(process_folder, schema_name)
+  logger.info('Trying to read: ' + schema_file)
+  schema = load_json(schema_file)
+  logger.info('Trying to read: ' + json_file)
+  json = load_json(json_file)
+  try:
+    logger.error(jsonschema.exceptions.best_match
+        (jsonschema.Draft4Validator(schema).iter_errors(json)).message)
+  except:
+    pass
+  try:
+    jsonschema.validate(json, schema)
+  except jsonschema.exceptions.SchemaError as e:
+    fatal('Failed to validate schema:\n' + str(e))
+  except jsonschema.exceptions.ValidationError as e:
+    fatal('Failed to validate json:\n' + str(e))
+  return json
 
 
 def touch(filename):

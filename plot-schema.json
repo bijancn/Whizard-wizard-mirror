@@ -6,53 +6,260 @@
       "properties": {
         "name": { "type": "string" },
         "folder": { "type": "string" }
+      },
+      "required": ["name"]
+    },
+    "plot_element": {
+      "type": "object",
+      "properties": {
+        "opacity": { "type": "number" },
+        "label": { "type": "string" },
+        "hide_label": {
+          "type": "boolean",
+          "description": "Remove the label from the legend completely"
+        },
+        "color": { "type": "string" },
+        "base_line": { "$ref": "#/definitions/line_core" }
       }
+    },
+    "y_properties": {
+      "type": "object",
+      "properties": {
+        "ymin": { "type": "number" },
+        "ymax": { "type": "number" },
+        "ylog": { "type": "boolean" },
+        "ylabel": { "type": "string" },
+        "yminors": { "type": "number" },
+        "ymajors": { "type": "number" },
+        "yticks": {
+          "type": "array",
+          "items": {"type": "number"}
+        }
+      }
+    },
+    "extra_text": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "`text` to be displayed. Can contain (escaped) latex."
+        },
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "fontsize": { "type": "number" },
+        "opacity": { "type": "number" },
+        "verticalalignment" : { "type": "string" },
+        "horizontalalignment" : { "type": "string" },
+        "color" : { "type": "string" }
+      },
+      "required": [ "text", "x", "y" ]
+    },
+    "line": {
+      "allOf": [
+        {"$ref": "#/definitions/line_core"},
+        {"$ref": "#/definitions/plot_element"},
+        {"type": "object", "properties": { "linestyle": { "type": "string" } } }
+      ],
+      "properties": {
+        "name": {},
+        "folder": {},
+        "opacity": {},
+        "label": {},
+        "hide_label": {},
+        "color": {},
+        "base_line": {},
+        "linestyle": {}
+      },
+      "additionalProperties": false
+    },
+    "band": {
+      "allOf": [
+        {"$ref": "#/definitions/plot_element"},
+        {"properties": {
+          "data": {
+            "type": "array",
+            "items": {"$ref": "#/definitions/line_core"}
+          }
+        } }
+      ],
+      "properties": {
+        "opacity": {},
+        "label": {},
+        "hide_label": {},
+        "color": {},
+        "base_line": {},
+        "data": {}
+      },
+      "additionalProperties": false,
+      "required": ["data"]
+    },
+    "plot": {
+      "allOf": [
+        { "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "output_file": { "type": "string" },
+            "lines": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/line"}
+            },
+            "bands": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/band"}
+            },
+            "xmin": { "type": "number" },
+            "xmax": { "type": "number" },
+            "xmajors": { "type": "number" },
+            "xminors": { "type": "number" },
+            "xlog": { "type": "boolean" },
+            "legend_outside": { "type": "boolean" },
+            "xlabel": { "type": "string" },
+            "xticks": {
+              "type": "array",
+              "items": {"type": "number"}
+            },
+            "extra_texts": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/extra_text"}
+            },
+            "extra_lines": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "description": "`vertical` or `horizontal`"
+                  },
+                  "value": {
+                    "type": "number",
+                    "description": "Where to draw the lines"
+                  },
+                  "color" : { "type": "string" }
+                }
+              }
+            },
+            "ratio": { "$ref": "#/definitions/y_properties" },
+            "opacity": { "type": "number" }
+          }
+        },
+        { "$ref": "#/definitions/y_properties" }
+      ],
+      "properties": {
+        "title": {},
+        "output_file": {},
+        "lines": {},
+        "bands": {},
+        "xmin": {},
+        "xmax": {},
+        "xmajors": {},
+        "xminors": {},
+        "xlog": {},
+        "legend_outside": {},
+        "extra_texts": {},
+        "extra_lines": {},
+        "xticks": {},
+        "xlabel": {},
+        "ratio": {},
+        "ylabel": {},
+        "ylog": {},
+        "ymajors": {},
+        "yminors": {},
+        "ymin": {},
+        "ymax": {},
+        "yticks": {}
+      },
+      "additionalProperties": false
     }
-  }
+  },
   "type": "object",
   "properties": {
     "plots": {
       "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "title": { "type": "string" },
-          "output_file": { "type": "string" },
-          "lines": {
-            "type": "array",
-            "items": {
-              "allOf": [
-                {"$ref": "#/definitions/line_core"},
-                {"properties": {
-                  "label": { "type": "string" },
-                  "linestyle": { "type": "string" },
-                  "base_line": { "$ref": "#/definitions/line_core" },
-                  "color": { "type": "string" }
-                } }
-              ]
-            }
-          }
-        }
-      },
-      "required": [
-        "1"
-      ]
+      "items": { "$ref": "#/definitions/plot"},
+      "required": [ "1" ]
     },
-    "smooth": {
+    "scalings": {
       "type": "array",
+      "description": "For each `line_core` in `data` it will create a scaled version",
       "items": {
         "type": "object",
         "properties": {
-          "window_size": { "type": "number" },
-          "poly_order": { "type": "number" }
+          "scale_by_point": {
+            "type": "number",
+            "description": "y-values (and errors) will be divided by the `y` value of the point with `x == scale_by_point`"
+          },
+          "scale_by_value": {
+            "type": "number",
+            "description": "y-values (and errors) will be divided by `scale_by_value`"
+          },
+          "scale_by_x": {
+            "type": "number",
+            "description": "y-values (and errors) will be multiplied at each point with `x**scale_by_x`"
+          },
+          "suffix": {
+            "type": "string",
+            "description": "Not supported yet. Default is `_scale`."
+          },
           "data": {
             "type": "array",
             "items": { "$ref": "#/definitions/line_core" }
           }
-        }
+        },
+        "additionalProperties": false
       }
     },
-    "data_output": { "type": "string" }
+    "smooth": {
+      "type": "array",
+      "description": "For each `line_core` in `data` it will create a smoothed version",
+      "items": {
+        "type": "object",
+        "properties": {
+          "window_size": { "type": "number" },
+          "poly_order": { "type": "number" },
+          "suffix": {
+            "type": "string",
+            "description": "Not supported yet. Default is `_smooth`."
+          },
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/line_core" }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "fits": {
+      "type": "array",
+      "description": "For each `line_core` in `data` it will create a fitted version",
+      "items": {
+        "type": "object",
+        "properties": {
+          "fit_degree": {
+            "type": "number",
+            "minimum": 0.0
+          },
+          "extrapolation_minus": { "type": "number" },
+          "extrapolation_plus": { "type": "number" },
+          "print_fit_parameters": { "type": "boolean" },
+          "suffix": {
+            "type": "string",
+            "description": "Not supported yet. Default is `_fit`."
+          },
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/line_core" }
+          }
+        },
+        "additionalProperties": false,
+        "required": [ "fit_degree" ]
+      }
+    },
+    "data_output": {
+      "type": "string",
+      "description": "Not supported yet. Default is `./plots`."
+    }
   },
-  "required": [ "plots" ]
+  "required": [ "plots" ],
+  "additionalProperties": false
 }

@@ -8,7 +8,6 @@ import logging
 from distutils import spawn
 from functools import partial
 from math import log10
-import jsonschema
 from mpi4py import MPI
 from numpy import logspace, arange, log2
 import nose.tools as nt
@@ -38,23 +37,7 @@ def fill_all_runs(_run_json):
 
 
 def retrieve_and_validate_run_json(process_folder, json_name='run.json'):
-  json_file = os.path.join(process_folder, json_name)
-  schema_file = os.path.join(process_folder, '../run-schema.json')
-  ut.logger.info('Trying to read: ' + schema_file)
-  schema = ut.load_json(schema_file)
-  ut.logger.info('Trying to read: ' + json_file)
-  json = ut.load_json(json_file)
-  try:
-    ut.logger.error(jsonschema.exceptions.best_match
-        (jsonschema.Draft4Validator(schema).iter_errors(json)).message)
-  except:
-    pass
-  try:
-    jsonschema.validate(json, schema)
-  except jsonschema.exceptions.SchemaError as e:
-    ut.fatal('Failed to validate schema:\n' + str(e))
-  except jsonschema.exceptions.ValidationError as e:
-    ut.fatal('Failed to validate json:\n' + str(e))
+  json = ut.retrieve_and_validate_json(process_folder, json_name=json_name)
   json = expand_process(json)
   ut.logger.info('Found the following processes:')
   for p in json['processes']:

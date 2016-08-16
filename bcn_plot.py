@@ -388,7 +388,9 @@ def select_data(data, plot_dict, title):
   lines = plot_dict.get('lines', [])
   for line in lines:
     line_data += [d for d in data if get_name(line) == d[0].replace('.dat', '')]
-  line_data = data_utils.scale_data(line_data, lines)
+  #  TODO: (bcn 2016-08-15) I don't see how you would scale the lines in a plot
+  #  without this but it does not work with the new scale_data function
+  # line_data = data_utils.scale_data(line_data, lines)
   bands = plot_dict.get('bands', [])
   band_data = data_utils.get_associated_plot_data(data, bands)
   fits = plot_dict.get('fits', [])
@@ -454,15 +456,35 @@ def use_local_or_global_base_line(band_or_line, data, this_errorbar_func,
   return this_errorbar, this_plot, this_fill_between
 
 
-def plot_extra_lines(ax, ax1, plot_dict, global_opacity):
-  extra_lines = plot_dict.get('extra_lines', None)
-  if extra_lines is not None:
-    for exline in extra_lines:
-      extype = exline.get('type', None)
-      if extype == "vertical":
-        ax.axvline(exline['value'], color=exline['color'], alpha=global_opacity)
-      elif extype == "horizontal":
-        ax.axhline(exline['value'], color=exline['color'], alpha=global_opacity)
+#  TODO: (bcn 2016-08-16) could this be done better with `update`?
+def try_update(new_dict, reference_dict, key):
+  try:
+    new_dict[key] = reference_dict[key]
+  except KeyError:
+    pass
+  return new_dict
+
+
+def plot_extra_lines_and_texts(ax, plot_dict, global_opacity):
+  extra_lines = plot_dict.get('extra_lines', [])
+  extra_texts = plot_dict.get('extra_texts', [])
+  for extra in extra_lines + extra_texts:
+    extype = extra.get('type', None)
+    extext = extra.get('text', None)
+    kwargs = {}
+    kwargs['alpha'] = extra.get('opacity', global_opacity)
+    kwargs['color'] = extra.get('color', 'black')
+    if extype == "vertical":
+      ax.axvline(extra['value'], **kwargs)
+    elif extype == "horizontal":
+      ax.axhline(extra['value'], **kwargs)
+    elif extext is not None:
+      kwargs = try_update(kwargs, extra, 'fontsize')
+      kwargs = try_update(kwargs, extra, 'verticalalignment')
+      kwargs = try_update(kwargs, extra, 'horizontalalignment')
+      ax.text(extra['x'], extra['y'], extext, **kwargs)
+    else:
+      print 'Cannot draw this extra object:', extra
 
 
 def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
@@ -473,15 +495,11 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
         x, y and optionally yerror
   """
   title = plot_dict.get('title', 'plot')
-  if not os.path.isdir(pic_path):
-     mkdirs(pic_path)
+  mkdirs(pic_path)
   valid, line_data, band_data, fit_data, many_labels, lines, bands, fits = \
       select_data(data, plot_dict, title)
   if not valid:
     return
-  # We are going to use this in the future
-  # TODO: (bcn 2016-06-29) Really?
-  # groups = create_baseline_groups(data, plot_dict)
   ratio_dict = plot_dict.get('ratio', None)
   fig_kwargs = setup_ranges(range_decider, line_data,
       band_data, title, plot_dict, ratio_dict)
@@ -494,17 +512,22 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
     this_errorbar_func = partial(partial(combined_errorbar, ax), ax1)
     this_plot_func = partial(partial(combined_plot, ax), ax1)
     this_fill_between_func = partial(partial(combined_fill_between, ax), ax1)
+    axes = [ax, ax1]
+    dicts = [plot_dict, ratio_dict]
   else:
     ax = fig.add_subplot(1, 1, 1)
     this_plot = ax.plot
     this_errorbar = ax.errorbar
     this_fill_between = ax.fill_between
     ax1 = None
+    axes = [ax]
+    dicts = [plot_dict]
   fig_kwargs['ax1'] = ax1
   global_opacity = plot_dict.get('opacity', 0.3)
   if plot_extra is not None:
     ax = plot_extra(ax, title)
-  plot_extra_lines(ax, ax1, plot_dict, global_opacity)
+  for axx, dictt in zip(axes, dicts):
+    plot_extra_lines_and_texts(axx, dictt, global_opacity)
   fig_kwargs.update(setup_majors(plot_dict, ratio_dict))
   fig_kwargs.update(setup_minors(plot_dict, ratio_dict))
   fig_kwargs.update(setup_labels(label_decider, title, plot_dict, ratio_dict))
