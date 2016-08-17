@@ -494,24 +494,29 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None,
   ratio_dict = plot_dict.get('ratio', None)
   fig = setup_figure(plot_dict, ratio_dict, many_labels)
   if ratio_dict is not None:
+    if type(ratio_dict) != list:
+      ratio_dict = [ratio_dict]
     global_base_line = line_data[0][1]
-    gs = gridspec.GridSpec(2, 1, height_ratios=[2, 1])
+    number_of_axes = len(ratio_dict) + 1
+    #  TODO: (bcn 2016-08-17) could be customizable
+    height_ratios = [number_of_axes]
+    for rd in ratio_dict:
+      height_ratios.append(1)
+    gs = gridspec.GridSpec(number_of_axes, 1, height_ratios=height_ratios)
     ax = fig.add_subplot(gs[0])
-    ax1 = fig.add_subplot(gs[1], sharex=ax)
+    axes = [ax]
+    for i in range(len(ratio_dict)):
+      axes.append(fig.add_subplot(gs[i + 1], sharex=ax))
+    ax1 = axes[1]
     this_errorbar_func = partial(partial(combined_errorbar, ax), ax1)
     this_plot_func = partial(partial(combined_plot, ax), ax1)
     this_fill_between_func = partial(partial(combined_fill_between, ax), ax1)
-    axes = [ax, ax1]
-    if type(ratio_dict) == list:
-      dicts = [plot_dict] + ratio_dict
-    else:
-      dicts = [plot_dict, ratio_dict]
+    dicts = [plot_dict] + ratio_dict
   else:
     ax = fig.add_subplot(1, 1, 1)
     this_plot = ax.plot
     this_errorbar = ax.errorbar
     this_fill_between = ax.fill_between
-    ax1 = None
     axes = [ax]
     dicts = [plot_dict]
   global_opacity = plot_dict.get('opacity', 0.3)
