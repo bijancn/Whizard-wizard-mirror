@@ -127,7 +127,7 @@ class Plotter(object):
     #       Default is (0, 0, 1, 1)
     #       We set top to 0.96 to have space for title
     if self.layout_notset:
-      plt.tight_layout(pad=0.5, rect=[0.04, 0.00, 1, 0.96])
+      plt.tight_layout(pad=0.5, h_pad=2.0, w_pad=2.0, rect=[0.04, 0.00, 1, 0.96])
       plt.subplots_adjust(hspace=0.01)
       self.layout_notset = False
 
@@ -189,25 +189,41 @@ def get_label(object_dict, title, filename=None, pretty_label=None):
   return object_dict.get('label', label)
 
 
-def combined_plot(ax, ax1, base_line, x, y, *args, **kwargs):
-  ax.plot(x, y, *args, **kwargs)
-  comb = data_utils.normalize(base_line, x, y)
-  ax1.plot(comb[0], comb[1], *args, **kwargs)
+def handle_base_line_exceptions(base_lines, axes):
+  if type(base_lines) != list:
+    base_lines = [base_lines] * len(axes[1:])
+  if len(axes[1:]) != len(base_lines):
+    print 'Inconsistent number of ratios and base_lines!'
+    print 'len(axes[1:]) = ', len(axes[1:])
+    print 'len(base_lines) = ', len(base_lines)
+  return base_lines
 
 
-def combined_errorbar(ax, ax1, base_line, x, y, yerr=None, **kwargs):
-  ax.errorbar(x, y, yerr=yerr, **kwargs)
-  comb = data_utils.normalize(base_line, x, y, yerr=yerr)
-  if len(comb[0]) != len(comb[1]):
-    raise Exception("normalize gave incoherent data: len(x) != len(y): " +
-        str(len(comb[0])) + " != " + str(len(comb[1])))
-  ax1.errorbar(comb[0], comb[1], yerr=comb[2], **kwargs)
+def combined_plot(axes, base_lines, x, y, *args, **kwargs):
+  axes[0].plot(x, y, *args, **kwargs)
+  base_lines = handle_base_line_exceptions(base_lines, axes)
+  for ax, base_line in zip(axes[1:], base_lines):
+    comb = data_utils.normalize(base_line, x, y)
+    ax.plot(comb[0], comb[1], *args, **kwargs)
 
 
-def combined_fill_between(ax, ax1, base_line, x, ymin, ymax, *args, **kwargs):
-  ax.fill_between(x, ymin, ymax, *args, **kwargs)
-  comb = data_utils.normalize(base_line, x, ymin, yerr=ymax)
-  ax1.fill_between(comb[0], comb[1], comb[2], *args, **kwargs)
+def combined_errorbar(axes, base_lines, x, y, yerr=None, **kwargs):
+  axes[0].errorbar(x, y, yerr=yerr, **kwargs)
+  base_lines = handle_base_line_exceptions(base_lines, axes)
+  for ax, base_line in zip(axes[1:], base_lines):
+    comb = data_utils.normalize(base_line, x, y, yerr=yerr)
+    if len(comb[0]) != len(comb[1]):
+      raise Exception("normalize gave incoherent data: len(x) != len(y): " +
+          str(len(comb[0])) + " != " + str(len(comb[1])))
+    ax.errorbar(comb[0], comb[1], yerr=comb[2], **kwargs)
+
+
+def combined_fill_between(axes, base_lines, x, ymin, ymax, *args, **kwargs):
+  axes[0].fill_between(x, ymin, ymax, *args, **kwargs)
+  base_lines = handle_base_line_exceptions(base_lines, axes)
+  for ax, base_line in zip(axes[1:], base_lines):
+    comb = data_utils.normalize(base_line, x, ymin, yerr=ymax)
+    ax.fill_between(comb[0], comb[1], comb[2], *args, **kwargs)
 
 
 #  TODO: (bcn 2016-08-17) is this art or can it go?
@@ -435,11 +451,18 @@ def use_local_or_global_base_line(band_or_line, data, this_errorbar_func,
     this_plot_func, this_fill_between_func, global_base_line):
   base_line = band_or_line.get('base_line', None)
   if base_line is not None:
-    this_base_line = [d for d in data
-        if get_name(base_line) == d[0].replace('.dat', '')][0][1]
-    this_errorbar = partial(this_errorbar_func, this_base_line)
-    this_plot = partial(this_plot_func, this_base_line)
-    this_fill_between = partial(this_fill_between_func, this_base_line)
+    if type(base_line) != list:
+      base_line = [base_line]
+    this_base_lines = []
+    for bl in base_line:
+      this_base_item = [d for d in data
+        if get_name(bl) == d[0].replace('.dat', '')]
+      if len(this_base_item) == 0:
+        raise Exception('Did not find ' + str(bl) + ' ! Maybe you made a typo?')
+      this_base_lines.append(this_base_item[0][1])
+    this_errorbar = partial(this_errorbar_func, this_base_lines)
+    this_plot = partial(this_plot_func, this_base_lines)
+    this_fill_between = partial(this_fill_between_func, this_base_lines)
   else:
     this_errorbar = partial(this_errorbar_func, global_base_line)
     this_plot = partial(this_plot_func, global_base_line)
@@ -507,10 +530,9 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None,
     axes = [ax]
     for i in range(len(ratio_dict)):
       axes.append(fig.add_subplot(gs[i + 1], sharex=ax))
-    ax1 = axes[1]
-    this_errorbar_func = partial(partial(combined_errorbar, ax), ax1)
-    this_plot_func = partial(partial(combined_plot, ax), ax1)
-    this_fill_between_func = partial(partial(combined_fill_between, ax), ax1)
+    this_errorbar_func = partial(combined_errorbar, axes)
+    this_plot_func = partial(combined_plot, axes)
+    this_fill_between_func = partial(combined_fill_between, axes)
     dicts = [plot_dict] + ratio_dict
   else:
     ax = fig.add_subplot(1, 1, 1)

@@ -45,6 +45,6 @@ def main():
   plot_this = partial(bcn_plot.plot, plot_extra=plot_x_axis, data=data,
       pic_path=pic_path, linestyle_decider=ls_decider,
       pretty_label=pretty_label)
-  pool.map(plot_this, plot_json['plots'])
+  map(plot_this, plot_json['plots'])
 
 main()

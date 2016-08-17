@@ -45,6 +45,6 @@ def main():
   pool = mp.Pool(processes=3)
   plot_this = partial(bcn_plot.plot, data=data, pic_path=pic_path,
       linestyle_decider=ls_decider, pretty_label=pretty_label)
-  pool.map(plot_this, plot_dict)
+  map(plot_this, plot_dict)
 
 main()
