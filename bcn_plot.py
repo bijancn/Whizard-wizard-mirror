@@ -34,16 +34,12 @@ N_YMAJORS_DEFAULT = 6
 N_XMAJORS_DEFAULT = 6
 
 
-def set_labels(ax, ax1, xlabel, ylabel, ylabel1):
-  if xlabel is not None:
-    if ax1 is None:
+def set_labels(axes, xlabel, ylabels):
+  for ax in axes:
+    if xlabel is not None:
       ax.set_xlabel(xlabel)
-    else:
-      ax1.set_xlabel(xlabel)
-  if ylabel is not None:
-    ax.set_ylabel(ylabel)
-    if ylabel1 is not None and ax1 is not None:
-      ax1.set_ylabel(ylabel1)
+  for ax, ylabel in zip(axes, ylabels):
+      ax.set_ylabel(ylabel)
 
 
 def set_major_ticks(ax, ax1, xticks, yticks, xmin, xmax, xmajors, ymin, ymax,
@@ -146,20 +142,18 @@ class Plotter(object):
       plt.subplots_adjust(hspace=0.01)
       self.layout_notset = False
 
-  def setfig(self, fig, ax, xmin, xmax, ymin, ymax, xlabel, ylabel,
-      title=None, xlog=False, ylog=False,
-      xmajors=N_XMAJORS_DEFAULT, ymajors=N_YMAJORS_DEFAULT,
-      xminors=0, yminors=0, yminors1=0,
+  def setfig(self, fig, axes, xmin, xmax, ymins, ymaxs, xlabel, ylabels,
+      title=None, xlog=False, ylogs=[],
+      xmajors=N_XMAJORS_DEFAULT, ymajorss=[],
+      xminors=0, yminorss=[],
       xticks=None, yticks=None, puff=0.05,
       legend_location='best',
       legend_columns=1, legend_outside=False, height_shrinker=0.80,
-      legend_hide=False, legend_ordering=[], ax1=None, ylabel1=None,
-      ymin1=None, ymax1=None, ymajors1=None):
-    set_labels(ax, ax1, xlabel, ylabel, ylabel1)
+      legend_hide=False, legend_ordering=[]):
+    set_labels(axes, xlabel, ylabels)
     _set_puffed_scale(puff, xmax, xmin, xlog, ax.set_xlim, ax.set_xscale)
-    _set_puffed_scale(puff, ymax, ymin, ylog, ax.set_ylim, ax.set_yscale)
-    if ymin1 is not None and ax1 is not None:
-      _set_puffed_scale(puff, ymax1, ymin1, False, ax1.set_ylim, ax1.set_yscale)
+    for ymax, ymin, ylog, ax in zip(ymaxs, ymins, ylogs, axes):
+      _set_puffed_scale(puff, ymax, ymin, ylog, ax.set_ylim, ax.set_yscale)
     if title is not None and self.title_notset:
       plt.suptitle(title, y=0.99, x=0.55)
       self.title_notset = False
