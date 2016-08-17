@@ -127,8 +127,16 @@
           "horizontalalignment": "center",
           "text": "\\textsc{Whizard+OpenLoops}"}
       ],
-      "ratio": {"ylabel": "K-factor",
-        "ymax": 2.25, "ymin": 0.75, "ymajors": 4},
+      "ratio": [
+        { "ylabel": "K-factor",
+          "ymax": 2.25,
+          "ymin": 0.75,
+          "ymajors": 4},
+        { "ylabel": "off-shell/on-shell",
+          "ymax": 2.25,
+          "ymin": 0.75,
+          "ymajors": 4}
+      ],
         "xlabel": "$\\sqrt{s}\\;$ [GeV]",
         "ylabel": "$\\sigma$ [fb]",
         "ymin": 0,

@@ -19,7 +19,14 @@
           "description": "Remove the label from the legend completely"
         },
         "color": { "type": "string" },
-        "base_line": { "$ref": "#/definitions/line_core" }
+        "base_line": {
+          "oneOf" : [
+            { "$ref": "#/definitions/line_core" },
+            { "type": "array",
+              "items": {"$ref": "#/definitions/line_core"}
+            }
+          ]
+        }
       }
     },
     "y_properties": {
@@ -139,8 +146,14 @@
                 }
               }
             },
-            "ratio": { "$ref": "#/definitions/y_properties" },
-            "opacity": { "type": "number" }
+            "ratio": {
+              "oneOf" : [
+                { "$ref": "#/definitions/y_properties" },
+                { "type": "array",
+                  "items": {"$ref": "#/definitions/y_properties"}
+                }
+              ]},
+              "opacity": { "type": "number" }
           }
         },
         { "$ref": "#/definitions/y_properties" }

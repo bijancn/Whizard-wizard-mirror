@@ -53,7 +53,6 @@ def set_major_ticks(axes, xticks, ytickss, xmin, xmax, xmajors, ymins, ymaxs,
       else:
         xticks = np.linspace(xmin, xmax, xmajors)
     ax.set_xticks(xticks)
-    print 'xticks = ', xticks   #   Debugging
     ax.set_xticklabels([str(xt) for xt in xticks])
     if yticks is None:
       if ylog:
@@ -503,7 +502,10 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None,
     this_plot_func = partial(partial(combined_plot, ax), ax1)
     this_fill_between_func = partial(partial(combined_fill_between, ax), ax1)
     axes = [ax, ax1]
-    dicts = [plot_dict, ratio_dict]
+    if type(ratio_dict) == list:
+      dicts = [plot_dict] + ratio_dict
+    else:
+      dicts = [plot_dict, ratio_dict]
   else:
     ax = fig.add_subplot(1, 1, 1)
     this_plot = ax.plot
