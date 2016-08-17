@@ -64,8 +64,9 @@
         "ymax": 875,
         "xmax": 1500,
         "xmajors": 5,
+        "xminors": 5,
         "ymajors": 6,
-        "yminors": 8,
+        "yminors": 6,
         "ylog": false,
         "xlog": false,
         "legend_outside": false
@@ -135,7 +136,7 @@
         "xmax": 3000,
         "xmajors": 5,
         "ymajors": 6,
-        "yminors": 8,
+        "yminors": 6,
         "ylog": false,
         "xlog": false,
         "legend_outside": false
@@ -175,7 +176,7 @@
       "ylog": false,
       "xlog": true,
       "xminors": 0,
-      "yminors": 5,
+      "yminors": 4,
       "xticks": [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0],
       "legend_location": "lower right"
     }

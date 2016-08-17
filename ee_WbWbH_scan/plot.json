@@ -137,7 +137,7 @@
         "xmax": 3000,
         "xmajors": 5,
         "ymajors": 7,
-        "yminors": 8,
+        "yminors": 4,
         "ylog": false,
         "xlog": false,
         "legend_outside": false
@@ -178,6 +178,7 @@
       "ymin": 0.90,
       "ymax": 1.05,
       "ymajors": 7,
+      "yminors": 4,
       "xticks": [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0]
     }
   ],
