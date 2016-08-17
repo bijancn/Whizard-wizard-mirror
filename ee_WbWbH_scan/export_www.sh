@@ -1,1 +1,1 @@
-../export_www.sh
+../export_www.sh `pwd`

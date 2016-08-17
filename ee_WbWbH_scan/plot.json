@@ -4,24 +4,24 @@
       "output_file": "tth-scan-combined",
       "lines": [
         {"name": "proc_lo",
-          "label": "LO - offshell",
+          "label": "LO, $W^+ W^- b \\bar{b}$",
           "color": "blue"
         },
         {"name": "proc_nlo_central-sqrts",
-          "label": "NLO - offshell",
+          "label": "NLO, $W^+ W^- b \\bar{b}$",
           "color": "red"
         },
         {"name": "proc_lo",
           "folder": "../ee_tth_scan/",
           "linestyle": "dashed",
-          "label": "LO",
+          "label": "LO, $t\\bar{t}H$",
           "color": "black",
           "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
         },
         {"name": "proc_nlo_central",
           "folder": "../ee_tth_scan/",
           "linestyle": "dashed",
-          "label": "NLO",
+          "label": "NLO, $t\\bar{t}H$",
           "color": "#109618",
           "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
         }
@@ -75,24 +75,24 @@
       "output_file": "tth-scan-combined-3000",
       "lines": [
         {"name": "proc_lo",
-          "label": "LO - offshell",
+          "label": "LO, $W^+ W^- b \\bar{b}H$",
           "color": "blue"
         },
         {"name": "proc_nlo_central-sqrts",
-          "label": "NLO - offshell",
+          "label": "NLO, $W^+ W^- b \\bar{b}H$",
           "color": "red"
         },
         {"name": "proc_lo",
           "folder": "../ee_tth_scan/",
           "linestyle": "dashed",
-          "label": "LO",
+          "label": "LO, $t\\bar{t}H$",
           "color": "black",
           "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
         },
         {"name": "proc_nlo_central",
           "folder": "../ee_tth_scan/",
           "linestyle": "dashed",
-          "label": "NLO",
+          "label": "NLO, $t\\bar{t}H$",
           "color": "#109618",
           "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
         }
@@ -142,16 +142,18 @@
         "xlog": false,
         "legend_outside": false
     },
-    {"title": "$e^+ e^- \\to t \\bar{t} H\\;$ and $\\;e^+ e^- \\to W^+ W^- b \\bar{b} H$ at $\\sqrt{s}=800 \\text{GeV}$",
+    {"title": "$e^+ e^- \\to t \\bar{t} H\\;$ and $\\;e^+ e^- \\to W^+ W^- b \\bar{b} H$ at $\\sqrt{s}=800 \\;\\text{GeV}$",
       "output_file": "tth-mu-scan",
       "lines": [
         {"name": "proc_nlo_tth_scale_smooth",
           "folder": "../scale_scans",
-          "label": "$t \\bar{t} H$"
+          "color": "#109618",
+          "label": "NLO, $t \\bar{t} H$"
         },
         {"name": "proc_nlo_WbWbH_scale_smooth",
           "folder": "../scale_scans",
-          "label": "$W^+ W^- b \\bar{b}H$"
+          "label": "NLO, $W^+ W^- b \\bar{b}H$",
+          "color": "red"
         }
       ],
       "extra_lines": [
@@ -159,7 +161,7 @@
         {"type": "vertical", "value": 0.5, "color": "gray" }
       ],
       "extra_texts": [
-        { "x": 4.0,
+        { "x": 4.15,
           "y": 0.91,
           "color": "gray",
           "opacity": 1.0,
