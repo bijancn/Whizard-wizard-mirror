@@ -1,6 +1,7 @@
 {
   "processes": [
-  {"process": "proc_nlo",
+  { "process": "proc_nlo",
+    "disabled": true,
     "purpose": "scan",
     "nlo_type": "nlo",
     "whizard_options": "",
@@ -27,6 +28,36 @@
     "adaption_iterations": "10:40000",
     "integration_iterations": "5:20000",
     "scale_variation": true,
+    "integration_copies": 25
+  },
+  { "process": "proc_lo",
+    "purpose": "scan",
+    "nlo_type": "lo",
+    "disabled": false,
+    "whizard_options": "",
+    "only_sindarins": false,
+    "scans": [{
+      "scan_object": "sqrts",
+      "ranges": [
+      {"type": "linear",
+        "start": 400,
+        "stop": 600,
+        "stepsize": 20.0
+      },
+      {"type": "linear",
+       "start": 650,
+       "stop": 1000,
+       "stepsize": 50.0
+      },
+      {"type": "linear",
+        "start": 1000,
+        "stop": 3200,
+        "stepsize": 200.0
+      }
+      ]}],
+    "adaption_iterations": "10:40000",
+    "integration_iterations": "5:20000",
+    "scale_variation": false,
     "integration_copies": 25
   }
   ],
