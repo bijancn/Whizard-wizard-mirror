@@ -35,25 +35,44 @@ N_XMAJORS_DEFAULT = 6
 
 
 def set_labels(axes, xlabel, ylabels):
-  for ax in axes:
-    if xlabel is not None:
-      ax.set_xlabel(xlabel)
+  if xlabel is not None:
+    axes[-1].set_xlabel(xlabel)
   for ax, ylabel in zip(axes, ylabels):
     if ylabel is not None:
       ax.set_ylabel(ylabel)
 
 
+def auto_tick_labeling(ticks):
+  max_tick = max(abs(ticks))
+  if max_tick < 10:
+    tick_str = "{:.2f}"
+  elif max_tick < 100:
+    tick_str = "{:.1f}"
+  elif max_tick < 10000:
+    tick_str = "{:.0f}"
+  else:
+    tick_str = "{:.2e}"
+  return ["$" + tick_str.format(tick) + "$" for tick in ticks]
+
+
 def set_major_ticks(axes, xticks, ytickss, xmin, xmax, xmajors, ymins, ymaxs,
           ymajorss, xlog, ylogs):
+  if xticks is None:
+    if xlog:
+      if xmin <= 0:
+        raise Exception("You should set xmin > 0 in a log plot")
+      else:
+        xticks = np.logspace(math.log10(xmin), math.log10(xmax), num=xmajors)
+    else:
+      xticks = np.linspace(xmin, xmax, xmajors)
+    axes[-1].set_xticklabels(auto_tick_labeling(xticks))
+  else:
+    axes[-1].set_xticklabels(["$" + str(xt) + "$" for xt in xticks])
+  axes[-1].set_xticks(xticks)
+  for ax in axes[:-1]:
+    plt.setp(ax.get_xticklabels(), visible=False)
   for ymax, ymin, ymajors, yticks, ylog, ax in zip(ymaxs, ymins, ymajorss,
       ytickss, ylogs, axes):
-    if xticks is None:
-      if xlog:
-        xticks = np.logspace(math.log10(xmin), math.log10(xmax), num=xmajors)
-      else:
-        xticks = np.linspace(xmin, xmax, xmajors)
-    ax.set_xticks(xticks)
-    ax.set_xticklabels([str(xt) for xt in xticks])
     if yticks is None:
       if ylog:
         if ymin <= 0:
@@ -62,6 +81,9 @@ def set_major_ticks(axes, xticks, ytickss, xmin, xmax, xmajors, ymins, ymaxs,
           yticks = np.logspace(math.log10(ymin), math.log10(ymax), num=ymajors)
       else:
         yticks = np.linspace(ymin, ymax, ymajors)
+      ax.set_yticklabels(auto_tick_labeling(yticks))
+    else:
+      ax.set_yticklabels(["$" + str(yt) + "$" for yt in yticks])
     ax.set_yticks(yticks)
 
 
@@ -128,7 +150,7 @@ class Plotter(object):
     #       We set top to 0.96 to have space for title
     if self.layout_notset:
       plt.tight_layout(pad=0.5, h_pad=2.0, w_pad=2.0, rect=[0.04, 0.00, 1, 0.96])
-      plt.subplots_adjust(hspace=0.01)
+      plt.subplots_adjust(hspace=0.05)
       self.layout_notset = False
 
   def setfig(self, fig, axes, xmin, xmax, ymins, ymaxs, xlabel, ylabels,

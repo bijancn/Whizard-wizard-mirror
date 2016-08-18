@@ -1,6 +1,6 @@
 {
   "plots": [
-    { "title": "$e^+ e^- \\to t \\bar{t}H, \\quad \\sqrt{s} = 800\\, \\rm{GeV}$",
+    { "title": "$e^+ e^- \\to t \\bar{t}H, \\quad \\sqrt{s} = 800\\; \\rm{GeV}$",
       "output_file": "tth-yt-scan",
       "lines": [
         { "name": "proc_lo_tth",
@@ -44,7 +44,7 @@
         "yticks": [0.96, 0.98, 1.0, 1.02]
       },
       "xlabel": "$y_t / m_t$",
-      "ylabel": "$\\sigma[fb]$",
+      "ylabel": "$\\sigma\\;$ [fb]",
       "ylog": false,
       "xlog": false,
       "xminors": false,
@@ -56,7 +56,7 @@
       "xticks": [0.9, 0.95, 1.0, 1.05, 1.1],
       "xminors": 4
     },
-    {"title": "$e^+ e^- \\to W^+ W^- b \\bar{b}H, \\quad \\sqrt{s} = 800\\, \\rm{GeV}$",
+    {"title": "$e^+ e^- \\to W^+ W^- b \\bar{b}H, \\quad \\sqrt{s} = 800\\; \\rm{GeV}$",
       "output_file": "WbWbH-yt-scan",
       "lines": [
         {"name": "proc_lo_WbWbH",
@@ -98,7 +98,7 @@
         "ymajors": 4,
         "yticks": [0.96, 0.98, 1.0, 1.02]},
         "xlabel": "$y_t / m_t$",
-        "ylabel": "$\\sigma[fb]$",
+        "ylabel": "$\\sigma\\;$ [fb]",
         "ylog": false,
         "xlog": false,
         "xminors": false,

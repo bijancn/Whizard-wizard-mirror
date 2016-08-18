@@ -86,8 +86,10 @@
           "ymin": 0.9,
           "ymajors": 3}
       ],
+        "xpagelength": 9,
+        "ypagelength": 9,
         "xlabel": "$\\sqrt{s}\\;$ [GeV]",
-        "ylabel": "$\\sigma$ [fb]",
+        "ylabel": "$\\sigma\\;$ [fb]",
         "ymin": 0,
         "ymax": 875,
         "xmax": 1500,
@@ -158,7 +160,7 @@
       "ratio": {"ylabel": "K-factor",
         "ymax": 2.75, "ymin": 0.75, "ymajors": 5},
         "xlabel": "$\\sqrt{s}\\;$ [GeV]",
-        "ylabel": "$\\sigma$ [fb]",
+        "ylabel": "$\\sigma\\;$ [fb]",
         "ymin": 0,
         "ymax": 875,
         "xmax": 3000,
@@ -205,7 +207,8 @@
       "xlog": true,
       "xminors": 0,
       "yminors": 4,
-      "xticks": [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0],
+      "yticks": [0.950, 0.975, 1.000, 1.025],
+      "xticks": [0.125, 0.25, 0.50, 1.00, 2.00, 4.00, 8.00],
       "legend_location": "lower right"
     }
   ],
