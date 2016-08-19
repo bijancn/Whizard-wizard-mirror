@@ -109,8 +109,8 @@ def set_minor_ticks(axes, xminors, yminorss, xlog, ylogs):
 def set_legend(fig, axes, legend_ordering, legend_outside, height_shrinker,
     legend_columns, legend_location):
   handles, labels = axes[0].get_legend_handles_labels()
-  # reorder if sequence is given
   if len(legend_ordering) == len(handles):
+    # reorder if sequence of appropriate size is given
     handles = map(handles.__getitem__, legend_ordering)
     labels = map(labels.__getitem__, legend_ordering)
   if legend_outside:
@@ -363,6 +363,7 @@ def setup_extra_kwargs(plot_dict, many_labels):
   kwargs['height_shrinker'] = 0.70
   kwargs['legend_outside'] = plot_dict.get('legend_outside', many_labels)
   kwargs['legend_location'] = plot_dict.get('legend_location', 'best')
+  kwargs['legend_ordering'] = plot_dict.get('legend_ordering', [])
   return kwargs
 
 
@@ -411,7 +412,9 @@ def plot_line(ldata, line, color, title, pretty_label, linestyle_decider,
         alpha=global_opacity)
     plt.hlines(mean, _[:-1], _[1:], label=label, colors=c)
   elif linestyle is not None and linestyle != "None":
-    this_plot(d[0], d[1], color=c, label=label, linestyle=linestyle)
+    linewidth = line.get('linewidth', 1.5)
+    this_plot(d[0], d[1], color=c, label=label, linestyle=linestyle,
+        linewidth=linewidth)
   else:
     marker = decide_if_not_none(line, marker_decider, 'marker', '+')
     if len(d) > 2:

@@ -220,8 +220,12 @@ def normalize(base_line, x, y, yerr=None):
   if yerr is not None:
     if len(x) != len(yerr):
       raise Exception("len(x) /= len(yerr)")
-    # TODO: (bcn 2016-05-02) we should actually give the error of the base_line as well
-    yerr_gens = [(yyerr for yyerr in yerr), (yyerr for yyerr in yerr)]
+    try:
+      yerr_gens = [(yyerr for yyerr in yerr), (yyerr for yyerr in base_line[2])]
+    except IndexError:
+      print 'Warning: Duplicating yerr in normalize. This can give unexpected' + \
+          'results when you input arrays with different lengths!'
+      yerr_gens = [(yyerr for yyerr in yerr), (yyerr for yyerr in yerr)]
     error_func = lambda self: self.next_yerr_values / self.next_y_values[1]
   else:
     yerr_gens = None

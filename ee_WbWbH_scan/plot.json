@@ -3,38 +3,38 @@
     {"title": "$e^+ e^- \\to t \\bar{t} H\\;$ and $\\;e^+ e^- \\to W^+ W^- b \\bar{b} H$",
       "output_file": "tth-scan-combined",
       "lines": [
-        {"name": "proc_lo",
-          "label": "LO, $W^+ W^- b \\bar{b}$",
+        {"name": "proc_lo-sqrts",
+          "folder": "../ee_tth_scan/",
+          "linestyle": "dashed",
+          "label": "LO $t\\bar{t}H$",
+          "color": "black",
+          "base_line": {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/"}
+        },
+        {"name": "proc_nlo_central-sqrts",
+          "folder": "../ee_tth_scan/",
+          "linestyle": "dashed",
+          "label": "NLO $t\\bar{t}H$",
+          "color": "#109618",
+          "base_line": {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/"}
+        },
+        {"name": "proc_lo-sqrts",
+          "label": "LO $W^+ W^- b \\bar{b}$",
           "color": "blue"
         },
         {"name": "proc_nlo_central-sqrts",
-          "label": "NLO, $W^+ W^- b \\bar{b}$",
+          "label": "NLO $W^+ W^- b \\bar{b}$",
           "color": "red"
-        },
-        {"name": "proc_lo",
-          "folder": "../ee_tth_scan/",
-          "linestyle": "dashed",
-          "label": "LO, $t\\bar{t}H$",
-          "color": "black",
-          "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
-        },
-        {"name": "proc_nlo_central",
-          "folder": "../ee_tth_scan/",
-          "linestyle": "dashed",
-          "label": "NLO, $t\\bar{t}H$",
-          "color": "#109618",
-          "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
         }
       ],
       "bands": [
         { "opacity": 0.4,
           "label": "",
           "color": "#109618",
-          "data":[{"name": "proc_nlo_central", "folder": "../ee_tth_scan/"},
-            {"name": "proc_nlo_high", "folder": "../ee_tth_scan/"},
-            {"name": "proc_nlo_low", "folder": "../ee_tth_scan/"}
+          "data":[{"name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/"},
+            {"name": "proc_nlo_high-sqrts", "folder": "../ee_tth_scan/"},
+            {"name": "proc_nlo_low-sqrts", "folder": "../ee_tth_scan/"}
           ],
-          "base_line": {"name": "proc_lo", "folder": "../ee_tth_scan/"}
+          "base_line": {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/"}
         },
         {"label": "",
           "opacity": 0.2,
@@ -44,7 +44,7 @@
             {"name": "proc_nlo_high-sqrts"},
             {"name": "proc_nlo_low-sqrts"}
           ],
-          "base_line": {"name": "proc_lo"}
+          "base_line": {"name": "proc_lo-sqrts"}
         }
       ],
       "extra_texts": [
@@ -74,54 +74,94 @@
     {"title": "$e^+ e^- \\to t \\bar{t} H\\;$ and $\\;e^+ e^- \\to W^+ W^- b \\bar{b} H$",
       "output_file": "tth-scan-combined-3000",
       "lines": [
-        {"name": "proc_lo",
-          "label": "LO, $W^+ W^- b \\bar{b}H$",
+        {"name": "proc_lo-sqrts",
+          "label": "LO $W^+ W^- b \\bar{b}H$",
           "color": "blue",
           "base_line": [
-            { "name": "proc_lo" },
-            { "name": "proc_lo", "folder": "../ee_tth_scan/" }
+            { "name": "proc_lo-sqrts" },
+            { "name": "proc_lo-sqrts", "folder": "../ee_tth_scan/" }
           ]
         },
         { "name": "proc_nlo_central-sqrts",
-          "label": "NLO, $W^+ W^- b \\bar{b}H$",
+          "label": "NLO $W^+ W^- b \\bar{b}H$",
           "color": "red",
           "base_line": [
-            { "name": "proc_lo" },
-            { "name": "proc_nlo_central", "folder": "../ee_tth_scan/" }
+            { "name": "proc_lo-sqrts" },
+            { "name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/" }
           ]
         },
-        { "name": "proc_lo",
+        { "name": "proc_nlo_low-sqrts",
+          "color": "red",
+          "base_line": [
+            { "name": "proc_lo-sqrts" },
+            { "name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/" }
+          ],
+          "hide_label": true,
+          "linewidth": 0.5
+        },
+        { "name": "proc_nlo_high-sqrts",
+          "color": "red",
+          "base_line": [
+            { "name": "proc_lo-sqrts" },
+            { "name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/" }
+          ],
+          "hide_label": true,
+          "linewidth": 0.5
+        },
+        { "name": "proc_lo-sqrts",
           "folder": "../ee_tth_scan/",
           "linestyle": "dashed",
-          "label": "LO, $t\\bar{t}H$",
+          "label": "LO $t\\bar{t}H$",
           "color": "black",
           "base_line": [
-            {"name": "proc_lo", "folder": "../ee_tth_scan/"},
-            {"name": "proc_lo", "folder": "../ee_tth_scan/"}
+            {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/"},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/"}
           ]
         },
-        { "name": "proc_nlo_central",
+        { "name": "proc_nlo_central-sqrts",
           "folder": "../ee_tth_scan/",
           "linestyle": "dashed",
-          "label": "NLO, $t\\bar{t}H$",
+          "label": "NLO $t\\bar{t}H$",
           "color": "#109618",
           "base_line": [
-            {"name": "proc_lo", "folder": "../ee_tth_scan/"},
-            {"name": "proc_nlo_central", "folder": "../ee_tth_scan/"}
+            {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/"},
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/"}
           ]
+        },
+        { "name": "proc_nlo_low-sqrts",
+          "folder": "../ee_tth_scan/",
+          "linestyle": "dashed",
+          "hide_label": true,
+          "color": "#109618",
+          "base_line": [
+            {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/"},
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/"}
+          ],
+          "linewidth": 0.5
+        },
+        { "name": "proc_nlo_high-sqrts",
+          "folder": "../ee_tth_scan/",
+          "linestyle": "dashed",
+          "hide_label": true,
+          "color": "#109618",
+          "base_line": [
+            {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/"},
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/"}
+          ],
+          "linewidth": 0.5
         }
       ],
       "bands": [
         { "opacity": 0.4,
           "label": "",
           "color": "#109618",
-          "data":[{"name": "proc_nlo_central", "folder": "../ee_tth_scan/"},
-            {"name": "proc_nlo_high", "folder": "../ee_tth_scan/"},
-            {"name": "proc_nlo_low", "folder": "../ee_tth_scan/"}
+          "data":[{"name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/"},
+            {"name": "proc_nlo_high-sqrts", "folder": "../ee_tth_scan/"},
+            {"name": "proc_nlo_low-sqrts", "folder": "../ee_tth_scan/"}
           ],
           "base_line": [
-            {"name": "proc_lo", "folder": "../ee_tth_scan/"},
-            {"name": "proc_nlo_central", "folder": "../ee_tth_scan/"}
+            {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/"},
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/"}
           ]
         },
         { "label": "",
@@ -133,8 +173,8 @@
             {"name": "proc_nlo_low-sqrts"}
           ],
           "base_line": [
-            { "name": "proc_lo" },
-            { "name": "proc_nlo_central", "folder": "../ee_tth_scan/" }
+            { "name": "proc_lo-sqrts" },
+            { "name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/" }
           ]
         }
       ],
@@ -152,7 +192,8 @@
           "ymax": 2.25,
           "ymin": 0.75,
           "ymajors": 4},
-        { "ylabel": "(off/on)-shell",
+        { "ylabel": "${\\sigma_{W^+W^-b\\bar{b}H}}/{\\sigma_{t\\bar{t}H}}$",
+          "yminors": 2,
           "ymax": 1.35,
           "ymin": 0.9,
           "ymajors": 4}
@@ -161,6 +202,7 @@
         "ylabel": "$\\sigma\\;$ [fb]",
         "xpagelength": 9,
         "ypagelength": 9,
+        "legend_ordering": [2,3,0,1],
         "ymin": 0,
         "ymax": 3.0,
         "xmin": 400,
@@ -178,11 +220,11 @@
         {"name": "proc_nlo_tth_scale_smooth",
           "folder": "../scale_scans",
           "color": "#109618",
-          "label": "NLO, $t \\bar{t} H$"
+          "label": "NLO $t \\bar{t} H$"
         },
         {"name": "proc_nlo_WbWbH_scale_smooth",
           "folder": "../scale_scans",
-          "label": "NLO, $W^+ W^- b \\bar{b}H$",
+          "label": "NLO $W^+ W^- b \\bar{b}H$",
           "color": "red"
         }
       ],

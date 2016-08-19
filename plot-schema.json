@@ -65,7 +65,10 @@
       "allOf": [
         {"$ref": "#/definitions/line_core"},
         {"$ref": "#/definitions/plot_element"},
-        {"type": "object", "properties": { "linestyle": { "type": "string" } } }
+        {"type": "object", "properties": {
+          "linestyle": { "type": "string" },
+          "linewidth": { "type": "number" }
+        } }
       ],
       "properties": {
         "name": {},
@@ -75,7 +78,8 @@
         "hide_label": {},
         "color": {},
         "base_line": {},
-        "linestyle": {}
+        "linestyle": {},
+        "linewidth": {}
       },
       "additionalProperties": false
     },
@@ -122,6 +126,8 @@
             "xminors": { "type": "number" },
             "xlog": { "type": "boolean" },
             "legend_outside": { "type": "boolean" },
+            "legend_location": { "type": "string" },
+            "legend_ordering": { "type": "array", "items": {"type": "number"} },
             "xlabel": { "type": "string" },
             "xticks": {
               "type": "array",
@@ -173,6 +179,8 @@
         "xminors": {},
         "xlog": {},
         "legend_outside": {},
+        "legend_location": {},
+        "legend_ordering": {},
         "extra_texts": {},
         "extra_lines": {},
         "xticks": {},
