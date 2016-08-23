@@ -28,100 +28,107 @@ colors = ['#EE3311',  # red
           # '#009688',  # teal
           ]
 
-N_YMINORS_DEFAULT = 5
-N_XMINORS_DEFAULT = 5
+N_YMINORS_DEFAULT = 4
+N_XMINORS_DEFAULT = 4
 N_YMAJORS_DEFAULT = 6
 N_XMAJORS_DEFAULT = 6
 
 
-def set_labels(ax, ax1, xlabel, ylabel, ylabel1):
+def set_labels(axes, xlabel, ylabels):
   if xlabel is not None:
-    if ax1 is None:
-      ax.set_xlabel(xlabel)
-    else:
-      ax1.set_xlabel(xlabel)
-  if ylabel is not None:
-    ax.set_ylabel(ylabel)
-    if ylabel1 is not None and ax1 is not None:
-      ax1.set_ylabel(ylabel1)
+    axes[-1].set_xlabel(xlabel)
+  for ax, ylabel in zip(axes, ylabels):
+    if ylabel is not None:
+      ax.set_ylabel(ylabel)
 
 
-def set_major_ticks(ax, ax1, xticks, yticks, xmin, xmax, xmajors, ymin, ymax,
-    ymajors, ymin1, ymax1, ymajors1, xlog, ylog):
+def auto_tick_labeling(ticks):
+  max_tick = max(abs(ticks))
+  if max_tick < 10:
+    tick_str = "{:.2f}"
+  elif max_tick < 100:
+    tick_str = "{:.1f}"
+  elif max_tick < 10000:
+    tick_str = "{:.0f}"
+  else:
+    tick_str = "{:.2e}"
+  return ["$" + tick_str.format(tick) + "$" for tick in ticks]
+
+
+def set_major_ticks(axes, xticks, ytickss, xmin, xmax, xmajors, ymins, ymaxs,
+          ymajorss, xlog, ylogs):
   if xticks is None:
     if xlog:
-      xticks = np.logspace(math.log10(xmin), math.log10(xmax), num=xmajors)
+      if xmin <= 0:
+        raise Exception("You should set xmin > 0 in a log plot")
+      else:
+        xticks = np.logspace(math.log10(xmin), math.log10(xmax), num=xmajors)
     else:
       xticks = np.linspace(xmin, xmax, xmajors)
-  ax.set_xticks(xticks)
-  ax.set_xticklabels([str(xt) for xt in xticks])
-  if yticks is None:
-    if ylog:
-      if ymin <= 0:
-        raise Exception("You should set ymin > 0 in a log plot")
+    axes[-1].set_xticklabels(auto_tick_labeling(xticks))
+  else:
+    axes[-1].set_xticklabels(["$" + str(xt) + "$" for xt in xticks])
+  axes[-1].set_xticks(xticks)
+  for ax in axes[:-1]:
+    plt.setp(ax.get_xticklabels(), visible=False)
+  for ymax, ymin, ymajors, yticks, ylog, ax in zip(ymaxs, ymins, ymajorss,
+      ytickss, ylogs, axes):
+    if yticks is None:
+      if ylog:
+        if ymin <= 0:
+          raise Exception("You should set ymin > 0 in a log plot")
+        else:
+          yticks = np.logspace(math.log10(ymin), math.log10(ymax), num=ymajors)
       else:
-        yticks = np.logspace(math.log10(ymin), math.log10(ymax), num=ymajors)
+        yticks = np.linspace(ymin, ymax, ymajors)
+      ax.set_yticklabels(auto_tick_labeling(yticks))
     else:
-      yticks = np.linspace(ymin, ymax, ymajors)
-    if ymin1 is not None and ymax1 is not None and ax1 is not None:
-      if ymajors1 is None:
-        ymajors1 = ymajors
-      yticks1 = np.linspace(ymin1, ymax1, ymajors1)
-      ax1.set_yticks(yticks1)
-  ax.set_yticks(yticks)
+      ax.set_yticklabels(["$" + str(yt) + "$" for yt in yticks])
+    ax.set_yticks(yticks)
 
 
-def set_minor_ticks(ax, ax1, xminors, yminors, yminors1, xlog, ylog):
-  # TODO: (bcn 2016-03-16) minors are not disabled in log plot
-  ax.minorticks_off()
-  if xminors > 0:
+def set_minor_ticks(axes, xminors, yminorss, xlog, ylogs):
+  for ax, yminors, ylog in zip(axes, yminorss, ylogs):
+    ax.minorticks_off()
+    if xminors is None:
+      xminors = N_XMINORS_DEFAULT
     if xlog:
       ax.set_xscale('log', subsx=[2, 3, 4, 5, 6, 7, 8, 9])
     else:
-      minorLocator = AutoMinorLocator(xminors)
+      minorLocator = AutoMinorLocator(xminors + 1)
       ax.xaxis.set_minor_locator(minorLocator)
-  if yminors > 0:
+    if yminors is None:
+      yminors = N_YMINORS_DEFAULT
     if ylog:
       ax.set_yscale('log', subsy=[2, 3, 4, 5, 6, 7, 8, 9])
     else:
       minorLocator = AutoMinorLocator(yminors + 1)
       ax.yaxis.set_minor_locator(minorLocator)
-  if yminors1 > 0 and ax1 is not None:
-    minorLocator = AutoMinorLocator(yminors1 + 1)
-    ax1.yaxis.set_minor_locator(minorLocator)
 
 
-def set_legend(fig, ax, ax1, legend_ordering, legend_outside, height_shrinker,
+def set_legend(fig, axes, legend_ordering, legend_outside, height_shrinker,
     legend_columns, legend_location):
-  handles, labels = ax.get_legend_handles_labels()
-  # reorder if fitting sequence is given
+  handles, labels = axes[0].get_legend_handles_labels()
   if len(legend_ordering) == len(handles):
+    # reorder if sequence of appropriate size is given
     handles = map(handles.__getitem__, legend_ordering)
     labels = map(labels.__getitem__, legend_ordering)
   if legend_outside:
     # Shrink current axis's height by (1.0-height_shrinker) on the bottom
-    if ax1 is None:
+    reduced_amount = 0.0
+    for ax in axes:
       box = ax.get_position()
-      ax.set_position([box.x0, box.y0 + box.height * (1.0 - height_shrinker),
-                       box.width, box.height * height_shrinker])
-      # Put a legend below current axis
-      ax.legend(handles, labels, loc='upper center',
-          bbox_to_anchor=(0.5, -0.1),
-          fancybox=False, ncol=legend_columns)
-    else:
-      box = ax.get_position()
-      reduced_amount = box.height * (1.0 - height_shrinker)
-      ax.set_position([box.x0, box.y0 + box.height * (1.0 - height_shrinker),
-                       box.width, box.height * height_shrinker])
-      box = ax1.get_position()
-      ax1.set_position([box.x0, box.y0 + reduced_amount + box.height * (1.0 -
+      ax.set_position([box.x0, box.y0 + reduced_amount + box.height * (1.0 -
         height_shrinker), box.width, box.height * height_shrinker])
-      # Put a legend below current axis (coordinates are relative to ax1)
-      fig.legend(handles, labels, loc='lower center',
-          bbox_to_anchor=(0.5, 0.0),
-          fancybox=False, ncol=legend_columns)
+      reduced_amount = box.height * (1.0 - height_shrinker)
+    # Put a legend below current axis (coordinates are relative to last ax)
+    fig.legend(handles, labels, loc='lower center',
+        bbox_to_anchor=(0.5, 0.0),
+        fancybox=False, ncol=legend_columns)
   else:
-    ax.legend(handles, labels, loc=legend_location,
+    #  TODO: (bcn 2016-08-17) in general one could imagine to give the ax to
+    #  draw the legend on
+    axes[0].legend(handles, labels, loc=legend_location,
               fancybox=False, ncol=legend_columns)
 
 
@@ -142,33 +149,32 @@ class Plotter(object):
     #       Default is (0, 0, 1, 1)
     #       We set top to 0.96 to have space for title
     if self.layout_notset:
-      plt.tight_layout(pad=0.5, rect=[0.04, 0.00, 1, 0.96])
-      plt.subplots_adjust(hspace=0.01)
+      plt.tight_layout(pad=0.5, h_pad=2.0, w_pad=2.0, rect=[0.04, 0.00, 1, 0.96])
+      plt.subplots_adjust(hspace=0.05)
       self.layout_notset = False
 
-  def setfig(self, fig, ax, xmin, xmax, ymin, ymax, xlabel, ylabel,
-      title=None, xlog=False, ylog=False,
-      xmajors=N_XMAJORS_DEFAULT, ymajors=N_YMAJORS_DEFAULT,
-      xminors=0, yminors=0, yminors1=0,
-      xticks=None, yticks=None, puff=0.05,
+  def setfig(self, fig, axes, xmin, xmax, ymins, ymaxs, xlabel, ylabels,
+      title=None, xlog=False, ylogs=[],
+      xmajors=N_XMAJORS_DEFAULT, ymajorss=[],
+      xminors=0, yminorss=[],
+      xticks=None, ytickss=[], puff=0.05,
       legend_location='best',
       legend_columns=1, legend_outside=False, height_shrinker=0.80,
-      legend_hide=False, legend_ordering=[], ax1=None, ylabel1=None,
-      ymin1=None, ymax1=None, ymajors1=None):
-    set_labels(ax, ax1, xlabel, ylabel, ylabel1)
-    _set_puffed_scale(puff, xmax, xmin, xlog, ax.set_xlim, ax.set_xscale)
-    _set_puffed_scale(puff, ymax, ymin, ylog, ax.set_ylim, ax.set_yscale)
-    if ymin1 is not None and ax1 is not None:
-      _set_puffed_scale(puff, ymax1, ymin1, False, ax1.set_ylim, ax1.set_yscale)
+      legend_hide=False, legend_ordering=[]):
+    set_labels(axes, xlabel, ylabels)
+    for ax in axes:
+      _set_puffed_scale(puff, xmax, xmin, xlog, ax.set_xlim, ax.set_xscale)
+    for ymax, ymin, ylog, ax in zip(ymaxs, ymins, ylogs, axes):
+      _set_puffed_scale(puff, ymax, ymin, ylog, ax.set_ylim, ax.set_yscale)
     if title is not None and self.title_notset:
       plt.suptitle(title, y=0.99, x=0.55)
       self.title_notset = False
     self.set_layout()
-    set_major_ticks(ax, ax1, xticks, yticks, xmin, xmax, xmajors, ymin, ymax,
-        ymajors, ymin1, ymax1, ymajors1, xlog, ylog)
-    set_minor_ticks(ax, ax1, xminors, yminors, yminors1, xlog, ylog)
+    set_minor_ticks(axes, xminors, yminorss, xlog, ylogs)
+    set_major_ticks(axes, xticks, ytickss, xmin, xmax, xmajors, ymins, ymaxs,
+          ymajorss, xlog, ylogs)
     if not legend_hide:
-      set_legend(fig, ax, ax1, legend_ordering, legend_outside, height_shrinker,
+      set_legend(fig, axes, legend_ordering, legend_outside, height_shrinker,
           legend_columns, legend_location)
 
 
@@ -205,27 +211,44 @@ def get_label(object_dict, title, filename=None, pretty_label=None):
   return object_dict.get('label', label)
 
 
-def combined_plot(ax, ax1, base_line, x, y, *args, **kwargs):
-  ax.plot(x, y, *args, **kwargs)
-  comb = data_utils.normalize(base_line, x, y)
-  ax1.plot(comb[0], comb[1], *args, **kwargs)
+def handle_base_line_exceptions(base_lines, axes):
+  if type(base_lines) != list:
+    base_lines = [base_lines] * len(axes[1:])
+  if len(axes[1:]) != len(base_lines):
+    print 'Inconsistent number of ratios and base_lines!'
+    print 'len(axes[1:]) = ', len(axes[1:])
+    print 'len(base_lines) = ', len(base_lines)
+  return base_lines
 
 
-def combined_errorbar(ax, ax1, base_line, x, y, yerr=None, **kwargs):
-  ax.errorbar(x, y, yerr=yerr, **kwargs)
-  comb = data_utils.normalize(base_line, x, y, yerr=yerr)
-  if len(comb[0]) != len(comb[1]):
-    raise Exception("normalize gave incoherent data: len(x) != len(y): " +
-        str(len(comb[0])) + " != " + str(len(comb[1])))
-  ax1.errorbar(comb[0], comb[1], yerr=comb[2], **kwargs)
+def combined_plot(axes, base_lines, x, y, *args, **kwargs):
+  axes[0].plot(x, y, *args, **kwargs)
+  base_lines = handle_base_line_exceptions(base_lines, axes)
+  for ax, base_line in zip(axes[1:], base_lines):
+    comb = data_utils.normalize(base_line, x, y)
+    ax.plot(comb[0], comb[1], *args, **kwargs)
 
 
-def combined_fill_between(ax, ax1, base_line, x, ymin, ymax, *args, **kwargs):
-  ax.fill_between(x, ymin, ymax, *args, **kwargs)
-  comb = data_utils.normalize(base_line, x, ymin, yerr=ymax)
-  ax1.fill_between(comb[0], comb[1], comb[2], *args, **kwargs)
+def combined_errorbar(axes, base_lines, x, y, yerr=None, **kwargs):
+  axes[0].errorbar(x, y, yerr=yerr, **kwargs)
+  base_lines = handle_base_line_exceptions(base_lines, axes)
+  for ax, base_line in zip(axes[1:], base_lines):
+    comb = data_utils.normalize(base_line, x, y, yerr=yerr)
+    if len(comb[0]) != len(comb[1]):
+      raise Exception("normalize gave incoherent data: len(x) != len(y): " +
+          str(len(comb[0])) + " != " + str(len(comb[1])))
+    ax.errorbar(comb[0], comb[1], yerr=comb[2], **kwargs)
 
 
+def combined_fill_between(axes, base_lines, x, ymin, ymax, *args, **kwargs):
+  axes[0].fill_between(x, ymin, ymax, *args, **kwargs)
+  base_lines = handle_base_line_exceptions(base_lines, axes)
+  for ax, base_line in zip(axes[1:], base_lines):
+    comb = data_utils.normalize(base_line, x, ymin, yerr=ymax)
+    ax.fill_between(comb[0], comb[1], comb[2], *args, **kwargs)
+
+
+#  TODO: (bcn 2016-08-17) is this art or can it go?
 def get_object_name(obj, is_fit):
   if not is_fit:
     return obj.get('name', '')
@@ -257,6 +280,26 @@ def sanity_check(data):
   return True
 
 
+def append_from_ratio_dict(ratio_dict, attribute, lst):
+  if ratio_dict is not None:
+    if type(ratio_dict) != list:
+      ratio_dict = [ratio_dict]
+    for rd in ratio_dict:
+      lst.append(rd.get(attribute, None))
+  return lst
+
+
+def setup_fig_kwargs(line_data, band_data, many_labels, plot_dict, ratio_dict):
+  fig_kwargs = setup_ranges(line_data, band_data, plot_dict, ratio_dict)
+  fig_kwargs.update(setup_labels(plot_dict, ratio_dict))
+  fig_kwargs.update(setup_log_scale(plot_dict, ratio_dict))
+  fig_kwargs.update(setup_ticks(plot_dict, ratio_dict))
+  fig_kwargs.update(setup_majors(plot_dict, ratio_dict))
+  fig_kwargs.update(setup_minors(plot_dict, ratio_dict))
+  fig_kwargs.update(setup_extra_kwargs(plot_dict, many_labels))
+  return fig_kwargs
+
+
 def setup_figure(plot_dict, ratio_dict, many_labels):
   try:
     size = (plot_dict['xpagelength'], plot_dict['ypagelength'])
@@ -265,41 +308,63 @@ def setup_figure(plot_dict, ratio_dict, many_labels):
   return plt.figure(figsize=size)
 
 
-def setup_labels(label_decider, title, plot_dict, ratio_dict):
-  label_kwargs = {}
-  if label_decider is not None:
-    label_kwargs['xlabel'], label_kwargs['ylabel'] = label_decider(title)
-  else:
-    label_kwargs['xlabel'] = plot_dict.get('xlabel', 'x')
-    label_kwargs['ylabel'] = plot_dict.get('ylabel', 'y')
-  if ratio_dict is not None:
-    label_kwargs['ylabel1'] = ratio_dict.get('ylabel', 'ratio')
-  else:
-    label_kwargs['ylabel1'] = None
-  return label_kwargs
+def setup_ranges(line_data, band_data, plot_dict, ratio_dict):
+  try:
+    flattened_band_data = reduce(lambda x, y: x + y, band_data)
+  except TypeError:
+    flattened_band_data = []
+  all_data = line_data + flattened_band_data
+  xmin = plot_dict.get('xmin', min([np.amin(d[1][0]) for d in all_data]))
+  xmax = plot_dict.get('xmax', min([np.amax(d[1][0]) for d in all_data]))
+  ymins = [plot_dict.get('ymin', min([np.amin(d[1][1]) for d in all_data]))]
+  ymaxs = [plot_dict.get('ymax', max([np.amax(d[1][1]) for d in all_data]))]
+  ymins = append_from_ratio_dict(ratio_dict, 'ymin', ymins)
+  ymaxs = append_from_ratio_dict(ratio_dict, 'ymax', ymaxs)
+  return {'xmin': xmin, 'xmax': xmax, 'ymins': ymins, 'ymaxs': ymaxs}
 
 
-def setup_ranges(range_decider, line_data, band_data, title,
-    plot_dict, ratio_dict):
-  ymin1, ymax1 = None, None
-  if range_decider is not None:
-    ymin, ymax, xmin, xmax = range_decider(line_data, title)
-  else:
-    try:
-      flattened_band_data = reduce(lambda x, y: x + y, band_data)
-    except TypeError:
-      flattened_band_data = []
-    all_data = line_data + flattened_band_data
-    xmin = plot_dict.get('xmin', min([np.amin(d[1][0]) for d in all_data]))
-    xmax = plot_dict.get('xmax', min([np.amax(d[1][0]) for d in all_data]))
-    ymin = plot_dict.get('ymin', min([np.amin(d[1][1]) for d in all_data]))
-    ymax = plot_dict.get('ymax', max([np.amax(d[1][1]) for d in all_data]))
-    if ratio_dict is not None:
-      ymax1 = ratio_dict.get('ymax', None)
-      ymin1 = ratio_dict.get('ymin', None)
-  fig_kwargs = {'xmin': xmin, 'xmax': xmax, 'ymin': ymin, 'ymax': ymax,
-      'ymin1': ymin1, 'ymax1': ymax1}
-  return fig_kwargs
+def setup_labels(plot_dict, ratio_dict):
+  xlabel = plot_dict.get('xlabel', 'x')
+  ylabels = [plot_dict.get('ylabel', 'y')]
+  ylabels = append_from_ratio_dict(ratio_dict, 'ylabel', ylabels)
+  return {'xlabel': xlabel, 'ylabels': ylabels}
+
+
+def setup_log_scale(plot_dict, ratio_dict):
+  xlog = plot_dict.get('xlog', False)
+  ylogs = [plot_dict.get('ylog', False)]
+  ylogs = append_from_ratio_dict(ratio_dict, 'ylog', ylogs)
+  return {'xlog': xlog, 'ylogs': ylogs}
+
+
+def setup_ticks(plot_dict, ratio_dict):
+  xticks = plot_dict.get('xticks', None)
+  ytickss = [plot_dict.get('yticks', None)]
+  ytickss = append_from_ratio_dict(ratio_dict, 'yticks', ytickss)
+  return {'xticks': xticks, 'ytickss': ytickss}
+
+
+def setup_majors(plot_dict, ratio_dict):
+  xmajors = plot_dict.get('xmajors', None)
+  ymajorss = [plot_dict.get('ymajors', None)]
+  ymajorss = append_from_ratio_dict(ratio_dict, 'ymajors', ymajorss)
+  return {'xmajors': xmajors, 'ymajorss': ymajorss}
+
+
+def setup_minors(plot_dict, ratio_dict):
+  xminors = plot_dict.get('xminors', None)
+  yminorss = [plot_dict.get('yminors', None)]
+  yminorss = append_from_ratio_dict(ratio_dict, 'yminors', yminorss)
+  return {'xminors': xminors, 'yminorss': yminorss}
+
+
+def setup_extra_kwargs(plot_dict, many_labels):
+  kwargs = {}
+  kwargs['height_shrinker'] = 0.70
+  kwargs['legend_outside'] = plot_dict.get('legend_outside', many_labels)
+  kwargs['legend_location'] = plot_dict.get('legend_location', 'best')
+  kwargs['legend_ordering'] = plot_dict.get('legend_ordering', [])
+  return kwargs
 
 
 def plot_band(data_of_a_band, band, color, title, global_opacity, pretty_label,
@@ -347,7 +412,9 @@ def plot_line(ldata, line, color, title, pretty_label, linestyle_decider,
         alpha=global_opacity)
     plt.hlines(mean, _[:-1], _[1:], label=label, colors=c)
   elif linestyle is not None and linestyle != "None":
-    this_plot(d[0], d[1], color=c, label=label, linestyle=linestyle)
+    linewidth = line.get('linewidth', 1.5)
+    this_plot(d[0], d[1], color=c, label=label, linestyle=linestyle,
+        linewidth=linewidth)
   else:
     marker = decide_if_not_none(line, marker_decider, 'marker', '+')
     if len(d) > 2:
@@ -405,50 +472,22 @@ def select_data(data, plot_dict, title):
   return valid, line_data, band_data, fit_data, many_labels, lines, bands, fits
 
 
-def setup_extra_kwargs(plot_dict, legend_decider, many_labels, title):
-  kwargs = {}
-  kwargs['height_shrinker'] = 0.70
-  kwargs['xlog'] = plot_dict.get('xlog', False)
-  kwargs['ylog'] = plot_dict.get('ylog', False)
-  kwargs['xticks'] = plot_dict.get('xticks', None)
-  kwargs['yticks'] = plot_dict.get('yticks', None)
-  kwargs['legend_outside'] = plot_dict.get('legend_outside', many_labels)
-  kwargs['legend_location'] = decide_if_not_none(plot_dict, legend_decider,
-      'legend_location', 'best', title)
-  return kwargs
-
-
-def setup_majors(plot_dict, ratio_dict):
-  kwargs = {}
-  kwargs['ymajors'] = plot_dict.get('ymajors', N_YMAJORS_DEFAULT)
-  kwargs['xmajors'] = plot_dict.get('xmajors', N_XMAJORS_DEFAULT)
-  if ratio_dict is not None:
-    kwargs['ymajors1'] = ratio_dict.get('ymajors', N_YMAJORS_DEFAULT)
-  else:
-    kwargs['ymajors1'] = N_YMAJORS_DEFAULT
-  return kwargs
-
-
-def setup_minors(plot_dict, ratio_dict):
-  kwargs = {}
-  kwargs['xminors'] = plot_dict.get('xminors', N_XMINORS_DEFAULT)
-  kwargs['yminors'] = plot_dict.get('yminors', N_YMINORS_DEFAULT)
-  if ratio_dict is not None:
-    kwargs['yminors1'] = ratio_dict.get('yminors', N_YMINORS_DEFAULT)
-  else:
-    kwargs['yminors1'] = N_YMINORS_DEFAULT
-  return kwargs
-
-
 def use_local_or_global_base_line(band_or_line, data, this_errorbar_func,
     this_plot_func, this_fill_between_func, global_base_line):
   base_line = band_or_line.get('base_line', None)
   if base_line is not None:
-    this_base_line = [d for d in data
-        if get_name(base_line) == d[0].replace('.dat', '')][0][1]
-    this_errorbar = partial(this_errorbar_func, this_base_line)
-    this_plot = partial(this_plot_func, this_base_line)
-    this_fill_between = partial(this_fill_between_func, this_base_line)
+    if type(base_line) != list:
+      base_line = [base_line]
+    this_base_lines = []
+    for bl in base_line:
+      this_base_item = [d for d in data
+        if get_name(bl) == d[0].replace('.dat', '')]
+      if len(this_base_item) == 0:
+        raise Exception('Did not find ' + str(bl) + ' ! Maybe you made a typo?')
+      this_base_lines.append(this_base_item[0][1])
+    this_errorbar = partial(this_errorbar_func, this_base_lines)
+    this_plot = partial(this_plot_func, this_base_lines)
+    this_fill_between = partial(this_fill_between_func, this_base_lines)
   else:
     this_errorbar = partial(this_errorbar_func, global_base_line)
     this_plot = partial(this_plot_func, global_base_line)
@@ -487,8 +526,8 @@ def plot_extra_lines_and_texts(ax, plot_dict, global_opacity):
       print 'Cannot draw this extra object:', extra
 
 
-def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
-    label_decider=None, legend_decider=None, marker_decider=None,
+def plot(plot_dict, data, pic_path='./', plot_extra=None,
+    legend_decider=None, marker_decider=None,
     linestyle_decider=None, pretty_label=None, set_extra_settings=None):
   """
   data: [(identifier_string, numpy_array),...] where numpy_array has the columns
@@ -501,37 +540,39 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
   if not valid:
     return
   ratio_dict = plot_dict.get('ratio', None)
-  fig_kwargs = setup_ranges(range_decider, line_data,
-      band_data, title, plot_dict, ratio_dict)
   fig = setup_figure(plot_dict, ratio_dict, many_labels)
   if ratio_dict is not None:
+    if type(ratio_dict) != list:
+      ratio_dict = [ratio_dict]
     global_base_line = line_data[0][1]
-    gs = gridspec.GridSpec(2, 1, height_ratios=[2, 1])
+    number_of_axes = len(ratio_dict) + 1
+    #  TODO: (bcn 2016-08-17) could be customizable
+    height_ratios = [number_of_axes]
+    for rd in ratio_dict:
+      height_ratios.append(1)
+    gs = gridspec.GridSpec(number_of_axes, 1, height_ratios=height_ratios)
     ax = fig.add_subplot(gs[0])
-    ax1 = fig.add_subplot(gs[1], sharex=ax)
-    this_errorbar_func = partial(partial(combined_errorbar, ax), ax1)
-    this_plot_func = partial(partial(combined_plot, ax), ax1)
-    this_fill_between_func = partial(partial(combined_fill_between, ax), ax1)
-    axes = [ax, ax1]
-    dicts = [plot_dict, ratio_dict]
+    axes = [ax]
+    for i in range(len(ratio_dict)):
+      axes.append(fig.add_subplot(gs[i + 1], sharex=ax))
+    this_errorbar_func = partial(combined_errorbar, axes)
+    this_plot_func = partial(combined_plot, axes)
+    this_fill_between_func = partial(combined_fill_between, axes)
+    dicts = [plot_dict] + ratio_dict
   else:
     ax = fig.add_subplot(1, 1, 1)
     this_plot = ax.plot
     this_errorbar = ax.errorbar
     this_fill_between = ax.fill_between
-    ax1 = None
     axes = [ax]
     dicts = [plot_dict]
-  fig_kwargs['ax1'] = ax1
   global_opacity = plot_dict.get('opacity', 0.3)
   if plot_extra is not None:
     ax = plot_extra(ax, title)
   for axx, dictt in zip(axes, dicts):
     plot_extra_lines_and_texts(axx, dictt, global_opacity)
-  fig_kwargs.update(setup_majors(plot_dict, ratio_dict))
-  fig_kwargs.update(setup_minors(plot_dict, ratio_dict))
-  fig_kwargs.update(setup_labels(label_decider, title, plot_dict, ratio_dict))
-  fig_kwargs.update(setup_extra_kwargs(plot_dict, legend_decider, many_labels, title))
+  fig_kwargs = setup_fig_kwargs(line_data, band_data, many_labels, plot_dict,
+      ratio_dict)
   if set_extra_settings is not None:
     ax = set_extra_settings(ax, title)
   plotter = Plotter()
@@ -553,10 +594,10 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None, range_decider=None,
         marker_decider, this_errorbar, this_plot, this_fill_between, ax,
         global_opacity, plotter)
     if plot_dict.get('generate_animated', False):
-      plotter.setfig(fig, ax, title=None, legend_hide=False, **fig_kwargs)
+      plotter.setfig(fig, axes, title=None, legend_hide=False, **fig_kwargs)
       fig.savefig(os.path.join(pic_path, title + '-' + str(i) + '.pdf'),
                   dpi=fig.dpi)
-  plotter.setfig(fig, ax, title=title, **fig_kwargs)
+  plotter.setfig(fig, axes, title=title, **fig_kwargs)
   save_fig(fig, title, plot_dict, pic_path)
 
 

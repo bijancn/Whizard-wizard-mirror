@@ -4,9 +4,8 @@ include("../process_settings.sin")
 wtop = 0.0
 wZ = 2.4409
 wW = 2.0454
-real dummy = 0.0
 scale = mtop
-?nlo_fixed_order = true
+?fixed_order_nlo_events = true
 ?unweighted = false
 ?negative_weights = true
 #ITERATIONS

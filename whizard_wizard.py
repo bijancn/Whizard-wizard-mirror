@@ -381,7 +381,8 @@ def fill_runs(proc_name, proc_dict):
   if proc_dict.get('disabled', False):
     runs = []
   elif purpose == 'events' or purpose == 'histograms':
-    runs = [(b, proc_name, proc_dict) for b in range(proc_dict['batches'])]
+    start = proc_dict.get('batch_start', 0)
+    runs = [(b + start, proc_name, proc_dict) for b in range(proc_dict['batches'])]
   elif purpose == 'scan':
     runs = fill_all_scan_runs(proc_name, proc_dict)
   elif purpose == 'integration' or purpose == 'test_soft':
@@ -399,6 +400,11 @@ def test_fill_runs_basic():
   proc_name = 'test'
   runs = fill_runs(proc_name, proc_dict)
   nt.eq_(runs, [(0, proc_name, proc_dict), (1, proc_name, proc_dict)])
+
+  proc_dict = {'purpose': 'events', 'batches': 2, 'batch_start': 17}
+  proc_name = 'test'
+  runs = fill_runs(proc_name, proc_dict)
+  nt.eq_(runs, [(17, proc_name, proc_dict), (18, proc_name, proc_dict)])
 
   proc_dict = {'purpose': 'scan', 'scans': [{'scan_object': 'sqrts', 'ranges':
       [{'start': 0.1, 'stop': 0.2, 'stepsize': 0.05, 'type': 'linear'}]}]}

@@ -5,17 +5,21 @@ wtop = 1.4757
 wZ = 2.5060
 wW = 2.0978
 
+?check_grid_file = false
 
 ?fixed_order_nlo_events = true
 ?unweighted = false
 ?negative_weights = true
 
+# $fks_mapping_type = "resonances"
+# $resonances_exclude_particles = "t:T"
 
-scale = mtop
+scale = mtop + mH
 #ITERATIONS
 library = proc_lo
-process proc_lo = E1, e1 => Wp, Wm, b, B
+process proc_lo = E1, e1 => Wp, Wm, b, B, H
 #SETSCAN
+
 
 integrate (proc_lo)
 printf "RES %8e %8e %8e" (sqrts, integral(proc_lo), error(proc_lo))

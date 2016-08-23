@@ -1,101 +1,88 @@
 {
   "$schema": "json-schema.org/draft-04/schema#",
-  "id": "run-schema",
   "type": "object",
-  "properties": {
-    "processes": {
-      "id": "processes",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "process": {
-            "id": "processes/process",
-            "type": "array"
-          },
-          "purpose": {
-            "id": "processes/purpose",
-            "type": "string",
-            "enum": ["scan", "integration", "histograms", "events",
-                     "test_soft"]
-          },
-          "nlo_type": {
-             "id": "processes/nlo_type",
-             "type": "string",
-             "enum": ["lo", "nlo", "nlo_combined"]
-          },
-          "fks_method": {
-             "id": "processes/fks_method",
-             "type": "string",
-             "enum": ["default", "resonances"]
-          },
-          "beam_type": {
-             "id" : "processes/beam_type",
-             "type": "string",
-             "enum": ["leptons", "hadrons"]
-          },
-          "batches": {
-            "id": "processes/batches",
-            "type": "number"
-          },
-          "events_per_batches": {
-            "id": "processes/batches",
-            "type": "number"
-          },
-          "scan_object": {
-            "id": "processes/scan_object",
-            "type": "string"
-          },
-          "start": {
-            "id": "processes/start",
-            "type": "number"
-          },
-          "stop": {
-            "id": "processes/stop",
-            "type": "number"
-          },
-          "stepsize": {
-            "id": "processes/stepsize",
-            "type": "string"
-          },
-          "adaption_iterations": {
-            "id": "processes/adaption_iterations",
-            "type": "string"
-          },
-          "integration_iterations": {
-            "id": "processes/integration_iterations",
-            "type": "string"
-          },
-          "scale_variation": {
-             "id": "processes/scale_variation",
-             "type": "boolean"
-          },
-          "only_sindarins": {
-             "id": "processes/only_sindarins",
-             "type": "boolean"
-          },
-          "event_mult_real": {
-             "id": "processes/event_mult_real",
-             "type": "number"
+  "definitions": {
+    "scan": {
+      "type": "object",
+      "properties": {
+        "scan_object": { "type": "string" },
+        "ranges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "start": { "type": "number" },
+              "stop": { "type": "number" },
+              "stepsize": { "type": "number" },
+              "steps": { "type": "number" },
+              "type": {
+                "type": "string",
+                "enum": ["logarithmic", "logarithmic2", "linear", "explicit"]
+              },
+              "range": {
+                "type": "array",
+                "items": { "type": "number" }
+              }
+            }
           }
+        }
+      }
+    },
+    "run": {
+      "type": "object",
+      "properties": {
+        "process": {
+          "type": "array",
+          "description": "apply run options of this entry to all processes in this array"
         },
-        "required": [
-          "process",
-          "purpose",
-          "nlo_type"
-        ]
+        "purpose": {
+          "type": "string",
+          "enum": ["scan", "integration", "histograms", "events", "test_soft"],
+          "description": "What to do. In the future, the purpose should be an object containing also the corresponding options"
+        },
+        "nlo_type": {
+          "type": "string",
+          "enum": ["lo", "nlo", "nlo_combined"]
+        },
+        "fks_method": {
+          "type": "string",
+          "enum": ["default", "resonances"]
+        },
+        "beam_type": {
+          "type": "string",
+          "enum": ["leptons", "hadrons"]
+        },
+        "batch_start": { "type": "number" },
+        "batches": { "type": "number" },
+        "events_per_batches": { "type": "number" },
+        "scans": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/scan" }
+        },
+        "adaption_iterations": { "type": "string" },
+        "integration_iterations": { "type": "string" },
+        "scale_variation": { "type": "boolean" },
+        "only_sindarins": { "type": "boolean" },
+        "event_mult_real": { "type": "number" }
       },
       "required": [
-        "1"
+        "process",
+        "purpose",
+        "nlo_type"
       ]
+    }
+  },
+  "properties": {
+    "processes": {
+      "type": "array",
+      "description": "`runs` would be a more appropriate name",
+      "items": { "$ref": "#/definitions/run" },
+      "required": [ "1" ]
     },
-    "whizard": {
-      "id": "whizard",
-      "type": "string"
-    },
+    "whizard": { "type": "string" },
     "data_output": {
-      "id": "data_output",
-      "type": "string"
+      "type": "string",
+      "description": "Not supported"
     }
   },
   "required": [

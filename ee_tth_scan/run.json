@@ -1,38 +1,64 @@
 {
   "processes": [
-  {"process": "proc_lo",
-    "purpose": "scan",
-    "nlo_type": "lo",
-    "whizard_options": "",
-    "scan_object": "sqrts",
-    "ranges": [
-    {"type": "linear",
-      "start": 700,
-      "stop": 900,
-      "stepsize": 2.5
+    {"process": "proc_lo",
+      "purpose": "scan",
+      "nlo_type": "lo",
+      "disabled": true,
+      "whizard_options": "",
+      "only_sindarins": false,
+      "scans": [{
+        "scan_object": "sqrts",
+        "ranges": [
+          {"type": "linear",
+            "start": 480,
+            "stop": 600,
+            "stepsize": 20.0
+          },
+          {"type": "linear",
+            "start": 650,
+            "stop": 1000,
+            "stepsize": 50.0
+          },
+          {"type": "linear",
+            "start": 1000,
+            "stop": 3200,
+            "stepsize": 200.0
+          }
+        ]}],
+        "adaption_iterations": "5:20000",
+        "integration_iterations": "5:20000",
+        "scale_variation": false,
+        "integration_copies": 25
+    },
+    {"process": "proc_nlo",
+      "purpose": "scan",
+      "disabled": true,
+      "nlo_type": "nlo",
+      "whizard_options": "",
+      "scans": [{
+        "scan_object": "sqrts",
+        "ranges": [
+          {"type": "linear",
+            "start": 480,
+            "stop": 600,
+            "stepsize": 20.0
+          },
+          {"type": "linear",
+            "start": 650,
+            "stop": 1000,
+            "stepsize": 50.0
+          },
+          {"type": "linear",
+            "start": 1000,
+            "stop": 3200,
+            "stepsize": 200.0
+          }
+        ]}],
+        "adaption_iterations": "5:20000",
+        "integration_iterations": "5:20000",
+        "integration_copies": 25,
+        "scale_variation": true
     }
-    ],
-    "adaption_iterations": "6:20000",
-    "integration_iterations": "4:10000",
-    "batches": 50
-  },
-  {"process": "proc_nlo",
-    "purpose": "scan",
-    "nlo_type": "nlo",
-    "whizard_options": "",
-    "scan_object": "sqrts",
-    "ranges": [
-    {"type": "linear",
-      "start": 700,
-      "stop": 900,
-      "stepsize": 2.5
-    }
-    ],
-    "adaption_iterations": "6:8000",
-    "integration_iterations": "3:5000",
-    "batches": 50,
-    "scale_variation": true
-  }
   ],
   "whizard": "whizard",
   "data_output": "./"
