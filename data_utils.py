@@ -308,7 +308,8 @@ def get_variance(sigma):
   if np.isclose(sum(sigma), 0.0):
     print 'Warning: sum(sigma) = 0. Weighted average doesnt make sense'
     return 0.0
-  sum_var_inv = sum([1.0 / (s * s) for s in sigma if not np.isclose(s, 0.0)])
+  sum_var_inv = sum([1.0 / (s * s) for s in sigma
+      if not np.isclose(s, 0.0, atol=1.e-10)])
   return 1.0 / sum_var_inv
 
 
