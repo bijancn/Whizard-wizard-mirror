@@ -31,6 +31,7 @@ include/
 *.la
 *.makefile
 *.dat
+done
 
 core
 main02
