@@ -381,7 +381,8 @@ def fill_runs(proc_name, proc_dict):
   if proc_dict.get('disabled', False):
     runs = []
   elif purpose == 'events' or purpose == 'histograms':
-    runs = [(b, proc_name, proc_dict) for b in range(proc_dict['batches'])]
+    start = proc_dict.get('batch_start', 0)
+    runs = [(b + start, proc_name, proc_dict) for b in range(proc_dict['batches'])]
   elif purpose == 'scan':
     runs = fill_all_scan_runs(proc_name, proc_dict)
   elif purpose == 'integration' or purpose == 'test_soft':
