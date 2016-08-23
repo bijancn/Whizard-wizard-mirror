@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-from SCons.Script import Builder
+from SCons.Script import Builder, Depends
+import sconstruct_utils as su
 from glob import glob
 import shutil
 
@@ -102,3 +103,53 @@ def ADD_BUILDERS(env):
     'MergeYodas': merge_yodas, 'MergeYodasNoScale': merge_yodas_noscale,
     'BuildEnvelope': build_envelope,
     'Plot' : build_plot, 'PlotLOLineWithNLOBand': build_plot_with_lo_line_and_nlo_band})
+
+
+def main(env, analysiss, processes, plot_together, configs,
+    lo_nlo_lines_and_nlo_band, descriptions):
+  analysis = env.Analysis("RivetAnalysis", analysiss)
+  make_plot_dir = lambda d : d + '/index.html'
+  control_plots = map(make_plot_dir, processes)
+  plot_targets = [pt['target'] for pt in plot_together]
+  plot_targets = map(make_plot_dir, plot_targets)
+  for idx, pd in enumerate(plot_together):
+    plot_together[idx]['target'] = make_plot_dir(pd['target'])
+
+  print 'processes: ', processes
+  yodas = build_yodas_from_hepmcs(env, processes)
+  Depends(yodas, analysis)
+  small_yoda_names = su.get_yodas_from_proc_list(processes)
+  print 'small_yoda_names: ', small_yoda_names
+  n_yodas = len(sum(small_yoda_names, []))
+  if n_yodas > 0:
+    final_yoda_names = su.get_final_yoda_names(small_yoda_names)
+    print 'final_yoda_names: ', final_yoda_names
+    merged_yodas = build_merged_yodas(env, small_yoda_names, final_yoda_names)
+    nlo_yodas = su.find_nlo_yodas(merged_yodas)
+    build_nlo_yodas(nlo_yodas, env)
+    scale_variation_yodas = su.find_scale_variation_yodas(merged_yodas)
+    final_scale_yodas = build_scale_variation_yodas(scale_variation_yodas, env)
+    if len(final_scale_yodas) > 0:
+      small_yoda_names = small_yoda_names + final_scale_yodas
+      control_plots += map(make_plot_dir, final_scale_yodas)
+      env.BuildEnvelope(target='envelope.yoda', source=final_scale_yodas)
+
+    print 'Control plots: ', control_plots
+    for (small_yodas, control_plot) in zip(small_yoda_names, control_plots):
+      # TODO: (bcn 2016-05-26) Use all given configs
+      try:
+        if len(small_yodas) == 0:
+          raise IndexError
+        plot = env.Plot(target=control_plot, source=small_yodas, CONFIG=configs[0])
+        Depends(plot, configs[0])
+      except IndexError:
+        print 'Could not build', control_plot, 'from', small_yodas
+
+    if len(lo_nlo_lines_and_nlo_band) > 0:
+      env.PlotLOLineWithNLOBand(target=plot_targets[0],
+          source=lo_nlo_lines_and_nlo_band, CONFIG=configs[0])
+
+    if len(plot_together) > 0:
+      for plot_dict in plot_together:
+        env.Plot(target=plot_dict['target'], source=plot_dict['lines'],
+            CONFIG=configs[0], DESCRIPTIONS=descriptions)
