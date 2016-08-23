@@ -305,14 +305,20 @@ def build_ratio(data, indices):
 
 
 def get_variance(sigma):
-  sum_var_inv = sum([1.0 / (s * s) for s in sigma])
+  if np.isclose(sum(sigma), 0.0):
+    print 'Warning: sum(sigma) = 0. Weighted average doesnt make sense'
+    return 0.0
+  sum_var_inv = sum([1.0 / (s * s) for s in sigma if not np.isclose(s, 0.0)])
   return 1.0 / sum_var_inv
 
 
 def get_weighted_mean(values, sigma):
   mean = 0.0
+  if np.isclose(sum(values), 0.0):
+    return mean
   for v, s in zip(values, sigma):
-    mean += v / (s * s)
+    if not np.isclose(v, 0.0):
+      mean += v / (s * s)
   return mean * get_variance(sigma)
 
 
