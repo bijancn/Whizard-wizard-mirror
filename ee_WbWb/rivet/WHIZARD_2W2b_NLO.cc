@@ -22,7 +22,7 @@ namespace Rivet {
 
     /// Book histograms and initialise projections before the run
     void init() {
-      const int stdbin = 30;
+      const int stdbin = 20;
 
       const IdentifiedFinalState b(PID::BQUARK);
       addProjection(b, "bquark");
