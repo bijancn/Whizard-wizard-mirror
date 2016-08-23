@@ -401,6 +401,11 @@ def test_fill_runs_basic():
   runs = fill_runs(proc_name, proc_dict)
   nt.eq_(runs, [(0, proc_name, proc_dict), (1, proc_name, proc_dict)])
 
+  proc_dict = {'purpose': 'events', 'batches': 2, 'batch_start': 17}
+  proc_name = 'test'
+  runs = fill_runs(proc_name, proc_dict)
+  nt.eq_(runs, [(17, proc_name, proc_dict), (18, proc_name, proc_dict)])
+
   proc_dict = {'purpose': 'scan', 'scans': [{'scan_object': 'sqrts', 'ranges':
       [{'start': 0.1, 'stop': 0.2, 'stepsize': 0.05, 'type': 'linear'}]}]}
   runs = fill_runs(proc_name, proc_dict)
