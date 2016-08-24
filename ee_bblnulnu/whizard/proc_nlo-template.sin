@@ -13,7 +13,6 @@ wW = 2.0978
 $fks_mapping_type = "resonances"
 
 
-real dummy = 0.0
 scale = mtop
 #ITERATIONS
 library = proc_nlo

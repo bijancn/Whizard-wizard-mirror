@@ -63,7 +63,10 @@
         "integration_iterations": { "type": "string" },
         "scale_variation": { "type": "boolean" },
         "only_sindarins": { "type": "boolean" },
-        "event_mult_real": { "type": "number" }
+        "event_mult_real": {
+          "type": "number",
+          "description": "increases the number of events per batch for reals"
+        }
       },
       "required": [
         "process",
