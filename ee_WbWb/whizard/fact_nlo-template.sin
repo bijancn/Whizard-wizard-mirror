@@ -16,7 +16,7 @@ sqrtsstepsize = 0.1 GeV
 sqrtsmin = sqrts - sqrtsstepsize
 sqrtsmax = sqrts + sqrtsstepsize
 
-?nlo_fixed_order = true
+?fixed_order_nlo_events = true
 ?unweighted = false
 ?negative_weights = true
 

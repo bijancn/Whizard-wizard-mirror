@@ -3,7 +3,11 @@
 import re
 import os
 import sys
-import SConstruct_utils
+import inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+grand_parentdir = os.path.dirname(os.path.dirname(currentdir))
+sys.path.insert(0, grand_parentdir)
+import sconstruct_utils as su
 import shutil
 
 env = Environment(ENV=os.environ, tools=['default', ADD_BUILDERS])
@@ -20,7 +24,7 @@ processes =  ['proc_lo',
              'proc_nlo_low_Born', 'proc_nlo_low_Real', 'proc_nlo_low_Virtual', 'proc_nlo_low_Mismatch', 
              'proc_nlo_central_Born', 'proc_nlo_central_Real', 'proc_nlo_central_Virtual', 'proc_nlo_central_Mismatch',
              'proc_nlo_high_Born', 'proc_nlo_high_Real', 'proc_nlo_high_Virtual', 'proc_nlo_high_Mismatch']
-###processes = SConstruct_utils.filter_existing_processes (processes, 'yoda')
+###processes = su.filter_existing_processes (processes, 'yoda')
 
 control_plots = map(dirify, processes)
 descriptions = [r"\textsc{LO}", r"\textsc{NLO}", r"\textsc{POWHEG}"]
@@ -31,9 +35,9 @@ plots = map(dirify, plots)
 configs = [base_analysis, base_analysis + '-show-MCerrors']
 configs = [c + '.plot' for c in configs]
 
-small_yoda_names = SConstruct_utils.get_yodas_from_proc_list (processes) 
+small_yoda_names = su.get_yodas_from_proc_list (processes) 
 print 'small_yoda_names: ', small_yoda_names
-final_yoda_names = SConstruct_utils.get_final_yoda_names (small_yoda_names)
+final_yoda_names = su.get_final_yoda_names (small_yoda_names)
 print 'final_yoda_names: ', final_yoda_names
 
 Analysis = env.Analysis('RivetAnalysis', analysiss)

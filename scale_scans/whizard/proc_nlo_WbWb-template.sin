@@ -6,7 +6,7 @@ wZ = 2.5060
 wW = 2.0978
 alpha_power = 4
 real dummy = 0.0
-?nlo_fixed_order = true
+?fixed_order_nlo_events = true
 ?unweighted = false
 ?negative_weights = true
 
