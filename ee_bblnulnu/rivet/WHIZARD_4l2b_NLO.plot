@@ -7,11 +7,32 @@
 \endpsclip
  END SPECIAL
 
+ BEGIN SPECIAL /WHIZARD_.*/BW-inv-peak
+\psclip{\psframe[linewidth=0,linestyle=none](0,0)(1,1)}
+\rput[bl](0.25,0.1){\color{gray}\textsc{Whizard+OpenLoops}}
+\endpsclip
+ END SPECIAL
+
+ BEGIN SPECIAL /WHIZARD_.*/BW-pT
+\psclip{\psframe[linewidth=0,linestyle=none](0,0)(1,1)}
+\rput[bl](0.2,0.1){\color{gray}\textsc{Whizard+OpenLoops}}
+\endpsclip
+ END SPECIAL
+
+ BEGIN SPECIAL /WHIZARD_.*/BWp-pT
+\psclip{\psframe[linewidth=0,linestyle=none](0,0)(1,1)}
+\rput[bl](0.2,0.1){\color{gray}\textsc{Whizard+OpenLoops}}
+\endpsclip
+ END SPECIAL
+
+
+
 #====================#
 #  general settings  #
 #====================#
  BEGIN PLOT /WHIZARD_.*
 LogY=1
+Rebin=2
 RatioPlotYLabel=K-Factor
 RatioPlotSameStyle=1
 LegendXPos=0.70
@@ -27,7 +48,7 @@ ErrorBands=0
 #  titles  #
 #==========#
  BEGIN PLOT /WHIZARD_.*
-Title=$\quad e^+e^-\to \mu^+\nu_\mu e^-\bar{\nu_e} b \bar{b}$, $N_\text{jets}\geq 2, \quad \quad \sqrt{s} = 800 \text{GeV}$
+Title=$\quad e^+e^-\to \mu^+\nu_\mu e^-\bar{\nu_e} b \bar{b}$, $N_\text{jets}\geq 2, \quad \quad \sqrt{s} = 800\,\text{GeV}$
  END PLOT
 
 #========================#
@@ -68,7 +89,7 @@ LegendXPos=0.25
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BW-inv-peak
-XLabel=$m^{BW}[\text{GeV}]$
+XLabel=$m_{Wj_b}[\text{GeV}]$
 RatioPlotYMax=5.0
 LegendXPos = 0.15
 LegendYPos = 0.9
@@ -94,9 +115,10 @@ RatioPlotXMax=200.0
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Blp-inv-*
-XLabel=$m^{Bl^+}[\text{GeV}]$
+XLabel=$m_{l^+ j_b}[\text{GeV}]$
 XMax=200.0
 RatioPlotXMax=200.0
+RatioPlotYMax=2.0
 LegendXPos=0.81
  END PLOT
 
@@ -168,7 +190,7 @@ YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BB-pT
-XLabel=$p_T^{BB}[\text{GeV}]$
+XLabel=$p_{T,j_b j_b}[\text{GeV}]$
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
 XMax=350.0
 RatioPlotXMax=350.0
@@ -183,9 +205,11 @@ RatioPlotXMax=350.0
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BWp-pT
-XLabel=$p_T^{BW^+}[\text{GeV}]$
-XMax=355.0
-RatioPlotXMax=355.0
+XLabel=$p_{T,W^+j_b} [\text{GeV}]$
+XMax=400.0
+RatioPlotXMax=400.0
+RatioPlotYMax=1.8
+LegendXPos=0.15
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Blm-pT
@@ -196,7 +220,7 @@ RatioPlotXMax=350.0
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Blp-pT
-XLabel=$p_T^{Bl^+}[\text{GeV}]$
+XLabel=$p_{T,l^+ j_b}[\text{GeV}]$
 XMax=355.0
 RatioPlotXMax=355.0
  END PLOT
@@ -398,9 +422,11 @@ XLabel=$\cos\theta^{BB}$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BWp-Theta
-XLabel=$\cos\theta^{BW^+}$
+XLabel=$\cos\theta_{W^+ j_b}$
 YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}]$
 LegendXPos=0.75
+RatioPlotYMin=0.8
+RatioPlotYMax=1.2
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BWm-Theta
