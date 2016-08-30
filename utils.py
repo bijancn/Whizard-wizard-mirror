@@ -182,9 +182,10 @@ def get_value(pattern, filename):
   except IOError:
     return None
   for line in file:
-    m = re.search(pattern, line)
-    if m:
-      return m.group(2)
+    if "#KEEP" not in line:
+      m = re.search(pattern, line)
+      if m:
+        return m.group(2)
   return None
 
 

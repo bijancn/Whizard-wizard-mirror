@@ -532,10 +532,17 @@ def test_replace_scale():
   os.remove('test_replace_scale')
 
 
+def replace_if_not_keep(line, pattern_old, pattern_new):
+  if "#KEEP" not in line:
+    return line.replace(pattern_old, pattern_new)
+  else:
+    return line
+
+
 def replace_nlo_calc(part, filename):
   # Expects part  = 'Real', 'Born', etc as strings
-  replace_func = lambda l : l.replace('"Full"', '"' + part + '"')
-  ut.sed(filename, replace_line=replace_func)
+  replace_func = lambda l: replace_if_not_keep(l, '"Full"', '"' + part + '"')
+  ut.sed(filename, replace_func)
 
 
 def insert_suffix_in_sindarin(sindarin, suffix):
@@ -707,7 +714,7 @@ def multiply_sindarins(integration_sindarin, proc_dict, scaled, nlo_type,
 def replace_proc_id(part, filename):
   # Expects part  = 'Real', 'Born', etc as strings
   proc_id = ut.get_process(filename)
-  replace_func = lambda l : l.replace(proc_id, proc_id + '_' + part)
+  replace_func = lambda l: replace_if_not_keep(l, proc_id, proc_id + '_' + part)
   ut.sed(filename, replace_line=replace_func)
 
 

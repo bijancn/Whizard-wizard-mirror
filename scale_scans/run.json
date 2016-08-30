@@ -1,33 +1,37 @@
 {
   "processes": [
   {"process": "proc_nlo_tt",
+    "disabled": true,
     "purpose": "scan",
     "nlo_type": "nlo",
     "whizard_options": "",
-    "scan_object": "dummy",
-    "ranges": [
-    {"type": "logarithmic2",
-      "start": 0.125,
-      "stop": 8,
-      "steps": 7
-    }
-    ],
+    "scans": [{
+       "scan_object": "dummy",
+       "ranges": [
+       {"type": "logarithmic2",
+         "start": 0.125,
+         "stop": 8,
+         "steps": 7
+       }
+    ]}],
     "adaption_iterations": "3:5000",
     "integration_iterations": "3:5000",
     "batches": 5
   },
   {"process": "proc_nlo_tth",
+    "disabled": true,
     "purpose": "scan",
     "nlo_type": "nlo",
     "whizard_options": "",
-    "scan_object": "dummy",
-    "ranges": [
-    {"type": "logarithmic2",
-      "start": 0.125,
-      "stop": 8,
-      "steps": 7
-    }
-    ],
+    "scans": [{
+       "scan_object": "dummy",
+       "ranges": [
+       {"type": "logarithmic2",
+         "start": 0.125,
+         "stop": 8,
+         "steps": 7
+       }
+    ]}],
     "adaption_iterations": "10:500000",
     "integration_iterations": "10:100000",
     "batches": 8
@@ -36,32 +40,52 @@
     "purpose": "scan",
     "nlo_type": "nlo",
     "whizard_options": "",
-    "scan_object": "dummy",
-    "ranges": [
-    {"type": "logarithmic2",
-      "start": 0.125,
-      "stop": 8,
-      "steps": 7
-    }
-    ],
+    "scans": [{
+       "scan_object": "dummy",
+       "ranges": [
+       {"type": "logarithmic2",
+         "start": 0.125,
+         "stop": 8,
+         "steps": 7
+       }
+       ]}],
     "fks_method": "resonances",
     "adaption_iterations": "10:50000",
     "integration_iterations": "5:40000",
     "batches": 24
   },
   {"process": "proc_nlo_WbWbH",
+    "disabled": true,
     "purpose": "scan",
     "nlo_type": "nlo",
     "whizard_options": "",
-    "scan_object": "dummy",
-    "ranges": [
-    {"type": "logarithmic2",
-      "start": 0.125,
-      "stop": 8,
-      "steps": 7
-    }
-    ],
+    "scans": [{
+       "scan_object": "dummy",
+       "ranges": [
+       {"type": "logarithmic2",
+         "start": 0.125,
+         "stop": 8,
+         "steps": 7
+       }
+    ]}],
     "fks_method": "resonances",
+    "adaption_iterations": "6:25000",
+    "integration_iterations": "15:15000"
+  },
+  {"process": "proc_nlo_tbw",
+    "disabled": true,
+    "purpose": "scan",
+    "nlo_type": "nlo",
+    "whizard_options": "",
+    "scans": [{
+       "scan_object": "dummy",
+       "ranges": [
+       {"type": "logarithmic2",
+         "start": 0.125,
+         "stop": 8,
+         "steps": 7
+       }
+    ]}],
     "adaption_iterations": "6:25000",
     "integration_iterations": "15:15000"
   }
