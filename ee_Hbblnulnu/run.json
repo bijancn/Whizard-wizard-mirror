@@ -1,6 +1,7 @@
 {
   "processes": [
   {"process": ["proc_lo"],
+    "disabled": true,
     "purpose": "histograms",
     "nlo_type": "lo",
     "whizard_options": "--rebuild-library",

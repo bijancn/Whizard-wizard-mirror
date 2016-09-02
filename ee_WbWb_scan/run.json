@@ -2,6 +2,7 @@
   "processes": [
   {"process": ["proc_lo"],
     "purpose": "scan",
+    "disabled": true,
     "nlo_type": "lo",
     "whizard_options": "",
     "scans": [{
@@ -19,8 +20,13 @@
         },
         {"type": "linear",
           "start": 700,
-          "stop": 1600,
+          "stop": 1500,
           "stepsize": 50.0
+        },
+        {"type": "linear",
+          "start": 1500,
+          "stop": 3300,
+          "stepsize": 300.0
         }
       ]}],
     "adaption_iterations": "10:40000",
