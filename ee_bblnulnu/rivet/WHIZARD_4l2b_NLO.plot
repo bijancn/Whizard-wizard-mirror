@@ -32,7 +32,7 @@
 #====================#
  BEGIN PLOT /WHIZARD_.*
 LogY=1
-Rebin=2
+# Rebin=2
 RatioPlotYLabel=K-Factor
 RatioPlotSameStyle=1
 LegendXPos=0.70
@@ -111,15 +111,11 @@ XLabel=$m^{Bl}[\text{GeV}]$
  BEGIN PLOT /WHIZARD_.*/Blm-inv-*
 XLabel=$m^{Bl^-}[\text{GeV}]$
 XMax=200.0
-RatioPlotXMax=200.0
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Blp-inv-*
 XLabel=$m_{l^+ j_b}[\text{GeV}]$
-XMax=200.0
-RatioPlotXMax=200.0
-RatioPlotYMax=2.0
-LegendXPos=0.81
+XMax=180.0
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/W-inv-peak
@@ -447,6 +443,8 @@ RatioPlotYMax=1.2
  BEGIN PLOT /WHIZARD_.*/Blp-Theta
 XLabel=$\cos\theta^{Bl^+}$
 YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}]$
+RatioPlotYMin=0.8
+RatioPlotYMax=1.2
  END PLOT
 
 
