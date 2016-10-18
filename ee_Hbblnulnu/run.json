@@ -1,7 +1,7 @@
 {
   "processes": [
   {"process": ["proc_lo"],
-    "disabled": true,
+  "disabled": true,
     "purpose": "histograms",
     "nlo_type": "lo",
     "whizard_options": "--rebuild-library",
@@ -10,6 +10,31 @@
     "events_per_batch": 10000,
     "adaption_iterations": "10:200000",
     "analysis": "WHIZARD_H4l2b_NLO"
+  },
+  {"process": ["proc_nlo_widthscan"],
+    "purpose": "scan",
+    "disabled": true,
+    "nlo_type": "lo",
+    "whizard_options": "",
+    "scans": [{
+      "scan_object": "?big_width",
+      "export_type": "separate",
+      "ranges": [
+        {"type": "explicit",
+          "range": ["true", "false"]
+        }
+      ]}, {
+      "scan_object": "resonance_method",
+      "export_type": "separate",
+      "ranges": [
+        {"type": "explicit",
+          "range": [0, 1, 2, 3]
+        }
+      ]}],
+    "adaption_iterations": "10:40000",
+    "integration_iterations": "5:20000",
+    "scale_variation": false,
+    "integration_copies": 10
   },
   {"process": ["proc_nlo"],
     "purpose": "histograms",

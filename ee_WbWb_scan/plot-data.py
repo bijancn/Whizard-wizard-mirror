@@ -41,10 +41,23 @@ def main():
   plot_json = load_json('plot.json')
   plot_dict = plot_json['plots']
   data = data_utils.load_and_clean_files(files, plot_json)
+  import numpy as np
+  strings = []
+  for d in data:
+    if 'proc_nlo_widthscan' in d[0]:
+      num_data = d[1]
+      mean_mean = np.average(num_data[1])
+      mean_error = np.average(num_data[2])
+      strings.append(os.path.basename(d[0]).replace('.dat', '') + ' ' +
+          str(mean_mean) + ' ' + str(mean_error) + ' ' + str(mean_error /
+            mean_mean * 100) + ' %')
+  strings.sort()
+  for string in strings:
+    print string
 
   pool = mp.Pool(processes=3)
   plot_this = partial(bcn_plot.plot, data=data, pic_path=pic_path,
       linestyle_decider=ls_decider, pretty_label=pretty_label)
-  map(plot_this, plot_dict)
+  pool.map(plot_this, plot_dict)
 
 main()

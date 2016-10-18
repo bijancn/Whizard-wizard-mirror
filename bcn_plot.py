@@ -355,8 +355,8 @@ def setup_ticks(plot_dict, ratio_dict):
 
 
 def setup_majors(plot_dict, ratio_dict):
-  xmajors = plot_dict.get('xmajors', None)
-  ymajorss = [plot_dict.get('ymajors', None)]
+  xmajors = plot_dict.get('xmajors', N_XMAJORS_DEFAULT)
+  ymajorss = [plot_dict.get('ymajors', N_YMAJORS_DEFAULT)]
   ymajorss = append_from_ratio_dict(ratio_dict, 'ymajors', ymajorss)
   return {'xmajors': xmajors, 'ymajorss': ymajorss}
 

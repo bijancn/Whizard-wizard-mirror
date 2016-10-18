@@ -6,6 +6,21 @@ from termcolor import colored
 import fit_utils
 
 
+def show_means(process_string, data):
+  strings = []
+  for d in data:
+    if process_string in d[0]:
+      num_data = d[1]
+      mean_mean = np.average(num_data[1])
+      mean_error = np.average(num_data[2])
+      strings.append(os.path.basename(d[0]).replace('.dat', '') + ' ' +
+          str(mean_mean) + ' ' + str(mean_error) + ' ' + str(mean_error /
+          mean_mean * 100) + ' % ' + str(len(num_data[1])))
+  strings.sort()
+  for string in strings:
+    print string
+
+
 def remove_empty_data(data):
   for index, item in enumerate(data):
     try:
