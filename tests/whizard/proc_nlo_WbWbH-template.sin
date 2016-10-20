@@ -7,7 +7,7 @@ wW = 2.0978
 
 ?check_grid_file = false
 
-?nlo_fixed_order = true
+?fixed_order_nlo_events = true
 ?unweighted = false
 ?negative_weights = true
 

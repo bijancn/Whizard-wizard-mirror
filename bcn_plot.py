@@ -23,10 +23,19 @@ colors = ['#EE3311',  # red
           '#ab47bc',  # purple
           '#000000',  # black
           '#f06292',  # pink
-          # '#cddc39',  # lime
           '#3f51b5'   # indigo
-          # '#009688',  # teal
           ]
+
+color_name = [
+    "red",
+    "blue",
+    "green",
+    "orange",
+    "cyan",
+    "purple",
+    "black",
+    "pink",
+    "indigo"]
 
 N_YMINORS_DEFAULT = 4
 N_XMINORS_DEFAULT = 4
@@ -36,7 +45,10 @@ N_XMAJORS_DEFAULT = 6
 
 def set_labels(axes, xlabel, ylabels):
   if xlabel is not None:
-    axes[-1].set_xlabel(xlabel)
+    combined_axes = [ax for ax in axes if 'Subplot' in str(type(ax))]
+    combined_axes[-1].set_xlabel(xlabel)
+    independent_axes = [ax for ax in axes if 'Subplot' not in str(type(ax))]
+    [ia.set_xlabel(xlabel) for ia in independent_axes]
   for ax, ylabel in zip(axes, ylabels):
     if ylabel is not None:
       ax.set_ylabel(ylabel)
@@ -57,6 +69,11 @@ def auto_tick_labeling(ticks):
 
 def set_major_ticks(axes, xticks, ytickss, xmin, xmax, xmajors, ymins, ymaxs,
           ymajorss, xlog, ylogs):
+  if type(axes) == list:
+    combined_axes = [ax for ax in axes if 'Subplot' in str(type(ax))]
+  else:
+    combined_axes = [axes]
+    axes = [axes]
   if xticks is None:
     if xlog:
       if xmin <= 0:
@@ -65,11 +82,11 @@ def set_major_ticks(axes, xticks, ytickss, xmin, xmax, xmajors, ymins, ymaxs,
         xticks = np.logspace(math.log10(xmin), math.log10(xmax), num=xmajors)
     else:
       xticks = np.linspace(xmin, xmax, xmajors)
-    axes[-1].set_xticklabels(auto_tick_labeling(xticks))
+    combined_axes[-1].set_xticklabels(auto_tick_labeling(xticks))
   else:
-    axes[-1].set_xticklabels(["$" + str(xt) + "$" for xt in xticks])
-  axes[-1].set_xticks(xticks)
-  for ax in axes[:-1]:
+    combined_axes[-1].set_xticklabels(["$" + str(xt) + "$" for xt in xticks])
+  combined_axes[-1].set_xticks(xticks)
+  for ax in combined_axes[:-1]:
     plt.setp(ax.get_xticklabels(), visible=False)
   for ymax, ymin, ymajors, yticks, ylog, ax in zip(ymaxs, ymins, ymajorss,
       ytickss, ylogs, axes):
@@ -225,8 +242,9 @@ def combined_plot(axes, base_lines, x, y, *args, **kwargs):
   axes[0].plot(x, y, *args, **kwargs)
   base_lines = handle_base_line_exceptions(base_lines, axes)
   for ax, base_line in zip(axes[1:], base_lines):
-    comb = data_utils.normalize(base_line, x, y)
-    ax.plot(comb[0], comb[1], *args, **kwargs)
+    if base_line is not None:
+      comb = data_utils.normalize(base_line, x, y)
+      ax.plot(comb[0], comb[1], *args, **kwargs)
 
 
 def combined_errorbar(axes, base_lines, x, y, yerr=None, **kwargs):
@@ -244,8 +262,9 @@ def combined_fill_between(axes, base_lines, x, ymin, ymax, *args, **kwargs):
   axes[0].fill_between(x, ymin, ymax, *args, **kwargs)
   base_lines = handle_base_line_exceptions(base_lines, axes)
   for ax, base_line in zip(axes[1:], base_lines):
-    comb = data_utils.normalize(base_line, x, ymin, yerr=ymax)
-    ax.fill_between(comb[0], comb[1], comb[2], *args, **kwargs)
+    if base_line is not None:
+      comb = data_utils.normalize(base_line, x, ymin, yerr=ymax)
+      ax.fill_between(comb[0], comb[1], comb[2], *args, **kwargs)
 
 
 #  TODO: (bcn 2016-08-17) is this art or can it go?
@@ -345,8 +364,8 @@ def setup_ticks(plot_dict, ratio_dict):
 
 
 def setup_majors(plot_dict, ratio_dict):
-  xmajors = plot_dict.get('xmajors', None)
-  ymajorss = [plot_dict.get('ymajors', None)]
+  xmajors = plot_dict.get('xmajors', N_XMAJORS_DEFAULT)
+  ymajorss = [plot_dict.get('ymajors', N_YMAJORS_DEFAULT)]
   ymajorss = append_from_ratio_dict(ratio_dict, 'ymajors', ymajorss)
   return {'xmajors': xmajors, 'ymajorss': ymajorss}
 
@@ -384,6 +403,8 @@ def plot_band(data_of_a_band, band, color, title, global_opacity, pretty_label,
 def plot_line(ldata, line, color, title, pretty_label, linestyle_decider,
     marker_decider, this_errorbar, this_plot, this_fill_between, ax,
     global_opacity, plotter):
+  if line.get('hide_line', False):
+    return
   filename, d = ldata[0], ldata[1]
   label = get_label(line, title, pretty_label=pretty_label, filename=filename)
   c = line.get('color', color)
@@ -480,11 +501,14 @@ def use_local_or_global_base_line(band_or_line, data, this_errorbar_func,
       base_line = [base_line]
     this_base_lines = []
     for bl in base_line:
-      this_base_item = [d for d in data
-        if get_name(bl) == d[0].replace('.dat', '')]
-      if len(this_base_item) == 0:
-        raise Exception('Did not find ' + str(bl) + ' ! Maybe you made a typo?')
-      this_base_lines.append(this_base_item[0][1])
+      if bl.get('hide_line', False):
+        this_base_lines.append(None)
+      else:
+        this_base_item = [d for d in data
+          if get_name(bl) == d[0].replace('.dat', '')]
+        if len(this_base_item) == 0:
+          raise Exception('Did not find ' + str(bl) + ' ! Maybe you made a typo?')
+        this_base_lines.append(this_base_item[0][1])
     this_errorbar = partial(this_errorbar_func, this_base_lines)
     this_plot = partial(this_plot_func, this_base_lines)
     this_fill_between = partial(this_fill_between_func, this_base_lines)
@@ -513,6 +537,7 @@ def plot_extra_lines_and_texts(ax, plot_dict, global_opacity):
     kwargs = {}
     kwargs['alpha'] = extra.get('opacity', global_opacity)
     kwargs['color'] = extra.get('color', 'black')
+    kwargs['linestyle'] = extra.get('linestyle', 'solid')
     if extype == "vertical":
       ax.axvline(extra['value'], **kwargs)
     elif extype == "horizontal":
@@ -544,17 +569,24 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None,
   if ratio_dict is not None:
     if type(ratio_dict) != list:
       ratio_dict = [ratio_dict]
+    insets = [rd for rd in ratio_dict if rd.get('inset', None) is not None]
+    combined_ratio_dict = [rd for rd in ratio_dict if rd.get('inset', None) is None]
     global_base_line = line_data[0][1]
-    number_of_axes = len(ratio_dict) + 1
+    number_of_axes = len(combined_ratio_dict) + 1
     #  TODO: (bcn 2016-08-17) could be customizable
     height_ratios = [number_of_axes]
-    for rd in ratio_dict:
+    for rd in combined_ratio_dict:
       height_ratios.append(1)
     gs = gridspec.GridSpec(number_of_axes, 1, height_ratios=height_ratios)
     ax = fig.add_subplot(gs[0])
     axes = [ax]
-    for i in range(len(ratio_dict)):
+    for i in range(len(combined_ratio_dict)):
       axes.append(fig.add_subplot(gs[i + 1], sharex=ax))
+    ins_axes = []
+    for ins in insets:
+      ax = plt.axes(ins['inset'])
+      ins_axes.append(ax)
+      axes.append(ax)
     this_errorbar_func = partial(combined_errorbar, axes)
     this_plot_func = partial(combined_plot, axes)
     this_fill_between_func = partial(combined_fill_between, axes)
@@ -566,6 +598,7 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None,
     this_fill_between = ax.fill_between
     axes = [ax]
     dicts = [plot_dict]
+    insets = ins_axes = []
   global_opacity = plot_dict.get('opacity', 0.3)
   if plot_extra is not None:
     ax = plot_extra(ax, title)
@@ -597,7 +630,13 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None,
       plotter.setfig(fig, axes, title=None, legend_hide=False, **fig_kwargs)
       fig.savefig(os.path.join(pic_path, title + '-' + str(i) + '.pdf'),
                   dpi=fig.dpi)
+
   plotter.setfig(fig, axes, title=title, **fig_kwargs)
+  for ins, ax in zip(insets, ins_axes):
+    _set_puffed_scale(0.05, ins['xmax'], ins['xmin'], ins['xlog'],
+        ax.set_xlim, ax.set_xscale)
+    set_major_ticks(ax, None, [], ins['xmin'], ins['xmax'], ins['xmajors'],
+        [], [], [], ins['xlog'], [])
   save_fig(fig, title, plot_dict, pic_path)
 
 

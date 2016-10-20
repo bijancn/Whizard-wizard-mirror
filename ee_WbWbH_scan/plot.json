@@ -78,8 +78,9 @@
           "label": "LO $W^+ W^- b \\bar{b}H$",
           "color": "blue",
           "base_line": [
-            { "name": "proc_lo-sqrts" },
-            { "name": "proc_lo-sqrts", "folder": "../ee_tth_scan/" }
+            { "name": "proc_lo-sqrts", "hide_line": true },
+            { "name": "proc_lo-sqrts", "folder": "../ee_tth_scan/" },
+            { "name": "proc_lo-sqrts", "hide_line": true }
           ]
         },
         { "name": "proc_nlo_central-sqrts",
@@ -87,14 +88,16 @@
           "color": "red",
           "base_line": [
             { "name": "proc_lo-sqrts" },
-            { "name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/" }
+            { "name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/" },
+            { "name": "proc_lo-sqrts" }
           ]
         },
         { "name": "proc_nlo_low-sqrts",
           "color": "red",
           "base_line": [
             { "name": "proc_lo-sqrts" },
-            { "name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/" }
+            { "name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/" },
+            { "name": "proc_lo-sqrts" }
           ],
           "hide_label": true,
           "linewidth": 0.5
@@ -103,7 +106,8 @@
           "color": "red",
           "base_line": [
             { "name": "proc_lo-sqrts" },
-            { "name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/" }
+            { "name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/" },
+            { "name": "proc_lo-sqrts" }
           ],
           "hide_label": true,
           "linewidth": 0.5
@@ -114,8 +118,9 @@
           "label": "LO $t\\bar{t}H$",
           "color": "black",
           "base_line": [
-            {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/"},
-            {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/"}
+            {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/", "hide_line": true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/", "hide_line": true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/", "hide_line": true}
           ]
         },
         { "name": "proc_nlo_central-sqrts",
@@ -125,7 +130,8 @@
           "color": "#109618",
           "base_line": [
             {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/"},
-            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/"}
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/", "hide_line":true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/"}
           ]
         },
         { "name": "proc_nlo_low-sqrts",
@@ -135,7 +141,8 @@
           "color": "#109618",
           "base_line": [
             {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/"},
-            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/"}
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/", "hide_line":true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/"}
           ],
           "linewidth": 0.5
         },
@@ -146,7 +153,8 @@
           "color": "#109618",
           "base_line": [
             {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/"},
-            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/"}
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/", "hide_line":true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/"}
           ],
           "linewidth": 0.5
         }
@@ -161,7 +169,8 @@
           ],
           "base_line": [
             {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/"},
-            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/"}
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/", "hide_line":true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tth_scan/"}
           ]
         },
         { "label": "",
@@ -174,7 +183,8 @@
           ],
           "base_line": [
             { "name": "proc_lo-sqrts" },
-            { "name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/" }
+            { "name": "proc_nlo_central-sqrts", "folder": "../ee_tth_scan/" },
+            { "name": "proc_lo-sqrts" }
           ]
         }
       ],
@@ -189,14 +199,28 @@
       ],
       "ratio": [
         { "ylabel": "K-factor",
-          "ymax": 2.25,
+          "ymax": 1.05,
           "ymin": 0.75,
+          "extra_lines": [ {"type": "horizontal", "value": 1.0, "color": "black" } ],
           "ymajors": 4},
         { "ylabel": "${\\sigma_{W^+W^-b\\bar{b}H}}/{\\sigma_{t\\bar{t}H}}$",
           "yminors": 2,
           "ymax": 1.35,
           "ymin": 0.9,
-          "ymajors": 4}
+          "extra_lines": [ {"type": "horizontal", "value": 1.0, "color": "black" } ],
+          "ymajors": 4},
+        { "ylabel": "K-factor",
+          "ymax": 2.5,
+          "xlog": false,
+          "ymin": 1.0,
+          "xmin": 425,
+          "xmax": 575,
+          "xlabel": "$\\sqrt{s}\\;$ [GeV]",
+          "ymajors": 3,
+          "inset": [0.51, 0.76, 0.16, 0.16],
+          "extra_lines": [ {"type": "horizontal", "value": 1.0, "color": "black" } ],
+          "xmajors": 3
+        }
       ],
         "xlabel": "$\\sqrt{s}\\;$ [GeV]",
         "ylabel": "$\\sigma\\;$ [fb]",
@@ -205,8 +229,9 @@
         "legend_ordering": [2,3,0,1],
         "ymin": 0,
         "ymax": 3.0,
-        "xmin": 400,
-        "xmax": 3000,
+        "xmin": 520,
+        "xmax": 2980,
+        "xticks": [500, 1000, 1500, 2000, 2500, 3000],
         "xmajors": 5,
         "ymajors": 7,
         "yminors": 4,

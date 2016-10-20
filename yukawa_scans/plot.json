@@ -43,7 +43,7 @@
         "yminors": 3,
         "yticks": [0.96, 0.98, 1.0, 1.02]
       },
-      "xlabel": "$y_t / m_t$",
+      "xlabel": "$\\xi_t$",
       "ylabel": "$\\sigma\\;$ [fb]",
       "ylog": false,
       "xlog": false,
@@ -97,7 +97,7 @@
         "ymax": 1.02, "ymin": 0.96,
         "ymajors": 4,
         "yticks": [0.96, 0.98, 1.0, 1.02]},
-        "xlabel": "$y_t / m_t$",
+        "xlabel": "$\\xi_t$",
         "ylabel": "$\\sigma\\;$ [fb]",
         "ylog": false,
         "xlog": false,

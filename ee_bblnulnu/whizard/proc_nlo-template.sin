@@ -6,14 +6,13 @@ wZ = 2.5060
 wW = 2.0978
 
 
-?nlo_fixed_order = true
+?fixed_order_nlo_events = true
 ?unweighted = false
 ?negative_weights = true
 
 $fks_mapping_type = "resonances"
 
 
-real dummy = 0.0
 scale = mtop
 #ITERATIONS
 library = proc_nlo

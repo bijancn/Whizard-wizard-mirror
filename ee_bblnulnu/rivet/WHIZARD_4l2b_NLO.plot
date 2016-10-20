@@ -7,11 +7,32 @@
 \endpsclip
  END SPECIAL
 
+ BEGIN SPECIAL /WHIZARD_.*/BW-inv-peak
+\psclip{\psframe[linewidth=0,linestyle=none](0,0)(1,1)}
+\rput[bl](0.25,0.1){\color{gray}\textsc{Whizard+OpenLoops}}
+\endpsclip
+ END SPECIAL
+
+ BEGIN SPECIAL /WHIZARD_.*/BW-pT
+\psclip{\psframe[linewidth=0,linestyle=none](0,0)(1,1)}
+\rput[bl](0.2,0.1){\color{gray}\textsc{Whizard+OpenLoops}}
+\endpsclip
+ END SPECIAL
+
+ BEGIN SPECIAL /WHIZARD_.*/BWp-pT
+\psclip{\psframe[linewidth=0,linestyle=none](0,0)(1,1)}
+\rput[bl](0.2,0.1){\color{gray}\textsc{Whizard+OpenLoops}}
+\endpsclip
+ END SPECIAL
+
+
+
 #====================#
 #  general settings  #
 #====================#
  BEGIN PLOT /WHIZARD_.*
 LogY=1
+Rebin=2
 RatioPlotYLabel=K-Factor
 RatioPlotSameStyle=1
 LegendXPos=0.70
@@ -27,7 +48,7 @@ ErrorBands=0
 #  titles  #
 #==========#
  BEGIN PLOT /WHIZARD_.*
-Title=$\quad e^+e^-\to \mu^+\nu_\mu e^-\bar{\nu_e} b \bar{b}$, $N_\text{jets}\geq 2, \quad \quad \sqrt{s} = 800 \text{GeV}$
+Title=$\quad e^+e^-\to \mu^+\nu_\mu e^-\bar{\nu_e} b \bar{b}$, $N_\text{jets}\geq 2, \quad \quad \sqrt{s} = 800\,\text{GeV}$
  END PLOT
 
 #========================#
@@ -38,74 +59,76 @@ YLabel=$\frac{d\sigma}{dm}[\text{fb}/\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/jets-inv
-XLabel=$m^{j_1,j_2}[\text{GeV}]$
+XLabel=$m_{j_1,j_2}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/jets-inv-Hpeak
-XLabel=$m^{j_1,j_2}[\text{GeV}]$
+XLabel=$m_{j_1,j_2}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/jets-inv-Zpeak
-XLabel=$m^{j_1,j_2}[\text{GeV}]$
+XLabel=$m_{j_1,j_2}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/WW-inv
-XLabel=$m^{WW}[\text{GeV}]$
+XLabel=$m_{WW}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BWp-inv
-XLabel=$m^{BW^+}[\text{GeV}]$
+XLabel=$m_{BW^+}[\text{GeV}]$
 RatioPlotYMax=5.0
 RatioPlotYMin=0.5
 LegendXPos=0.25
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BWm-inv
-XLabel=$m^{BW^-}[\text{GeV}]$
+XLabel=$m_{BW^-}[\text{GeV}]$
 RatioPlotYMax=5.0
 RatioPlotYMin=0.5
 LegendXPos=0.25
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BW-inv-peak
-XLabel=$m^{BW}[\text{GeV}]$
+XLabel=$m_{Wj_b}[\text{GeV}]$
 RatioPlotYMax=5.0
 LegendXPos = 0.15
 LegendYPos = 0.9
+Rebin=1
  END PLOT
 
 
 
  BEGIN PLOT /WHIZARD_.*/BB-inv-*
-XLabel=$m^{BB}[\text{GeV}]$
+XLabel=$m_{BB}[\text{GeV}]$
 XMax=550.0
 RatioPlotXMax=550.0
 RatioPlotYMax=2.0
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Bl-inv-*
-XLabel=$m^{Bl}[\text{GeV}]$
+XLabel=$m_{Bl}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Blm-inv-*
-XLabel=$m^{Bl^-}[\text{GeV}]$
+XLabel=$m_{Bl^-}[\text{GeV}]$
 XMax=200.0
-RatioPlotXMax=200.0
  END PLOT
 
- BEGIN PLOT /WHIZARD_.*/Blp-inv-*
-XLabel=$m^{Bl^+}[\text{GeV}]$
-XMax=200.0
-RatioPlotXMax=200.0
-LegendXPos=0.81
+ BEGIN PLOT /WHIZARD_.*/Blp-inv
+XLabel=$m_{l^+ j_b}[\text{GeV}]$
+XMax=180.0
+LegendXPos = 0.05
+LegendYPos = 0.9
+RatioPlotYMin=0.8
+Rebin=1
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/W-inv-peak
-XLabel=$m^W[\text{GeV}]$
+XLabel=$m_W[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/W-inv
-XLabel=$m^W[\text{GeV}]$
+XLabel=$m_W[\text{GeV}]$
  END PLOT
 
 #============#
@@ -116,7 +139,7 @@ YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/jet-pT
-XLabel=$\sum_i p_T^{j_i}[\text{GeV}]$
+XLabel=$\sum_i p_{T,{j_i}}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/gluon-pT
@@ -129,7 +152,7 @@ YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/leading-jet-pT
-XLabel=$p_T^{j_1}[\text{GeV}]$
+XLabel=$p_{T,{j_1}}[\text{GeV}]$
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
 XMax=350.0
 RatioPlotXMax=350.0
@@ -137,26 +160,26 @@ LegendXPos=0.815
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/2nd-leading-jet-pT
-XLabel=$p_T^{j_2}[\text{GeV}]$
+XLabel=$p_{T,{j_2}}[\text{GeV}]$
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
 LegendXPos=0.815
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/b-jet-pT
-XLabel=$p_T^{b}[\text{GeV}]$
+XLabel=$p_{T,{b}}[\text{GeV}]$
  END PLOT
 
 
  BEGIN PLOT /WHIZARD_.*/bbar-jet-pT
-XLabel=$p_T^{\bar{b}}[\text{GeV}]$
+XLabel=$p_{T,{\bar{b}}}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/hardest-lepton-pT
-XLabel=$p_T^{l_1}[\text{GeV}]$
+XLabel=$p_{T,{l_1}}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/2nd-hardest-lepton-pT
-XLabel=$p_T^{l_2}[\text{GeV}]$
+XLabel=$p_{T,{l_2}}[\text{GeV}]$
 XMax=200.0
 RatioPlotXMax=200.0
  END PLOT
@@ -168,7 +191,7 @@ YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BB-pT
-XLabel=$p_T^{BB}[\text{GeV}]$
+XLabel=$p_{T,j_b j_b}[\text{GeV}]$
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
 XMax=350.0
 RatioPlotXMax=350.0
@@ -176,48 +199,52 @@ LegendXPos=0.8
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BWm-pT
-XLabel=$p_T^{BW^-}[\text{GeV}]$
+XLabel=$p_{T,{BW^-}}[\text{GeV}]$
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
 XMax=350.0
 RatioPlotXMax=350.0
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BWp-pT
-XLabel=$p_T^{BW^+}[\text{GeV}]$
-XMax=355.0
-RatioPlotXMax=355.0
+XLabel=$p_{T,W^+j_b} [\text{GeV}]$
+XMax=400.0
+RatioPlotXMax=400.0
+RatioPlotYMax=1.8
+LegendXPos=0.15
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Blm-pT
-XLabel=$p_T^{Bl^-}[\text{GeV}]$
+XLabel=$p_{T,{Bl^-}}[\text{GeV}]$
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
 XMax=350.0
 RatioPlotXMax=350.0
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Blp-pT
-XLabel=$p_T^{Bl^+}[\text{GeV}]$
+XLabel=$p_{T,l^+ j_b}[\text{GeV}]$
 XMax=355.0
 RatioPlotXMax=355.0
+LegendXPos=0.8
+Rebin=1
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Wm-pT
-XLabel=$p_T^{W^-}[\text{GeV}]$
+XLabel=$p_{T,{W^-}}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Wp-pT
-XLabel=$p_T^{W^+}[\text{GeV}]$
+XLabel=$p_{T,{W^+}}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/electron-Pt
-XLabel=$p_T^{e^-}[\text{GeV}]$
+XLabel=$p_{T,{e^-}}[\text{GeV}]$
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
 XMax=350.0
 RatioPlotXMax=350.0
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/muon-Pt
-XLabel=$p_T^{\mu^+}[\text{GeV}]$
+XLabel=$p_{T,{\mu^+}}[\text{GeV}]$
 YLabel=$\frac{d\sigma}{dp_T}[\text{fb}/\text{GeV}]$
 XMax=350.0
 RatioPlotXMax=350.0
@@ -225,7 +252,7 @@ RatioPlotXMax=350.0
 
 
  BEGIN PLOT /WHIZARD_.*/lepton-lepton-Pt
-XLabel=$p_T^{ll}[\text{GeV}]$
+XLabel=$p_{T,{ll}}[\text{GeV}]$
  END PLOT
 
 
@@ -245,32 +272,32 @@ YLabel=$\frac{d\sigma}{dE}[\text{fb}/\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/leading-jet-E
-XLabel=$E^{j_1}[\text{GeV}]$
+XLabel=$E_{j_1}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/2nd-leading-jet-E
-XLabel=$E^{j_2}[\text{GeV}]$
+XLabel=$E_{j_2}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/b-jet-E
-XLabel=$E^{b}[\text{GeV}]$
+XLabel=$E_{b}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/hardest-lepton-E
-XLabel=$E^{l_1}[\text{GeV}]$
+XLabel=$E_{l_1}[\text{GeV}]$
  END PLOT
 
 
  BEGIN PLOT /WHIZARD_.*/2nd-hardest-lepton-E
-XLabel=$E^{l_2}[\text{GeV}]$
+XLabel=$E_{l_2}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BB-E
-XLabel=$E^{BB}[\text{GeV}]$
+XLabel=$E_{BB}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Blm-E
-XLabel=$E^{Bl^-}[\text{GeV}]$
+XLabel=$E_{Bl^-}[\text{GeV}]$
  END PLOT
 
 
@@ -287,60 +314,60 @@ XLabel=$E_{W^+}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BWm-E
-XLabel=$E^{BW^-}[\text{GeV}]$
+XLabel=$E_{BW^-}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BWp-E
-XLabel=$E^{BW^+}[\text{GeV}]$
+XLabel=$E_{BW^+}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Blp-E
-XLabel=$E^{Bl^+}[\text{GeV}]$
+XLabel=$E_{Bl^+}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Blm-E
-XLabel=$E^{Bl^-}[\text{GeV}]$
+XLabel=$E_{Bl^-}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Wm-E
-XLabel=$E^{W^-}[\text{GeV}]$
+XLabel=$E_{W^-}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Wp-E
-XLabel=$E^{W^+}[\text{GeV}]$
+XLabel=$E_{W^+}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/electron-E
-XLabel=$E^{e^-}[\text{GeV}]$
+XLabel=$E_{e^-}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/muon-E
-XLabel=$E^{\mu^+}[\text{GeV}]$
+XLabel=$E_{\mu^+}[\text{GeV}]$
  END PLOT
 
 
  BEGIN PLOT /WHIZARD_.*/lepton-lepton-E
-XLabel=$E^{ll}[\text{GeV}]$
+XLabel=$E_{ll}[\text{GeV}]$
  END PLOT
 
 
 
  BEGIN PLOT /WHIZARD_.*/Wm-inv
-XLabel=$m^{W^-}[\text{GeV}]$
+XLabel=$m_{W^-}[\text{GeV}]$
  END PLOT
 
 
  BEGIN PLOT /WHIZARD_.*/Wm-inv-peak
-XLabel=$m^{W^-}[\text{GeV}]$
+XLabel=$m_{W^-}[\text{GeV}]$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Wp-inv
-XLabel=$m^{W^+}[\text{GeV}]$
+XLabel=$m_{W^+}[\text{GeV}]$
  END PLOT
 
 
  BEGIN PLOT /WHIZARD_.*/Wp-inv-peak
-XLabel=$m^{W^+}[\text{GeV}]$
+XLabel=$m_{W^+}[\text{GeV}]$
  END PLOT
 
 
@@ -390,21 +417,23 @@ LegendXPos=0.5
 
 
  BEGIN PLOT /WHIZARD_.*/2nd-leading-jet-Theta
-XLabel=$\cos\theta^{j_2}$
+XLabel=$\cos\theta_{j_2}$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BB-Theta
-XLabel=$\cos\theta^{BB}$
+XLabel=$\cos\theta_{BB}$
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BWp-Theta
-XLabel=$\cos\theta^{BW^+}$
+XLabel=$\cos\theta_{W^+ j_b}$
 YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}]$
 LegendXPos=0.75
+RatioPlotYMin=0.8
+RatioPlotYMax=1.2
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/BWm-Theta
-XLabel=$\cos\theta^{BW^-}$
+XLabel=$\cos\theta_{BW^-}$
 YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}]$
 LegendXPos=0.1
 RatioPlotYMin=0.8
@@ -412,15 +441,18 @@ RatioPlotYMax=1.2
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Blm-Theta
-XLabel=$\cos\theta^{Bl^-}$
+XLabel=$\cos\theta_{l^-j_{\bar b}}$
 YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}]$
-RatioPlotYMin=0.8
-RatioPlotYMax=1.2
+RatioPlotYMin=0.95
+RatioPlotYMax=1.25
+LegendXPos=0.2
  END PLOT
 
  BEGIN PLOT /WHIZARD_.*/Blp-Theta
-XLabel=$\cos\theta^{Bl^+}$
+XLabel=$\cos\theta_{l^+j_b}$
 YLabel=$\frac{d\sigma}{d\cos\theta}[\text{fb}]$
+RatioPlotYMin=0.95
+RatioPlotYMax=1.25
  END PLOT
 
 

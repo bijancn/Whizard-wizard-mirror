@@ -1,7 +1,8 @@
 {
   "processes": [
-  {"process": "proc_lo",
+  {"process": ["proc_lo"],
     "purpose": "scan",
+    "disabled": true,
     "nlo_type": "lo",
     "whizard_options": "",
     "scans": [{
@@ -19,16 +20,22 @@
         },
         {"type": "linear",
           "start": 700,
-          "stop": 1600,
+          "stop": 1500,
           "stepsize": 50.0
+        },
+        {"type": "linear",
+          "start": 1500,
+          "stop": 3300,
+          "stepsize": 300.0
         }
       ]}],
     "adaption_iterations": "10:40000",
     "integration_iterations": "5:20000",
     "integration_copies": 10
   },
-  {"process": "proc_nlo",
+  {"process": ["proc_nlo"],
     "purpose": "scan",
+    "disabled": true,
     "nlo_type": "nlo",
     "whizard_options": "",
     "scans": [{
@@ -46,14 +53,44 @@
         },
         {"type": "linear",
           "start": 700,
-          "stop": 1600,
+          "stop": 1500,
           "stepsize": 50.0
+        },
+        {"type": "linear",
+          "start": 1500,
+          "stop": 3300,
+          "stepsize": 300.0
         }
       ]}],
     "adaption_iterations": "10:40000",
     "integration_iterations": "5:20000",
     "scale_variation": true,
     "integration_copies": 20
+  },
+  {"process": ["proc_nlo_widthscan"],
+    "purpose": "scan",
+    "disabled": true,
+    "nlo_type": "lo",
+    "whizard_options": "",
+    "scans": [{
+      "scan_object": "?big_width",
+      "export_type": "separate",
+      "ranges": [
+        {"type": "explicit",
+          "range": ["true", "false"]
+        }
+      ]}, {
+      "scan_object": "resonance_method",
+      "export_type": "separate",
+      "ranges": [
+        {"type": "explicit",
+          "range": [0, 1, 2, 3]
+        }
+      ]}],
+    "adaption_iterations": "10:40000",
+    "integration_iterations": "5:20000",
+    "scale_variation": false,
+    "integration_copies": 10
   }
   ],
   "whizard": "whizard",

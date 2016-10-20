@@ -1,22 +1,30 @@
 include("../../general_settings.sin")
 include("../process_settings.sin")
 
-wtop = 1.3681
+real dummy = 0.0
+#SETSCAN
+scale = dummy * mtop
+
+wtop = 0
+alpha_power = 1
+process proc_tbw = t => Wp, b { nlo_calculation = "Full" } #KEEP
+integrate (proc_tbw)
+
+
+# wtop = 1.3681
 wZ = 2.5060
 wW = 2.0978
+wtop = integral(proc_tbw)
 alpha_power = 4
-real dummy = 0.0
-?nlo_fixed_order = true
+?fixed_order_nlo_events = true
 ?unweighted = false
 ?negative_weights = true
 
 $fks_mapping_type = "resonances"
 $resonances_exclude_particles = "t:T"
 
-#SETSCAN
-scale = dummy * mtop
-real foo = dummy * mtop
 mult_call_real = 10
+alpha_power = 4
 #ITERATIONS
 library = proc_nlo_WbWb
 process proc_nlo_WbWb = e1, E1 => Wp, Wm, b, B { nlo_calculation = "Full" }

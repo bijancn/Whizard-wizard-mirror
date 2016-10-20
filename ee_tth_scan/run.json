@@ -10,6 +10,11 @@
         "scan_object": "sqrts",
         "ranges": [
           {"type": "linear",
+          "start": 472,
+            "stop": 480,
+            "stepsize": 1.0
+          },
+          {"type": "linear",
             "start": 480,
             "stop": 600,
             "stepsize": 20.0
@@ -38,6 +43,11 @@
       "scans": [{
         "scan_object": "sqrts",
         "ranges": [
+          {"type": "linear",
+            "start": 472,
+            "stop": 480,
+            "stepsize": 1.0
+          },
           {"type": "linear",
             "start": 480,
             "stop": 600,
