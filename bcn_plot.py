@@ -23,10 +23,19 @@ colors = ['#EE3311',  # red
           '#ab47bc',  # purple
           '#000000',  # black
           '#f06292',  # pink
-          # '#cddc39',  # lime
           '#3f51b5'   # indigo
-          # '#009688',  # teal
           ]
+
+color_name = [
+    "red",
+    "blue",
+    "green",
+    "orange",
+    "cyan",
+    "purple",
+    "black",
+    "pink",
+    "indigo"]
 
 N_YMINORS_DEFAULT = 4
 N_XMINORS_DEFAULT = 4
@@ -528,6 +537,7 @@ def plot_extra_lines_and_texts(ax, plot_dict, global_opacity):
     kwargs = {}
     kwargs['alpha'] = extra.get('opacity', global_opacity)
     kwargs['color'] = extra.get('color', 'black')
+    kwargs['linestyle'] = extra.get('linestyle', 'solid')
     if extype == "vertical":
       ax.axvline(extra['value'], **kwargs)
     elif extype == "horizontal":
