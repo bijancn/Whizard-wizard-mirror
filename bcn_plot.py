@@ -26,7 +26,7 @@ colors = ['#EE3311',  # red
           '#3f51b5'   # indigo
           ]
 
-color_name = [
+color_names = [
     "red",
     "blue",
     "green",
@@ -37,10 +37,16 @@ color_name = [
     "pink",
     "indigo"]
 
+color_dict = dict(zip(color_names, colors))
+
 N_YMINORS_DEFAULT = 4
 N_XMINORS_DEFAULT = 4
 N_YMAJORS_DEFAULT = 6
 N_XMAJORS_DEFAULT = 6
+
+
+def use_defined_colors(col_string):
+  return color_dict.get(col_string, col_string)
 
 
 def set_labels(axes, xlabel, ylabels):
@@ -390,7 +396,7 @@ def plot_band(data_of_a_band, band, color, title, global_opacity, pretty_label,
   this_fill_between):
   label = get_label(band, title, pretty_label=pretty_label)
   opacity = band.get('opacity', global_opacity)
-  color = band.get('color', color)
+  color = use_defined_colors(band.get('color', color))
   list_of_y_arrays = [db[1][1] for db in data_of_a_band]
   list_of_x_arrays = [db[1][0] for db in data_of_a_band]
   combined_x, list_of_y_arrays = data_utils.remove_uncommon(list_of_x_arrays,
@@ -407,7 +413,7 @@ def plot_line(ldata, line, color, title, pretty_label, linestyle_decider,
     return
   filename, d = ldata[0], ldata[1]
   label = get_label(line, title, pretty_label=pretty_label, filename=filename)
-  c = line.get('color', color)
+  c = use_defined_colors(line.get('color', color))
   if line.get('hide_label', False):
     label = None
   linestyle = decide_if_not_none(line, linestyle_decider, 'linestyle', 'solid',
@@ -536,7 +542,7 @@ def plot_extra_lines_and_texts(ax, plot_dict, global_opacity):
     extext = extra.get('text', None)
     kwargs = {}
     kwargs['alpha'] = extra.get('opacity', global_opacity)
-    kwargs['color'] = extra.get('color', 'black')
+    kwargs['color'] = use_defined_colors(extra.get('color', 'black'))
     kwargs['linestyle'] = extra.get('linestyle', 'solid')
     if extype == "vertical":
       ax.axvline(extra['value'], **kwargs)

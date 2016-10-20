@@ -144,24 +144,28 @@
     "output_file": "expansions_onshell",
     "lines": [
       { "name": "fixedorder_onshell_NLO", "label": "NLO", "linestyle": "solid",
+        "color": "orange",
         "base_line": [
           { "name": "AnalyticOneloop_mpole172_ONSHELL", "hide_line": false }
         ]
       },
       { "name": "expanded_hard_onshell_mpole172", "label":
           "LL, expanded, hard scales", "linestyle": "solid",
+        "color": "blue",
         "base_line": [
           {"name": "AnalyticOneloop_mpole172_ONSHELL", "hide_line": false}
         ]
       },
       { "name": "expanded_hard_onshell_mpole172_nopwave", "label":
           "LL, expanded, hard scales, no $p$-wave", "linestyle": "solid",
+        "color": "red",
         "base_line": [
           {"name": "AnalyticOneloop_mpole172_ONSHELL", "hide_line": false}
         ]
       },
       { "name": "AnalyticOneloop_mpole172_ONSHELL", "label":
           "LL, expanded, analytic, no $p$-wave", "linestyle": "solid",
+        "color": "green",
         "base_line": [
           {"name": "AnalyticOneloop_mpole172_ONSHELL", "hide_line": true}
         ]
