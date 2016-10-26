@@ -5,9 +5,9 @@ process PROCESS = e1, E1 => Wm, Wp, B, b
 compile
 
 nrqcd_order = 0  !!! LL
-FF = -2          !!! resummed p0-constant with switchoff
+FF = 1           !!! resummed p0-constant withOUT switchoff
 offshell_strategy = 2      !!! factorized
-                  + 4      !!! interference with background diagrams
+                  + 0*4    !!! interference with background diagrams
                   + 128    !!! decay on-shell projected
 !                  + 32   ! hel approx
 !                  + 1024 ! extra hel approx
