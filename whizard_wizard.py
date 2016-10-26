@@ -325,15 +325,14 @@ def get_step_range(scan_type, start, stop, steps, stepsize, given_range):
   return step_range
 
 
-def fill_with_copies(proc_name, proc_dict, scan_object, step_range):
+def fill_with_copies(proc_dict, uncopied):
   n_copies = proc_dict.get('integration_copies', 1)
   if n_copies > 1:
     runs = []
     for i_copy in range(n_copies):
-      runs += [(str(sr) + '-' + scan_object + '-' +
-        str(i_copy), proc_name, proc_dict) for sr in step_range]
+      runs += [(r[0] + '-' + str(i_copy), r[1], r[2]) for r in uncopied]
   else:
-    runs = [(str(sr) + '-' + scan_object, proc_name, proc_dict) for sr in step_range]
+    runs = uncopied
   return runs
 
 
@@ -352,7 +351,18 @@ def fill_scan_runs(proc_name, proc_dict, scan):
     steps, stepsize, given_range = get_steps(rnge, start, stop)
     step_range = get_step_range(range_type, start, stop, steps, stepsize,
         given_range)
-    runs += fill_with_copies(proc_name, proc_dict, scan_object, step_range)
+    runs += [(str(sr) + '-' + scan_object, proc_name, proc_dict) for sr in step_range]
+  return runs
+
+
+def unpack_proc_ids(full_combination):
+  runs = []
+  for scan in full_combination:
+    proc_id = ''
+    for part in scan:
+      proc_id += part[0] + '--'
+    proc_id = proc_id[:-2]
+    runs += [(proc_id, scan[0][1], scan[0][2])]
   return runs
 
 
@@ -366,13 +376,8 @@ def fill_all_scan_runs(proc_name, proc_dict):
   else:
     list_of_scans = [fill_scan_runs(proc_name, proc_dict, scan) for scan in scans]
     full_combination = [sa for sa in dt.Scan_all(list_of_scans)]
-    runs = []
-    for scan in full_combination:
-      proc_id = ''
-      for part in scan:
-        proc_id += part[0] + '--'
-      proc_id = proc_id[:-2]
-      runs += [(proc_id, scan[0][1], scan[0][2])]
+    runs = unpack_proc_ids(full_combination)
+    runs = fill_with_copies(proc_dict, runs)
     return runs
 
 
@@ -428,6 +433,75 @@ def test_fill_runs_basic():
   nt.eq_(len(runs), len(expectation))
   for r, e in zip(runs, expectation):
     nt.eq_(r[0:2], e[0:2])
+
+
+def test_fill_integration_copies_1():
+  proc_name = 'test'
+  proc_dict = {'purpose': 'scan',
+      "scans": [
+          {"scan_object": "sqrts",
+          "ranges": [{
+              "type": "linear",
+              "start": 300.0,
+              "stop": 305.0,
+              "stepsize": 5.0
+          }]}
+      ]
+  }
+  runs = fill_runs(proc_name, proc_dict)
+  nt.eq_(len(runs), 1)
+  proc_dict['integration_copies'] = 2
+  runs = fill_runs(proc_name, proc_dict)
+  nt.eq_(len(runs), 1 * 2)
+
+
+def test_fill_integration_copies_2():
+  proc_name = 'test'
+  proc_dict = {'purpose': 'scan',
+      "scans": [
+          {"scan_object": "sqrts",
+          "ranges": [{
+              "type": "linear",
+              "start": 300.0,
+              "stop": 305.0,
+              "stepsize": 5.0
+          }]},
+          {"scan_object": "mpole_fixed",
+          "export_type": "separate",
+          "ranges": [{"type": "explicit", "range": [0, 1]}]}
+      ]
+  }
+  # runs = fill_runs(proc_name, proc_dict)
+  # nt.eq_(len(runs), 2)
+  proc_dict['integration_copies'] = 2
+  runs = fill_runs(proc_name, proc_dict)
+  nt.eq_(len(runs), 2 * 2)
+
+
+def test_fill_integration_copies_3():
+  proc_name = 'test'
+  proc_dict = {'purpose': 'scan',
+      "scans": [
+          {"scan_object": "sqrts",
+          "ranges": [{
+              "type": "linear",
+              "start": 300.0,
+              "stop": 305.0,
+              "stepsize": 5.0
+          }]},
+          {"scan_object": "mpole_fixed",
+          "export_type": "separate",
+          "ranges": [{"type": "explicit", "range": [0, 1]}]},
+          {"scan_object": "scale_vars",
+          "export_type": "separate",
+          "ranges": [{"type": "explicit", "range": [0, 1, 2, 3]}]}
+      ]
+  }
+  runs = fill_runs(proc_name, proc_dict)
+  nt.eq_(len(runs), 8)
+  proc_dict['integration_copies'] = 2
+  runs = fill_runs(proc_name, proc_dict)
+  nt.eq_(len(runs), 8 * 2)
 
 
 @nt.raises(Exception)
