@@ -10,6 +10,24 @@ def get_RES(c):
   return "grep RES " + c + "/whizard.log | sed 's/^.*RES //'"
 
 
+def build_regexs(proc):
+  proc_regexs = [proc[1]]
+  for nscans, scan in enumerate(proc[2]['scans']):
+    if nscans > 0:
+      proc_regexs = [pr + '-' for pr in proc_regexs]
+    if scan.get('export_type', '') == 'separate':
+      old = proc_regexs
+      new = []
+      for sc in scan['ranges'][0].get('range', None):
+        new += [pr + '-' + str(sc) + '-' + scan['scan_object'] for pr in old]
+      proc_regexs = new
+    else:
+      proc_regexs = [pr + '-*-' + scan['scan_object'] for pr in proc_regexs]
+  if proc[2].get('integration_copies', 0) > 0:
+    proc_regexs = [pr + '-*' for pr in proc_regexs]
+  return proc_regexs
+
+
 def main():
   try:
     process_folder = sys.argv[1]
@@ -24,23 +42,9 @@ def main():
       # TODO: (bcn 2016-07-15) for now we only support separate export
       # 2D export could be relevant as well
       process_names = []
-      for p in process_runs:
-        if p[2]['purpose'] == 'scan':
-          proc_regexs = [p[1]]
-          for nscans, scan in enumerate(p[2]['scans']):
-            if nscans > 0:
-              proc_regexs = [pr + '-' for pr in proc_regexs]
-            if scan.get('export_type', '') == 'separate':
-              old = proc_regexs
-              new = []
-              for sc in scan['ranges'][0].get('range', None):
-                new += [pr + '-' + str(sc) + '-' + scan['scan_object'] for pr in old]
-              proc_regexs = new
-            else:
-              proc_regexs = [pr + '-*-' + scan['scan_object'] for pr in proc_regexs]
-            if p[2].get('integration_copies', 0) > 0:
-              proc_regexs = [pr + '-*' for pr in proc_regexs]
-          process_names += proc_regexs
+      for proc in process_runs:
+        if proc[2]['purpose'] == 'scan':
+          process_names += build_regexs(proc)
       process_names = list(set(process_names))
       runfolders = ['whizard/' + p for p in process_names]
       for rf in runfolders:
