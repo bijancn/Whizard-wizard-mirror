@@ -1,3 +1,4 @@
+#!/bin/sh
 curve=$1
 target=$1/$1/run.sin
 mkdir -p $1/$1
