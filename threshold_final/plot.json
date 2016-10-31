@@ -209,6 +209,128 @@
     "ymin": 450.0,
     "ymax": 800.0,
     "yminors": 4
+  },
+  {"title": "",
+    "output_file": "form_factor",
+    "lines": [
+      { "name": "abs_v_of_sqrts", "label": "$|v(\\sqrt{s})|$",
+        "linestyle": "solid", "color": "green"
+      },
+      { "name": "real_v_of_sqrts", "label": "$\\text{Re}[v(\\sqrt{s})]$",
+        "linestyle": "dashed", "color": "orange"
+      },
+      { "name": "imag_v_of_sqrts", "label": "$\\text{Im}[v(\\sqrt{s})]$",
+        "linestyle": "dashdot", "color": "cyan"
+      },
+      { "name": "switchoff_of_abs_v_of_sqrts", "label": "$f(|v(\\sqrt{s})|)$",
+        "linestyle": "solid", "color": "purple"
+      },
+      { "name": "switchoff_of_real_v_of_sqrts", "label": "$f(\\text{Re}[v(\\sqrt{s})])$",
+        "linestyle": "dashed", "color": "red"
+      },
+      { "name": "switchoff_of_imag_v_of_sqrts", "label": "$f(\\text{Im}[v(\\sqrt{s})])$",
+        "linestyle": "dashdot", "color": "blue"
+      }
+    ],
+    "extra_texts": [
+      { "text": "$\\Gamma_t = 1.4$ GeV", "x": 300, "y": 0.9 },
+      { "text": "$v_1 = 0.1$", "x": 300, "y": 0.05 },
+      { "text": "$v_2 = 0.3$", "x": 300, "y": 0.25 }
+    ],
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      },
+      {"type": "horizontal",
+       "value": 0.3,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      },
+      {"type": "horizontal",
+       "value": 0.1,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "",
+    "legend_location": "upper right",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "xminors": true,
+    "xmin": 300.0,
+    "xmax": 400.0,
+    "ymin": 0.0,
+    "ymax": 1.0,
+    "yminors": 5
   }
-  ]
+  ],
+  "functions": {
+    "to_evaluate": [
+      "data_abs_v_of_sqrts",
+      "data_real_v_of_sqrts",
+      "data_imag_v_of_sqrts",
+      "data_switchoff_of_real_v_of_sqrts",
+      "data_switchoff_of_imag_v_of_sqrts",
+      "data_switchoff_of_abs_v_of_sqrts"
+    ],
+    "expression": [
+      "def data_abs_v_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v = np.vectorize(include.abs_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  return ('abs_v_of_sqrts', np.vstack([sqrts, v]))",
+      "",
+      "def data_real_v_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v = np.vectorize(include.real_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  return ('real_v_of_sqrts', np.vstack([sqrts, v]))",
+      "",
+      "def data_imag_v_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v = np.vectorize(include.imag_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  return ('imag_v_of_sqrts', np.vstack([sqrts, v]))",
+      "",
+      "def data_switchoff_of_real_v_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v1 = 0.1",
+      "  v2 = 0.3",
+      "  v = np.vectorize(include.real_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  f = np.vectorize(lambda x: include.switch_off(v1,v2,x))",
+      "  f = f(v)",
+      "  return ('switchoff_of_real_v_of_sqrts', np.vstack([sqrts, f]))",
+      "",
+      "def data_switchoff_of_imag_v_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v1 = 0.1",
+      "  v2 = 0.3",
+      "  v = np.vectorize(include.imag_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  f = np.vectorize(lambda x: include.switch_off(v1,v2,x))",
+      "  f = f(v)",
+      "  return ('switchoff_of_imag_v_of_sqrts', np.vstack([sqrts, f]))",
+      "",
+      "def data_switchoff_of_abs_v_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v1 = 0.1",
+      "  v2 = 0.3",
+      "  v = np.vectorize(include.abs_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  f = np.vectorize(lambda x: include.switch_off(v1,v2,x))",
+      "  f = f(v)",
+      "  return ('switchoff_of_abs_v_of_sqrts', np.vstack([sqrts, f]))"
+    ]
+  }
 }

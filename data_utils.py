@@ -86,15 +86,12 @@ def test_sort_data():
   np.testing.assert_array_almost_equal(data[0][1], expectation)
 
 
-def get_name(line):
-  try:
-    folder = line.get('folder', '.')
-  except AttributeError:
-    print 'lines and bands interface has changed:' + \
-          'Please give an object with name instead of ' + line
-  else:
-    path = os.path.abspath(os.path.join(folder, 'scan-results', line.get('name', None)))
-    return path
+def get_name(line, custom_name=None):
+  folder = line.get('folder', '.')
+  if custom_name is None:
+    custom_name = line.get('name', None)
+  path = os.path.abspath(os.path.join(folder, 'scan-results', custom_name))
+  return path
 
 
 def get_associated_plot_data(data, special, suffix=""):
@@ -136,49 +133,36 @@ def build_nlo_sums(data):
         data.append((combined_name, array))
       except StopIteration:
         pass
-    xs_low = 0
-    xs_central = 0
-    xs_high = 0
-    xs_low = 0
-    for data_item in data:
-      sqrts = 500
-
-      if 'ee_tt_scan/scan-results/proc_nlo_central-sqrts.dat' in data_item[0]:
-        # print 'data_item: ', data_item[0]
-        # print 'data: ', data_item[1][0]
-        # print 'data: ', data_item[1][1]
-        i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
-        xs_central = data_item[1][1][i_sqrts]
-      elif 'ee_tt_scan/scan-results/proc_nlo_high-sqrts.dat' in data_item[0]:
-        # print 'data_item: ', data_item[0]
-        # print 'data: ', data_item[1][0]
-        # print 'data: ', data_item[1][1]
-        i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
-        xs_high = data_item[1][1][i_sqrts]
-      elif 'ee_tt_scan/scan-results/proc_nlo_low-sqrts.dat' in data_item[0]:
-        # print 'data_item: ', data_item[0]
-        # print 'data: ', data_item[1][0]
-        # print 'data: ', data_item[1][1]
-        i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
-        xs_low = data_item[1][1][i_sqrts]
-      elif 'ee_tt_scan/scan-results/proc_lo-sqrts.dat' in data_item[0]:
-        # print 'data_item: ', data_item[0]
-        # print 'data: ', data_item[1][0]
-        # print 'data: ', data_item[1][1]
-        i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
-        xs_lo = data_item[1][1][i_sqrts]
-
-    if (xs_central > 0):
-      k = xs_central / xs_lo
-      print '***************'
-      print 'sqrts: ', sqrts
-      print 'LO: ', xs_lo
-      print 'central: ', xs_central
-      print 'scale_plus: ', (xs_high - xs_central) / xs_central * 100
-      print 'scale_low: ', (xs_central - xs_low) / xs_central * 100
-      print 'k-central: ', k
-      print 'k-plus: ', (xs_high - xs_central) / xs_lo / k * 100
-      print 'k-minus: ', (xs_central - xs_low) / xs_lo / k * 100
+    if False:
+      xs_low = 0
+      xs_central = 0
+      xs_high = 0
+      for data_item in data:
+        #  TODO: (bcn 2016-10-31) should be steerable from plot.json
+        sqrts = 500
+        if 'nlo_central' in data_item[0]:
+          i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
+          xs_central = data_item[1][1][i_sqrts]
+        elif 'nlo_high' in data_item[0]:
+          i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
+          xs_high = data_item[1][1][i_sqrts]
+        elif 'nlo_low' in data_item[0]:
+          i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
+          xs_low = data_item[1][1][i_sqrts]
+        elif 'lo' in data_item[0]:
+          i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
+          xs_lo = data_item[1][1][i_sqrts]
+      if (xs_central > 0):
+        k = xs_central / xs_lo
+        print '***************'
+        print 'sqrts: ', sqrts
+        print 'LO: ', xs_lo
+        print 'central: ', xs_central
+        print 'scale_plus: ', (xs_high - xs_central) / xs_central * 100
+        print 'scale_low: ', (xs_central - xs_low) / xs_central * 100
+        print 'k-central: ', k
+        print 'k-plus: ', (xs_high - xs_central) / xs_lo / k * 100
+        print 'k-minus: ', (xs_central - xs_low) / xs_lo / k * 100
   return data
 
 
@@ -633,9 +617,7 @@ def get_data_index(data, name):
 def apply_transforms(data, plot_json):
   transforms = plot_json.get('transforms', [])
   for transform in transforms:
-    print 'transform'
     for action in transform:
-      print 'action'
       if action["type"] == "scalings":
          print 'build scaled data: '
          data = build_scaled(data, action['properties'])
@@ -647,25 +629,33 @@ def apply_transforms(data, plot_json):
   return data
 
 
+try:
+  import include
+  print "Including custom include.py file"
+except ImportError:
+  print "Did not find a custom include.py file"
+
+
+def execute_defined_functions(data, plot_json):
+  functions = plot_json.get("functions", [])
+  exec('\n'.join(functions['expression']))
+  for func in functions['to_evaluate']:
+    entry = eval(func + '()')
+    entry = (get_name({}, entry[0]), entry[1])
+    print 'Executed ', func, 'and appended it under the tag', entry[0]
+    data.append(entry)
+  return data
+
+
 def load_and_clean_files(files, plot_json=None):
   data = [(filename, np.loadtxt(filename, unpack=True)) for filename in files]
   data = remove_empty_data(data)
   data = sort_data(data)
   data = average_copies(data)
   data = build_nlo_sums(data)
-  # TODO: (bcn 2016-08-15) The problem is that the fit/smooth has to be done
-  # after scaling and scaling can be different for different plots
-  #
-  # What we really want are composable data transformations, likely represented
-  # in a list (has order)
-  #
-  # For now we can probably work with scaling first and then combining suffixes
-  # like proc_scale_smooth
   if plot_json is not None:
+    data = execute_defined_functions(data, plot_json)
     data = apply_transforms(data, plot_json)
-    # data = build_scaled(data, plot_json)
-    # data = build_smooth(data, plot_json)
-    # data = build_fits(data, plot_json)
   data = remove_empty_data(data)
   return data
 

@@ -280,6 +280,34 @@
         "required": [ "fit_degree" ]
       }
     },
+    "functions": {
+      "type": "array",
+      "description": "Use this to inject functions. The array of strings will be executed with `exec`, no questions asked! You get what you ask for. Can be used to define functions for the extra_data_functions",
+      "items": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "data_functions": {
+      "type": "array",
+      "description": "Use this to inject computed data. You define a function that has to return a tupel (tagname, x, y). tagname can be used to plot lines and bands.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
     "data_output": {
       "type": "string",
       "description": "Not supported yet. Default is `./plots`."

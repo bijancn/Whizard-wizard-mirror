@@ -482,9 +482,6 @@ def select_data(data, plot_dict, title):
   lines = plot_dict.get('lines', [])
   for line in lines:
     line_data += [d for d in data if get_name(line) == d[0].replace('.dat', '')]
-  #  TODO: (bcn 2016-08-15) I don't see how you would scale the lines in a plot
-  #  without this but it does not work with the new scale_data function
-  # line_data = data_utils.scale_data(line_data, lines)
   bands = plot_dict.get('bands', [])
   band_data = data_utils.get_associated_plot_data(data, bands)
   fits = plot_dict.get('fits', [])
@@ -543,10 +540,11 @@ def plot_extra_lines_and_texts(ax, plot_dict, global_opacity):
     kwargs = {}
     kwargs['alpha'] = extra.get('opacity', global_opacity)
     kwargs['color'] = use_defined_colors(extra.get('color', 'black'))
-    kwargs['linestyle'] = extra.get('linestyle', 'solid')
     if extype == "vertical":
+      kwargs['linestyle'] = extra.get('linestyle', 'solid')
       ax.axvline(extra['value'], **kwargs)
     elif extype == "horizontal":
+      kwargs['linestyle'] = extra.get('linestyle', 'solid')
       ax.axhline(extra['value'], **kwargs)
     elif extext is not None:
       kwargs = try_update(kwargs, extra, 'fontsize')
