@@ -1,16 +1,12 @@
 {
   "plots": [
     {"title": "",
-      "output_file": "lo_ll_scale_vars",
-      "data_input": [
-        "./",
-        "../threshold_final"
-      ],
+      "output_file": "ll_scale_vars",
       "lines": [
         { "name": "LO-sqrts--0-mpole_fixed", "label": "LO",
           "folder": "../threshold_final"
         },
-        { "name": "LL_signal-sqrts--0-mpole_fixed",
+        { "name": "LL-sqrts--0-mpole_fixed",
           "folder": "../threshold_final",
           "label": "LL scale, $h = 1.0$, $f = 1.0$",
           "linestyle": "None",
@@ -71,7 +67,7 @@
       ],
       "ratio": [
         { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
-          "ymax": 30.00, "ymin": 1.0, "ymajors": 5, "yminors": 5,
+          "ymax": 20.00, "ymin": 1.0, "ymajors": 5, "yminors": 5,
           "extra_lines": [
             { "type": "vertical",
               "value": 344.0,
@@ -100,5 +96,158 @@
       "ymax": 1500.0,
       "ymajors": 6,
       "yminors": 5
-    }]
+    },
+    {"title": "",
+      "output_file": "ll_nll_combined",
+      "lines": [
+        { "name": "LO-sqrts--0-mpole_fixed", "label": "LO",
+          "folder": "../threshold_final",
+          "color": "green"
+        },
+        { "name": "LL-sqrts--0-mpole_fixed",
+          "folder": "../threshold_final",
+          "label": "LL scale, $h = 1.0$, $f = 1.0$",
+          "linestyle": "None",
+          "color": "blue",
+          "base_line": [
+            {"name": "LO-sqrts--0-mpole_fixed", "hide_line": false,
+              "folder": "../threshold_final"}
+          ]
+        },
+        { "name": "LL-sqrts--0-mpole_fixed--0-scale_vars",
+          "label": "LL scale, $h = 0.5$, $f = 1.0$",
+          "linestyle": "dashed",
+          "color": "blue",
+          "base_line": [
+            {"name": "LO-sqrts--0-mpole_fixed", "hide_line": false,
+              "folder": "../threshold_final"}
+          ]
+        },
+        { "name": "LL-sqrts--0-mpole_fixed--1-scale_vars",
+          "label": "LL scale, $h = 0.5$, $f = 2.0$",
+          "linestyle": "solid",
+          "color": "blue",
+          "base_line": [
+            {"name": "LO-sqrts--0-mpole_fixed", "hide_line": false,
+              "folder": "../threshold_final"}
+          ]
+        },
+        { "name": "LL-sqrts--0-mpole_fixed--2-scale_vars",
+          "label": "LL scale, $h = 2.0$, $f = 1.0$",
+          "linestyle": "dotted",
+          "color": "blue",
+          "base_line": [
+            {"name": "LO-sqrts--0-mpole_fixed", "hide_line": false,
+              "folder": "../threshold_final"}
+          ]
+        },
+        { "name": "LL-sqrts--0-mpole_fixed--3-scale_vars",
+          "label": "LL scale, $h = 2.0$, $f = 0.5$",
+          "linestyle": "dashdot",
+          "color": "blue",
+          "base_line": [
+            {"name": "LO-sqrts--0-mpole_fixed", "hide_line": false,
+              "folder": "../threshold_final"}
+          ]
+        },
+        { "name": "NLL-sqrts--0-mpole_fixed--0-scale_vars",
+          "label": "NLL scale, $h = 0.5$, $f = 1.0$",
+          "folder": "../threshold_scale_variations_NLL",
+          "linestyle": "dashed",
+          "color": "red",
+          "base_line": [
+            {"name": "LO-sqrts--0-mpole_fixed", "hide_line": false,
+              "folder": "../threshold_final"}
+          ]
+        },
+        { "name": "NLL-sqrts--0-mpole_fixed--1-scale_vars",
+          "label": "NLL scale, $h = 0.5$, $f = 2.0$",
+          "folder": "../threshold_scale_variations_NLL",
+          "linestyle": "solid",
+          "color": "red",
+          "base_line": [
+            {"name": "LO-sqrts--0-mpole_fixed", "hide_line": false,
+              "folder": "../threshold_final"}
+          ]
+        },
+        { "name": "NLL-sqrts--0-mpole_fixed--2-scale_vars",
+          "label": "NLL scale, $h = 2.0$, $f = 1.0$",
+          "folder": "../threshold_scale_variations_NLL",
+          "linestyle": "dotted",
+          "color": "red",
+          "base_line": [
+            {"name": "LO-sqrts--0-mpole_fixed", "hide_line": false,
+              "folder": "../threshold_final"}
+          ]
+        },
+        { "name": "NLL-sqrts--0-mpole_fixed--3-scale_vars",
+          "label": "NLL scale, $h = 2.0$, $f = 0.5$",
+          "folder": "../threshold_scale_variations_NLL",
+          "linestyle": "dashdot",
+          "color": "red",
+          "base_line": [
+            {"name": "LO-sqrts--0-mpole_fixed", "hide_line": false,
+              "folder": "../threshold_final"}
+          ]
+        }
+      ],
+      "bands": [
+        {"opacity": 0.4,
+          "label": "",
+          "color": "blue",
+          "data":[
+            {"name": "LL-sqrts--0-mpole_fixed--0-scale_vars"},
+            {"name": "LL-sqrts--0-mpole_fixed--1-scale_vars"},
+            {"name": "LL-sqrts--0-mpole_fixed--2-scale_vars"},
+            {"name": "LL-sqrts--0-mpole_fixed--3-scale_vars"}
+          ]
+        },
+        {"opacity": 0.4,
+          "label": "",
+          "color": "red",
+          "data":[
+            { "name": "NLL-sqrts--0-mpole_fixed--0-scale_vars",
+              "folder": "../threshold_scale_variations_NLL/" },
+            { "name": "NLL-sqrts--0-mpole_fixed--1-scale_vars",
+              "folder": "../threshold_scale_variations_NLL/" },
+            { "name": "NLL-sqrts--0-mpole_fixed--2-scale_vars",
+              "folder": "../threshold_scale_variations_NLL/" },
+            { "name": "NLL-sqrts--0-mpole_fixed--3-scale_vars",
+              "folder": "../threshold_scale_variations_NLL/" }
+          ]
+        }
+      ],
+      "ratio": [
+        { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
+          "ymax": 4.00, "ymin": 1.0, "ymajors": 5, "yminors": 5,
+          "extra_lines": [
+            { "type": "vertical",
+              "value": 344.0,
+              "opacity": 0.2,
+              "linestyle": "dashed"
+            }
+          ]
+        }
+      ],
+      "extra_lines": [
+        {"type": "vertical",
+          "value": 344.0,
+          "opacity": 0.2,
+          "linestyle": "dashed"
+        }
+      ],
+      "xlabel": "$\\sqrt{s}$ [GeV]",
+      "ylabel": "$\\sigma$ [fb]",
+      "opacity": 0.7,
+      "ylog": false,
+      "xlog": false,
+      "xminors": true,
+      "xmin": 300.0,
+      "xmax": 400.0,
+      "ymin": 0.0,
+      "ymax": 1500.0,
+      "ymajors": 6,
+      "yminors": 5
+    }
+  ]
 }

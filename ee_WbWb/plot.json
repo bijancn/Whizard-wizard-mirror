@@ -189,6 +189,7 @@
     "lines": [
       { "name": "master_threshold-sqrts--9-FF--162-offshell_strategy",
         "label": "production unprojected, decay unboosted, correlated spins",
+        "linestyle": "None",
         "color": "blue"
       },
       { "name": "master_threshold-sqrts--9-FF--226-offshell_strategy",
@@ -198,6 +199,7 @@
       },
       { "name": "master_threshold-sqrts--9-FF--674-offshell_strategy",
         "label": "production unprojected, decay boosted, correlated spins",
+        "linestyle": "None",
         "marker": "o",
         "color": "red"
       },
@@ -208,6 +210,7 @@
       },
       { "name": "master_threshold-sqrts--9-FF--1186-offshell_strategy",
         "label": "production unprojected, decay unboosted, spins averaged",
+        "linestyle": "None",
         "color": "green"
       },
       { "name": "master_threshold-sqrts--9-FF--1250-offshell_strategy",
@@ -217,6 +220,7 @@
       },
       { "name": "master_threshold-sqrts--9-FF--1698-offshell_strategy",
         "label": "production unprojected, decay boosted, spins averaged",
+        "linestyle": "None",
         "marker": "o",
         "color": "orange"
       },
@@ -281,6 +285,7 @@
        "linestyle": "solid"},
       {"name": "master_threshold-sqrts--9-FF--674-offshell_strategy",
        "label": "production unprojected, decay boosted, correlated spins",
+        "linestyle": "None",
        "marker": "x"},
       {"name": "master_threshold-sqrts--9-FF--738-offshell_strategy",
        "label": "production projected, decay boosted, correlated spins",
@@ -292,6 +297,7 @@
        "linestyle": "solid"},
       {"name": "master_threshold-sqrts--9-FF--1698-offshell_strategy",
        "label": "production unprojected, decay boosted, spins averaged",
+        "linestyle": "None",
        "marker": "x"},
       {"name": "master_threshold-sqrts--9-FF--1762-offshell_strategy",
        "label": "production projected, decay boosted, spins averaged",

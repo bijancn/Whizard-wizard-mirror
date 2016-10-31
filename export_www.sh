@@ -1,8 +1,8 @@
-target=~/www/$(basename $1)
+target=~/www/$(basename `pwd`)
 echo "Writing to $target"
 mkdir -p $target
-cp $1/plots/*.pdf $target/
-cp $1/plots/*.svg $target/
+cp `pwd`/plots/*.pdf $target/
+cp `pwd`/plots/*.svg $target/
 
 rm -f $target/md3overview.html
 touch $target/md3overview.html

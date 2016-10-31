@@ -3,26 +3,26 @@
   {"title": "",
     "output_file": "lo_ll",
     "lines": [
-      { "name": "LO-sqrts--0-mpole_fixed", "label": "LO", "linestyle": "banded",
+      { "name": "LO-sqrts--0-mpole_fixed", "label": "LO", "linestyle": "solid",
         "base_line": [
           {"name": "LO-sqrts--0-mpole_fixed", "hide_line": true},
           {"name": "LO-sqrts--0-mpole_fixed", "hide_line": true}
         ]
       },
-      { "name": "LL-sqrts--0-mpole_fixed", "label": "LL", "linestyle": "banded",
+      { "name": "LL-sqrts--0-mpole_fixed", "label": "LL", "linestyle": "solid",
         "base_line": [
           {"name": "LO-sqrts--0-mpole_fixed"},
           {"name": "LO-sqrts--0-mpole_fixed", "hide_line": true}
         ]
       },
-      { "name": "LO_LL_matched-sqrts--0-mpole_fixed", "label": "LO+LL", "linestyle": "banded",
+      { "name": "LO_LL_matched-sqrts--0-mpole_fixed", "label": "LO+LL", "linestyle": "solid",
         "base_line": [
           {"name": "LO-sqrts--0-mpole_fixed"},
           {"name": "LL-sqrts--0-mpole_fixed"}
         ]
       },
       { "name": "LO_LL_matched_wrongPhase-sqrts", "label": "LO+LL ($\\phi=\\pi$)",
-        "linestyle": "banded",
+        "linestyle": "solid",
         "base_line": [
           {"name": "LO-sqrts--0-mpole_fixed"},
           {"name": "LL-sqrts--0-mpole_fixed"}
@@ -73,26 +73,26 @@
   {"title": "$m_\\text{pole}=m_{1\\text{S}}$",
     "output_file": "lo_ll_mpolefixed",
     "lines": [
-      { "name": "LO-sqrts--1-mpole_fixed", "label": "LO", "linestyle": "banded",
+      { "name": "LO-sqrts--1-mpole_fixed", "label": "LO", "linestyle": "solid",
         "base_line": [
           {"name": "LO-sqrts--1-mpole_fixed", "hide_line": true},
           {"name": "LO-sqrts--1-mpole_fixed", "hide_line": true}
         ]
       },
-      { "name": "LL-sqrts--1-mpole_fixed", "label": "LL", "linestyle": "banded",
+      { "name": "LL-sqrts--1-mpole_fixed", "label": "LL", "linestyle": "solid",
         "base_line": [
           {"name": "LO-sqrts--1-mpole_fixed"},
           {"name": "LO-sqrts--1-mpole_fixed", "hide_line": true}
         ]
       },
-      { "name": "LO_LL_matched-sqrts--1-mpole_fixed", "label": "LO+LL", "linestyle": "banded",
+      { "name": "LO_LL_matched-sqrts--1-mpole_fixed", "label": "LO+LL", "linestyle": "solid",
         "base_line": [
           {"name": "LO-sqrts--1-mpole_fixed"},
           {"name": "LL-sqrts--1-mpole_fixed"}
         ]
       },
       { "name": "LO_LL_matched_mpoleFixed_wrongPhase-sqrts", "label": "LO+LL ($\\phi=\\pi$)",
-        "linestyle": "banded",
+        "linestyle": "solid",
         "base_line": [
           {"name": "LO-sqrts--1-mpole_fixed"},
           {"name": "LL-sqrts--1-mpole_fixed"}

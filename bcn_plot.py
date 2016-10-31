@@ -1,11 +1,12 @@
 import sys
 import os
 import math
-import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib._cm import cubehelix
 from matplotlib.ticker import AutoMinorLocator
-import matplotlib.gridspec as gridspec
+from matplotlib import rc_file
+from matplotlib import gridspec
+import matplotlib.pyplot as plt
 import data_utils
 from data_utils import get_name
 from functools import partial
@@ -14,6 +15,9 @@ try:
   import mpld3
 except:
   mpld3 = None
+rc = os.path.join(os.getcwd(), '../matplotlibrc')
+print 'Loading rc : ', rc
+rc_file(rc)
 
 colors = ['#EE3311',  # red
           '#3366FF',  # blue
@@ -439,7 +443,7 @@ def plot_line(ldata, line, color, title, pretty_label, linestyle_decider,
         alpha=global_opacity)
     plt.hlines(mean, _[:-1], _[1:], label=label, colors=c)
   elif linestyle is not None and linestyle != "None":
-    linewidth = line.get('linewidth', 1.5)
+    linewidth = line.get('linewidth', 2.0)
     this_plot(d[0], d[1], color=c, label=label, linestyle=linestyle,
         linewidth=linewidth)
   else:
