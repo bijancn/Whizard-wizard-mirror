@@ -134,36 +134,40 @@ def build_nlo_sums(data):
       except StopIteration:
         pass
     if False:
-      xs_low = 0
-      xs_central = 0
-      xs_high = 0
-      for data_item in data:
-        #  TODO: (bcn 2016-10-31) should be steerable from plot.json
-        sqrts = 500
-        if 'nlo_central' in data_item[0]:
-          i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
-          xs_central = data_item[1][1][i_sqrts]
-        elif 'nlo_high' in data_item[0]:
-          i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
-          xs_high = data_item[1][1][i_sqrts]
-        elif 'nlo_low' in data_item[0]:
-          i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
-          xs_low = data_item[1][1][i_sqrts]
-        elif 'lo' in data_item[0]:
-          i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
-          xs_lo = data_item[1][1][i_sqrts]
-      if (xs_central > 0):
-        k = xs_central / xs_lo
-        print '***************'
-        print 'sqrts: ', sqrts
-        print 'LO: ', xs_lo
-        print 'central: ', xs_central
-        print 'scale_plus: ', (xs_high - xs_central) / xs_central * 100
-        print 'scale_low: ', (xs_central - xs_low) / xs_central * 100
-        print 'k-central: ', k
-        print 'k-plus: ', (xs_high - xs_central) / xs_lo / k * 100
-        print 'k-minus: ', (xs_central - xs_low) / xs_lo / k * 100
+      show_scale_variations(data)
   return data
+
+
+def show_scale_variations(data):
+  xs_low = 0
+  xs_central = 0
+  xs_high = 0
+  for data_item in data:
+    #  TODO: (bcn 2016-10-31) should be steerable from plot.json
+    sqrts = 500
+    if 'nlo_central' in data_item[0]:
+      i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
+      xs_central = data_item[1][1][i_sqrts]
+    elif 'nlo_high' in data_item[0]:
+      i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
+      xs_high = data_item[1][1][i_sqrts]
+    elif 'nlo_low' in data_item[0]:
+      i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
+      xs_low = data_item[1][1][i_sqrts]
+    elif 'lo' in data_item[0]:
+      i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
+      xs_lo = data_item[1][1][i_sqrts]
+  if (xs_central > 0):
+    k = xs_central / xs_lo
+    print '***************'
+    print 'sqrts: ', sqrts
+    print 'LO: ', xs_lo
+    print 'central: ', xs_central
+    print 'scale_plus: ', (xs_high - xs_central) / xs_central * 100
+    print 'scale_low: ', (xs_central - xs_low) / xs_central * 100
+    print 'k-central: ', k
+    print 'k-plus: ', (xs_high - xs_central) / xs_lo / k * 100
+    print 'k-minus: ', (xs_central - xs_low) / xs_lo / k * 100
 
 
 def build_smooth(data, smooth_dict):
@@ -629,21 +633,21 @@ def apply_transforms(data, plot_json):
   return data
 
 
-try:
-  import include
-  print "Including custom include.py file"
-except ImportError:
-  print "Did not find a custom include.py file"
-
-
 def execute_defined_functions(data, plot_json):
-  functions = plot_json.get("functions", [])
-  exec('\n'.join(functions['expression']))
-  for func in functions['to_evaluate']:
-    entry = eval(func + '()')
-    entry = (get_name({}, entry[0]), entry[1])
-    print 'Executed ', func, 'and appended it under the tag', entry[0]
-    data.append(entry)
+  functions = plot_json.get("functions", None)
+  if functions is not None:
+    try:
+      import include  # NOQA
+      print "Including custom include.py file"
+    except ImportError:
+      print "Did not find a custom include.py file"
+    expression = functions['expression']
+    exec('\n'.join(expression))
+    for func in functions['to_evaluate']:
+      entry = eval(func + '()')
+      entry = (get_name({}, entry[0]), entry[1])
+      print 'Executed ', func, 'and appended it under the tag', entry[0]
+      data.append(entry)
   return data
 
 

@@ -37,6 +37,9 @@ elsif (scale_vars == 2) then
 elsif (scale_vars == 3) then
   sh = 2.0
   sf = 0.5
+elsif (scale_vars == 4) then
+  sh = 1.0
+  sf = 1.0
 endif
 sqrtsstepsize = 0.1 GeV
 sqrtsmin = sqrts - sqrtsstepsize

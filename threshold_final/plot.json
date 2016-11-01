@@ -211,7 +211,7 @@
     "yminors": 4
   },
   {"title": "",
-    "output_file": "form_factor",
+    "output_file": "switch_off",
     "lines": [
       { "name": "abs_v_of_sqrts", "label": "$|v(\\sqrt{s})|$",
         "linestyle": "solid", "color": "green"
@@ -222,13 +222,13 @@
       { "name": "imag_v_of_sqrts", "label": "$\\text{Im}[v(\\sqrt{s})]$",
         "linestyle": "dashdot", "color": "cyan"
       },
-      { "name": "switchoff_of_abs_v_of_sqrts", "label": "$f(|v(\\sqrt{s})|)$",
+      { "name": "switchoff_of_abs_v_of_sqrts", "label": "$f_s(|v(\\sqrt{s})|)$",
         "linestyle": "solid", "color": "purple"
       },
-      { "name": "switchoff_of_real_v_of_sqrts", "label": "$f(\\text{Re}[v(\\sqrt{s})])$",
+      { "name": "switchoff_of_real_v_of_sqrts", "label": "$f_s(\\text{Re}[v(\\sqrt{s})])$",
         "linestyle": "dashed", "color": "red"
       },
-      { "name": "switchoff_of_imag_v_of_sqrts", "label": "$f(\\text{Im}[v(\\sqrt{s})])$",
+      { "name": "switchoff_of_imag_v_of_sqrts", "label": "$f_s(\\text{Im}[v(\\sqrt{s})])$",
         "linestyle": "dashdot", "color": "blue"
       }
     ],

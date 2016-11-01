@@ -77,13 +77,7 @@ def auto_tick_labeling(ticks):
   return ["$" + tick_str.format(tick) + "$" for tick in ticks]
 
 
-def set_major_ticks(axes, xticks, ytickss, xmin, xmax, xmajors, ymins, ymaxs,
-          ymajorss, xlog, ylogs):
-  if type(axes) == list:
-    combined_axes = [ax for ax in axes if 'Subplot' in str(type(ax))]
-  else:
-    combined_axes = [axes]
-    axes = [axes]
+def set_x_ticks(xticks, combined_axes, xlog, xmin, xmax, xmajors):
   if xticks is None:
     if xlog:
       if xmin <= 0:
@@ -96,8 +90,9 @@ def set_major_ticks(axes, xticks, ytickss, xmin, xmax, xmajors, ymins, ymaxs,
   else:
     combined_axes[-1].set_xticklabels(["$" + str(xt) + "$" for xt in xticks])
   combined_axes[-1].set_xticks(xticks)
-  for ax in combined_axes[:-1]:
-    plt.setp(ax.get_xticklabels(), visible=False)
+
+
+def set_y_ticks(ytickss, axes, ylogs, ymins, ymaxs, ymajorss):
   for ymax, ymin, ymajors, yticks, ylog, ax in zip(ymaxs, ymins, ymajorss,
       ytickss, ylogs, axes):
     if yticks is None:
@@ -112,6 +107,19 @@ def set_major_ticks(axes, xticks, ytickss, xmin, xmax, xmajors, ymins, ymaxs,
     else:
       ax.set_yticklabels(["$" + str(yt) + "$" for yt in yticks])
     ax.set_yticks(yticks)
+
+
+def set_major_ticks(axes, xticks, ytickss, xmin, xmax, xmajors, ymins, ymaxs,
+          ymajorss, xlog, ylogs):
+  if type(axes) == list:
+    combined_axes = [ax for ax in axes if 'Subplot' in str(type(ax))]
+  else:
+    combined_axes = [axes]
+    axes = [axes]
+  set_x_ticks(xticks, combined_axes, xlog, xmin, xmax, xmajors)
+  for ax in combined_axes[:-1]:
+    plt.setp(ax.get_xticklabels(), visible=False)
+  set_y_ticks(ytickss, axes, ylogs, ymins, ymaxs, ymajorss)
 
 
 def set_minor_ticks(axes, xminors, yminorss, xlog, ylogs):
@@ -389,7 +397,7 @@ def setup_minors(plot_dict, ratio_dict):
 
 def setup_extra_kwargs(plot_dict, many_labels):
   kwargs = {}
-  kwargs['height_shrinker'] = 0.70
+  kwargs['height_shrinker'] = plot_dict.get('legend_height_shrinker', 0.7)
   kwargs['legend_outside'] = plot_dict.get('legend_outside', many_labels)
   kwargs['legend_location'] = plot_dict.get('legend_location', 'best')
   kwargs['legend_ordering'] = plot_dict.get('legend_ordering', [])
@@ -410,27 +418,37 @@ def plot_band(data_of_a_band, band, color, title, global_opacity, pretty_label,
       color=color, label=label, alpha=opacity)
 
 
+def setup_kwargs(line, title, pretty_label, filename, color, global_opacity):
+  label = get_label(line, title, pretty_label=pretty_label, filename=filename)
+  col = use_defined_colors(line.get('color', color))
+  if line.get('hide_label', False):
+    label = None
+  kwargs = {
+      'label': label,
+      'color': col,
+      'alpha': global_opacity
+  }
+  return kwargs
+
+
 def plot_line(ldata, line, color, title, pretty_label, linestyle_decider,
     marker_decider, this_errorbar, this_plot, this_fill_between, ax,
     global_opacity, plotter):
   if line.get('hide_line', False):
     return
   filename, d = ldata[0], ldata[1]
-  label = get_label(line, title, pretty_label=pretty_label, filename=filename)
-  c = use_defined_colors(line.get('color', color))
-  if line.get('hide_label', False):
-    label = None
+  kwargs = setup_kwargs(line, title, pretty_label, filename, color, global_opacity)
   linestyle = decide_if_not_none(line, linestyle_decider, 'linestyle', 'solid',
       filename, title)
   if linestyle == 'banded':
     if len(d) > 2:
-      this_fill_between(d[0], d[1] - d[2], d[1] + d[2],
-        color=c, label=label, alpha=global_opacity)
+      this_fill_between(d[0], d[1] - d[2], d[1] + d[2], **kwargs)
     else:
       raise Exception("You have to supply errors for banded linestyle")
   elif linestyle == 'scatter':
     # TODO: (bcn 2016-03-31) hacking in a ratio for now #notproud
-    ax.scatter(d[0], d[1] / d[2], c=c, alpha=global_opacity, label=label, marker="+")
+    kwargs['marker'] = "+"
+    ax.scatter(d[0], d[1] / d[2], **kwargs)
   elif linestyle == 'histogram':
     # TODO: (bcn 2016-03-31) hacking in a ratio for now #notproud
     nbins = 10
@@ -439,19 +457,23 @@ def plot_line(ldata, line, color, title, pretty_label, linestyle_decider,
     sy2, _ = np.histogram(d[0], bins=nbins, weights=d[1] / d[2] * d[1] / d[2])
     mean = sy / n
     std = np.sqrt(sy2 / n - mean * mean)
-    plt.errorbar((_[1:] + _[:-1]) / 2, mean, yerr=std, ecolor=c, fmt="none",
-        alpha=global_opacity)
-    plt.hlines(mean, _[:-1], _[1:], label=label, colors=c)
+    kwargs['ecolor'] = kwargs['color']
+    kwargs['yerr'] = std
+    kwargs['fmt'] = "none"
+    plt.errorbar((_[1:] + _[:-1]) / 2, mean, **kwargs)
+    plt.hlines(mean, _[:-1], _[1:], **kwargs)
   elif linestyle is not None and linestyle != "None":
     linewidth = line.get('linewidth', 2.0)
-    this_plot(d[0], d[1], color=c, label=label, linestyle=linestyle,
-        linewidth=linewidth)
+    kwargs['linestyle'] = linestyle
+    kwargs['linewidth'] = linewidth
+    this_plot(d[0], d[1], **kwargs)
   else:
-    marker = decide_if_not_none(line, marker_decider, 'marker', '+')
+    kwargs['fmt'] = decide_if_not_none(line, marker_decider, 'marker', '+')
     if len(d) > 2:
-      this_errorbar(d[0], d[1], fmt=marker, yerr=d[2], color=c, label=label)
+      kwargs['yerr'] = d[2]
+      this_errorbar(d[0], d[1], **kwargs)
     else:
-      this_errorbar(d[0], d[1], fmt=marker, color=c, label=label)
+      this_errorbar(d[0], d[1], **kwargs)
 
 
 def save_fig(fig, title, plot_dict, pic_path):
@@ -500,29 +522,31 @@ def select_data(data, plot_dict, title):
   return valid, line_data, band_data, fit_data, many_labels, lines, bands, fits
 
 
-def use_local_or_global_base_line(band_or_line, data, this_errorbar_func,
-    this_plot_func, this_fill_between_func, global_base_line):
-  base_line = band_or_line.get('base_line', None)
-  if base_line is not None:
-    if type(base_line) != list:
-      base_line = [base_line]
-    this_base_lines = []
-    for bl in base_line:
-      if bl.get('hide_line', False):
-        this_base_lines.append(None)
-      else:
-        this_base_item = [d for d in data
-          if get_name(bl) == d[0].replace('.dat', '')]
-        if len(this_base_item) == 0:
-          raise Exception('Did not find ' + str(bl) + ' ! Maybe you made a typo?')
-        this_base_lines.append(this_base_item[0][1])
-    this_errorbar = partial(this_errorbar_func, this_base_lines)
-    this_plot = partial(this_plot_func, this_base_lines)
-    this_fill_between = partial(this_fill_between_func, this_base_lines)
-  else:
-    this_errorbar = partial(this_errorbar_func, global_base_line)
-    this_plot = partial(this_plot_func, global_base_line)
-    this_fill_between = partial(this_fill_between_func, global_base_line)
+def use_local_or_global_base_line(ratio_dict, band_or_line, data, this_errorbar,
+    this_errorbar_func, this_plot, this_plot_func, this_fill_between,
+    this_fill_between_func, global_base_line):
+  if ratio_dict is not None:
+    base_line = band_or_line.get('base_line', None)
+    if base_line is not None:
+      if type(base_line) != list:
+        base_line = [base_line]
+      this_base_lines = []
+      for bl in base_line:
+        if bl.get('hide_line', False):
+          this_base_lines.append(None)
+        else:
+          this_base_item = [d for d in data
+            if get_name(bl) == d[0].replace('.dat', '')]
+          if len(this_base_item) == 0:
+            raise Exception('Did not find ' + str(bl) + ' ! Maybe you made a typo?')
+          this_base_lines.append(this_base_item[0][1])
+      this_errorbar = partial(this_errorbar_func, this_base_lines)
+      this_plot = partial(this_plot_func, this_base_lines)
+      this_fill_between = partial(this_fill_between_func, this_base_lines)
+    else:
+      this_errorbar = partial(this_errorbar_func, global_base_line)
+      this_plot = partial(this_plot_func, global_base_line)
+      this_fill_between = partial(this_fill_between_func, global_base_line)
   return this_errorbar, this_plot, this_fill_between
 
 
@@ -559,27 +583,12 @@ def plot_extra_lines_and_texts(ax, plot_dict, global_opacity):
       print 'Cannot draw this extra object:', extra
 
 
-def plot(plot_dict, data, pic_path='./', plot_extra=None,
-    legend_decider=None, marker_decider=None,
-    linestyle_decider=None, pretty_label=None, set_extra_settings=None):
-  """
-  data: [(identifier_string, numpy_array),...] where numpy_array has the columns
-        x, y and optionally yerror
-  """
-  title = plot_dict.get('title', 'plot')
-  mkdirs(pic_path)
-  valid, line_data, band_data, fit_data, many_labels, lines, bands, fits = \
-      select_data(data, plot_dict, title)
-  if not valid:
-    return
-  ratio_dict = plot_dict.get('ratio', None)
-  fig = setup_figure(plot_dict, ratio_dict, many_labels)
+def prepare_plot_objects(ratio_dict, plot_dict, fig):
   if ratio_dict is not None:
     if type(ratio_dict) != list:
       ratio_dict = [ratio_dict]
     insets = [rd for rd in ratio_dict if rd.get('inset', None) is not None]
     combined_ratio_dict = [rd for rd in ratio_dict if rd.get('inset', None) is None]
-    global_base_line = line_data[0][1]
     number_of_axes = len(combined_ratio_dict) + 1
     #  TODO: (bcn 2016-08-17) could be customizable
     height_ratios = [number_of_axes]
@@ -607,38 +616,57 @@ def plot(plot_dict, data, pic_path='./', plot_extra=None,
     axes = [ax]
     dicts = [plot_dict]
     insets = ins_axes = []
+  return ax, this_plot, this_plot_func, this_errorbar, this_errorbar_func, \
+      this_fill_between, this_fill_between_func, axes, dicts, insets, ins_axes
+
+
+def plot(plot_dict, data, pic_path='./',
+    legend_decider=None, marker_decider=None,
+    linestyle_decider=None, pretty_label=None):
+  """
+  data: [(identifier_string, numpy_array),...] where numpy_array has the columns
+        x, y and optionally yerror
+  """
+  title = plot_dict.get('title', 'plot')
+  mkdirs(pic_path)
+  valid, line_data, band_data, fit_data, many_labels, lines, bands, fits = \
+      select_data(data, plot_dict, title)
+  if not valid:
+    return
+  ratio_dict = plot_dict.get('ratio', None)
+  fig = setup_figure(plot_dict, ratio_dict, many_labels)
   global_opacity = plot_dict.get('opacity', 0.3)
-  if plot_extra is not None:
-    ax = plot_extra(ax, title)
+  ax, this_plot, this_plot_func, this_errorbar, this_errorbar_func, \
+      this_fill_between, this_fill_between_func, axes, dicts, insets, ins_axes = \
+      prepare_plot_objects(ratio_dict, plot_dict, fig)
+  global_base_line = line_data[0][1]
   for axx, dictt in zip(axes, dicts):
     plot_extra_lines_and_texts(axx, dictt, global_opacity)
   fig_kwargs = setup_fig_kwargs(line_data, band_data, many_labels, plot_dict,
       ratio_dict)
-  if set_extra_settings is not None:
-    ax = set_extra_settings(ax, title)
   plotter = Plotter()
   i = 0
   for data_of_a_band, band, color in zip(band_data, bands, colors):
-    if ratio_dict is not None:
-      this_errorbar, this_plot, this_fill_between = \
-          use_local_or_global_base_line(band, data, this_errorbar_func,
-          this_plot_func, this_fill_between_func, global_base_line)
+    this_errorbar, this_plot, this_fill_between = \
+        use_local_or_global_base_line(ratio_dict, band, data, this_errorbar,
+            this_errorbar_func, this_plot, this_plot_func, this_fill_between,
+            this_fill_between_func, global_base_line)
     plot_band(data_of_a_band, band, color, title, global_opacity, pretty_label,
         this_fill_between)
   for ldata, line, color in zip(line_data + fit_data, lines + fits, colors + colors):
     i += 1
     if ratio_dict is not None:
       this_errorbar, this_plot, this_fill_between = \
-          use_local_or_global_base_line(line, data, this_errorbar_func,
-          this_plot_func, this_fill_between_func, global_base_line)
-    plot_line(ldata, line, color, title, pretty_label, linestyle_decider,
+          use_local_or_global_base_line(ratio_dict, line, data, this_errorbar,
+              this_errorbar_func, this_plot, this_plot_func, this_fill_between,
+              this_fill_between_func, global_base_line)
+      plot_line(ldata, line, color, title, pretty_label, linestyle_decider,
         marker_decider, this_errorbar, this_plot, this_fill_between, ax,
         global_opacity, plotter)
     if plot_dict.get('generate_animated', False):
       plotter.setfig(fig, axes, title=None, legend_hide=False, **fig_kwargs)
       fig.savefig(os.path.join(pic_path, title + '-' + str(i) + '.pdf'),
                   dpi=fig.dpi)
-
   plotter.setfig(fig, axes, title=title, **fig_kwargs)
   for ins, ax in zip(insets, ins_axes):
     _set_puffed_scale(0.05, ins['xmax'], ins['xmin'], ins['xlog'],

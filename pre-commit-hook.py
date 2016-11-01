@@ -28,16 +28,10 @@ CHECKS = [
         'print_filename': True,
     },
     {
-        'output': 'Running Pyflakes...',
-        'command': 'pyflakes %s',
+        'output': 'Running flake8...',
+        'command': 'flake8 --max-line-length=89 %s',
         'match_files': ['.*\.py$'],
-        'print_filename': False,
-    },
-    {
-        'output': 'Running pep8...',
-        'command': 'pep8 --max-line-length=89 %s',
         'ignore_files': ['mpi4py_map.py'],
-        'match_files': ['.*\.py$'],
         'print_filename': False,
     },
 ]
@@ -75,62 +69,66 @@ def check_files(files, check):
   return result
 
 
-def main(all_files, syntax_only):
-    new_stash = subprocess.Popen(['git', 'rev-parse', '-q', '--verify', 'refs/stash'],
-      stdout=subprocess.PIPE).stdout.read()
+def stash_working_tree():
+  new_stash = subprocess.Popen(['git', 'rev-parse', '-q', '--verify', 'refs/stash'],
+    stdout=subprocess.PIPE).stdout.read()
+  subprocess.call(['git', 'stash', 'save', '-q', '--keep-index'],
+      stdout=subprocess.PIPE)
+  old_stash = subprocess.Popen(['git', 'rev-parse', '-q', '--verify', 'refs/stash'],
+    stdout=subprocess.PIPE).stdout.read()
+  print 'old stash:', old_stash
+  print 'new stash:', new_stash
+  if new_stash == old_stash:
+    print 'No changes to test'
+    time.sleep(1)
+    sys.exit(0)
 
-    # Stash any changes to the working tree that are not going to be committed
-    subprocess.call(['git', 'stash', 'save', '-q', '--keep-index'],
+
+def files_to_be_checked():
+  files = []
+  if all_files:
+    for root, dirs, file_names in os.walk('.'):
+      for file_name in file_names:
+          files.append(os.path.join(root, file_name))
+  else:
+    p = subprocess.Popen(['git', 'status', '--porcelain'],
         stdout=subprocess.PIPE)
+    out, err = p.communicate()
+    for line in out.splitlines():
+      match = modified.match(line)
+      if match:
+        files.append(match.group('name'))
+  print 'files to be checked =    ', files
+  return files
 
-    old_stash = subprocess.Popen(['git', 'rev-parse', '-q', '--verify', 'refs/stash'],
-      stdout=subprocess.PIPE).stdout.read()
-    print 'old stash:', old_stash
-    print 'new stash:', new_stash
-    if new_stash == old_stash:
-      print 'No changes to test'
-      time.sleep(1)
-      sys.exit(0)
 
-    files = []
-    if all_files:
-        for root, dirs, file_names in os.walk('.'):
-            for file_name in file_names:
-                files.append(os.path.join(root, file_name))
-    else:
-        p = subprocess.Popen(['git', 'status', '--porcelain'],
-            stdout=subprocess.PIPE)
-        out, err = p.communicate()
-        for line in out.splitlines():
-            match = modified.match(line)
-            if match:
-                files.append(match.group('name'))
+def main(all_files, syntax_only):
+  stash_working_tree()
+  files = files_to_be_checked()
+  result = 0
+  for command in EXTRA_COMMANDS:
+    process = subprocess.Popen(command,
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    out, err = process.communicate()
+  for check in CHECKS:
+    result = check_files(files, check) or result
+  if (not syntax_only):
+    print 'Running Test Suite...'
+    return_code = subprocess.call('./run_tests.sh', shell=True)
+    result = return_code or result
+  unstash_working_tree()
+  if result != 0:
+    print colored('Commit cannot be accepted. See errors above.', 'red')
+  sys.exit(result)
 
-    result = 0
 
-    for command in EXTRA_COMMANDS:
-      process = subprocess.Popen(command,
-          stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-      out, err = process.communicate()
-    print 'files to be checked =    ', files
-    for check in CHECKS:
-      result = check_files(files, check) or result
-
-    if (not syntax_only):
-      print 'Running Test Suite...'
-      return_code = subprocess.call('./run_tests.sh', shell=True)
-      result = return_code or result
-
-    # Unstash changes to the working tree that we had stashed
-    subprocess.call(['git', 'reset', '--hard', '-q'], stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE)
-    subprocess.call(['git', 'stash', 'apply', '--index', '-q'], stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE)
-    subprocess.call(['git', 'stash', 'drop', '-q'], stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE)
-    if result != 0:
-      print colored('Commit cannot be accepted. See errors above.', 'red')
-    sys.exit(result)
+def unstash_working_tree():
+  subprocess.call(['git', 'reset', '--hard', '-q'], stdout=subprocess.PIPE,
+      stderr=subprocess.PIPE)
+  subprocess.call(['git', 'stash', 'apply', '--index', '-q'], stdout=subprocess.PIPE,
+      stderr=subprocess.PIPE)
+  subprocess.call(['git', 'stash', 'drop', '-q'], stdout=subprocess.PIPE,
+      stderr=subprocess.PIPE)
 
 if __name__ == '__main__':
     all_files = False

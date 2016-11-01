@@ -251,6 +251,7 @@
           }
         ]
     },
+    "legend_height_shrinker": 0.65,
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
@@ -308,6 +309,7 @@
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
+    "legend_height_shrinker": 0.65,
     "ylog": true,
     "xlog": false,
     "ymajors": 5,

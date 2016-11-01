@@ -40,7 +40,7 @@
       },
       { "scan_object": "scale_vars",
         "export_type": "separate",
-        "ranges": [{ "type": "explicit", "range": [0,1,2,3]} ]
+        "ranges": [{ "type": "explicit", "range": [0,1,2,3,4]} ]
       }
       ],
     "integration_copies": 3,

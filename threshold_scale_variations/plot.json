@@ -238,6 +238,7 @@
       ],
       "xlabel": "$\\sqrt{s}$ [GeV]",
       "ylabel": "$\\sigma$ [fb]",
+      "legend_height_shrinker": 0.6,
       "opacity": 0.7,
       "ylog": false,
       "xlog": false,
