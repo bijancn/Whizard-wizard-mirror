@@ -1,0 +1,49 @@
+{
+  "processes": [
+  { "process": ["LO_LL"],
+    "disabled": true,
+    "purpose": "scan",
+    "whizard_options": "--no-banner -r",
+    "nlo_type": "lo",
+    "scans": [{
+      "scan_object": "sqrts",
+      "ranges": [
+      {"type": "linear",
+        "start": 300.0,
+        "stop": 330.0,
+        "stepsize": 5.0
+      },
+      {"type": "linear",
+        "start": 330.0,
+        "stop": 340.0,
+        "stepsize": 1.0
+      },
+      {"type": "linear",
+        "start": 340.0,
+        "stop": 350.0,
+        "stepsize": 0.2
+      },
+      {"type": "linear",
+        "start": 350.0,
+        "stop": 360.0,
+        "stepsize": 1.0
+      },
+      {"type": "linear",
+        "start": 360.0,
+        "stop": 500.0,
+        "stepsize": 5.0
+      }
+      ]},
+      { "scan_object": "scale_vars",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [0,1,2,3,4]} ]
+      }
+      ],
+    "integration_copies": 3,
+    "adaption_iterations": "5:20000",
+    "integration_iterations": "5:20000"
+  }
+  ],
+  "whizard": "whizard",
+  "data_output": "./"
+}

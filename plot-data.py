@@ -2,13 +2,20 @@
 import os
 import glob
 import multiprocessing as mp
+import argparse
 from functools import partial
 import bcn_plot
 import data_utils
 from utils import load_json
-cwd = os.getcwd()
 
-parallel = True
+# Parse command line options
+parser = argparse.ArgumentParser(description='Check the Whizard',
+    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+# options how to behave
+parser.add_argument("-j", '--jobs', default=4, type=int,
+    help='Set number of jobs for plotting. Use -j1 to disable multiprocessing.')
+args = parser.parse_args()
 
 
 def find_all_data_paths(cwd, plot_json):
@@ -25,6 +32,7 @@ def find_all_data_paths(cwd, plot_json):
 
 
 def main():
+  cwd = os.getcwd()
   plot_json = load_json(os.path.join(cwd, 'plot.json'))
   data_paths = find_all_data_paths(cwd, plot_json)
   files = [str(f) for dp in data_paths for f in glob.glob(dp + '/*.dat')]
@@ -34,8 +42,8 @@ def main():
     if 'Analytic' in item[0]:
       data[idx][1][1] *= 1000
   plot_this = partial(bcn_plot.plot, data=data, pic_path=pic_path)
-  if parallel:
-    pool = mp.Pool(processes=4)
+  if args.jobs > 1:
+    pool = mp.Pool(processes=args.jobs)
     pool.map(plot_this, plot_json['plots'])
   else:
     map(plot_this, plot_json['plots'])

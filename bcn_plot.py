@@ -604,15 +604,21 @@ def prepare_plot_objects(ratio_dict, plot_dict, fig):
       ax = plt.axes(ins['inset'])
       ins_axes.append(ax)
       axes.append(ax)
+    this_errorbar = None
     this_errorbar_func = partial(combined_errorbar, axes)
+    this_plot = None
     this_plot_func = partial(combined_plot, axes)
+    this_fill_between = None
     this_fill_between_func = partial(combined_fill_between, axes)
     dicts = [plot_dict] + ratio_dict
   else:
     ax = fig.add_subplot(1, 1, 1)
     this_plot = ax.plot
+    this_plot_func = None
     this_errorbar = ax.errorbar
+    this_errorbar_func = None
     this_fill_between = ax.fill_between
+    this_fill_between_func = None
     axes = [ax]
     dicts = [plot_dict]
     insets = ins_axes = []
