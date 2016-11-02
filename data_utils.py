@@ -632,15 +632,16 @@ def apply_transforms(data, plot_json):
          data = build_fits(data, action['properties'])
   return data
 
+try:
+  import include  # NOQA
+  print "Including custom include.py file"
+except ImportError:
+  print "Did not find a custom include.py file"
+
 
 def execute_defined_functions(data, plot_json):
   functions = plot_json.get("functions", None)
   if functions is not None:
-    try:
-      import include  # NOQA
-      print "Including custom include.py file"
-    except ImportError:
-      print "Did not find a custom include.py file"
     expression = functions['expression']
     exec('\n'.join(expression))
     for func in functions['to_evaluate']:

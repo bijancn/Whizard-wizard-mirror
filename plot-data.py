@@ -9,12 +9,14 @@ import data_utils
 from utils import load_json
 
 # Parse command line options
-parser = argparse.ArgumentParser(description='Check the Whizard',
+parser = argparse.ArgumentParser(description='Plot data',
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
 # options how to behave
 parser.add_argument("-j", '--jobs', default=4, type=int,
     help='Set number of jobs for plotting. Use -j1 to disable multiprocessing.')
+parser.add_argument("-p", '--plot', type=str,
+    help='Select a PLOT according to its output_file.')
 args = parser.parse_args()
 
 
@@ -42,10 +44,13 @@ def main():
     if 'Analytic' in item[0]:
       data[idx][1][1] *= 1000
   plot_this = partial(bcn_plot.plot, data=data, pic_path=pic_path)
+  plots = plot_json['plots']
+  if args.plot is not None:
+    plots = [p for p in plots if args.plot in p['output_file']]
   if args.jobs > 1:
     pool = mp.Pool(processes=args.jobs)
-    pool.map(plot_this, plot_json['plots'])
+    pool.map(plot_this, plots)
   else:
-    map(plot_this, plot_json['plots'])
+    map(plot_this, plots)
 
 main()

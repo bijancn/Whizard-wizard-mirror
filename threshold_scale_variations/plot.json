@@ -8,7 +8,7 @@
         },
         { "name": "LL-sqrts--0-mpole_fixed",
           "folder": "../threshold_final",
-          "label": "LL scale, $h = 1.0$, $f = 1.0$",
+          "label": "LL, $h = 1.0$, $f = 1.0$",
           "linestyle": "None",
           "color": "blue",
           "base_line": [
@@ -17,7 +17,7 @@
           ]
         },
         { "name": "LL-sqrts--0-mpole_fixed--0-scale_vars",
-          "label": "LL scale, $h = 0.5$, $f = 1.0$",
+          "label": "LL, $h = 0.5$, $f = 1.0$",
           "linestyle": "dashed",
           "color": "blue",
           "base_line": [
@@ -26,7 +26,7 @@
           ]
         },
         { "name": "LL-sqrts--0-mpole_fixed--1-scale_vars",
-          "label": "LL scale, $h = 0.5$, $f = 2.0$",
+          "label": "LL, $h = 0.5$, $f = 2.0$",
           "linestyle": "solid",
           "color": "blue",
           "base_line": [
@@ -35,7 +35,7 @@
           ]
         },
         { "name": "LL-sqrts--0-mpole_fixed--2-scale_vars",
-          "label": "LL scale, $h = 2.0$, $f = 1.0$",
+          "label": "LL, $h = 2.0$, $f = 1.0$",
           "linestyle": "dotted",
           "color": "blue",
           "base_line": [
@@ -44,7 +44,7 @@
           ]
         },
         { "name": "LL-sqrts--0-mpole_fixed--3-scale_vars",
-          "label": "LL scale, $h = 2.0$, $f = 0.5$",
+          "label": "LL, $h = 2.0$, $f = 0.5$",
           "linestyle": "dashdot",
           "color": "blue",
           "base_line": [
@@ -105,8 +105,9 @@
         },
         { "name": "LO_LL-sqrts--4-scale_vars",
           "folder": "../threshold_scale_variations_LO_LL",
-          "label": "LL scale, $h = 1.0$, $f = 1.0$",
-          "linestyle": "None",
+          "label": "LO+LL, $h = 1.0$, $f = 1.0$",
+          "hide_label": true,
+          "linestyle": "solid",
           "color": "blue",
           "base_line": [
             {"name": "LO-sqrts--0-mpole_fixed", "hide_line": false,
@@ -115,7 +116,8 @@
         },
         { "name": "LO_LL-sqrts--0-scale_vars",
           "folder": "../threshold_scale_variations_LO_LL",
-          "label": "LL scale, $h = 0.5$, $f = 1.0$",
+          "label": "LL, $h = 0.5$, $f = 1.0$",
+          "hide_line": true,
           "linestyle": "dashed",
           "color": "blue",
           "base_line": [
@@ -125,7 +127,8 @@
         },
         { "name": "LO_LL-sqrts--1-scale_vars",
           "folder": "../threshold_scale_variations_LO_LL",
-          "label": "LL scale, $h = 0.5$, $f = 2.0$",
+          "label": "LL, $h = 0.5$, $f = 2.0$",
+          "hide_line": true,
           "linestyle": "solid",
           "color": "blue",
           "base_line": [
@@ -135,8 +138,9 @@
         },
         { "name": "LO_LL-sqrts--2-scale_vars",
           "folder": "../threshold_scale_variations_LO_LL",
-          "label": "LL scale, $h = 2.0$, $f = 1.0$",
+          "label": "LL, $h = 2.0$, $f = 1.0$",
           "linestyle": "dotted",
+          "hide_line": true,
           "color": "blue",
           "base_line": [
             {"name": "LO-sqrts--0-mpole_fixed", "hide_line": false,
@@ -145,8 +149,9 @@
         },
         { "name": "LO_LL-sqrts--3-scale_vars",
           "folder": "../threshold_scale_variations_LO_LL",
-          "label": "LL scale, $h = 2.0$, $f = 0.5$",
+          "label": "LL, $h = 2.0$, $f = 0.5$",
           "linestyle": "dashdot",
+          "hide_line": true,
           "color": "blue",
           "base_line": [
             {"name": "LO-sqrts--0-mpole_fixed", "hide_line": false,
@@ -156,7 +161,7 @@
       ],
       "bands": [
         {"opacity": 0.4,
-          "label": "",
+          "label": "LO+LL, $h,f$ variations",
           "color": "blue",
           "data":[
             { "name": "LO_LL-sqrts--0-scale_vars",
@@ -191,6 +196,8 @@
       ],
       "xlabel": "$\\sqrt{s}$ [GeV]",
       "ylabel": "$\\sigma$ [fb]",
+      "legend_outside": false,
+      "legend_location": "upper left",
       "opacity": 0.7,
       "ylog": false,
       "xlog": false,
@@ -211,7 +218,7 @@
         },
         { "name": "LL-sqrts--0-mpole_fixed",
           "folder": "../threshold_final",
-          "label": "LL scale, $h = 1.0$, $f = 1.0$",
+          "label": "LL, $h = 1.0$, $f = 1.0$",
           "linestyle": "None",
           "color": "blue",
           "base_line": [
@@ -220,7 +227,7 @@
           ]
         },
         { "name": "LL-sqrts--0-mpole_fixed--0-scale_vars",
-          "label": "LL scale, $h = 0.5$, $f = 1.0$",
+          "label": "LL, $h = 0.5$, $f = 1.0$",
           "linestyle": "dashed",
           "color": "blue",
           "base_line": [
@@ -229,7 +236,7 @@
           ]
         },
         { "name": "LL-sqrts--0-mpole_fixed--1-scale_vars",
-          "label": "LL scale, $h = 0.5$, $f = 2.0$",
+          "label": "LL, $h = 0.5$, $f = 2.0$",
           "linestyle": "solid",
           "color": "blue",
           "base_line": [
@@ -238,7 +245,7 @@
           ]
         },
         { "name": "LL-sqrts--0-mpole_fixed--2-scale_vars",
-          "label": "LL scale, $h = 2.0$, $f = 1.0$",
+          "label": "LL, $h = 2.0$, $f = 1.0$",
           "linestyle": "dotted",
           "color": "blue",
           "base_line": [
@@ -247,7 +254,7 @@
           ]
         },
         { "name": "LL-sqrts--0-mpole_fixed--3-scale_vars",
-          "label": "LL scale, $h = 2.0$, $f = 0.5$",
+          "label": "LL, $h = 2.0$, $f = 0.5$",
           "linestyle": "dashdot",
           "color": "blue",
           "base_line": [
@@ -255,8 +262,18 @@
               "folder": "../threshold_final"}
           ]
         },
+        { "name": "NLL-sqrts--0-mpole_fixed--4-scale_vars",
+          "label": "NLL, $h = 1.0$, $f = 1.0$",
+          "folder": "../threshold_scale_variations_NLL",
+          "linestyle": "None",
+          "color": "red",
+          "base_line": [
+            {"name": "LO-sqrts--0-mpole_fixed", "hide_line": false,
+              "folder": "../threshold_final"}
+          ]
+        },
         { "name": "NLL-sqrts--0-mpole_fixed--0-scale_vars",
-          "label": "NLL scale, $h = 0.5$, $f = 1.0$",
+          "label": "NLL, $h = 0.5$, $f = 1.0$",
           "folder": "../threshold_scale_variations_NLL",
           "linestyle": "dashed",
           "color": "red",
@@ -266,7 +283,7 @@
           ]
         },
         { "name": "NLL-sqrts--0-mpole_fixed--1-scale_vars",
-          "label": "NLL scale, $h = 0.5$, $f = 2.0$",
+          "label": "NLL, $h = 0.5$, $f = 2.0$",
           "folder": "../threshold_scale_variations_NLL",
           "linestyle": "solid",
           "color": "red",
@@ -276,7 +293,7 @@
           ]
         },
         { "name": "NLL-sqrts--0-mpole_fixed--2-scale_vars",
-          "label": "NLL scale, $h = 2.0$, $f = 1.0$",
+          "label": "NLL, $h = 2.0$, $f = 1.0$",
           "folder": "../threshold_scale_variations_NLL",
           "linestyle": "dotted",
           "color": "red",
@@ -286,7 +303,7 @@
           ]
         },
         { "name": "NLL-sqrts--0-mpole_fixed--3-scale_vars",
-          "label": "NLL scale, $h = 2.0$, $f = 0.5$",
+          "label": "NLL, $h = 2.0$, $f = 0.5$",
           "folder": "../threshold_scale_variations_NLL",
           "linestyle": "dashdot",
           "color": "red",
