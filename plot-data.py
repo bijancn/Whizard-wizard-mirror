@@ -5,8 +5,8 @@ import multiprocessing as mp
 import argparse
 from functools import partial
 import bcn_plot
+import utils
 import data_utils
-from utils import load_json
 
 # Parse command line options
 parser = argparse.ArgumentParser(description='Plot data',
@@ -35,7 +35,8 @@ def find_all_data_paths(cwd, plot_json):
 
 def main():
   cwd = os.getcwd()
-  plot_json = load_json(os.path.join(cwd, 'plot.json'))
+  plot_json = utils.retrieve_and_validate_json(cwd, json_name='plot.json',
+      schema_name='../plot-schema.json')
   data_paths = find_all_data_paths(cwd, plot_json)
   files = [str(f) for dp in data_paths for f in glob.glob(dp + '/*.dat')]
   pic_path = os.path.abspath(os.path.join(cwd, 'plots')) + '/'

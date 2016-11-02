@@ -623,10 +623,8 @@ def apply_transforms(data, plot_json):
   for transform in transforms:
     for action in transform:
       if action["type"] == "scalings":
-         print 'build scaled data: '
          data = build_scaled(data, action['properties'])
       elif action["type"] == "smooth":
-         print 'build smooth data'
          data = build_smooth(data, action['properties'])
       elif action["type"] == "fits":
          data = build_fits(data, action['properties'])

@@ -21,6 +21,12 @@
           {"name": "LL-sqrts--0-mpole_fixed"}
         ]
       },
+      { "name": "LL_minus_One-sqrts--0-mpole_fixed", "label": "LL-1", "linestyle": "solid",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed"},
+          {"name": "LL-sqrts--0-mpole_fixed"}
+        ]
+      },
       { "name": "LO_LL_matched_wrongPhase-sqrts", "label": "LO+LL ($\\phi=\\pi$)",
         "linestyle": "solid",
         "base_line": [
@@ -63,7 +69,6 @@
     "opacity": 0.7,
     "ylog": false,
     "xlog": false,
-    "xminors": true,
     "xmin": 300.0,
     "xmax": 400.0,
     "ymin": 0.0,
@@ -133,7 +138,6 @@
     "opacity": 0.7,
     "ylog": false,
     "xlog": false,
-    "xminors": true,
     "xmin": 300.0,
     "xmax": 400.0,
     "ymin": 0.0,
@@ -260,7 +264,6 @@
     "opacity": 0.7,
     "ylog": false,
     "xlog": false,
-    "xminors": true,
     "xmin": 300.0,
     "xmax": 400.0,
     "ymin": 0.0,

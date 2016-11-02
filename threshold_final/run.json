@@ -1,7 +1,7 @@
 {
   "processes": [
   { "process": ["LO_LL_matched", "LO_LL_matched_EHA", "LO",
-             "LO_LL_matched_signal", "LL_signal"],
+             "LO_LL_matched_signal", "LL_signal", "LL_minus_One"],
     "disabled": true,
     "purpose": "scan",
     "whizard_options": "--no-banner -r",

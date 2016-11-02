@@ -5,7 +5,11 @@
       "type": "object",
       "properties": {
         "name": { "type": "string" },
-        "folder": { "type": "string" }
+        "folder": { "type": "string" },
+        "hide_line": {
+          "type": "boolean",
+          "description": "Hide the line from the subplot"
+        }
       },
       "required": ["name"]
     },
@@ -59,7 +63,8 @@
         "horizontalalignment" : { "type": "string" },
         "color" : { "type": "string" }
       },
-      "required": [ "text", "x", "y" ]
+      "required": [ "text", "x", "y" ],
+      "additionalProperties": false
     },
     "line": {
       "allOf": [
@@ -76,6 +81,7 @@
         "opacity": {},
         "label": {},
         "hide_label": {},
+        "hide_line": {},
         "color": {},
         "base_line": {},
         "linestyle": {},
@@ -97,6 +103,7 @@
         "opacity": {},
         "label": {},
         "hide_label": {},
+        "hide_line": {},
         "color": {},
         "base_line": {},
         "data": {}
@@ -192,9 +199,104 @@
         "yminors": {},
         "ymin": {},
         "ymax": {},
-        "yticks": {}
+        "yticks": {},
+        "opacity": {}
       },
       "additionalProperties": false
+    },
+    "scalings": {
+      "type": "object",
+      "description": "For each `line_core` in `data` it will create a scaled version",
+      "properties": {
+        "type": { "enum": [ "scalings", "smooth", "fits", "binary_function" ] },
+        "scale_by_point": {
+          "type": "number",
+          "description": "y-values (and errors) will be divided by the `y` value of the point with `x == scale_by_point`"
+        },
+        "scale_by_value": {
+          "type": "number",
+          "description": "y-values (and errors) will be divided by `scale_by_value`"
+        },
+        "scale_by_x": {
+          "type": "number",
+          "description": "y-values (and errors) will be multiplied at each point with `x**scale_by_x`"
+        },
+        "suffix": {
+          "type": "string",
+          "description": "Not supported yet. Default is `_scale`."
+        },
+        "data": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/line_core" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "smooth": {
+      "type": "object",
+      "description": "For each `line_core` in `data` it will create a smoothed version",
+      "properties": {
+        "type": { "enum": [ "scalings", "smooth", "fits", "binary_function" ] },
+        "window_size": { "type": "number" },
+        "poly_order": { "type": "number" },
+        "suffix": {
+          "type": "string",
+          "description": "Not supported yet. Default is `_smooth`."
+        },
+        "data": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/line_core" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "fits": {
+      "type": "object",
+      "description": "For each `line_core` in `data` it will create a fitted version",
+      "properties": {
+        "type": { "enum": [ "scalings", "smooth", "fits", "binary_function" ] },
+        "fit_degree": {
+          "type": "number",
+          "minimum": 0.0
+        },
+        "extrapolation_minus": { "type": "number" },
+        "extrapolation_plus": { "type": "number" },
+        "print_fit_parameters": { "type": "boolean" },
+        "suffix": {
+          "type": "string",
+          "description": "Not supported yet. Default is `_fit`."
+        },
+        "data": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/line_core" }
+        }
+      },
+      "additionalProperties": false,
+      "required": [ "fit_degree" ]
+    },
+    "binary_function": {
+      "type": "object",
+      "description": "Takes exactely two unique `line_core`s in `data` and combines them with the given lambda function in expression",
+      "properties": {
+        "type": { "enum": [ "scalings", "smooth", "fits", "binary_function" ] },
+        "expression": {
+          "type": "string",
+          "description": "lambda expression to be `eval`uated: Default is `lambda x,y: x+y`."
+        },
+        "infix": {
+          "type": "string",
+          "description": "New data name is build up of old1 and old2, combined with `infix`. Default is `_sum_`."
+        },
+        "data": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/line_core" }
+        }
+      },
+      "additionalProperties": false,
+      "required": [ "fit_degree" ]
     }
   },
   "type": "object",
@@ -204,108 +306,33 @@
       "items": { "$ref": "#/definitions/plot"},
       "required": [ "1" ]
     },
-    "scalings": {
+    "transforms": {
       "type": "array",
-      "description": "For each `line_core` in `data` it will create a scaled version",
+      "description": "This is a list of transformations. The ordering in this list does not matter.",
       "items": {
-        "type": "object",
-        "properties": {
-          "scale_by_point": {
-            "type": "number",
-            "description": "y-values (and errors) will be divided by the `y` value of the point with `x == scale_by_point`"
-          },
-          "scale_by_value": {
-            "type": "number",
-            "description": "y-values (and errors) will be divided by `scale_by_value`"
-          },
-          "scale_by_x": {
-            "type": "number",
-            "description": "y-values (and errors) will be multiplied at each point with `x**scale_by_x`"
-          },
-          "suffix": {
-            "type": "string",
-            "description": "Not supported yet. Default is `_scale`."
-          },
-          "data": {
-            "type": "array",
-            "items": { "$ref": "#/definitions/line_core" }
-          }
-        },
-        "additionalProperties": false
-      }
-    },
-    "smooth": {
-      "type": "array",
-      "description": "For each `line_core` in `data` it will create a smoothed version",
-      "items": {
-        "type": "object",
-        "properties": {
-          "window_size": { "type": "number" },
-          "poly_order": { "type": "number" },
-          "suffix": {
-            "type": "string",
-            "description": "Not supported yet. Default is `_smooth`."
-          },
-          "data": {
-            "type": "array",
-            "items": { "$ref": "#/definitions/line_core" }
-          }
-        },
-        "additionalProperties": false
-      }
-    },
-    "fits": {
-      "type": "array",
-      "description": "For each `line_core` in `data` it will create a fitted version",
-      "items": {
-        "type": "object",
-        "properties": {
-          "fit_degree": {
-            "type": "number",
-            "minimum": 0.0
-          },
-          "extrapolation_minus": { "type": "number" },
-          "extrapolation_plus": { "type": "number" },
-          "print_fit_parameters": { "type": "boolean" },
-          "suffix": {
-            "type": "string",
-            "description": "Not supported yet. Default is `_fit`."
-          },
-          "data": {
-            "type": "array",
-            "items": { "$ref": "#/definitions/line_core" }
-          }
-        },
-        "additionalProperties": false,
-        "required": [ "fit_degree" ]
+        "type": "array",
+        "description": "Each transformation is a list of atomic transformations of different types. The ordering in the transformation list matters.",
+        "items": {
+          "oneOf" : [
+            { "$ref": "#/definitions/scalings" },
+            { "$ref": "#/definitions/smooth" },
+            { "$ref": "#/definitions/fits" }
+          ]
+        }
       }
     },
     "functions": {
-      "type": "array",
-      "description": "Use this to inject functions. The array of strings will be executed with `exec`, no questions asked! You get what you ask for. Can be used to define functions for the extra_data_functions",
-      "items": {
-        "type": "object",
-        "properties": {
-          "expression": {
-            "type": "array",
-            "items": { "type": "string" }
-          }
+      "type": "object",
+      "description": "Use this to inject computed data. Put in `to_evaluate` the function names you want to be executed. Each function, defined in the string array `expression`, has to return a tupel `(tagname, data)`. `tagname` can be used in plot lines and bands. `data` has to be a numpy array like `np.vstack([x,y])` or `np.vstack([x,y,yerr])`.",
+      "properties": {
+        "expression": {
+          "type": "array",
+          "items": { "type": "string" }
         },
-        "additionalProperties": false
-      }
-    },
-    "data_functions": {
-      "type": "array",
-      "description": "Use this to inject computed data. You define a function that has to return a tupel (tagname, x, y). tagname can be used to plot lines and bands.",
-      "items": {
-        "type": "object",
-        "properties": {
-          "expression": {
-            "type": "array",
-            "items": { "type": "string" }
-          }
-        },
-        "additionalProperties": false
+        "to_evaluate": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
       }
     },
     "data_output": {

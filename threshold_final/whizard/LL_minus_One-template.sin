@@ -2,14 +2,14 @@ include("../process_settings_threshold.sin")
 
 library = PROCESS
 process PROCESS = e1, E1 => Wm, Wp, B, b
-    {$restrictions = "3+6~t && 4+5~tbar"}  !!! Switch off LO with impossible restrictions
 compile
 
 nrqcd_order = 0  !!! LL
 FF = -2          !!! resummed p0-constant with switchoff
 offshell_strategy = 2      !!! factorized
-                  + 4      !!! interference with background diagrams
+                  + 4*0    !!! interference with background diagrams
                   + 128    !!! decay on-shell projected
+                  + 2048   !!! enforce minus one in the form factor
 !                  + 32   ! hel approx
 !                  + 1024 ! extra hel approx
 mpole_fixed = 0
