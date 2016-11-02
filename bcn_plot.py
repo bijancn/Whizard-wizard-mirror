@@ -666,9 +666,9 @@ def plot(plot_dict, data, pic_path='./',
           use_local_or_global_base_line(ratio_dict, line, data, this_errorbar,
               this_errorbar_func, this_plot, this_plot_func, this_fill_between,
               this_fill_between_func, global_base_line)
-      plot_line(ldata, line, color, title, pretty_label, linestyle_decider,
-        marker_decider, this_errorbar, this_plot, this_fill_between, ax,
-        global_opacity, plotter)
+    plot_line(ldata, line, color, title, pretty_label, linestyle_decider,
+      marker_decider, this_errorbar, this_plot, this_fill_between, ax,
+      global_opacity, plotter)
     if plot_dict.get('generate_animated', False):
       plotter.setfig(fig, axes, title=None, legend_hide=False, **fig_kwargs)
       fig.savefig(os.path.join(pic_path, title + '-' + str(i) + '.pdf'),
