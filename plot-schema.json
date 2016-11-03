@@ -299,6 +299,14 @@
       },
       "additionalProperties": false,
       "required": [ "fit_degree" ]
+    },
+    "transform": {
+      "anyOf" : [
+        { "$ref": "#/definitions/scalings" },
+        { "$ref": "#/definitions/smooth" },
+        { "$ref": "#/definitions/fits" },
+        { "$ref": "#/definitions/binary_function" }
+      ]
     }
   },
   "type": "object",
@@ -314,13 +322,7 @@
       "items": {
         "type": "array",
         "description": "Each transformation is a list of atomic transformations of different types. The ordering in the transformation list matters.",
-        "items": {
-          "anyOf" : [
-            { "$ref": "#/definitions/scalings" },
-            { "$ref": "#/definitions/smooth" },
-            { "$ref": "#/definitions/fits" }
-          ]
-        }
+        "items": { "$ref": "#/definitions/transform" }
       }
     },
     "functions": {
