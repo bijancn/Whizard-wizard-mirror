@@ -12,13 +12,24 @@ def show_means(process_string, data):
     if process_string in d[0]:
       num_data = d[1]
       mean_mean = np.average(num_data[1])
-      mean_error = np.average(num_data[2])
-      strings.append(os.path.basename(d[0]).replace('.dat', '') + ' ' +
-          str(mean_mean) + ' ' + str(mean_error) + ' ' + str(mean_error /
-          mean_mean * 100) + ' % ' + str(len(num_data[1])))
+      try:
+        mean_error = np.average(num_data[2])
+        strings.append(os.path.basename(d[0]).replace('.dat', '') + ' ' +
+            str(mean_mean) + ' ' + str(mean_error) + ' ' + str(mean_error /
+            mean_mean * 100) + ' % ' + str(len(num_data[1])))
+      except IndexError:
+        strings.append(os.path.basename(d[0]).replace('.dat', '') + ' ' +
+            str(mean_mean) + ' ' + str(len(num_data[1])))
   strings.sort()
   for string in strings:
     print string
+
+
+def test_show_means():
+    test_string = 'foo'
+    test_data = [('foofoo', np.array((np.array([1, 2, 3]), np.array([11, 12, 13])))),
+                 ('foobar', np.array((np.array([1, 2, 3]), np.array([21, 22, 23]))))]
+    show_means(test_string, test_data)
 
 
 def remove_empty_data(data):
@@ -108,6 +119,17 @@ def get_associated_plot_data(data, special, suffix=""):
       this_special_data += [d for d in data
           if get_name(lbl) + suffix == d[0].replace('.dat', '')]
     special_data += [this_special_data]
+  return special_data
+
+
+def get_associated_plot_data_single(data, special, suffix=""):
+  """This returns a list of data tuples.
+  """
+  special_data = []
+  list_of_lbls = special.get('data', [])
+  for lbl in list_of_lbls:
+    special_data += [d for d in data
+        if get_name(lbl) + suffix == d[0].replace('.dat', '')]
   return special_data
 
 
@@ -218,6 +240,42 @@ def build_fits(data, plot_json):
       print 'Appending ' + fit_name
       data.append((fit_name, np.array((fit_x, fit_y))))
   return data
+
+
+def build_binary_function(data, action_dict):
+  action_data = get_associated_plot_data_single(data, action_dict)
+  infix = action_dict.get('infix', '_sum_')
+  try:
+    binary_name = action_data[0][0].replace('.dat',
+        infix + os.path.basename(action_data[1][0]))
+  except IndexError:
+      print 'Warning: You have to give two data sets to binary function.' + \
+          ' Skipping: ', action_dict
+  else:
+    print 'Appending ', binary_name
+    common_x, combined_y = remove_uncommon(
+        [action_data[0][1][0], action_data[1][1][0]],
+        [action_data[0][1][1], action_data[1][1][1]])
+    user_func = eval(action_dict.get('expression', 'lambda x,y: x + y'))
+    new_y = user_func(combined_y[0], combined_y[1])
+    data.append((binary_name, np.array((common_x, new_y))))
+    return data
+
+
+def test_build_binary_function():
+  cwd = os.getcwd()
+  x_array = np.array((1, 2, 3))
+  data = [(cwd + '/scan-results/foo.dat',
+           np.vstack((x_array, np.array((10, 20, 30))))),
+          (os.path.abspath(cwd + '/../other/scan-results/bar.dat'),
+           np.vstack((x_array, np.array((30, 20, 10)))))]
+  action_dict = {'data': [
+      {'name': 'foo', 'folder': './'},
+      {'name': 'bar', 'folder': '../other'}]}
+  data = build_binary_function(data, action_dict)
+  nt.eq_(data[2][0], cwd + '/scan-results/foo_sum_bar.dat')
+  np.testing.assert_array_equal(data[2][1][0], x_array)
+  np.testing.assert_array_equal(data[2][1][1], np.array((40, 40, 40)))
 
 
 def remove_uncommon(list_of_x_arrays, list_of_y_arrays):
@@ -623,12 +681,27 @@ def apply_transforms(data, plot_json):
   for transform in transforms:
     for action in transform:
       if action["type"] == "scalings":
-         data = build_scaled(data, action['properties'])
+         data = build_scaled(data, action)
       elif action["type"] == "smooth":
-         data = build_smooth(data, action['properties'])
+         data = build_smooth(data, action)
       elif action["type"] == "fits":
-         data = build_fits(data, action['properties'])
+         data = build_fits(data, action)
+      elif action["type"] == "binary_function":
+         data = build_binary_function(data, action)
   return data
+
+
+def test_apply_transforms():
+  plot_json = {'transforms': [
+      [{'type': 'binary_function'}]
+  ]}
+  data = []
+  data = apply_transforms(data, plot_json)
+  plot_json = {'transforms': [
+      [{'type': 'binary_function'}, {'type': 'smooth'}]
+  ]}
+  data = []
+  # data = apply_transforms(data, plot_json)
 
 try:
   import include  # NOQA

@@ -135,6 +135,7 @@
             "legend_outside": { "type": "boolean" },
             "legend_location": { "type": "string" },
             "legend_ordering": { "type": "array", "items": {"type": "number"} },
+            "legend_height_shrinker": { "type": "number"},
             "xlabel": { "type": "string" },
             "xticks": {
               "type": "array",
@@ -188,6 +189,7 @@
         "legend_outside": {},
         "legend_location": {},
         "legend_ordering": {},
+        "legend_height_shrinker": {},
         "extra_texts": {},
         "extra_lines": {},
         "xticks": {},
@@ -313,7 +315,7 @@
         "type": "array",
         "description": "Each transformation is a list of atomic transformations of different types. The ordering in the transformation list matters.",
         "items": {
-          "oneOf" : [
+          "anyOf" : [
             { "$ref": "#/definitions/scalings" },
             { "$ref": "#/definitions/smooth" },
             { "$ref": "#/definitions/fits" }

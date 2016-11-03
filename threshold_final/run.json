@@ -1,6 +1,53 @@
 {
   "processes": [
-  { "process": ["LO_LL_matched", "LO_LL_matched_EHA", "LO",
+  { "process": ["LO_LL_matched"],
+    "disabled": true,
+    "purpose": "scan",
+    "whizard_options": "--no-banner -r",
+    "nlo_type": "lo",
+    "scans": [{
+      "scan_object": "sqrts",
+      "ranges": [
+      { "type": "linear",
+        "start": 300.0,
+        "stop": 330.0,
+        "stepsize": 5.0
+      },
+      { "type": "linear",
+        "start": 330.0,
+        "stop": 340.0,
+        "stepsize": 1.0
+      },
+      { "type": "linear",
+        "start": 340.0,
+        "stop": 350.0,
+        "stepsize": 0.2
+      },
+      { "type": "linear",
+        "start": 350.0,
+        "stop": 360.0,
+        "stepsize": 1.0
+      },
+      { "type": "linear",
+        "start": 360.0,
+        "stop": 500.0,
+        "stepsize": 5.0
+      }
+      ]},
+      { "scan_object": "mpole_fixed",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [0,1]} ]
+      },
+      { "scan_object": "phase_flip",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [0,1]} ]
+      }
+      ],
+    "integration_copies": 3,
+    "adaption_iterations": "5:20000",
+    "integration_iterations": "5:20000"
+  },
+  { "process": ["LO_LL_matched_EHA", "LO",
              "LO_LL_matched_signal", "LL_signal", "LL_minus_One"],
     "disabled": true,
     "purpose": "scan",
@@ -36,6 +83,53 @@
       }
       ]},
       { "scan_object": "mpole_fixed",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [0,1]} ]
+      }
+      ],
+    "integration_copies": 3,
+    "adaption_iterations": "5:20000",
+    "integration_iterations": "5:20000"
+  },
+  { "process": ["LL"],
+    "disabled": true,
+    "purpose": "scan",
+    "whizard_options": "--no-banner -r",
+    "nlo_type": "lo",
+    "scans": [{
+      "scan_object": "sqrts",
+      "ranges": [
+      { "type": "linear",
+        "start": 300.0,
+        "stop": 330.0,
+        "stepsize": 5.0
+      },
+      { "type": "linear",
+        "start": 330.0,
+        "stop": 340.0,
+        "stepsize": 1.0
+      },
+      { "type": "linear",
+        "start": 340.0,
+        "stop": 350.0,
+        "stepsize": 0.2
+      },
+      { "type": "linear",
+        "start": 350.0,
+        "stop": 360.0,
+        "stepsize": 1.0
+      },
+      { "type": "linear",
+        "start": 360.0,
+        "stop": 500.0,
+        "stepsize": 5.0
+      }
+      ]},
+      { "scan_object": "mpole_fixed",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [0,1]} ]
+      },
+      { "scan_object": "switchoff",
         "export_type": "separate",
         "ranges": [{ "type": "explicit", "range": [0,1]} ]
       }

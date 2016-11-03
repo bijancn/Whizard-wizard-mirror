@@ -19,6 +19,7 @@ iterations = 3:20000:"gw",3:20000
 sqrts = 800 GeV
 real mass_cut = - 1
 real scale_vars = - 1
+real phase_flip = - 1
 #SETSCAN
 show(model)
 if (mass_cut > 0) then
@@ -40,6 +41,9 @@ elsif (scale_vars == 3) then
 elsif (scale_vars == 4) then
   sh = 1.0
   sf = 1.0
+endif
+if (phase_flip > 0) then
+  offshell_strategy = offshell_strategy + 4096
 endif
 sqrtsstepsize = 0.1 GeV
 sqrtsmin = sqrts - sqrtsstepsize

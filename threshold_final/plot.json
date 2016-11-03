@@ -6,32 +6,46 @@
       { "name": "LO-sqrts--0-mpole_fixed", "label": "LO", "linestyle": "solid",
         "base_line": [
           {"name": "LO-sqrts--0-mpole_fixed", "hide_line": true},
-          {"name": "LO-sqrts--0-mpole_fixed", "hide_line": true}
+          {"name": "LL-sqrts--0-mpole_fixed--0-switchoff", "hide_line": true}
         ]
       },
-      { "name": "LL-sqrts--0-mpole_fixed", "label": "LL", "linestyle": "solid",
+      { "name": "LL-sqrts--0-mpole_fixed--0-switchoff", "label": "LL no $f$", "linestyle": "solid",
         "base_line": [
           {"name": "LO-sqrts--0-mpole_fixed"},
-          {"name": "LO-sqrts--0-mpole_fixed", "hide_line": true}
+          {"name": "LL-sqrts--0-mpole_fixed--0-switchoff", "hide_line": false}
+        ]
+      },
+      { "name": "LL-sqrts--0-mpole_fixed--1-switchoff", "label": "LL with $f$", "linestyle": "solid",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed"},
+          {"name": "LL-sqrts--0-mpole_fixed--0-switchoff", "hide_line": false}
         ]
       },
       { "name": "LO_LL_matched-sqrts--0-mpole_fixed", "label": "LO+LL", "linestyle": "solid",
         "base_line": [
           {"name": "LO-sqrts--0-mpole_fixed"},
-          {"name": "LL-sqrts--0-mpole_fixed"}
+          {"name": "LL-sqrts--0-mpole_fixed--0-switchoff"}
         ]
       },
       { "name": "LL_minus_One-sqrts--0-mpole_fixed", "label": "LL-1", "linestyle": "solid",
         "base_line": [
           {"name": "LO-sqrts--0-mpole_fixed"},
-          {"name": "LL-sqrts--0-mpole_fixed"}
+          {"name": "LL-sqrts--0-mpole_fixed--0-switchoff"}
         ]
       },
-      { "name": "LO_LL_matched_wrongPhase-sqrts", "label": "LO+LL ($\\phi=\\pi$)",
-        "linestyle": "solid",
+      { "name": "LL_minus_One-sqrts--0-mpole_fixed_sum_LO-sqrts--0-mpole_fixed",
+        "hide_line": true,
+        "label": "LL-1+LO", "linestyle": "dashed",
         "base_line": [
           {"name": "LO-sqrts--0-mpole_fixed"},
-          {"name": "LL-sqrts--0-mpole_fixed"}
+          {"name": "LL-sqrts--0-mpole_fixed--0-switchoff"}
+        ]
+      },
+      { "name": "LO_LL_matched-sqrts--0-mpole_fixed--1-phase_flip", "label": "LO+LL ($\\phi=\\pi$)",
+        "linestyle": "dotted",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed"},
+          {"name": "LL-sqrts--0-mpole_fixed--0-switchoff"}
         ]
       }
     ],
@@ -64,6 +78,8 @@
        "linestyle": "dashed"
       }
     ],
+    "legend_height_shrinker": 0.8,
+    "legend_outside": false,
     "xlabel": "$\\sqrt{s}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
@@ -84,7 +100,7 @@
           {"name": "LO-sqrts--1-mpole_fixed", "hide_line": true}
         ]
       },
-      { "name": "LL-sqrts--1-mpole_fixed", "label": "LL", "linestyle": "solid",
+      { "name": "LL-sqrts--1-mpole_fixed--0-switchoff", "label": "LL", "linestyle": "solid",
         "base_line": [
           {"name": "LO-sqrts--1-mpole_fixed"},
           {"name": "LO-sqrts--1-mpole_fixed", "hide_line": true}
@@ -93,14 +109,14 @@
       { "name": "LO_LL_matched-sqrts--1-mpole_fixed", "label": "LO+LL", "linestyle": "solid",
         "base_line": [
           {"name": "LO-sqrts--1-mpole_fixed"},
-          {"name": "LL-sqrts--1-mpole_fixed"}
+          {"name": "LL-sqrts--1-mpole_fixed--0-switchoff"}
         ]
       },
       { "name": "LO_LL_matched_mpoleFixed_wrongPhase-sqrts", "label": "LO+LL ($\\phi=\\pi$)",
         "linestyle": "solid",
         "base_line": [
           {"name": "LO-sqrts--1-mpole_fixed"},
-          {"name": "LL-sqrts--1-mpole_fixed"}
+          {"name": "LL-sqrts--1-mpole_fixed--0-switchoff"}
         ]
       }
     ],
@@ -270,6 +286,15 @@
     "ymax": 1.0,
     "yminors": 5
   }
+  ],
+  "transforms": [
+    [{"type": "binary_function",
+      "data": [
+        {"name": "LL_minus_One-sqrts--0-mpole_fixed"},
+        {"name": "LO-sqrts--0-mpole_fixed"}
+      ]
+     }
+    ]
   ],
   "functions": {
     "to_evaluate": [
