@@ -1,36 +1,117 @@
 {
   "plots": [
   {"title": "",
+    "output_file": "lo_ll_lean",
+    "lines": [
+      { "name": "LO_LL_matched-sqrts--0-phase_flip--1-force_factorized",
+        "label": "LO+LL", "linestyle": "solid", "color": "red",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed"},
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff"}
+        ]
+      },
+      { "name": "LO-sqrts--0-mpole_fixed", "label": "LO", "linestyle": "dashed",
+        "color": "blue",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed", "hide_line": false},
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff", "hide_line": false}
+        ]
+      },
+      { "name": "LL-sqrts--0-mpole_fixed--0-switchoff", "label": "LL no $f_s$",
+        "linestyle": "dashdot", "color": "orange",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed"},
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff", "hide_line": false}
+        ]
+      },
+      { "name": "LL-sqrts--0-mpole_fixed--1-switchoff",
+        "label": "LL with $f_s$", "linestyle": "dotted", "color": "green",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed"},
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff", "hide_line": false}
+        ]
+      }
+    ],
+    "ratio": [
+      { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
+        "ymax": 20.00, "ymin": 0.0, "ymajors": 5, "yminors": 5,
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ]
+      },
+      { "ylabel": "$\\sigma/\\sigma^{\\text{LL with $f_s$}}$",
+        "ymax": 1.5, "ymin": 1.0, "ymajors": 3, "yminors": 5,
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ]
+      }
+    ],
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "legend_height_shrinker": 0.8,
+    "legend_outside": false,
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "xmin": 300.0,
+    "xmax": 400.0,
+    "ymin": 0.0,
+    "ymax": 1200.0,
+    "yminors": 5
+  },
+  {"title": "",
     "output_file": "lo_ll",
     "lines": [
       { "name": "LO-sqrts--0-mpole_fixed", "label": "LO", "linestyle": "solid",
         "base_line": [
           {"name": "LO-sqrts--0-mpole_fixed", "hide_line": true},
-          {"name": "LL-sqrts--0-mpole_fixed--0-switchoff", "hide_line": true}
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff", "hide_line": true}
         ]
       },
-      { "name": "LL-sqrts--0-mpole_fixed--0-switchoff", "label": "LL no $f$", "linestyle": "solid",
+      { "name": "LL-sqrts--0-mpole_fixed--0-switchoff", "label": "LL no $f_s$", "linestyle": "solid",
         "base_line": [
           {"name": "LO-sqrts--0-mpole_fixed"},
-          {"name": "LL-sqrts--0-mpole_fixed--0-switchoff", "hide_line": false}
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff", "hide_line": false}
         ]
       },
-      { "name": "LL-sqrts--0-mpole_fixed--1-switchoff", "label": "LL with $f$", "linestyle": "solid",
+      { "name": "LL-sqrts--0-mpole_fixed--1-switchoff", "label": "LL with $f_s$", "linestyle": "solid",
         "base_line": [
           {"name": "LO-sqrts--0-mpole_fixed"},
-          {"name": "LL-sqrts--0-mpole_fixed--0-switchoff", "hide_line": false}
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff", "hide_line": false}
         ]
       },
-      { "name": "LO_LL_matched-sqrts--0-mpole_fixed", "label": "LO+LL", "linestyle": "solid",
+      { "name": "LO_LL_matched-sqrts--0-phase_flip--0-force_factorized", "label": "LO+LL", "linestyle": "solid",
         "base_line": [
           {"name": "LO-sqrts--0-mpole_fixed"},
-          {"name": "LL-sqrts--0-mpole_fixed--0-switchoff"}
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff"}
+        ]
+      },
+      { "name": "LO_LL_matched-sqrts--0-phase_flip--1-force_factorized", "label": "LO+LL factorized interference term", "linestyle": "solid",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed"},
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff"}
         ]
       },
       { "name": "LL_minus_One-sqrts--0-mpole_fixed", "label": "LL-1", "linestyle": "solid",
+        "hide_line": true,
         "base_line": [
           {"name": "LO-sqrts--0-mpole_fixed"},
-          {"name": "LL-sqrts--0-mpole_fixed--0-switchoff"}
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff"}
         ]
       },
       { "name": "LL_minus_One-sqrts--0-mpole_fixed_sum_LO-sqrts--0-mpole_fixed",
@@ -38,14 +119,21 @@
         "label": "LL-1+LO", "linestyle": "dashed",
         "base_line": [
           {"name": "LO-sqrts--0-mpole_fixed"},
-          {"name": "LL-sqrts--0-mpole_fixed--0-switchoff"}
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff"}
         ]
       },
-      { "name": "LO_LL_matched-sqrts--0-mpole_fixed--1-phase_flip", "label": "LO+LL ($\\phi=\\pi$)",
+      { "name": "LO_LL_matched-sqrts--1-phase_flip--0-force_factorized", "label": "LO+LL ($\\phi=\\pi$)",
         "linestyle": "dotted",
         "base_line": [
           {"name": "LO-sqrts--0-mpole_fixed"},
-          {"name": "LL-sqrts--0-mpole_fixed--0-switchoff"}
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff"}
+        ]
+      },
+      { "name": "LO_LL_matched-sqrts--1-phase_flip--1-force_factorized", "label": "LO+LL ($\\phi=\\pi$) factorized interference term",
+        "linestyle": "dotted",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed"},
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff"}
         ]
       }
     ],
@@ -60,8 +148,8 @@
           }
         ]
       },
-      { "ylabel": "$\\sigma^\\text{LO+LL}/\\sigma^{\\text{LL}}$",
-        "ymax": 1.25, "ymin": 0.25, "ymajors": 5, "yminors": 5,
+      { "ylabel": "$\\sigma/\\sigma^{\\text{LL with $f_s$}}$",
+        "ymax": 1.5, "ymin": 0.5, "ymajors": 5, "yminors": 5,
         "extra_lines": [
           { "type": "vertical",
             "value": 344.0,
@@ -104,19 +192,6 @@
         "base_line": [
           {"name": "LO-sqrts--1-mpole_fixed"},
           {"name": "LO-sqrts--1-mpole_fixed", "hide_line": true}
-        ]
-      },
-      { "name": "LO_LL_matched-sqrts--1-mpole_fixed", "label": "LO+LL", "linestyle": "solid",
-        "base_line": [
-          {"name": "LO-sqrts--1-mpole_fixed"},
-          {"name": "LL-sqrts--1-mpole_fixed--0-switchoff"}
-        ]
-      },
-      { "name": "LO_LL_matched_mpoleFixed_wrongPhase-sqrts", "label": "LO+LL ($\\phi=\\pi$)",
-        "linestyle": "solid",
-        "base_line": [
-          {"name": "LO-sqrts--1-mpole_fixed"},
-          {"name": "LL-sqrts--1-mpole_fixed--0-switchoff"}
         ]
       }
     ],

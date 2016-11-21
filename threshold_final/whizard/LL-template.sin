@@ -5,10 +5,10 @@ process PROCESS = e1, E1 => Wm, Wp, B, b
 compile
 
 nrqcd_order = 0  !!! LL
-FF = -2          !!! resummed p0-constant with switchoff
 offshell_strategy = 2      !!! factorized
-                  + 4      !!! interference with background diagrams
+                  + 4*0    !!! interference with background diagrams
                   + 128    !!! decay on-shell projected
+!                  + 2048   !!! enforce minus one in the form factor
 !                  + 32   ! hel approx
 !                  + 1024 ! extra hel approx
 mpole_fixed = 0
@@ -18,14 +18,18 @@ iterations = 3:20000:"gw",3:20000
 #ITERATIONS
 sqrts = 800 GeV
 real mass_cut = - 1
+real switchoff = - 1
 real scale_vars = - 1
-real phase_flip = - 1
-real force_factorized = - 1
 #SETSCAN
 show(model)
 if (mass_cut > 0) then
   cuts = all abs (M - mtpole) < mass_cut [Wp, b] and
          all abs (M - mtpole) < mass_cut [Wm, B]
+endif
+if (switchoff > 0) then
+  FF = - 2        !!! resummed p0-constant with switchoff
+else
+  FF = 1          !!! resummed p0-constant without switchoff
 endif
 if (scale_vars == 0) then
   sh = 0.5
@@ -42,12 +46,6 @@ elsif (scale_vars == 3) then
 elsif (scale_vars == 4) then
   sh = 1.0
   sf = 1.0
-endif
-if (phase_flip > 0) then
-  offshell_strategy = offshell_strategy + 4096
-endif
-if (force_factorized > 0) then
-  offshell_strategy = offshell_strategy + 8192
 endif
 sqrtsstepsize = 0.1 GeV
 sqrtsmin = sqrts - sqrtsstepsize

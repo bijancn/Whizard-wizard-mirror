@@ -34,11 +34,11 @@
         "stepsize": 5.0
       }
       ]},
-      { "scan_object": "mpole_fixed",
+      { "scan_object": "phase_flip",
         "export_type": "separate",
         "ranges": [{ "type": "explicit", "range": [0,1]} ]
       },
-      { "scan_object": "phase_flip",
+      { "scan_object": "force_factorized",
         "export_type": "separate",
         "ranges": [{ "type": "explicit", "range": [0,1]} ]
       }
