@@ -1,0 +1,29 @@
+include("../process_settings_threshold.sin")
+
+library = PROCESS
+process PROCESS = e1, E1 => Wm, Wp, B, b { nlo_calculation = "Full" }
+compile
+
+nrqcd_order = 0  !!! LL
+FF = -2          !!! resummed p0-constant with switchoff
+offshell_strategy = 
+                  + 1      !!! NLO
+                  + 2      !!! factorized
+                  + 8      !!! onshell projection
+                  + 32     !!! helicity approximation
+                  + 2048   !!! enforce minus one in the form factor
+mpole_fixed = 0
+
+
+mult_call_real = 60
+#ITERATIONS
+mult_call_real = 60
+sqrts = 800 GeV
+#SETSCAN
+show(model)
+sqrtsstepsize = 0.1 GeV
+sqrtsmin = sqrts - sqrtsstepsize
+sqrtsmax = sqrts + sqrtsstepsize
+
+integrate (PROCESS)
+

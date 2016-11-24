@@ -1,0 +1,439 @@
+{
+  "plots": [
+  {"title": "",
+    "output_file": "lo_ll_lean",
+    "lines": [
+      { "name": "LO_LL_matched-sqrts--0-phase_flip--1-force_factorized",
+        "label": "LO+LL", "linestyle": "solid", "color": "red",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed"},
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff"}
+        ]
+      },
+      { "name": "LO-sqrts--0-mpole_fixed", "label": "LO", "linestyle": "dashed",
+        "color": "blue",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed", "hide_line": false},
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff", "hide_line": false}
+        ]
+      },
+      { "name": "LL-sqrts--0-mpole_fixed--0-switchoff", "label": "LL no $f_s$",
+        "linestyle": "dashdot", "color": "orange",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed"},
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff", "hide_line": false}
+        ]
+      },
+      { "name": "LL-sqrts--0-mpole_fixed--1-switchoff",
+        "label": "LL with $f_s$", "linestyle": "dotted", "color": "green",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed"},
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff", "hide_line": false}
+        ]
+      }
+    ],
+    "ratio": [
+      { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
+        "ymax": 20.00, "ymin": 0.0, "ymajors": 5, "yminors": 5,
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ]
+      },
+      { "ylabel": "$\\sigma/\\sigma^{\\text{LL with $f_s$}}$",
+        "ymax": 1.5, "ymin": 1.0, "ymajors": 3, "yminors": 5,
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ]
+      }
+    ],
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "legend_height_shrinker": 0.8,
+    "legend_outside": false,
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "xmin": 300.0,
+    "xmax": 400.0,
+    "ymin": 0.0,
+    "ymax": 1200.0,
+    "yminors": 5
+  },
+  {"title": "",
+    "output_file": "lo_ll",
+    "lines": [
+      { "name": "LO-sqrts--0-mpole_fixed", "label": "LO", "linestyle": "solid",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed", "hide_line": true},
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff", "hide_line": true}
+        ]
+      },
+      { "name": "LL-sqrts--0-mpole_fixed--0-switchoff", "label": "LL no $f_s$", "linestyle": "solid",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed"},
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff", "hide_line": false}
+        ]
+      },
+      { "name": "LL-sqrts--0-mpole_fixed--1-switchoff", "label": "LL with $f_s$", "linestyle": "solid",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed"},
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff", "hide_line": false}
+        ]
+      },
+      { "name": "LO_LL_matched-sqrts--0-phase_flip--0-force_factorized", "label": "LO+LL", "linestyle": "solid",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed"},
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff"}
+        ]
+      },
+      { "name": "LO_LL_matched-sqrts--0-phase_flip--1-force_factorized", "label": "LO+LL factorized interference term", "linestyle": "solid",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed"},
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff"}
+        ]
+      },
+      { "name": "LL_minus_One-sqrts--0-mpole_fixed", "label": "LL-1", "linestyle": "solid",
+        "hide_line": true,
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed"},
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff"}
+        ]
+      },
+      { "name": "LL_minus_One-sqrts--0-mpole_fixed_sum_LO-sqrts--0-mpole_fixed",
+        "hide_line": true,
+        "label": "LL-1+LO", "linestyle": "dashed",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed"},
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff"}
+        ]
+      },
+      { "name": "LO_LL_matched-sqrts--1-phase_flip--0-force_factorized", "label": "LO+LL ($\\phi=\\pi$)",
+        "linestyle": "dotted",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed"},
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff"}
+        ]
+      },
+      { "name": "LO_LL_matched-sqrts--1-phase_flip--1-force_factorized", "label": "LO+LL ($\\phi=\\pi$) factorized interference term",
+        "linestyle": "dotted",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed"},
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff"}
+        ]
+      }
+    ],
+    "ratio": [
+      { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
+        "ymax": 20.00, "ymin": 1.0, "ymajors": 5, "yminors": 5,
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ]
+      },
+      { "ylabel": "$\\sigma/\\sigma^{\\text{LL with $f_s$}}$",
+        "ymax": 1.5, "ymin": 0.5, "ymajors": 5, "yminors": 5,
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ]
+      }
+    ],
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "legend_height_shrinker": 0.8,
+    "legend_outside": false,
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "xmin": 300.0,
+    "xmax": 400.0,
+    "ymin": 0.0,
+    "ymax": 1200.0,
+    "yminors": 5
+  },
+  {"title": "$m_\\text{pole}=m_{1\\text{S}}$",
+    "output_file": "lo_ll_mpolefixed",
+    "lines": [
+      { "name": "LO-sqrts--1-mpole_fixed", "label": "LO", "linestyle": "solid",
+        "base_line": [
+          {"name": "LO-sqrts--1-mpole_fixed", "hide_line": true},
+          {"name": "LO-sqrts--1-mpole_fixed", "hide_line": true}
+        ]
+      },
+      { "name": "LL-sqrts--1-mpole_fixed--0-switchoff", "label": "LL", "linestyle": "solid",
+        "base_line": [
+          {"name": "LO-sqrts--1-mpole_fixed"},
+          {"name": "LO-sqrts--1-mpole_fixed", "hide_line": true}
+        ]
+      }
+    ],
+    "ratio": [
+      { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
+        "ymax": 20.00, "ymin": 1.0, "ymajors": 5, "yminors": 5,
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ]
+      },
+      { "ylabel": "$\\sigma^\\text{LO+LL}/\\sigma^{\\text{LL}}$",
+        "ymax": 1.25, "ymin": 0.25, "ymajors": 5, "yminors": 5,
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ]
+      }
+    ],
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "xmin": 300.0,
+    "xmax": 400.0,
+    "ymin": 0.0,
+    "ymax": 1200.0,
+    "yminors": 5
+  },
+  { "title": "$e^+\\,e^-\\to t\\,\\bar{t}$",
+    "output_file": "expansions_onshell",
+    "lines": [
+      { "name": "fixedorder_onshell_NLO", "label": "NLO", "linestyle": "solid",
+        "color": "orange",
+        "base_line": [
+          { "name": "AnalyticOneloop_mpole172_ONSHELL", "hide_line": false }
+        ]
+      },
+      { "name": "expanded_hard_onshell_mpole172", "label":
+          "LL, expanded, hard scales", "linestyle": "solid",
+        "color": "blue",
+        "base_line": [
+          {"name": "AnalyticOneloop_mpole172_ONSHELL", "hide_line": false}
+        ]
+      },
+      { "name": "expanded_hard_onshell_mpole172_nopwave", "label":
+          "LL, expanded, hard scales, no $p$-wave", "linestyle": "solid",
+        "color": "red",
+        "base_line": [
+          {"name": "AnalyticOneloop_mpole172_ONSHELL", "hide_line": false}
+        ]
+      },
+      { "name": "AnalyticOneloop_mpole172_ONSHELL", "label":
+          "LL, expanded, analytic, no $p$-wave", "linestyle": "solid",
+        "color": "green",
+        "base_line": [
+          {"name": "AnalyticOneloop_mpole172_ONSHELL", "hide_line": true}
+        ]
+      }
+    ],
+    "ratio": [
+      { "ylabel": "$\\sigma/\\sigma^{\\text{analytic}}$",
+        "ymax": 1.08, "ymin": 1.0, "ymajors": 5, "yminors": 3,
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          },
+          { "type": "horizontal",
+            "value": 1.0,
+            "opacity": 1.0,
+            "color": "black",
+            "linestyle": "solid"
+          }
+        ]
+      }
+    ],
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "xminors": 2,
+    "xmin": 344.0,
+    "xmax": 359.0,
+    "xticks": [344, 347, 350, 353, 356, 359],
+    "yticks": [450, 500, 550, 600, 650, 700, 750, 800],
+    "ymin": 450.0,
+    "ymax": 800.0,
+    "yminors": 4
+  },
+  {"title": "",
+    "output_file": "switch_off",
+    "lines": [
+      { "name": "abs_v_of_sqrts", "label": "$|v(\\sqrt{s})|$",
+        "linestyle": "solid", "color": "green"
+      },
+      { "name": "real_v_of_sqrts", "label": "$\\text{Re}[v(\\sqrt{s})]$",
+        "linestyle": "dashed", "color": "orange"
+      },
+      { "name": "imag_v_of_sqrts", "label": "$\\text{Im}[v(\\sqrt{s})]$",
+        "linestyle": "dashdot", "color": "cyan"
+      },
+      { "name": "switchoff_of_abs_v_of_sqrts", "label": "$f_s(|v(\\sqrt{s})|)$",
+        "linestyle": "solid", "color": "purple"
+      },
+      { "name": "switchoff_of_real_v_of_sqrts", "label": "$f_s(\\text{Re}[v(\\sqrt{s})])$",
+        "linestyle": "dashed", "color": "red"
+      },
+      { "name": "switchoff_of_imag_v_of_sqrts", "label": "$f_s(\\text{Im}[v(\\sqrt{s})])$",
+        "linestyle": "dashdot", "color": "blue"
+      }
+    ],
+    "extra_texts": [
+      { "text": "$\\Gamma_t = 1.4$ GeV", "x": 300, "y": 0.9 },
+      { "text": "$v_1 = 0.1$", "x": 300, "y": 0.05 },
+      { "text": "$v_2 = 0.3$", "x": 300, "y": 0.25 }
+    ],
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      },
+      {"type": "horizontal",
+       "value": 0.3,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      },
+      {"type": "horizontal",
+       "value": 0.1,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "",
+    "legend_location": "upper right",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "xmin": 300.0,
+    "xmax": 400.0,
+    "ymin": 0.0,
+    "ymax": 1.0,
+    "yminors": 5
+  }
+  ],
+  "transforms": [
+    [{"type": "binary_function",
+      "data": [
+        {"name": "LL_minus_One-sqrts--0-mpole_fixed"},
+        {"name": "LO-sqrts--0-mpole_fixed"}
+      ]
+     }
+    ]
+  ],
+  "functions": {
+    "to_evaluate": [
+      "data_abs_v_of_sqrts",
+      "data_real_v_of_sqrts",
+      "data_imag_v_of_sqrts",
+      "data_switchoff_of_real_v_of_sqrts",
+      "data_switchoff_of_imag_v_of_sqrts",
+      "data_switchoff_of_abs_v_of_sqrts"
+    ],
+    "expression": [
+      "def data_abs_v_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v = np.vectorize(include.abs_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  return ('abs_v_of_sqrts', np.vstack([sqrts, v]))",
+      "",
+      "def data_real_v_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v = np.vectorize(include.real_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  return ('real_v_of_sqrts', np.vstack([sqrts, v]))",
+      "",
+      "def data_imag_v_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v = np.vectorize(include.imag_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  return ('imag_v_of_sqrts', np.vstack([sqrts, v]))",
+      "",
+      "def data_switchoff_of_real_v_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v1 = 0.1",
+      "  v2 = 0.3",
+      "  v = np.vectorize(include.real_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  f = np.vectorize(lambda x: include.switch_off(v1,v2,x))",
+      "  f = f(v)",
+      "  return ('switchoff_of_real_v_of_sqrts', np.vstack([sqrts, f]))",
+      "",
+      "def data_switchoff_of_imag_v_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v1 = 0.1",
+      "  v2 = 0.3",
+      "  v = np.vectorize(include.imag_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  f = np.vectorize(lambda x: include.switch_off(v1,v2,x))",
+      "  f = f(v)",
+      "  return ('switchoff_of_imag_v_of_sqrts', np.vstack([sqrts, f]))",
+      "",
+      "def data_switchoff_of_abs_v_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v1 = 0.1",
+      "  v2 = 0.3",
+      "  v = np.vectorize(include.abs_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  f = np.vectorize(lambda x: include.switch_off(v1,v2,x))",
+      "  f = f(v)",
+      "  return ('switchoff_of_abs_v_of_sqrts', np.vstack([sqrts, f]))"
+    ]
+  }
+}
