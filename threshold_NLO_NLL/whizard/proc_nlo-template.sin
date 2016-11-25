@@ -1,0 +1,32 @@
+include("../../general_settings.sin")
+include("../process_settings_threshold.sin")
+
+$method = "openloops"
+$born_me_method = "openloops"
+$loop_me_method = "openloops"
+$correlation_me_method = "openloops"
+$real_tree_me_method = "openloops"
+mpole_fixed = -1
+
+offshell_strategy = 1   !!! NLO
+nrqcd_order = 1
+wZ = 2.5060
+wW = 2.0978
+show(model)
+
+?check_grid_file = false
+
+?fixed_order_nlo_events = true
+?unweighted = false
+?negative_weights = true
+
+scale = m1S
+#ITERATIONS
+library = proc_nlo
+process proc_nlo = E1, e1 => Wp, Wm, b, B {nlo_calculation="Full"}
+#SETSCAN
+
+
+mult_call_real = 25
+integrate (proc_nlo)
+printf "RES %8e %8e %8e" (sqrts, integral(proc_nlo), error(proc_nlo))
