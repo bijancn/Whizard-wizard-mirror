@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # Install me with `ln -s ../../pre-commit-hook.py .git/hooks/pre-commit`
+# Runs tests before each commit
 
 import os
 import re

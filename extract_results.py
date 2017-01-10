@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# extract scan results from whizard.logs
 import sys
 import os
 import subprocess

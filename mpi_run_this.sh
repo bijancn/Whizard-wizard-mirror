@@ -1,3 +1,5 @@
+# to be run by a process folder
+
 if mpirun --version 2>&1 | grep Open; then
   time mpirun -np 4 nice -n 11 ../mpi_generate.py `pwd` $@
 elif mpirun --version | grep Intel; then

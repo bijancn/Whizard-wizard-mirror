@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# main program to plot data
+
 import os
 import glob
 import multiprocessing as mp

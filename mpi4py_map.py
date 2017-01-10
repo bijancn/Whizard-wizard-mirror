@@ -1,4 +1,5 @@
 #!/bin/env python
+# MPI parallelization of the map function
 
 import sys
 import time

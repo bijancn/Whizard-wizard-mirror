@@ -1,3 +1,5 @@
+# main functions for plotting. Used by plot-data.py
+
 import sys
 import os
 import math

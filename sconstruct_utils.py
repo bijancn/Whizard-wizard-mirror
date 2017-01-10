@@ -1,3 +1,5 @@
+# helper functions for site_init.py
+
 import os
 import re
 from glob import glob

@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# Main program to generate results. To be run like in mpi_run_this.sh
+
 import argparse
 from mpi4py_map import mpi_map, comm
 import whizard_wizard

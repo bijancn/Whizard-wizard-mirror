@@ -1,3 +1,5 @@
+# various data manipulation functions
+
 import numpy as np
 import nose.tools as nt
 import os

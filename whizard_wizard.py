@@ -1,3 +1,5 @@
+# main logic for the whizard wizard to generate folders and sindarins
+# used mainly by mpi_generate.py
 import os
 import re
 import shutil
@@ -13,7 +15,6 @@ from numpy import logspace, arange, log2
 import nose.tools as nt
 import data_utils as dt
 import utils as ut
-# from termcolor import colored
 
 
 def no_critical_log():
@@ -78,8 +79,6 @@ def log(action, batch, proc_dict):
       str(proc_dict) + ' on ' + MPI.Get_processor_name()))
 
 
-# TODO: (bcn 2016-03-30) slim the Whizard. would be nice to only have
-# information and data how to run Whizard here
 SUCCESS, FAIL = range(2)
 
 
@@ -156,8 +155,7 @@ class Whizard():
       shutil.copyfile(integration_grids, os.path.join(runfolder, integration_grids))
       with ut.cd(runfolder):
         if (purpose == 'histograms'):
-          ut.remove(fifo)
-          # Suppress annoying display output if Fifo is already present
+          ut.remove(fifo)  # Suppress annoying display output if Fifo is already present
           if not os.path.isfile(fifo):
             subprocess.call("mkfifo " + fifo, shell=True)
         change_sindarin_for_event_gen(sindarin, runfolder, proc_id, proc_dict)
@@ -369,7 +367,6 @@ def unpack_proc_ids(full_combination):
 def fill_all_scan_runs(proc_name, proc_dict):
   try:
     scans = proc_dict['scans']
-  # TODO: (bcn 2016-03-30) this should be made impossible in the scheme
   except KeyError:
     ut.fatal('Aborting: You want a scan but have not set a scans array')
     return []
@@ -471,8 +468,6 @@ def test_fill_integration_copies_2():
           "ranges": [{"type": "explicit", "range": [0, 1]}]}
       ]
   }
-  # runs = fill_runs(proc_name, proc_dict)
-  # nt.eq_(len(runs), 2)
   proc_dict['integration_copies'] = 2
   runs = fill_runs(proc_name, proc_dict)
   nt.eq_(len(runs), 2 * 2)
@@ -874,9 +869,7 @@ def test_get_grid_index():
   nt.eq_(get_grid_index(proc_name, 'leptons'), 4)
 
 
-# TODO: (bcn 2016-03-30) review this
 def divider(matchobj, batches):
-  # nevents = matchobj.group(2)
   divided = str(int(float(matchobj.group(2)) / batches))
   return matchobj.group(1) + divided + matchobj.group(3)
 
