@@ -38,8 +38,9 @@
         "purpose": {
           "type": "string",
           "enum": ["scan", "integration", "histograms", "events", "test_soft"],
-          "description": "What to do. In the future, the purpose should be an object containing also the corresponding options"
+          "description": "What to do. In the future, the purpose should be an object containing also the corresponding options. `integration` produces a integration grid, usable for `events` or `histogram`. `events` produces `.hepmc`s and moves them to the `rivet` subfolder of the process folder. `histograms` sets up FIFOs and directly produces `yoda`s (analysis library must be compiled beforehand). `scan` does a scan over values specified in `scans` and `scan_object`. "
         },
+        "disabled": { "type": "boolean", "description": "Do nothing. Don't run this process." },
         "nlo_type": {
           "type": "string",
           "enum": ["lo", "nlo", "nlo_combined"]
@@ -62,6 +63,10 @@
         "adaption_iterations": { "type": "string" },
         "integration_iterations": { "type": "string" },
         "scale_variation": { "type": "boolean" },
+        "whizard_options": {
+          "type": "string",
+          "description": "CMD line options for whizard. Default is `--no-banner`."
+        },
         "only_sindarins": { "type": "boolean" },
         "event_mult_real": {
           "type": "number",
@@ -82,10 +87,13 @@
       "items": { "$ref": "#/definitions/run" },
       "required": [ "1" ]
     },
-    "whizard": { "type": "string" },
+    "whizard": {
+      "type": "string",
+      "description": "Allows to set an absolute path to your Whizard binary. Default is just `whizard` which works with an installed Whizard."
+    },
     "data_output": {
       "type": "string",
-      "description": "Not supported"
+      "description": "Select a folder where to put the results. Not supported"
     }
   },
   "required": [

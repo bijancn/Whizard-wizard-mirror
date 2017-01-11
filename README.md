@@ -1,34 +1,37 @@
+Introduction
+================================================================================
+This repository is a collection of scripts to run `whizard` on a cluster via
+`MPI`, extract the results and plot them with `matplotlib`.
+Furthermore, various analyses are documented here in the form of sindarin
+and Rivet C++ files.
+All main plots of https://arxiv.org/abs/1609.03390 have been computed with
+these scripts.
+The steering of running `whizard` is done with a `run.json` in a process
+folder.
+The description of the plot is done with a `plot.json` in a process folder.
+Various examples can be found in the folders named according to the respective
+process.
+The allowed variables and syntax of both `.json` files is documented and
+validated against a schema: `plot-schema.json` and `run-schema.json`.
+
+Example usage
+================================================================================
+Create a new process folder. Create in there a `whizard` folder and in that
+folder a `myprocess-template.sin`. Create a `run.json` in the process folder
+with e.g. a scan job in there that uses `myprocess`. Then run it with
+`../mpi_run_this.sh` (note that you likely need a `host_file`, that specifies
+the nodes and cores to use, above the process folder but this depends on your
+MPI installation. Check if `mpi_run_this.sh` uses a command that fits your
+installation). In case you did a scan, you can extract the results with
+`../extract-results.py` and plot it with `../plot-data.py`.
+
 Steering with `run.json`
 ================================================================================
-Run schema that shows which values can be used are found 
-[here](http://desy.de/~bcho/docson/#run-schema.json) (because Bitbucket does not allow custom HTML/Javascript).
-
-Some extra comments below:
-
-### Possible values for `purpose` ###
-- `disabled`: Do nothing
-- `integration`: Produce the integration grid for `events` or `histograms`
-- `events`: Produce `.hepmc`s and move them to the `rivet` folder
-- `histograms`: Setup FIFOs and directly produce `yodas` with rivet
-- `scan`: Setup a scan over values, see `scan_object`,
-
-### General values ###
-- `whizard_options`: (optional) argument to Whizard. Default is '--no-banner'
-
-### For all processes ###
-- `whizard`: (optional) Allows to set an absolute path to your Whizard binary.
-  Default is `whizard` which works with an installed Whizard.
-- `data_output`: Select a folder where to put the results (NOT FUNCTIONAL YET)
-
-General behavior
-================================================================================
-- `mpi_generate` can create integration and simulation sindarins from the values
-  in `run.json` for you. For this functionality just give a
-  `processname-template.sin` with a line `#ITERATIONS` and potentially
-  `#SETSCAN`. For a `scan`, it is mandatory to give a template.
-  It is assumed that the process name in sindarin is the same as `processname`
+The run schema that shows which values can be used and what they do are found
+[here](http://desy.de/~bcho/docson/#run-schema.json) (because Gitlab does not
+allow custom Javascript, we can't show them here).
 
 Plotting with `plot.json`
 ================================================================================
-Plot schema that shows which values can be used are found 
-[here](http://desy.de/~bcho/docson/#plot-schema.json) (because Bitbucket does not allow custom HTML/Javascript).
+The plot schema that shows which values can be used and what they do are found
+[here](http://desy.de/~bcho/docson/#plot-schema.json).
