@@ -1,0 +1,84 @@
+{
+  "plots": [
+  {"title": "",
+    "output_file": "nlo_nll",
+    "lines": [
+      { "name": "proc_nlo-sqrts_sum_NLL_matched-sqrts",
+        "label": "NLO+NLL", "linestyle": "solid", "color": "red",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed", "folder": "../threshold_final/"}
+        ]
+      },
+        { "name": "NLL-sqrts--0-mpole_fixed--4-scale_vars",
+          "label": "NLL, $h = 1.0$, $f = 1.0$",
+          "folder": "../threshold_scale_variations_NLL",
+          "linestyle": "solid",
+          "color": "cyan",
+          "base_line": [
+            {"name": "LO-sqrts--0-mpole_fixed", "hide_line": false,
+              "folder": "../threshold_final"}
+          ]
+        },
+      { "name": "NLL_matched-sqrts",
+        "label": "(NLO+NLL)-NLO", "linestyle": "solid", "color": "green",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed", "folder": "../threshold_final/"}
+        ]
+      },
+      { "name": "proc_nlo-sqrts",
+        "label": "NLO", "linestyle": "solid", "color": "blue",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed", "folder": "../threshold_final/"}
+        ]
+      },
+      { "name": "expanded_hard-sqrts",
+        "label": "resummation, expanded", "linestyle": "dashed", "color": "orange",
+        "base_line": [
+          {"name": "LO-sqrts--0-mpole_fixed", "folder": "../threshold_final/"}
+        ]
+      }
+    ],
+    "ratio": [
+      { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
+        "ymax": 15.00, "ymin": 0.0, "ymajors": 5, "yminors": 5,
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ]
+      }
+    ],
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "legend_height_shrinker": 0.8,
+    "legend_outside": false,
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "xmin": 300.0,
+    "xmax": 400.0,
+    "ymin": 0.0,
+    "ymax": 1000.0,
+    "ymajors": 5,
+    "yminors": 5
+  }
+  ],
+  "transforms": [
+    [{"type": "binary_function",
+      "data": [
+        {"name": "proc_nlo-sqrts"},
+        {"name": "NLL_matched-sqrts"}
+      ]
+     }
+    ]
+  ]
+}

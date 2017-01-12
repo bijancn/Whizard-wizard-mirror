@@ -1,3 +1,4 @@
+include("../../general_settings.sin")
 include("../process_settings_threshold.sin")
 
 ?negative_weights = true
@@ -24,6 +25,8 @@ real scale_vars = - 1
 real phase_flip = - 1
 real force_factorized = - 1
 #SETSCAN
+wW = 2.0978
+wZ = 2.5060
 show(model)
 if (mass_cut > 0) then
   cuts = all abs (M - mtpole) < mass_cut [Wp, b] and
