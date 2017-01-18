@@ -36,8 +36,68 @@
     "ymax": 500.0,
     "yminors": 5
   },
+  { "title": "",
+    "output_file": "virtual_helicities",
+    "lines": [
+      { "name": "NLO_Virtual-sqrts--0-top_helicity_selection",
+        "label": "Virtual $-,-$", "color": "green"
+      },
+      { "name": "NLO_Virtual-sqrts--1-top_helicity_selection",
+        "label": "Virtual $-,+$", "color": "red"
+      },
+      { "name": "NLO_Virtual-sqrts--2-top_helicity_selection",
+        "label": "Virtual $+,-$", "color": "blue"
+      },
+      { "name": "NLO_Virtual-sqrts--3-top_helicity_selection",
+        "label": "Virtual $+,+$", "color": "orange"
+      },
+      { "name": "NLO_noboost_Virtual-sqrts--0-top_helicity_selection",
+        "label": "Virtual $-,-$", "color": "green", "linestyle": "dashed"
+      },
+      { "name": "NLO_noboost_Virtual-sqrts--1-top_helicity_selection",
+        "label": "Virtual $-,+$", "color": "red", "linestyle": "dashed"
+      },
+      { "name": "NLO_noboost_Virtual-sqrts--2-top_helicity_selection",
+        "label": "Virtual $+,-$", "color": "blue", "linestyle": "dashed"
+      },
+      { "name": "NLO_noboost_Virtual-sqrts--3-top_helicity_selection",
+        "label": "Virtual $+,+$", "color": "orange", "linestyle": "dashed"
+      }
+    ],
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "legend_height_shrinker": 0.8,
+    "legend_outside": false,
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "xmin": 330.0,
+    "xmax": 350.0,
+    "ymin": 0.0,
+    "ymax": 50.0,
+    "yminors": 5
+  },
   { "output_file": "real_helicities",
     "lines": [
+      { "name": "NLO_noboost_Real-sqrts--0-top_helicity_selection",
+        "label": "Real $-,-$", "color": "green", "linestyle": "dashed"
+      },
+      { "name": "NLO_noboost_Real-sqrts--1-top_helicity_selection",
+        "label": "Real $-,+$", "color": "red", "linestyle": "dashed"
+      },
+      { "name": "NLO_noboost_Real-sqrts--2-top_helicity_selection",
+        "label": "Real $+,-$", "color": "blue", "linestyle": "dashed"
+      },
+      { "name": "NLO_noboost_Real-sqrts--3-top_helicity_selection",
+        "label": "Real $+,+$", "color": "orange", "linestyle": "dashed"
+      },
       { "name": "NLO_Real-sqrts--0-top_helicity_selection",
         "label": "Real $-,-$", "color": "green", "linestyle": "None"
       },

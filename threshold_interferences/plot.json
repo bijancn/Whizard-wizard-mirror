@@ -33,10 +33,10 @@
     "xmax": 400.0,
     "ymin": -200.0,
     "ymax": 200.0,
-    "yminors": 5,
+    "yminors": 4,
     "ymajors": 5
   },
-  {"title": "LO + LL",
+  {"title": "LO + LL matched",
     "output_file": "lo_ll",
     "lines": [
       { "name": "LO_LL-sqrts--0-factorization_type",
@@ -63,16 +63,17 @@
     ],
     "legend_height_shrinker": 0.8,
     "legend_outside": false,
+    "legend_location": "lower right",
     "xlabel": "$\\sqrt{s}$ [GeV]",
-    "ylabel": "$\\text{IF}$ [fb]",
+    "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
     "ylog": false,
     "xlog": false,
     "xmin": 300.0,
     "xmax": 400.0,
-    "ymin": -2.0,
+    "ymin": 0.0,
     "ymax": 1200.0,
-    "yminors": 5,
+    "yminors": 4,
     "ymajors": 7
   },
   {"title": "Interference, no form factor",
@@ -125,7 +126,8 @@
     "xmax": 400.0,
     "ymin": 0,
     "ymax": 1500,
-    "yminors": 5,
+    "yminors": 4,
+    "xminors": 4,
     "ymajors": 7
   }
   ]

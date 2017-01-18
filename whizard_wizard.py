@@ -87,6 +87,7 @@ def prepare_scan_sindarin(proc_name, proc_id, proc_dict, runfolder, sindarin):
   scan_expression = ''
   for scan in scans:
     scan_value, scan_object = scan.split('-')[0:2]
+    scan_value = scan_value.replace('MINUS', '-')
     scan_expression += scan_object + " = " + scan_value + "\n"
   replace_line = lambda line: line.replace('#SETSCAN',
     scan_expression).replace('include("', 'include("../')
@@ -253,15 +254,6 @@ def setup_sindarin(proc_dict):
       template_present = os.path.isfile(template_sindarin)
       scan = proc_dict['purpose'] == 'scan'
       test_soft = proc_dict['purpose'] == 'test_soft'
-      if scan and not template_present:
-        ut.fatal('You have to supply ' + template_sindarin + ' for a scan')
-      elif not scan and not template_present:
-        fallback = integration_sindarin + ' and ' + base_sindarin
-        if os.path.isfile(integration_sindarin) and os.path.isfile(base_sindarin):
-          ut.logger.info('Didnt find ' + template_sindarin + ', will use ' + fallback)
-          return
-        else:
-          ut.fatal('Didnt find ' + template_sindarin + ' nor ' + fallback)
       if template_present:
         if proc_dict['purpose'] == 'integration' or scan or test_soft:
           create_integration_sindarin(integration_sindarin, template_sindarin,
@@ -276,6 +268,16 @@ def setup_sindarin(proc_dict):
               proc_dict['events_per_batch'])
           multiply_sindarins(base_sindarin, proc_dict,
              proc_dict.get('scale_variation', False), proc_dict['nlo_type'])
+      else:
+        if scan:
+          ut.fatal('You have to supply ' + template_sindarin + ' for a scan')
+        else:
+          fallback = integration_sindarin + ' and ' + base_sindarin
+          if os.path.isfile(integration_sindarin) and os.path.isfile(base_sindarin):
+            ut.logger.info('Didnt find ' + template_sindarin + ', will use ' + fallback)
+            return
+          else:
+            ut.fatal('Didnt find ' + template_sindarin + ' nor ' + fallback)
   else:
     ut.logger.info('Skipping ' + proc_dict['process'] + ' because it is disabled')
 
@@ -349,7 +351,8 @@ def fill_scan_runs(proc_name, proc_dict, scan):
     steps, stepsize, given_range = get_steps(rnge, start, stop)
     step_range = get_step_range(range_type, start, stop, steps, stepsize,
         given_range)
-    runs += [(str(sr) + '-' + scan_object, proc_name, proc_dict) for sr in step_range]
+    runs += [(str(sr).replace('-', 'MINUS') + '-' +
+              scan_object, proc_name, proc_dict) for sr in step_range]
   return runs
 
 
@@ -430,6 +433,21 @@ def test_fill_runs_basic():
   nt.eq_(len(runs), len(expectation))
   for r, e in zip(runs, expectation):
     nt.eq_(r[0:2], e[0:2])
+
+
+def test_fill_negative_runs():
+  proc_name = 'test'
+  proc_dict = {'purpose': 'scan',
+               "scans": [
+                   {'scan_object': 'sqrts',
+      'ranges': [{'start': 1, 'stop': 10, 'type': 'logarithmic', 'steps': 2}]},
+                   {"scan_object": "foo",
+                    "export_type": "separate",
+                    "ranges": [{"type": "explicit", "range": [-1, 0, 1]}]}
+               ]}
+  runs = fill_runs(proc_name, proc_dict)
+  nt.eq_(len(runs), 6)
+  nt.eq_(runs[0][0], '1.0-sqrts--MINUS1-foo')
 
 
 def test_fill_integration_copies_1():
@@ -897,11 +915,11 @@ def change_sindarin_for_event_gen(filename, samplename, i, proc_dict):
 
 
 def run_json(json_name):
-  run_json = retrieve_and_validate_run_json('tests', json_name=json_name)
+  runjson = retrieve_and_validate_run_json('tests', json_name=json_name)
   with ut.cd('tests'):
-    setup_sindarins(run_json)
-    whizard = Whizard(run_json, False)
-    runs = fill_all_runs(run_json)
+    setup_sindarins(runjson)
+    whizard = Whizard(runjson, False)
+    runs = fill_all_runs(runjson)
     return map(whizard.run_process, runs)
 
 
