@@ -21,6 +21,8 @@ alpha_s_order = 1
 alpha_s_nf = 5
 mpole_fixed = 0
 
+scale = m1S
+
 nrqcd_order = 0
 sh          = 1.
 sf          = 1.
@@ -31,10 +33,12 @@ $born_me_method        = "threshold"
 $loop_me_method        = "threshold"
 $correlation_me_method = "threshold"
 $real_tree_me_method   = "threshold"
+$soft_mismatch_me_method = "threshold"
 alpha_power = 4
 alphas_power = 0
 
-sqrts = 800 GeV
+sqrts = 500 GeV
+sqrtsstepsize = 0.1 GeV
 
 sample_format = hepmc
 ?write_raw = false

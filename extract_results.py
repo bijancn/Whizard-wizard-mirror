@@ -20,7 +20,8 @@ def build_regexs(proc):
       old = proc_regexs
       new = []
       for sc in scan['ranges'][0].get('range', None):
-        new += [pr + '-' + str(sc) + '-' + scan['scan_object'] for pr in old]
+        new += [pr + '-' + str(sc).replace('-', 'MINUS') +
+                '-' + scan['scan_object'] for pr in old]
       proc_regexs = new
     else:
       proc_regexs = [pr + '-*-' + scan['scan_object'] for pr in proc_regexs]
@@ -47,7 +48,6 @@ def main():
   result_cmd = [get_RES(runfolder) for runfolder in runfolders]
   result_files = [os.path.join(result_path, p.replace('-*', '') + '.dat')
       for p in process_names]
-  print 'result_files = ', result_files
   for cmd, file_name in zip(result_cmd, result_files):
     ret = subprocess.call(cmd + ' > ' + file_name, shell=True)
     if (ret == 0):

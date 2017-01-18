@@ -1,30 +1,11 @@
 include("../process_settings_threshold.sin")
-alpha_power = 4
-alphas_power = 0
-
-alpha_em_i = 125.924 ! (not running)
-m1S = 172.0
-scale = m1S
-mpole_fixed = 1
-nrqcd_order  = 1 # NLL
-
-alphas = 0.118
-?alpha_s_is_fixed = false
-?alpha_s_from_mz = true
-?alpha_s_from_lambda_qcd = false
-
-$method = "threshold"
-$born_me_method = "threshold"
-$loop_me_method = "threshold"
-$correlation_me_method = "threshold"
-$real_tree_me_method = "threshold"
-$soft_mismatch_me_method = "threshold"
 
 library = PROCESS
 process PROCESS = e1, E1 => Wm, Wp, B, b { nlo_calculation = "Full" }
 compile
 
-nrqcd_order = 0  !!! LL
+mpole_fixed = 0
+nrqcd_order = 1 # NLL
 offshell_strategy =
   1 +   ! NLO width and decay
   2 +   ! factorized
@@ -32,17 +13,14 @@ offshell_strategy =
   8 +   ! on-shell projection
   32 +  ! helicity approximation simple
   512   ! boost the momenta of the decay
-FF = 9       !!! tree-level
+FF = 9  !!! tree-level form factor
 
 mult_call_real = 25
 #ITERATIONS
-sqrts = 800 GeV
-top_helicity_selection = 0
 #SETSCAN
 show(model)
-sqrtsstepsize = 0.1 GeV
-sqrtsmin = sqrts - sqrtsstepsize
-sqrtsmax = sqrts + sqrtsstepsize
+sqrtsmin = sqrts - 2 * sqrtsstepsize
+sqrtsmax = sqrts + 2 * sqrtsstepsize
 
 integrate (PROCESS)
 
