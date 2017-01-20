@@ -1,0 +1,131 @@
+{
+  "processes": [
+  { "process": ["NLO", "NLO_noboost"],
+    "disabled": true,
+    "purpose": "scan",
+    "whizard_options": "--no-banner -r",
+    "nlo_type": "nlo",
+    "scans": [{
+      "scan_object": "sqrts",
+      "ranges": [
+      { "type": "linear",
+        "start": 300.0,
+        "stop": 330.0,
+        "stepsize": 5.0
+      },
+      { "type": "linear",
+        "start": 330.0,
+        "stop": 340.0,
+        "stepsize": 1.0
+      },
+      { "type": "linear",
+        "start": 340.0,
+        "stop": 350.0,
+        "stepsize": 0.2
+      },
+      { "type": "linear",
+        "start": 350.0,
+        "stop": 360.0,
+        "stepsize": 1.0
+      },
+      { "type": "linear",
+        "start": 360.0,
+        "stop": 400.0,
+        "stepsize": 5.0
+      }
+      ]},
+      { "scan_object": "top_helicity_selection",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [-1,0,1,2,3]} ]
+      }
+      ],
+    "adaption_iterations": "5:10000",
+    "integration_iterations": "3:10000",
+    "integration_copies": 5
+  },
+  { "process": ["LO", "LO_noboost"],
+    "disabled": true,
+    "purpose": "scan",
+    "whizard_options": "--no-banner -r",
+    "nlo_type": "lo",
+    "scans": [{
+      "scan_object": "sqrts",
+      "ranges": [
+      { "type": "linear",
+        "start": 300.0,
+        "stop": 330.0,
+        "stepsize": 5.0
+      },
+      { "type": "linear",
+        "start": 330.0,
+        "stop": 340.0,
+        "stepsize": 1.0
+      },
+      { "type": "linear",
+        "start": 340.0,
+        "stop": 350.0,
+        "stepsize": 0.2
+      },
+      { "type": "linear",
+        "start": 350.0,
+        "stop": 360.0,
+        "stepsize": 1.0
+      },
+      { "type": "linear",
+        "start": 360.0,
+        "stop": 400.0,
+        "stepsize": 5.0
+      }
+      ]},
+      { "scan_object": "top_helicity_selection",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [-1,0,1,2,3]} ]
+      }
+      ],
+    "adaption_iterations": "5:10000",
+    "integration_iterations": "3:10000",
+    "integration_copies": 5
+  },
+  { "process": ["LO_full", "LO_full_NLOwidth"],
+    "disabled": true,
+    "purpose": "scan",
+    "whizard_options": "--no-banner -r",
+    "nlo_type": "lo",
+    "scans": [{
+      "scan_object": "sqrts",
+      "ranges": [
+      { "type": "linear",
+        "start": 300.0,
+        "stop": 330.0,
+        "stepsize": 5.0
+      },
+      { "type": "linear",
+        "start": 330.0,
+        "stop": 340.0,
+        "stepsize": 1.0
+      },
+      { "type": "linear",
+        "start": 340.0,
+        "stop": 350.0,
+        "stepsize": 0.2
+      },
+      { "type": "linear",
+        "start": 350.0,
+        "stop": 360.0,
+        "stepsize": 1.0
+      },
+      { "type": "linear",
+        "start": 360.0,
+        "stop": 400.0,
+        "stepsize": 5.0
+      }
+      ]}
+      ],
+    "adaption_iterations": "5:10000",
+    "integration_iterations": "3:10000",
+    "integration_copies": 5
+  }
+  ],
+  "whizard": "whizard",
+  "data_output": "./"
+}

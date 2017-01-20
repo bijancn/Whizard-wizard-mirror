@@ -1,0 +1,46 @@
+model = SM_tt_threshold
+
+?vis_history = false
+
+mZ = 91.1876
+mW = 80.385
+mb = 4.2
+mH =  1.250000000000E+02
+me =  0.0
+alpha_em_i = 132.23323     !!! GF = 1.1663787E-005
+m1S = 172.0
+! alpha_em_i = 125.924     !!! old
+wZ =  2.443
+wW =  2.049000000000E+00
+wH =  4.143000000000E-03
+?alpha_s_is_fixed = false
+?alpha_s_from_mz = true
+?alpha_s_from_lambda_qcd = false
+alphas = 0.118 ! (Z pole, NLL running to mu_h)
+alpha_s_order = 1
+alpha_s_nf = 5
+mpole_fixed = 0
+
+scale = m1S
+
+nrqcd_order = 0
+sh          = 1.
+sf          = 1.
+Vtb         = 1.
+
+$method                = "threshold"
+$born_me_method        = "threshold"
+$loop_me_method        = "threshold"
+$correlation_me_method = "threshold"
+$real_tree_me_method   = "threshold"
+$soft_mismatch_me_method = "threshold"
+alpha_power = 4
+alphas_power = 0
+
+sqrts = 500 GeV
+sqrtsstepsize = 0.1 GeV
+
+sample_format = hepmc
+?write_raw = false
+?unweighted = false
+?hepmc_output_cross_section = true
