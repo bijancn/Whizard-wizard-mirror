@@ -197,28 +197,27 @@ def show_scale_variations(data):
 def build_smooth(data, smooth_dict):
   if smooth_dict is None:
     return data
-  smooth_data = get_associated_plot_data(data, smooth_dict)
-  for data_of_a_smooth, smooth in zip(smooth_data, smooth_dict):
-    for this_data in data_of_a_smooth:
-      x_start = smooth.get('start_at', this_data[1][0][0])
-      if x_start != this_data[1][0][0]:
-        i_start = min(enumerate(this_data[1][0]), key=lambda x: abs(x[1] - x_start))
-        x = this_data[1][0][i_start[0]:]
-        y = this_data[1][1][i_start[0]:]
-      else:
-        x = this_data[1][0]
-        y = this_data[1][1]
-      smooth_x, smooth_y = smooth_data_sg(x, y,
-          window_size=smooth.get('window_size', 0),
-          poly_order=smooth.get('poly_order', 3))
-      if x_start != this_data[1][0][0]:
-        non_smooth_x = np.array(this_data[1][0][0 : i_start[0] - 1])
-        non_smooth_y = np.array(this_data[1][1][0 : i_start[0] - 1])
-        smooth_x = np.concatenate((non_smooth_x, smooth_x))
-        smooth_y = np.concatenate((non_smooth_y, smooth_y))
-      smooth_name = this_data[0].replace('.dat', '_smooth.dat')
-      print 'Appending ' + smooth_name
-      data.append((smooth_name, np.array((smooth_x, smooth_y))))
+  smooth_data = get_associated_plot_data_single(data, smooth_dict)
+  for this_data in smooth_data:
+    x_start = smooth_dict.get('start_at', this_data[1][0][0])
+    if x_start != this_data[1][0][0]:
+      i_start = min(enumerate(this_data[1][0]), key=lambda x: abs(x[1] - x_start))
+      x = this_data[1][0][i_start[0]:]
+      y = this_data[1][1][i_start[0]:]
+    else:
+      x = this_data[1][0]
+      y = this_data[1][1]
+    smooth_x, smooth_y = smooth_data_sg(x, y,
+        window_size=smooth_dict.get('window_size', 0),
+        poly_order=smooth_dict.get('poly_order', 3))
+    if x_start != this_data[1][0][0]:
+      non_smooth_x = np.array(this_data[1][0][0 : i_start[0] - 1])
+      non_smooth_y = np.array(this_data[1][1][0 : i_start[0] - 1])
+      smooth_x = np.concatenate((non_smooth_x, smooth_x))
+      smooth_y = np.concatenate((non_smooth_y, smooth_y))
+    smooth_name = this_data[0].replace('.dat', '_smooth.dat')
+    print 'Appending ' + smooth_name
+    data.append((smooth_name, np.array((smooth_x, smooth_y))))
   return data
 
 
@@ -226,21 +225,20 @@ def build_fits(data, plot_json):
   fit_dict = plot_json.get('fits', None)
   if fit_dict is None:
     return data
-  fit_data = get_associated_plot_data(data, fit_dict)
-  for data_of_a_fit, fit in zip(fit_data, fit_dict):
-    degree = fit['fit_degree']
-    verbose = fit.get('print_fit_parameters', False)
-    for this_data in data_of_a_fit:
-      x = this_data[1][0]
-      xmin = fit.get('extrapolation_minus', min(x))
-      xmax = fit.get('extrapolation_plus', max(x))
-      y = this_data[1][1]
-      y_err = this_data[1][2]
-      fit_x, fit_y = fit_utils.fit_polynomial(x, y, xmin, xmax, degree,
-        y_err=y_err, verbose=verbose)
-      fit_name = this_data[0].replace('.dat', '_fit.dat')
-      print 'Appending ' + fit_name
-      data.append((fit_name, np.array((fit_x, fit_y))))
+  fit_data = get_associated_plot_data_single(data, fit_dict)
+  degree = fit_dict['fit_degree']
+  verbose = fit_dict.get('print_fit_parameters', False)
+  for this_data in fit_data:
+    x = this_data[1][0]
+    xmin = fit_dict.get('extrapolation_minus', min(x))
+    xmax = fit_dict.get('extrapolation_plus', max(x))
+    y = this_data[1][1]
+    y_err = this_data[1][2]
+    fit_x, fit_y = fit_utils.fit_polynomial(x, y, xmin, xmax, degree,
+      y_err=y_err, verbose=verbose)
+    fit_name = this_data[0].replace('.dat', '_fit.dat')
+    print 'Appending ' + fit_name
+    data.append((fit_name, np.array((fit_x, fit_y))))
   return data
 
 
@@ -798,20 +796,19 @@ def smooth_data_internal(x_values, y_values, delta):
 def build_scaled(data, scale_dict):
   if scale_dict is None:
     return data
-  scale_data = get_associated_plot_data(data, scale_dict)
-  for data_of_a_scaling, scale in zip(scale_data, scale_dict):
-    scale_by_value = scale.get('scale_by_value', None)
-    scale_by_point = scale.get('scale_by_point', None)
-    scale_by_x = scale.get('scale_by_x', None)
-    for this_data in data_of_a_scaling:
-      scaled_name = this_data[0].replace('.dat', '_scale.dat')
-      for sc, sc_func in zip([scale_by_value, scale_by_point, scale_by_x],
-          [add_scaled_by_value, add_scaled_by_point, add_scaled_by_x]):
-        if sc is not None:
-          this_scale_data = sc_func(sc, this_data)
-          if this_scale_data is not None:
-            print 'Appending ' + scaled_name
-            data.append((scaled_name, this_scale_data))
+  scale_data = get_associated_plot_data_single(data, scale_dict)
+  scale_by_value = scale_dict.get('scale_by_value', None)
+  scale_by_point = scale_dict.get('scale_by_point', None)
+  scale_by_x = scale_dict.get('scale_by_x', None)
+  for this_data in scale_data:
+    scaled_name = this_data[0].replace('.dat', '_scale.dat')
+    for sc, sc_func in zip([scale_by_value, scale_by_point, scale_by_x],
+        [add_scaled_by_value, add_scaled_by_point, add_scaled_by_x]):
+      if sc is not None:
+        this_scale_data = sc_func(sc, this_data)
+        if this_scale_data is not None:
+          print 'Appending ' + scaled_name
+          data.append((scaled_name, this_scale_data))
   return data
 
 
