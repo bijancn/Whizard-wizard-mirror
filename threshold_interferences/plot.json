@@ -15,6 +15,18 @@
         "linestyle": "None", "color": "orange"
       }
     ],
+    "ratio": [
+      { "ylabel": "$\\text{IF}/\\text{IF}^{\\text{signal}}$",
+        "ymax": 1.5, "ymin": 0.9, "ymajors": 4, "yminors": 4,
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ]
+      }
+    ],
     "extra_lines": [
       {"type": "vertical",
        "value": 344.0,
@@ -36,22 +48,69 @@
     "yminors": 4,
     "ymajors": 5
   },
-  {"title": "LO + LL matched",
+  {"title": "LO + LL matched compared to LL, all without $f_s$",
     "output_file": "lo_ll",
     "lines": [
-      { "name": "LO_LL-sqrts--0-factorization_type",
-        "label": "signal diagram", "linestyle": "None", "color": "red"
-      },
       { "name": "LL-sqrts--1-mpole_fixed--0-switchoff",
-        "label": "LL no $f_s$", "linestyle": "solid", "folder": "../threshold_final"
+        "label": "LL, factorized", "linestyle": "solid", "folder": "../threshold_final",
+        "color": "blue",
+        "base_line": [
+          { "name": "LL-sqrts--1-mpole_fixed--0-switchoff",
+            "folder": "../threshold_final"
+          },
+          { "name" : "foo", "hide_line" : true}
+        ]
+      },
+      { "name": "LO_LL-sqrts--0-factorization_type",
+        "label": "machted, signal diagram", "linestyle": "dashed", "color": "red",
+        "base_line": [
+          { "name": "LL-sqrts--1-mpole_fixed--0-switchoff",
+            "folder": "../threshold_final"
+          },
+          { "name": "LO_LL-sqrts--0-factorization_type" }
+        ]
       },
       { "name": "LO_LL-sqrts--1-factorization_type",
-        "label": "factorized boosted", "linestyle": "None",
-        "color": "blue"
+        "label": "machted, factorized boosted", "linestyle": "dashed",
+        "color": "blue",
+        "base_line": [
+          { "name": "LL-sqrts--1-mpole_fixed--0-switchoff",
+            "folder": "../threshold_final"
+          },
+          { "name": "LO_LL-sqrts--0-factorization_type" }
+        ]
       },
       { "name": "LO_LL-sqrts--2-factorization_type",
-        "label": "factorized rest frame",
-        "linestyle": "None", "color": "orange"
+        "label": "machted, factorized rest frame",
+        "linestyle": "dashed", "color": "orange",
+        "base_line": [
+          { "name": "LL-sqrts--1-mpole_fixed--0-switchoff",
+            "folder": "../threshold_final"
+          },
+          { "name" : "foo", "hide_line" : true}
+        ]
+      }
+    ],
+    "ratio": [
+      { "ylabel": "$\\sigma/\\sigma^{\\text{LL}}$",
+        "ymax": 1.25, "ymin": 0.5, "ymajors": 4, "yminors": 4,
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ]
+      },
+      { "ylabel": "\\footnotesize$\\sigma_\\text{matched}^\\text{factorized,boosted}/\\sigma_\\text{matched}^{\\text{signal}}$",
+        "ymax": 1.15, "ymin": 1.0, "ymajors": 4, "yminors": 4,
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ]
       }
     ],
     "extra_lines": [
@@ -79,6 +138,12 @@
   {"title": "Interference, no form factor",
     "output_file": "interferences_noFF",
     "lines": [
+      { "name": "interferences_noFF_signal-sqrts--0-factorization_type",
+        "label": "signal | signal", "linestyle": "solid", "color": "gray"
+      },
+      { "name": "interferences_noFF-sqrts--0-factorization_type",
+        "label": "signal | full LO", "linestyle": "None", "color": "red"
+      },
       { "name": "interferences_fact-sqrts--2-factorization_type",
         "label": "factorized rest frame | factorized rest frame", "linestyle": "dashed",
         "color": "orange", "hide_line": false
@@ -86,9 +151,6 @@
       { "name": "interferences_fact-sqrts--1-factorization_type",
         "label": "factorized boosted | factorized boosted", "linestyle": "dashdot",
         "color": "black", "hide_line": false
-      },
-      { "name": "interferences_noFF-sqrts--0-factorization_type",
-        "label": "signal diagram | full LO", "linestyle": "None", "color": "red"
       },
       { "name": "interferences_noFF-sqrts--2-factorization_type",
         "label": "factorized rest frame | full LO",
@@ -105,6 +167,18 @@
       { "name": "interferences_noFF_signal-sqrts--2-factorization_type",
         "label": "factorized rest frame | signal",
         "linestyle": "None", "color": "purple"
+      }
+    ],
+    "ratio": [
+      { "ylabel": "$\\text{IF}/\\text{IF}^{\\text{signal | signal}}$",
+        "ymax": 1.5, "ymin": 0.9, "ymajors": 4, "yminors": 4,
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ]
       }
     ],
     "extra_lines": [
