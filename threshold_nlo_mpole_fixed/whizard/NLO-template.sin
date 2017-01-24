@@ -16,7 +16,7 @@ offshell_strategy =
 FF = 9  !!! tree-level form factor
 
 mult_call_real = 20
-virt_call_real = 0.75
+mult_call_virt = 0.75
 #ITERATIONS
 #SETSCAN
 show(model)
