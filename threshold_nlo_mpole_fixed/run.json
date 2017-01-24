@@ -39,8 +39,8 @@
         "ranges": [{ "type": "explicit", "range": [-1,0,1,2,3]} ]
       }
       ],
-    "adaption_iterations": "5:10000",
-    "integration_iterations": "3:10000",
+    "adaption_iterations": "5:20000",
+    "integration_iterations": "5:20000",
     "integration_copies": 5
   },
   { "process": ["LO", "LO_noboost"],
@@ -82,8 +82,8 @@
         "ranges": [{ "type": "explicit", "range": [-1,0,1,2,3]} ]
       }
       ],
-    "adaption_iterations": "5:10000",
-    "integration_iterations": "3:10000",
+    "adaption_iterations": "5:20000",
+    "integration_iterations": "5:20000",
     "integration_copies": 5
   },
   { "process": ["LO_full", "LO_full_NLOwidth"],
@@ -121,8 +121,8 @@
       }
       ]}
       ],
-    "adaption_iterations": "5:10000",
-    "integration_iterations": "3:10000",
+    "adaption_iterations": "5:20000",
+    "integration_iterations": "5:20000",
     "integration_copies": 5
   }
   ],

@@ -55,8 +55,8 @@
           "type": "string",
           "description": "`text` to be displayed. Can contain (escaped) latex."
         },
-        "x": { "type": "number" },
-        "y": { "type": "number" },
+        "x": { "type": "number", "description": "Coordinates in the plot" },
+        "y": { "type": "number", "description": "Coordinates in the plot" },
         "fontsize": { "type": "number" },
         "opacity": { "type": "number" },
         "verticalalignment" : { "type": "string" },

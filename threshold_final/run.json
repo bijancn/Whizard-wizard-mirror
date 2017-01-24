@@ -43,9 +43,9 @@
         "ranges": [{ "type": "explicit", "range": [0,1]} ]
       }
       ],
-    "integration_copies": 3,
     "adaption_iterations": "5:20000",
-    "integration_iterations": "5:20000"
+    "integration_iterations": "5:20000",
+    "integration_copies": 5
   },
   { "process": ["LO_LL_matched_EHA", "LO",
              "LO_LL_matched_signal", "LL_signal", "LL_minus_One"],
@@ -87,9 +87,9 @@
         "ranges": [{ "type": "explicit", "range": [0,1]} ]
       }
       ],
-    "integration_copies": 3,
     "adaption_iterations": "5:20000",
-    "integration_iterations": "5:20000"
+    "integration_iterations": "5:20000",
+    "integration_copies": 5
   },
   { "process": ["LL"],
     "disabled": true,
@@ -134,9 +134,9 @@
         "ranges": [{ "type": "explicit", "range": [0,1]} ]
       }
       ],
-    "integration_copies": 3,
     "adaption_iterations": "5:20000",
-    "integration_iterations": "5:20000"
+    "integration_iterations": "5:20000",
+    "integration_copies": 5
   }
   ],
   "whizard": "whizard",

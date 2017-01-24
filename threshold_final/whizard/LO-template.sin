@@ -9,8 +9,6 @@ FF = 9           !!! tree
 offshell_strategy = 0*2    !!! factorized
                   + 4      !!! interference with background diagrams
                   + 0*128  !!! decay on-shell projected
-!                  + 32   ! hel approx
-!                  + 1024 ! extra hel approx
 mpole_fixed = 0
 
 

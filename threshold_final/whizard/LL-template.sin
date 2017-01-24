@@ -6,11 +6,7 @@ compile
 
 nrqcd_order = 0  !!! LL
 offshell_strategy = 2      !!! factorized
-                  + 4*0    !!! interference with background diagrams
                   + 128    !!! decay on-shell projected
-!                  + 2048   !!! enforce minus one in the form factor
-!                  + 32   ! hel approx
-!                  + 1024 ! extra hel approx
 mpole_fixed = 0
 
 
