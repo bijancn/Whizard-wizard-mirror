@@ -1,0 +1,34 @@
+include("../process_settings_threshold.sin")
+
+library = PROCESS
+$method ="omega"
+process PROCESS = e1, E1 => Wp, Wm, b, B
+compile
+
+nrqcd_order = 0  !!! LL
+FF = 9           !!! TREE
+! offshell_strategy = + 4      !!! interference with background diagrams
+!                     + 128    !!! decay on-shell projected
+!                     + 16384  !!! only interference terms
+!                  + 32   ! hel approx
+!                  + 1024 ! extra hel approx
+mpole_fixed = 1
+?negative_weights = true
+
+
+iterations = 3:20000:"gw",3:20000
+#ITERATIONS
+sqrts = 800 GeV
+real mass_cut = - 1
+real scale_vars = 4
+real phase_flip = - 1
+real force_factorized = - 1
+real factorization_type = -1
+#SETSCAN
+show(model)
+sqrtsstepsize = 0.1 GeV
+sqrtsmin = sqrts - sqrtsstepsize
+sqrtsmax = sqrts + sqrtsstepsize
+
+integrate (PROCESS)
+printf "RES %g %g %g" (sqrts, integral(PROCESS), error(PROCESS))

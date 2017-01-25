@@ -1,0 +1,45 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+wtop = 1.3475
+int resonance_method = 0
+logical ?big_width = false
+#SETSCAN
+if (?big_width) then
+  wZ = 50 GeV
+  wH = 50 GeV
+else
+  wZ = 2.5060
+  wH =  4.14E-03
+endif
+
+if resonance_method == 0 then
+  $fks_mapping_type = "default"
+elsif resonance_method == 1 then
+  $fks_mapping_type = "resonances"
+elsif resonance_method == 2 then
+  $resonances_exclude_particles = "t:T"
+  $fks_mapping_type = "resonances"
+elsif resonance_method == 3 then
+  $resonances_exclude_particles = "Z:H"
+  $fks_mapping_type = "resonances"
+endif
+
+wW = 2.0978
+
+?check_grid_file = false
+
+?fixed_order_nlo_events = true
+?unweighted = false
+?negative_weights = true
+
+scale = mtop + mH
+#ITERATIONS
+library = PROCESS
+process PROCESS = E1, e1 => b, B, e1, N1, E2, n2, H { nlo_calculation = "Real" }
+
+
+cuts = all abs(M) > 20 GeV [incoming e1, e1]
+mult_call_real = 25
+integrate (PROCESS)
+printf "RES %8e %8e %8e" (sqrts, integral(PROCESS), error(PROCESS))

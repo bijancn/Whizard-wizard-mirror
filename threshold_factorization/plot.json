@@ -1,0 +1,135 @@
+{
+  "plots": [
+  {"title": "",
+    "output_file": "influence_of_OS_projection_for_production_zoom",
+    "notes": ["2 (factorization) + 32 (hel approx) + 128 (decay projected)",
+      "variables: 64 (production projected) + 512 (decay boost) + 1024 (spin average)",
+      "decay always projected, production Y/N, decay boosted Y/N, spin sum/average",
+      "[162, 226, 674, 738, 1186, 1250, 1698, 1762]"
+      ],
+    "lines": [
+      { "name": "master_threshold-sqrts--9-FF--162-offshell_strategy",
+        "label": "production unprojected, decay unboosted, correlated spins",
+        "linestyle": "dashdot"
+      },
+      { "name": "master_threshold-sqrts--9-FF--1186-offshell_strategy",
+        "label": "production unprojected, decay unboosted, spins averaged",
+        "linestyle": "dashdot"
+      },
+      { "name": "master_threshold-sqrts--9-FF--674-offshell_strategy",
+        "label": "production unprojected, decay boosted, correlated spins",
+        "linestyle": "dotted"
+      },
+      { "name": "master_threshold-sqrts--9-FF--1698-offshell_strategy",
+        "label": "production unprojected, decay boosted, spins averaged",
+        "linestyle": "dotted"
+      },
+      { "name": "master_threshold-sqrts--9-FF--226-offshell_strategy",
+        "label": "production projected, decay unboosted, correlated spins",
+        "linestyle": "solid"
+      },
+      { "name": "master_threshold-sqrts--9-FF--1250-offshell_strategy",
+        "label": "production projected, decay unboosted, spins averaged",
+        "linestyle": "solid"
+      },
+      { "name": "master_threshold-sqrts--9-FF--738-offshell_strategy",
+        "label": "production projected, decay boosted, correlated spins",
+        "linestyle": "dashed", "color": "gray"
+      },
+      { "name": "master_threshold-sqrts--9-FF--1762-offshell_strategy",
+        "label": "production projected, decay boosted, spins averaged",
+        "linestyle": "dashed"
+      }
+    ],
+    "ratio": {
+      "ylabel": "$\\sigma/\\sigma^{\\text{\\footnotesize unprojected,unboosted,correlated}}$",
+      "ymax": 1.2,
+      "ymin": 0.95,
+      "ymajors": 6,
+      "yminors": 4,
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ]
+    },
+    "legend_height_shrinker": 0.65,
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }],
+    "ymajors": 4,
+    "ymin": 0,
+    "ymax": 3000,
+    "xmin": 320,
+    "xmax": 380,
+    "xminors": 6,
+    "yminors": 3
+  },
+  {"title": "Influence of On-Shell Projection for Production",
+    "output_file": "influence_of_OS_projection_for_production",
+    "notes": ["2 (factorization) + 32 (hel approx) + 128 (decay projected)",
+      "variables: 64 (production projected) + 512 (decay boost) + 1024 (spin average)",
+      "decay always projected, production Y/N, decay boosted Y/N, spin sum/average",
+      "[162, 226, 674, 738, 1186, 1250, 1698, 1762]"
+      ],
+    "lines": [
+      { "name": "master_threshold-sqrts--9-FF--162-offshell_strategy",
+        "label": "production unprojected, decay unboosted, correlated spins",
+        "linestyle": "dashdot"
+      },
+      { "name": "master_threshold-sqrts--9-FF--1186-offshell_strategy",
+        "label": "production unprojected, decay unboosted, spins averaged",
+        "linestyle": "dashdot"
+      },
+      { "name": "master_threshold-sqrts--9-FF--674-offshell_strategy",
+        "label": "production unprojected, decay boosted, correlated spins",
+        "linestyle": "dotted"
+      },
+      { "name": "master_threshold-sqrts--9-FF--1698-offshell_strategy",
+        "label": "production unprojected, decay boosted, spins averaged",
+        "linestyle": "dotted"
+      },
+      { "name": "master_threshold-sqrts--9-FF--226-offshell_strategy",
+        "label": "production projected, decay unboosted, correlated spins",
+        "linestyle": "solid"
+      },
+      { "name": "master_threshold-sqrts--9-FF--1250-offshell_strategy",
+        "label": "production projected, decay unboosted, spins averaged",
+        "linestyle": "solid"
+      },
+      { "name": "master_threshold-sqrts--9-FF--738-offshell_strategy",
+        "label": "production projected, decay boosted, correlated spins",
+        "linestyle": "dashed", "color": "gray"
+      },
+      { "name": "master_threshold-sqrts--9-FF--1762-offshell_strategy",
+        "label": "production projected, decay boosted, spins averaged",
+        "linestyle": "dashed"
+      }
+    ],
+    "ratio": {
+      "ylabel": "$\\sigma/\\sigma^{\\text{\\footnotesize unprojected,unboosted,correlated}}$",
+      "ymax": 1.01, "ymin": 0.99, "ymajors": 3, "yminors": 4},
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "legend_height_shrinker": 0.65,
+    "ylog": true,
+    "xlog": false,
+    "ymajors": 5,
+    "ymin": 1,
+    "xmax": 10000,
+    "xminors": 6,
+    "yminors": 3
+  }
+  ]
+}
