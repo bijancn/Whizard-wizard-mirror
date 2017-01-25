@@ -3,10 +3,6 @@
   { "title": "NLO decay, tree-level formfactor",
     "output_file": "helicities",
     "lines": [
-      { "name": "NLO-sqrts--MINUS1-top_helicity_selection",
-        "label": "$\\Sigma(h_t,h_{\\bar t})$", "color": "black",
-        "base_line": [{ "name": "LO-sqrts--MINUS1-top_helicity_selection" }]
-      },
       { "name": "NLO-sqrts--0-top_helicity_selection",
         "label": "$(h_t,h_{\\bar t})=(-,-)$", "color": "green",
         "base_line": [{ "name": "LO-sqrts--0-top_helicity_selection" }]
@@ -22,6 +18,10 @@
       { "name": "NLO-sqrts--3-top_helicity_selection",
         "label": "$(h_t,h_{\\bar t})=(+,+)$", "color": "orange",
         "base_line": [{ "name": "LO-sqrts--3-top_helicity_selection" }]
+      },
+      { "name": "NLO-sqrts--MINUS1-top_helicity_selection",
+        "label": "$\\Sigma(h_t,h_{\\bar t})$", "color": "black",
+        "base_line": [{ "name": "LO-sqrts--MINUS1-top_helicity_selection" }]
       }
     ],
     "ratio": [
