@@ -11,8 +11,8 @@ offshell_strategy =
   0 +   ! NLO width and decay
   2 +   ! factorized
   0 +   ! interference with background
-  8 +   ! on-shell projection
   32 +  ! helicity approximation simple
+  128 + ! on-shell projection of decay
   512   ! boost the momenta of the decay
 FF = 9  !!! tree-level form factor
 

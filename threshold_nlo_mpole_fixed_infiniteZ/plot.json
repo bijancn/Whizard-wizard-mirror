@@ -16,7 +16,22 @@
         "label": "$(h_t,h_{\\bar t})=(+,-)$", "color": "blue", "linestyle": "dashed"
       },
       { "name": "LO-sqrts--3-top_helicity_selection",
-        "label": "$(h_t,h_{\\bar t})=(+,+)$", "color": "orange"
+        "label": "$(h_t,h_{\\bar t})=(+,+)$", "color": "orange", "linestyle": "dashed"
+      },
+      { "name": "LO_prodproj-sqrts--MINUS1-top_helicity_selection",
+        "label": "$\\Sigma(h_t,h_{\\bar t})$", "color": "pink", "linestyle": "dashdot"
+      },
+      { "name": "LO_prodproj-sqrts--0-top_helicity_selection",
+        "label": "$(h_t,h_{\\bar t})=(-,-)$", "color": "green", "linestyle": "dashdot"
+      },
+      { "name": "LO_prodproj-sqrts--1-top_helicity_selection",
+        "label": "$(h_t,h_{\\bar t})=(-,+)$", "color": "red", "linestyle": "dotted"
+      },
+      { "name": "LO_prodproj-sqrts--2-top_helicity_selection",
+        "label": "$(h_t,h_{\\bar t})=(+,-)$", "color": "blue", "linestyle": "dashdot"
+      },
+      { "name": "LO_prodproj-sqrts--3-top_helicity_selection",
+        "label": "$(h_t,h_{\\bar t})=(+,+)$", "color": "orange", "linestyle": "dotted"
       }
     ],
     "ratio": [
