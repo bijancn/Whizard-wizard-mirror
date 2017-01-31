@@ -707,7 +707,7 @@ try:
   import include  # NOQA
   print "Including custom include.py file"
 except ImportError:
-  print "Did not find a custom include.py file"
+  pass
 
 
 def execute_defined_functions(data, plot_json):
