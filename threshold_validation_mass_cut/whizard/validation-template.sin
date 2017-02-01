@@ -1,0 +1,58 @@
+include("../process_settings_threshold.sin")
+
+library = PROCESS
+process PROCESS = e1, E1 => Wm, Wp, B, b
+compile
+
+mpole_fixed = 1
+nrqcd_order = 0 # LL
+offshell_strategy =
+  0 +    ! LO width and decay
+  2 +    ! factorized
+  0 +    ! interference with background
+  1024 + ! extra helicity approximation
+  128    ! on-shell projection of decay
+FF = 1  !!! tree-level form factor
+no_pwave = 1
+
+mult_call_real = 20
+mult_call_virt = 0.75
+#ITERATIONS
+real mass_cut = - 1
+real factorization_type = -1
+real scale_variations = -1
+#SETSCAN
+if (factorization_type == 1) then
+  offshell_strategy = offshell_strategy - 2 !!! signal diagram
+elsif (factorization_type == 2) then
+  offshell_strategy = offshell_strategy + 64 ! factorized all on-shell projected
+elsif (factorization_type == 3) then
+  ! factorized only decay on-shell projected
+endif
+if (scale_variations == 0) then
+  sh = 0.5
+  sf = 1.0
+elsif (scale_variations == 1) then
+  sh = 0.5
+  sf = 2.0
+elsif (scale_variations == 2) then
+  sh = 2.0
+  sf = 1.0
+elsif (scale_variations == 3) then
+  sh = 2.0
+  sf = 0.5
+elsif (scale_variations == 4) then
+  sh = 1.0
+  sf = 1.0
+endif
+if (mass_cut > 0) then
+  cuts = all abs (M - mtpole) < mass_cut [Wp, b] and
+         all abs (M - mtpole) < mass_cut [Wm, B]
+endif
+show(model)
+sqrtsmin = sqrts - 2 * sqrtsstepsize
+sqrtsmax = sqrts + 2 * sqrtsstepsize
+
+integrate (PROCESS)
+
+printf  "RES %8e %8e %8e" (mass_cut, integral(PROCESS), error(PROCESS))
