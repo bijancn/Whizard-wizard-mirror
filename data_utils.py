@@ -409,8 +409,7 @@ def build_ratio(data, indices):
 
 def get_variance(sigma):
   if np.isclose(sum(sigma), 0.0):
-    print 'Warning: sum(sigma) = 0. Weighted average doesnt make sense'
-    return 0.0
+    raise ZeroDivisionError('y = 0')
   sum_var_inv = sum([1.0 / (s * s) for s in sigma
       if not np.isclose(s, 0.0, atol=1.e-10)])
   return 1.0 / sum_var_inv
@@ -432,6 +431,7 @@ def average_data_item(item, limits):
     return item
   new_y = []
   new_y_err = []
+  zeros = 0
   for i in range(len(limits)):
     if i < len(limits) - 1:
       l_low = limits[i]
@@ -444,9 +444,17 @@ def average_data_item(item, limits):
       new_y_err.append(item[1][2][l_low])
       new_y.append(item[1][1][l_low])
     else:
-      new_y_err.append(np.sqrt(get_variance(item[1][2][l_low:l_high])))
-      new_y.append(get_weighted_mean(item[1][1][l_low:l_high],
-         item[1][2][l_low:l_high]))
+      try:
+        new_y_err.append(np.sqrt(get_variance(item[1][2][l_low:l_high])))
+        new_y.append(get_weighted_mean(item[1][1][l_low:l_high],
+           item[1][2][l_low:l_high]))
+      except ZeroDivisionError:
+        new_y_err.append(0.0)
+        new_y.append(0.0)
+        zeros += 1
+  if zeros > 0:
+      print "{:5.2f}".format(100.0 * zeros / len(limits)), '% 0s in', \
+          item[0].split('/')[-1].replace('.dat', '')
   item = (item[0], np.array([item[1][0][limits], np.array(new_y),
           np.array(new_y_err)]))
   return item
