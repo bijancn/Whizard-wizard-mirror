@@ -30,7 +30,7 @@
       },
       { "scan_object": "sqrts",
         "export_type": "separate",
-        "ranges": [{ "type": "explicit", "range": [330, 350, 800, 10000]} ]
+        "ranges": [{ "type": "explicit", "range": [330, 340, 350, 800, 10000]} ]
       },
       { "scan_object": "factorization_type",
         "export_type": "separate",
