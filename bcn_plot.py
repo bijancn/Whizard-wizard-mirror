@@ -304,8 +304,8 @@ def get_object_name(obj, is_fit):
 
 def sanity_check(data):
   for dat in data:
-    if type(dat[0]) is not str:
-      print 'This is not an identifier_string:', dat[0]
+    if not (type(dat[0]) is str or type(dat[0]) is unicode):
+      print 'This is not an identifier_string:', dat[0], type(dat[0])
       print 'Aborting'
       return False
     if type(dat[1]) is not np.ndarray:

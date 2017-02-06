@@ -253,12 +253,24 @@ def build_binary_function(data, action_dict):
           ' Skipping: ', action_dict
   else:
     print 'Appending ', binary_name
-    common_x, combined_y = remove_uncommon(
-        [action_data[0][1][0], action_data[1][1][0]],
-        [action_data[0][1][1], action_data[1][1][1]])
-    user_func = eval(action_dict.get('expression', 'lambda x,y: x + y'))
-    new_y = user_func(combined_y[0], combined_y[1])
-    data.append((binary_name, np.array((common_x, new_y))))
+    try:
+      common_x, combined_y, combined_yerr = remove_uncommon(
+          [action_data[0][1][0], action_data[1][1][0]],
+          [action_data[0][1][1], action_data[1][1][1]],
+          [action_data[0][1][2], action_data[1][1][2]])
+      user_func = eval(action_dict.get('expression', 'lambda x,y: x + y'))
+      user_errfunc = eval(action_dict.get('error_expression',
+                                          'lambda x,y: np.sqrt(x**2 + y**2)'))
+      new_y = user_func(combined_y[0], combined_y[1])
+      new_yerr = user_errfunc(combined_yerr[0], combined_yerr[1])
+      data.append((binary_name, np.array((common_x, new_y, new_yerr))))
+    except IndexError:
+      common_x, combined_y = remove_uncommon(
+          [action_data[0][1][0], action_data[1][1][0]],
+          [action_data[0][1][1], action_data[1][1][1]])
+      user_func = eval(action_dict.get('expression', 'lambda x,y: x + y'))
+      new_y = user_func(combined_y[0], combined_y[1])
+      data.append((binary_name, np.array((common_x, new_y))))
     return data
 
 
@@ -277,14 +289,39 @@ def test_build_binary_function():
   np.testing.assert_array_equal(data[2][1][0], x_array)
   np.testing.assert_array_equal(data[2][1][1], np.array((40, 40, 40)))
 
+  data = [(cwd + '/scan-results/foo.dat',
+           np.vstack((x_array, np.array((10, 20, 30)), np.array((0, 2, 0))))),
+          (os.path.abspath(cwd + '/../other/scan-results/bar.dat'),
+           np.vstack((x_array, np.array((30, 20, 10)), np.array((3, 0, 1)))))]
+  action_dict = {
+      'data': [
+          {'name': 'foo', 'folder': './'},
+          {'name': 'bar', 'folder': '../other'}],
+      "expression": "lambda x,y: x-y",
+      "infix": "_minus_",
+      "error_expression": "lambda x,y: np.sqrt(x**2+y**2)"
+  }
+  data = build_binary_function(data, action_dict)
+  nt.eq_(data[2][0], cwd + '/scan-results/foo_minus_bar.dat')
+  np.testing.assert_array_equal(data[2][1][0], x_array)
+  np.testing.assert_array_equal(data[2][1][1], np.array((-20, 0, 20)))
+  np.testing.assert_array_equal(data[2][1][2], np.array((3, 2, 1)))
 
-def remove_uncommon(list_of_x_arrays, list_of_y_arrays):
+
+def remove_uncommon(list_of_x_arrays, list_of_y_arrays, list_of_yerr_arrays=None):
   x_generators = [(value for value in array) for array in list_of_x_arrays]
   y_generators = [(value for value in array) for array in list_of_y_arrays]
-  combiner = Combiner(x_generators, y_generators,
-      [len(array) for array in list_of_x_arrays])
-  combined_x, combined_y = combiner.get_all()
-  return combined_x, combined_y
+  if list_of_yerr_arrays is None:
+    combiner = Combiner(x_generators, y_generators,
+        [len(array) for array in list_of_x_arrays])
+  else:
+    yerr_generators = [(value for value in array) for array in list_of_yerr_arrays]
+    error_func = lambda self: self.next_yerr_values
+    combiner = Combiner(x_generators, y_generators,
+                        [len(array) for array in list_of_x_arrays],
+                        yerr_generators=yerr_generators,
+                        error_func=error_func)
+  return combiner.get_all()
 
 
 def test_remove_uncommon():
