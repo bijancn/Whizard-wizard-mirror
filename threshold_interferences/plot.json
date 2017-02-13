@@ -135,14 +135,14 @@
   {"title": "Interference, no form factor",
     "output_file": "interferences_noFF",
     "lines": [
+      { "name": "full_LO-sqrts_scale",
+        "label": "full LO | full LO", "linestyle": "solid"
+      },
       { "name": "interferences_noFF_signal-sqrts--0-factorization_type",
         "label": "signal | signal", "linestyle": "solid"
       },
       { "name": "interferences_noFF-sqrts--0-factorization_type",
         "label": "signal | full LO", "linestyle": "solid"
-      },
-      { "name": "full_LO-sqrts_scale",
-        "label": "full LO | full LO", "linestyle": "solid"
       },
       { "name": "interferences_fact-sqrts--2-factorization_type",
         "label": "factorized rest frame | factorized rest frame", "linestyle": "dashed",
@@ -169,7 +169,7 @@
     ],
     "ratio": [
       { "ylabel": "$\\text{IF}/\\text{IF}^{\\text{signal | signal}}$",
-        "ymax": 1.5, "ymin": 0.9, "ymajors": 4, "yminors": 3,
+        "ymax": 1.1, "ymin": 0.5, "ymajors": 4, "yminors": 3,
         "extra_lines": [
           { "type": "vertical",
             "value": 344.0,
@@ -209,7 +209,7 @@
   ],
   "transforms" : [
     [{ "type": "scalings",
-      "scale_by_value": 2.0,
+      "scale_by_value": 0.5,
       "data": [
         { "name": "full_LO-sqrts" }
       ]

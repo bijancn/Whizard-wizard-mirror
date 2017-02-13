@@ -67,11 +67,12 @@
        "opacity": 0.2,
        "linestyle": "dashed"
       }],
-    "ymajors": 4,
+    "ymajors": 7,
     "ymin": 0,
-    "ymax": 3000,
+    "ymax": 600,
     "xmin": 320,
     "xmax": 380,
+    "xmajors": 6,
     "xminors": 6,
     "yminors": 3
   },

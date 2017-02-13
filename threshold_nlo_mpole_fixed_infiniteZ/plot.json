@@ -11,8 +11,8 @@
     ]
   ],
   "plots": [
-  { "title": "LO decay, tree-level form factor, without Z",
-    "output_file": "LO_helicities_diff",
+  { "title": "Absolute difference between mixed helicities (without Z)",
+    "output_file": "infiniteZ_LO_helicities_diff",
     "lines": [
       {"name": "LO-sqrts--1-top_helicity_selection_minus_LO-sqrts--2-top_helicity_selection",
         "label": "", "linestyle": "None"}
@@ -33,8 +33,8 @@
     "opacity": 0.7,
     "xmax": 400.0
   },
-  { "title": "LO decay, tree-level form factor, without Z",
-    "output_file": "LO_helicities",
+  { "title": "Distribution over helicities (without Z)",
+    "output_file": "infiniteZ_LO_helicities",
     "lines": [
       { "name": "LO-sqrts--MINUS1-top_helicity_selection",
         "label": "$\\Sigma(h_t,h_{\\bar t})$", "color": "black",
@@ -156,7 +156,7 @@
     "yminors": 5
   },
   { "title": "LO decay, tree-level form factor, on-shell projected production",
-    "output_file": "LO_helicities_productionprojected",
+    "output_file": "infiniteZ_LO_helicities_productionprojected",
     "lines": [
       { "name": "LO_prodproj-sqrts--MINUS1-top_helicity_selection",
         "label": "$\\Sigma(h_t,h_{\\bar t})$", "color": "black"
@@ -207,7 +207,7 @@
     "yminors": 5
   },
   { "title": "NLO decay, tree-level formfactor, on-shell projected production",
-    "output_file": "helicities_productionprojected",
+    "output_file": "infiniteZ_helicities_productionprojected",
     "lines": [
       { "name": "NLO_prodproj-sqrts--0-top_helicity_selection",
         "label": "$(h_t,h_{\\bar t})=(-,-)$", "color": "green",
@@ -269,7 +269,7 @@
     "xminors": 3
   },
   { "title": "NLO decay, tree-level formfactor",
-    "output_file": "helicities",
+    "output_file": "infiniteZ_helicities",
     "lines": [
       { "name": "NLO-sqrts--0-top_helicity_selection",
         "label": "$(h_t,h_{\\bar t})=(-,-)$", "color": "green",
@@ -332,7 +332,7 @@
     "xminors": 3
   },
   { "title": "Born part of NLO decay, tree-level form factor, on-shell projected production",
-    "output_file": "born_helicities_productionprojected",
+    "output_file": "infiniteZ_born_helicities_productionprojected",
     "lines": [
       { "name": "NLO_prodproj_Born-sqrts--MINUS1-top_helicity_selection",
         "label": "$\\Sigma(h_t,h_{\\bar t})$", "color": "black",
@@ -388,7 +388,7 @@
     "yminors": 5
   },
   { "title": "Born part of NLO decay, tree-level form factor",
-    "output_file": "born_helicities",
+    "output_file": "infiniteZ_born_helicities",
     "lines": [
       { "name": "NLO_Born-sqrts--MINUS1-top_helicity_selection",
         "label": "$\\Sigma(h_t,h_{\\bar t})$", "color": "black",
@@ -445,7 +445,7 @@
     "yminors": 4
   },
   { "title": "Virtual part of NLO decay, tree-level form factor, on-shell projected production",
-    "output_file": "virtual_helicities_productionprojected",
+    "output_file": "infiniteZ_virtual_helicities_productionprojected",
     "lines": [
       { "name": "NLO_prodproj_Virtual-sqrts--0-top_helicity_selection",
         "label": "$(h_t,h_{\\bar t})=(-,-)$", "color": "green",
@@ -498,7 +498,7 @@
     "yminors": 5
   },
   { "title": "Virtual part of NLO decay, tree-level form factor",
-    "output_file": "virtual_helicities",
+    "output_file": "infiniteZ_virtual_helicities",
     "lines": [
       { "name": "NLO_Virtual-sqrts--0-top_helicity_selection",
         "label": "$(h_t,h_{\\bar t})=(-,-)$", "color": "green",
@@ -550,7 +550,7 @@
     "ymajors": 5,
     "yminors": 5
   },
-  { "output_file": "real_helicities_productionprojected",
+  { "output_file": "infiniteZ_real_helicities_productionprojected",
     "title": "Real part of NLO decay, tree-level form factor, on-shell projected",
     "lines": [
       { "name": "NLO_prodproj_Real-sqrts--0-top_helicity_selection",
@@ -603,7 +603,7 @@
     "yminors": 3,
     "xminors": 3
   },
-  { "output_file": "real_helicities",
+  { "output_file": "infiniteZ_real_helicities",
     "title": "Real part of NLO decay, tree-level form factor",
     "lines": [
       { "name": "NLO_Real-sqrts--0-top_helicity_selection",

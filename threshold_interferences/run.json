@@ -81,7 +81,7 @@
       ],
     "adaption_iterations": "5:20000",
     "integration_iterations": "5:20000",
-    "integration_copies": 5
+    "integration_copies": 10
   }
   ],
   "whizard": "whizard",

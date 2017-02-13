@@ -130,14 +130,14 @@ def set_minor_ticks(axes, xminors, yminorss, xlog, ylogs):
     if xminors is None:
       xminors = N_XMINORS_DEFAULT
     if xlog:
-      ax.set_xscale('log', subsx=[2, 3, 4, 5, 6, 7, 8, 9])
+      ax.set_xscale('log')
     else:
       minorLocator = AutoMinorLocator(xminors + 1)
       ax.xaxis.set_minor_locator(minorLocator)
     if yminors is None:
       yminors = N_YMINORS_DEFAULT
     if ylog:
-      ax.set_yscale('log', subsy=[2, 3, 4, 5, 6, 7, 8, 9])
+      ax.set_yscale('log')
     else:
       minorLocator = AutoMinorLocator(yminors + 1)
       ax.yaxis.set_minor_locator(minorLocator)
@@ -488,7 +488,7 @@ def save_fig(fig, title, plot_dict, pic_path):
       out_file = output_file + '.pdf'
   else:
     out_file = title + '.pdf'
-  print 'Writing to output: ', out_file.replace('.pdf', '')
+  print 'Writing to output:', out_file.replace('.pdf', '')
   out_path = os.path.join(pic_path, out_file).replace(' ', '_')
   strip_chars = ['(', ')', ',', ';']
   for sc in strip_chars:

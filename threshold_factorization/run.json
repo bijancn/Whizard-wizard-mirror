@@ -28,240 +28,120 @@
      "fact_osproj_unboosted_lo10t",
      "fact_decosproj_boosted_lo10t",
      "fact_decosproj_unboosted_lo10t",
-     "fact_osproj_boosted_ha_lo10t",
-     "fact_osproj_unboosted_ha_lo10t",
-     "fact_decosproj_boosted_ha_lo10t",
-     "fact_decosproj_unboosted_ha_lo10t"
-    ],
-    "disabled": true,
-    "purpose": "scan",
-    "scans": [{
-      "scans": [
-        {"scan_object": "mass_cut",
-        "ranges": [
-        {"type": "logarithmic",
-          "start": 1,
-          "stop": 10000,
-          "steps": 50}
-        ]}
-      ]}],
-    "nlo_type": "lo",
-    "adaption_iterations": "3:50000",
-    "integration_iterations": "3:20000"
-  },
-  {"process":
-    ["proc_lo_thresholdparams",
-     "fact_lo",
-     "fact_decosproj_unboosted_lo",
-     "fact_decosproj_eha_lo",
-     "proc_lo_thresholdparams350",
-     "fact_lo350",
-     "fact_decosproj_unboosted_lo350",
-     "fact_decosproj_eha_lo350"
-    ],
-    "disabled": true,
-    "purpose": "scan",
-    "scans": [{
-      "scan_object": "mass_cut",
+   "fact_osproj_boosted_ha_lo10t",
+   "fact_osproj_unboosted_ha_lo10t",
+   "fact_decosproj_boosted_ha_lo10t",
+   "fact_decosproj_unboosted_ha_lo10t"
+  ],
+  "disabled": true,
+  "purpose": "scan",
+  "scans": [{
+    "scans": [
+      {"scan_object": "mass_cut",
       "ranges": [
       {"type": "logarithmic",
         "start": 1,
-        "stop": 800,
+        "stop": 10000,
         "steps": 50}
-      ]}],
-    "nlo_type": "lo",
-    "adaption_iterations": "3:50000",
-    "integration_iterations": "3:20000"
-  },
-  {"process":
-    ["proc_lo_thresholdparams",
-     "fact_lo",
-     "fact_decosproj_unboosted_lo",
-     "unity",
-     "proc_lo_thresholdparams350",
-     "fact_lo350",
-     "fact_decosproj_unboosted_lo350",
-     "unity350",
-     "proc_lo_thresholdparams10t",
-     "fact_lo10t",
-     "fact_decosproj_unboosted_lo10t",
-     "unity10t"
-    ],
-    "disabled": true,
-    "purpose": "events",
-    "nlo_type": "lo",
-    "batches": 10,
-    "events_per_batch": 50000,
-    "adaption_iterations": "3:50000",
-    "integration_iterations": "3:20000",
-    "analysis": "WHIZARD_2W2b_NLO"
-  },
-  {"process": ["proc_nlo"],
-    "disabled": true,
-    "purpose": "histograms",
-    "nlo_type": "nlo",
-    "batches": 12,
-    "events_per_batch": 2000,
-    "adaption_iterations": "3:10000",
-    "integration_iterations": "3:10000",
-    "analysis": "WHIZARD_2W2b_NLO",
-    "scale_variation": true
-  },
-  {"process": ["fact_nlo", "proc_nlo"],
-    "disabled": true,
-    "purpose": "test_soft",
-    "nlo_type": "nlo_combined",
-    "adaption_iterations": "1:10000",
-    "integration_iterations": "1:10000"
-  },
-  {"process": ["proc_nlo"],
-    "disabled": true,
-    "purpose": "scan",
-    "nlo_type": "nlo",
-    "adaption_iterations": "5:100000",
-    "integration_iterations": "5:100000",
-    "scans": [{
-      "scan_object": "sqrts",
-      "ranges": [
-      {"type": "linear",
-        "start": 360.0,
-        "stop": 510.0,
-        "stepsize": 10.0
-      }
-      ]}]
-  },
-  {"process": ["unity"],
-    "disabled": true,
-    "purpose": "scan",
-    "nlo_type": "lo",
-    "scans": [{
-      "scan_object": "sqrts",
-      "ranges": [
-      {"type": "logarithmic",
-        "start": 1000,
-        "stop": 1000000,
-        "steps": 4}
-      ]}],
-    "adaption_iterations": "1:10000",
-    "integration_iterations": "1:10000"
-  },
-  {"process": ["fact_decosproj_eha_lo10t", "signaldiagram_lo_thresholdmethod",
-    "ll_fact_decosproj_eha_lo", "ll", "ll_old"],
-    "disabled": true,
-    "purpose": "scan",
-    "whizard_options": "--no-banner -r",
-    "nlo_type": "lo",
-    "scans": [{
-      "scan_object": "sqrts",
-      "ranges": [
-      {"type": "linear",
-        "start": 330.0,
-        "stop": 340.0,
-        "stepsize": 1.0
-      },
-      {"type": "linear",
-        "start": 340.0,
-        "stop": 350.0,
-        "stepsize": 0.2
-      },
-      {"type": "linear",
-        "start": 350.0,
-        "stop": 360.0,
-        "stepsize": 1.0
-      },
-      {"type": "linear",
-        "start": 300.0,
-        "stop": 330.0,
-        "stepsize": 5.0
-      },
-      {"type": "linear",
-        "start": 360.0,
-        "stop": 500.0,
-        "stepsize": 5.0
-      }
-      ]},
-      {"scan_object": "mass_cut",
-       "export_type": "separate",
-       "ranges": [{"type": "explicit",
-        "range": [15, 100]}]
-      }
-      ],
-    "adaption_iterations": "3:20000",
-    "integration_iterations": "3:20000"
-  },
-  {"process": ["master_threshold"],
-    "disabled": true,
-    "purpose": "scan",
-    "whizard_options": "--no-banner -r",
-    "nlo_type": "lo",
-    "scans": [{
-      "scan_object": "sqrts",
-      "ranges": [
-      {"type": "linear",
-        "start": 300.0,
-        "stop": 330.0,
-        "stepsize": 5.0
-      },
-      {"type": "linear",
-        "start": 330.0,
-        "stop": 340.0,
-        "stepsize": 1.0
-      },
-      {"type": "linear",
-        "start": 340.0,
-        "stop": 350.0,
-        "stepsize": 0.2
-      },
-      {"type": "linear",
-        "start": 350.0,
-        "stop": 360.0,
-        "stepsize": 1.0
-      },
-      {"type": "linear",
-        "start": 360.0,
-        "stop": 500.0,
-        "stepsize": 5.0
-      },
-      {"type": "linear",
-      "start": 500,
-      "stop": 10000,
-      "steps": 20}
-      ]},
-      {"scan_object": "FF",
-       "export_type": "separate",
-       "ranges": [{"type": "explicit",
-        "range": [9]}]
-      },
-      {"scan_object": "offshell_strategy",
-       "export_type": "separate",
-       "ranges": [{"type": "explicit",
-        "range": [0, 2, 4, 162, 226, 674, 738, 1186, 1190, 1250, 1698, 1762]}]
-      }],
-    "integration_copies": 10,
-    "adaption_iterations": "5:20000",
-    "integration_iterations": "5:20000"
-  },
-  {"process": [
-    "signaldiagram_lo",
-    "proc_lo_thresholdparams",
-    "fact_lo",
-    "fact_osproj_boosted_ha_lo10t",
-    "fact_osproj_unboosted_lo",
-    "fact_osproj_boosted_lo10t",
-    "fact_decosproj_eha_lo10t",
-    "fact_lo_widthunprojected",
-    "fact_osproj_unboosted_ha_lo10t"],
-    "disabled": true,
-    "purpose": "scan",
-    "nlo_type": "lo",
+      ]}
+    ]}],
+  "nlo_type": "lo",
+  "adaption_iterations": "3:50000",
+  "integration_iterations": "3:20000"
+},
+{"process":
+  ["proc_lo_thresholdparams",
+   "fact_lo",
+   "fact_decosproj_unboosted_lo",
+   "unity",
+   "proc_lo_thresholdparams350",
+   "fact_lo350",
+   "fact_decosproj_unboosted_lo350",
+   "unity350",
+   "proc_lo_thresholdparams10t",
+   "fact_lo10t",
+   "fact_decosproj_unboosted_lo10t",
+   "unity10t"
+  ],
+  "disabled": true,
+  "purpose": "events",
+  "nlo_type": "lo",
+  "batches": 10,
+  "events_per_batch": 50000,
+  "adaption_iterations": "3:50000",
+  "integration_iterations": "3:20000",
+  "analysis": "WHIZARD_2W2b_NLO"
+},
+{"process": ["proc_nlo"],
+  "disabled": true,
+  "purpose": "histograms",
+  "nlo_type": "nlo",
+  "batches": 12,
+  "events_per_batch": 2000,
+  "adaption_iterations": "3:10000",
+  "integration_iterations": "3:10000",
+  "analysis": "WHIZARD_2W2b_NLO",
+  "scale_variation": true
+},
+{"process": ["fact_nlo", "proc_nlo"],
+  "disabled": true,
+  "purpose": "test_soft",
+  "nlo_type": "nlo_combined",
+  "adaption_iterations": "1:10000",
+  "integration_iterations": "1:10000"
+},
+{"process": ["proc_nlo"],
+  "disabled": true,
+  "purpose": "scan",
+  "nlo_type": "nlo",
+  "adaption_iterations": "5:100000",
+  "integration_iterations": "5:100000",
+  "scans": [{
+    "scan_object": "sqrts",
+    "ranges": [
+    {"type": "linear",
+      "start": 360.0,
+      "stop": 510.0,
+      "stepsize": 10.0
+    }
+    ]}]
+},
+{"process": ["unity"],
+  "disabled": true,
+  "purpose": "scan",
+  "nlo_type": "lo",
+  "scans": [{
     "scan_object": "sqrts",
     "ranges": [
     {"type": "logarithmic",
-      "start": 500,
+      "start": 1000,
       "stop": 1000000,
-      "steps": 100},
+      "steps": 4}
+    ]}],
+  "adaption_iterations": "1:10000",
+  "integration_iterations": "1:10000"
+},
+{"process": ["fact_decosproj_eha_lo10t", "signaldiagram_lo_thresholdmethod",
+  "ll_fact_decosproj_eha_lo", "ll", "ll_old"],
+  "disabled": true,
+  "purpose": "scan",
+  "whizard_options": "--no-banner -r",
+  "nlo_type": "lo",
+  "scans": [{
+    "scan_object": "sqrts",
+    "ranges": [
     {"type": "linear",
       "start": 330.0,
+      "stop": 340.0,
+      "stepsize": 1.0
+    },
+    {"type": "linear",
+      "start": 340.0,
+      "stop": 350.0,
+      "stepsize": 0.2
+    },
+    {"type": "linear",
+      "start": 350.0,
       "stop": 360.0,
       "stepsize": 1.0
     },
@@ -275,9 +155,63 @@
       "stop": 500.0,
       "stepsize": 5.0
     }
+    ]},
+    {"scan_object": "mass_cut",
+     "export_type": "separate",
+     "ranges": [{"type": "explicit",
+      "range": [15, 100]}]
+    }
     ],
-    "adaption_iterations": "3:20000",
-    "integration_iterations": "3:20000"
+  "adaption_iterations": "3:20000",
+  "integration_iterations": "3:20000"
+},
+{"process": ["master_threshold"],
+  "disabled": true,
+  "purpose": "scan",
+  "whizard_options": "--no-banner -r",
+  "nlo_type": "lo",
+  "scans": [{
+    "scan_object": "sqrts",
+    "ranges": [
+    {"type": "linear",
+      "start": 300.0,
+      "stop": 330.0,
+      "stepsize": 5.0
+    },
+    {"type": "linear",
+      "start": 330.0,
+      "stop": 340.0,
+      "stepsize": 1.0
+    },
+    {"type": "linear",
+      "start": 340.0,
+      "stop": 350.0,
+      "stepsize": 0.2
+    },
+    {"type": "linear",
+      "start": 350.0,
+      "stop": 360.0,
+      "stepsize": 1.0
+    },
+    {"type": "linear",
+      "start": 360.0,
+      "stop": 500.0,
+      "stepsize": 5.0
+    }
+    ]},
+    {"scan_object": "FF",
+     "export_type": "separate",
+     "ranges": [{"type": "explicit",
+      "range": [9]}]
+    },
+    {"scan_object": "offshell_strategy",
+     "export_type": "separate",
+     "ranges": [{"type": "explicit",
+      "range": [0, 2, 4, 162, 226, 674, 738, 1186, 1190, 1250, 1698, 1762]}]
+      }],
+    "integration_copies": 20,
+    "adaption_iterations": "5:20000",
+    "integration_iterations": "5:20000"
   }
   ],
   "whizard": "whizard",
