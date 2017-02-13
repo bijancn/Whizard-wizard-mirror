@@ -1,0 +1,42 @@
+{
+  "processes": [
+  {"process": [
+    "signaldiagram_lo",
+    "fact_lo",
+    "fact_lo_onshell",
+    "fact_lo_onshell_all",
+    "full_lo",
+    "ttbar"
+    ],
+    "disabled": true,
+    "purpose": "scan",
+    "nlo_type": "lo",
+    "scans": [{
+      "scan_object": "sqrts",
+      "ranges": [
+      {"type": "linear",
+        "start": 340.0,
+        "stop": 350.0,
+        "stepsize": 1.0
+      },
+      {"type": "linear",
+        "start": 300.0,
+        "stop": 500.0,
+        "stepsize": 5.0
+      },
+      {"type": "logarithmic",
+        "start": 500,
+        "stop": 1000000,
+        "steps": 50}
+      ]
+    }],
+    "adaption_iterations": "3:20000",
+    "integration_iterations": "3:20000"
+  }
+  ],
+  "whizard": "whizard",
+  "data_output": "./",
+  "adaption_iterations": "5:20000",
+  "integration_iterations": "5:20000",
+  "integration_copies": 20
+}

@@ -1,0 +1,37 @@
+include("../process_settings_threshold.sin")
+
+library = PROCESS
+process PROCESS = e1, E1 => Wm, Wp, B, b {$restrictions = "3+5~tbar && 4+6~t"}
+compile
+
+mpole_fixed = 1
+FF = 9        # tree level from signal comp
+offshell_strategy =
+  0 +   ! NLO width and decay
+  1*2 + ! factorized
+  0 +   ! interference with background
+  0*32 +  ! helicity approximation simple
+  1*128 + ! on-shell projection of decay
+  1*512 + ! boost the momenta of the decay
+  0*32768 ! disable Z propagator
+
+show(model)
+
+iterations = 3:20000:"gw",3:20000
+#ITERATIONS
+real mass_cut = - 1
+#SETSCAN
+if (mass_cut > 0) then
+  cuts = all abs (M - mtpole) < mass_cut [Wp, b] and
+         all abs (M - mtpole) < mass_cut [Wm, B]
+endif
+sqrtsstepsize = 0.1 GeV
+sqrtsmin = sqrts - sqrtsstepsize
+sqrtsmax = sqrts + sqrtsstepsize
+
+integrate (PROCESS)
+if (mass_cut > 0) then
+  printf "RES %g %g %g" (mass_cut, integral(PROCESS), error(PROCESS))
+else
+  printf "RES %g %g %g" (sqrts, integral(PROCESS), error(PROCESS))
+endif

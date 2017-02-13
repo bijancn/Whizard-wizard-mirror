@@ -43,7 +43,7 @@
     "integration_iterations": "5:20000",
     "integration_copies": 5
   },
-  { "process": ["LO", "LO_prodproj"],
+  { "process": ["LO", "LO_ttbar", "LO_prodproj"],
     "disabled": true,
     "purpose": "scan",
     "whizard_options": "--no-banner -r",

@@ -1,0 +1,29 @@
+include("../process_settings_threshold.sin")
+
+library = PROCESS
+process PROCESS = e1, E1 => t, T
+compile
+
+mpole_fixed = 1
+nrqcd_order = 1 # NLL
+offshell_strategy =
+  0 +   ! NLO width and decay
+  0*2 + ! factorized
+  0 +   ! interference with background
+  0*32 +  ! helicity approximation simple
+  0*128 + ! on-shell projection of decay
+  0*512 + ! boost the momenta of the decay
+  0*32768 ! disable Z propagator
+FF = 9  !!! tree-level form factor
+
+mult_call_real = 20
+mult_call_virt = 0.75
+#ITERATIONS
+#SETSCAN
+show(model)
+sqrtsmin = sqrts - 2 * sqrtsstepsize
+sqrtsmax = sqrts + 2 * sqrtsstepsize
+
+integrate (PROCESS)
+
+printf  "RES %8e %8e %8e" (sqrts, integral(PROCESS), error(PROCESS))
