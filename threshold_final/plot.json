@@ -3,7 +3,7 @@
   {"title": "",
     "output_file": "lo_ll_lean",
     "lines": [
-      { "name": "LO_LL_matched-sqrts--0-phase_flip--1-force_factorized",
+      { "name": "LO_LL_matched-sqrts",
         "label": "LO+LL", "linestyle": "solid", "color": "red",
         "base_line": [
           {"name": "LO-sqrts--0-mpole_fixed"},
@@ -14,7 +14,7 @@
         "color": "blue",
         "base_line": [
           {"name": "LO-sqrts--0-mpole_fixed", "hide_line": false},
-          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff", "hide_line": false}
+          {"name": "LL-sqrts--0-mpole_fixed--1-switchoff", "hide_line": true}
         ]
       },
       { "name": "LL-sqrts--0-mpole_fixed--0-switchoff", "label": "LL no $f_s$",
@@ -44,7 +44,7 @@
         ]
       },
       { "ylabel": "$\\sigma/\\sigma^{\\text{LL with $f_s$}}$",
-        "ymax": 1.5, "ymin": 1.0, "ymajors": 3, "yminors": 5,
+        "ymax": 1.5, "ymin": 0.5, "ymajors": 3, "yminors": 5,
         "extra_lines": [
           { "type": "vertical",
             "value": 344.0,

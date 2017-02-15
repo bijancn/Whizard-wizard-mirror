@@ -207,9 +207,9 @@
     {"scan_object": "offshell_strategy",
      "export_type": "separate",
      "ranges": [{"type": "explicit",
-      "range": [0, 2, 4, 162, 226, 674, 738, 1186, 1190, 1250, 1698, 1762]}]
+      "range": [162, 226, 674, 738, 1186, 1250, 1698, 1762]}]
       }],
-    "integration_copies": 20,
+    "integration_copies": 50,
     "adaption_iterations": "5:20000",
     "integration_iterations": "5:20000"
   }

@@ -5,13 +5,14 @@
     "lines": [
       { "name": "validation-mass_cut--0-nrqcd_order--330-sqrts--2-factorization_type",
         "folder": "../threshold_validation_mass_cut",
-        "label": "Whizard factorized, all projected, EHA",
-        "color": "orange"
+        "label": "Whizard factorized",
+        "color": "red"
       },
       { "name": "validation-mass_cut--0-nrqcd_order--330-sqrts--3-factorization_type",
         "folder": "../threshold_validation_mass_cut",
         "label": "Whizard factorized, decay projected, EHA",
-        "color": "red"
+        "color": "red",
+        "hide_line": true
       },
       { "name": "validation-mass_cut--0-nrqcd_order--330-sqrts--1-factorization_type",
         "folder": "../threshold_validation_mass_cut",
@@ -24,7 +25,7 @@
       }
     ],
     "ratio": [
-      { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
+      { "ylabel": "$\\sigma/\\sigma^{\\text{Whizard factorized}}$",
         "ymax": 1.5, "ymin": 0.5, "ymajors": 3, "yminors": 4,
         "extra_lines": [
           {"type": "horizontal",
@@ -40,7 +41,7 @@
     ],
     "legend_height_shrinker": 0.8,
     "legend_outside": false,
-    "xlabel": "$\\Delta M$ [GeV]",
+    "xlabel": "$\\Delta_{m_t}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
     "ylog": false,
@@ -59,13 +60,14 @@
     "lines": [
       { "name": "validation-mass_cut--0-nrqcd_order--340-sqrts--2-factorization_type",
         "folder": "../threshold_validation_mass_cut",
-        "label": "Whizard factorized, all projected, EHA",
-        "color": "orange"
+        "label": "Whizard factorized",
+        "color": "red"
       },
       { "name": "validation-mass_cut--0-nrqcd_order--340-sqrts--3-factorization_type",
         "folder": "../threshold_validation_mass_cut",
         "label": "Whizard factorized, decay projected, EHA",
-        "color": "red"
+        "color": "red",
+        "hide_line": true
       },
       { "name": "validation-mass_cut--0-nrqcd_order--340-sqrts--1-factorization_type",
         "folder": "../threshold_validation_mass_cut",
@@ -78,7 +80,7 @@
       }
     ],
     "ratio": [
-      { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
+      { "ylabel": "$\\sigma/\\sigma^{\\text{Whizard factorized}}$",
         "ymax": 1.5, "ymin": 0.5, "ymajors": 3, "yminors": 4,
         "extra_lines": [
           {"type": "horizontal",
@@ -94,7 +96,7 @@
     ],
     "legend_height_shrinker": 0.8,
     "legend_outside": false,
-    "xlabel": "$\\Delta M$ [GeV]",
+    "xlabel": "$\\Delta_{m_t}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
     "ylog": false,
@@ -113,13 +115,14 @@
     "lines": [
       { "name": "validation-mass_cut--1-nrqcd_order--340-sqrts--2-factorization_type",
         "folder": "../threshold_validation_mass_cut",
-        "label": "Whizard factorized, all projected, EHA",
-        "color": "orange"
+        "label": "Whizard factorized",
+        "color": "red"
       },
       { "name": "validation-mass_cut--1-nrqcd_order--340-sqrts--3-factorization_type",
         "folder": "../threshold_validation_mass_cut",
         "label": "Whizard factorized, decay projected, EHA",
-        "color": "red"
+        "color": "red",
+        "hide_line": true
       },
       { "name": "validation-mass_cut--1-nrqcd_order--340-sqrts--1-factorization_type",
         "folder": "../threshold_validation_mass_cut",
@@ -132,7 +135,7 @@
       }
     ],
     "ratio": [
-      { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
+      { "ylabel": "$\\sigma/\\sigma^{\\text{Whizard factorized}}$",
         "ymax": 1.5, "ymin": 0.5, "ymajors": 3, "yminors": 4,
         "extra_lines": [
           {"type": "horizontal",
@@ -148,7 +151,7 @@
     ],
     "legend_height_shrinker": 0.8,
     "legend_outside": false,
-    "xlabel": "$\\Delta M$ [GeV]",
+    "xlabel": "$\\Delta_{m_t}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
     "ylog": false,
@@ -167,13 +170,14 @@
     "lines": [
       { "name": "validation-mass_cut--1-nrqcd_order--330-sqrts--2-factorization_type",
         "folder": "../threshold_validation_mass_cut",
-        "label": "Whizard factorized, all projected, EHA",
-        "color": "orange"
+        "label": "Whizard factorized",
+        "color": "red"
       },
       { "name": "validation-mass_cut--1-nrqcd_order--330-sqrts--3-factorization_type",
         "folder": "../threshold_validation_mass_cut",
         "label": "Whizard factorized, decay projected, EHA",
-        "color": "red"
+        "color": "red",
+        "hide_line": true
       },
       { "name": "validation-mass_cut--1-nrqcd_order--330-sqrts--1-factorization_type",
         "folder": "../threshold_validation_mass_cut",
@@ -186,7 +190,7 @@
       }
     ],
     "ratio": [
-      { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
+      { "ylabel": "$\\sigma/\\sigma^{\\text{Whizard factorized}}$",
         "ymax": 1.5, "ymin": 0.5, "ymajors": 3, "yminors": 4,
         "extra_lines": [
           {"type": "horizontal",
@@ -202,7 +206,7 @@
     ],
     "legend_height_shrinker": 0.8,
     "legend_outside": false,
-    "xlabel": "$\\Delta M$ [GeV]",
+    "xlabel": "$\\Delta_{m_t}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
     "ylog": false,
@@ -221,13 +225,14 @@
     "lines": [
       { "name": "validation-mass_cut--0-nrqcd_order--350-sqrts--2-factorization_type",
         "folder": "../threshold_validation_mass_cut",
-        "label": "Whizard factorized, all projected, EHA",
-        "color": "orange"
+        "label": "Whizard factorized",
+        "color": "red"
       },
       { "name": "validation-mass_cut--0-nrqcd_order--350-sqrts--3-factorization_type",
         "folder": "../threshold_validation_mass_cut",
         "label": "Whizard factorized, decay projected, EHA",
-        "color": "red"
+        "color": "red",
+        "hide_line": true
       },
       { "name": "validation-mass_cut--0-nrqcd_order--350-sqrts--1-factorization_type",
         "folder": "../threshold_validation_mass_cut",
@@ -240,8 +245,8 @@
       }
     ],
     "ratio": [
-      { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
-        "ymax": 1.05, "ymin": 0.90, "ymajors": 4, "yminors": 4,
+      { "ylabel": "$\\sigma/\\sigma^{\\text{Whizard factorized}}$",
+        "ymax": 1.5, "ymin": 0.5, "ymajors": 3, "yminors": 4,
         "extra_lines": [
           {"type": "horizontal",
             "value": 1.05,
@@ -256,7 +261,7 @@
     ],
     "legend_height_shrinker": 0.8,
     "legend_outside": false,
-    "xlabel": "$\\Delta M$ [GeV]",
+    "xlabel": "$\\Delta_{m_t}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
     "ylog": false,
@@ -275,13 +280,14 @@
     "lines": [
       { "name": "validation-mass_cut--1-nrqcd_order--350-sqrts--2-factorization_type",
         "folder": "../threshold_validation_mass_cut",
-        "label": "Whizard factorized, all projected, EHA",
-        "color": "orange"
+        "label": "Whizard factorized",
+        "color": "red"
       },
       { "name": "validation-mass_cut--1-nrqcd_order--350-sqrts--3-factorization_type",
         "folder": "../threshold_validation_mass_cut",
         "label": "Whizard factorized, decay projected, EHA",
-        "color": "red"
+        "color": "red",
+        "hide_line": true
       },
       { "name": "validation-mass_cut--1-nrqcd_order--350-sqrts--1-factorization_type",
         "folder": "../threshold_validation_mass_cut",
@@ -294,8 +300,8 @@
       }
     ],
     "ratio": [
-      { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
-        "ymax": 1.05, "ymin": 0.90, "ymajors": 4, "yminors": 4,
+      { "ylabel": "$\\sigma/\\sigma^{\\text{Whizard factorized}}$",
+        "ymax": 1.5, "ymin": 0.5, "ymajors": 3, "yminors": 4,
         "extra_lines": [
           {"type": "horizontal",
             "value": 1.05,
@@ -310,7 +316,7 @@
     ],
     "legend_height_shrinker": 0.8,
     "legend_outside": false,
-    "xlabel": "$\\Delta M$ [GeV]",
+    "xlabel": "$\\Delta_{m_t}$ [GeV]",
     "ylabel": "$\\sigma$ [fb]",
     "opacity": 0.7,
     "ylog": false,
@@ -324,16 +330,46 @@
     "xmajors": 6,
     "xminors": 2
   },
-  { "title": "$\\Delta M = 100 $ GeV, LL, only s-wave contributions",
+  { "title": "$\\Delta_{m_t} = 100 $ GeV, LL, only s-wave contributions",
     "output_file": "validation_dm100_LL",
+    "bands": [
+      { "label": "Analytic",
+        "opacity": 0.4,
+        "color": "blue",
+        "data": [
+          { "name": "Max_WhizardValidation_MPoleFixed_LL_dm100_h1f1" },
+          { "name": "Max_WhizardValidation_MPoleFixed_LL_dm100_h05f1" },
+          { "name": "Max_WhizardValidation_MPoleFixed_LL_dm100_h05f2" },
+          { "name": "Max_WhizardValidation_MPoleFixed_LL_dm100_h2f05" },
+          { "name": "Max_WhizardValidation_MPoleFixed_LL_dm100_h2f1" }
+        ]
+      },
+      { "label": "Whizard factorized",
+        "opacity": 0.4,
+        "color": "red",
+        "data": [
+          { "name": "validation-sqrts--0-nrqcd_order--100-mass_cut--1-FF--2-factorization_type--0-scale_variations" },
+          { "name": "validation-sqrts--0-nrqcd_order--100-mass_cut--1-FF--2-factorization_type--1-scale_variations" },
+          { "name": "validation-sqrts--0-nrqcd_order--100-mass_cut--1-FF--2-factorization_type--2-scale_variations" },
+          { "name": "validation-sqrts--0-nrqcd_order--100-mass_cut--1-FF--2-factorization_type--3-scale_variations" },
+          { "name": "validation-sqrts--0-nrqcd_order--100-mass_cut--1-FF--2-factorization_type--4-scale_variations" }
+        ]
+      }
+    ],
     "lines": [
+      { "name": "validation-sqrts--0-nrqcd_order--100-mass_cut--1-FF--2-factorization_type--4-scale_variations",
+        "label": "Whizard factorized", "hide_label": true,
+        "color": "red"
+      },
       { "name": "validation-sqrts--0-nrqcd_order--100-mass_cut--1-FF--3-factorization_type--4-scale_variations",
         "label": "Whizard factorized, decay projected, EHA, $h=1,f=1$",
-        "color": "red"
+        "color": "red",
+        "hide_line": true
       },
       { "name": "validation-sqrts--0-nrqcd_order--100-mass_cut--1-FF--3-factorization_type--0-scale_variations",
         "label": "Whizard factorized, decay projected, EHA, $h=1/2,f=1$",
-        "color": "red", "linestyle": "dashed"
+        "color": "red", "linestyle": "dashed",
+        "hide_line": true
       },
       { "name": "validation-sqrts--0-nrqcd_order--100-mass_cut--1-FF--3-factorization_type--1-scale_variations",
         "label": "Whizard factorized, decay projected, EHA, $h=1/2,f=2$",
@@ -345,22 +381,19 @@
       },
       { "name": "validation-sqrts--0-nrqcd_order--100-mass_cut--1-FF--3-factorization_type--2-scale_variations",
         "label": "Whizard factorized, decay projected, EHA, $h=2,f=1$",
-        "color": "red", "linestyle": "dashed"
-      },
-      { "name": "validation-sqrts--0-nrqcd_order--100-mass_cut--1-FF--2-factorization_type--4-scale_variations",
-        "label": "Whizard factorized, all projected, EHA",
-        "color": "orange"
+        "color": "red", "linestyle": "dashed",
+        "hide_line": true
       },
       { "name": "validation-sqrts--0-nrqcd_order--100-mass_cut--1-FF--1-factorization_type--4-scale_variations",
         "label": "Whizard signal",
         "color": "green"
       },
       { "name": "Max_WhizardValidation_MPoleFixed_LL_dm100_h1f1",
-        "label": "Analytic, $h=1,f=1$",
+        "label": "Analytic, $h=1,f=1$", "hide_label": true,
         "color": "blue"
       },
       { "name": "Max_WhizardValidation_MPoleFixed_LL_dm100_h05f1",
-        "label": "Analytic, $h=1/2,f=1$",
+        "label": "Analytic, $h=1/2,f=1$", "hide_line": true,
         "color": "blue", "linestyle": "dashed"
       },
       { "name": "Max_WhizardValidation_MPoleFixed_LL_dm100_h05f2",
@@ -372,12 +405,12 @@
         "color": "blue", "linestyle": "dotted", "hide_line": true
       },
       { "name": "Max_WhizardValidation_MPoleFixed_LL_dm100_h2f1",
-        "label": "Analytic, $h=2,f=1$",
+        "label": "Analytic, $h=2,f=1$", "hide_line": true,
         "color": "blue", "linestyle": "dashed"
       }
     ],
     "ratio": [
-      { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
+      { "ylabel": "$\\sigma/\\sigma^{\\text{Whizard factorized}}$",
         "ymax": 1.75, "ymin": 0.5, "ymajors": 6, "yminors": 4,
         "extra_lines": [
           { "type": "vertical",
@@ -412,22 +445,56 @@
     "xlog": false,
     "xmin": 330.0,
     "xmax": 380.0,
+    "xmajors": 6,
+    "xminors": 3,
     "ymin": 0.0,
     "ymax": 1500.0,
-    "yminors": 4,
-    "xmajors": 6,
-    "xminors": 3
+    "yminors": 5
   },
-  { "title": "$\\Delta M = 15 $ GeV, LL, only s-wave contributions",
+  { "title": "$\\Delta_{m_t} = 15 $ GeV, LL, only s-wave contributions",
     "output_file": "validation_dm15_LL",
+    "bands": [
+      { "label": "Analytic",
+        "opacity": 0.4,
+        "color": "blue",
+        "data": [
+          { "name": "Max_WhizardValidation_MPoleFixed_LL_dm15_h1f1" },
+          { "name": "Max_WhizardValidation_MPoleFixed_LL_dm15_h05f1" },
+          { "name": "Max_WhizardValidation_MPoleFixed_LL_dm15_h05f2" },
+          { "name": "Max_WhizardValidation_MPoleFixed_LL_dm15_h2f05" },
+          { "name": "Max_WhizardValidation_MPoleFixed_LL_dm15_h2f1" }
+        ]
+      },
+      { "label": "Whizard factorized",
+        "opacity": 0.4,
+        "color": "red",
+        "data": [
+          { "name": "validation-sqrts--0-nrqcd_order--15-mass_cut--1-FF--2-factorization_type--0-scale_variations" },
+          { "name": "validation-sqrts--0-nrqcd_order--15-mass_cut--1-FF--2-factorization_type--1-scale_variations" },
+          { "name": "validation-sqrts--0-nrqcd_order--15-mass_cut--1-FF--2-factorization_type--2-scale_variations" },
+          { "name": "validation-sqrts--0-nrqcd_order--15-mass_cut--1-FF--2-factorization_type--3-scale_variations" },
+          { "name": "validation-sqrts--0-nrqcd_order--15-mass_cut--1-FF--2-factorization_type--4-scale_variations" }
+        ]
+      }
+    ],
     "lines": [
+      { "name": "validation-sqrts--0-nrqcd_order--15-mass_cut--1-FF--2-factorization_type--4-scale_variations",
+        "label": "Whizard factorized", "hide_label": true,
+        "color": "red"
+      },
+      { "name": "validation-sqrts--0-nrqcd_order--15-mass_cut--1-FF--1-factorization_type--4-scale_variations",
+        "label": "Whizard signal",
+        "color": "green"
+      },
       { "name": "validation-sqrts--0-nrqcd_order--15-mass_cut--1-FF--3-factorization_type--4-scale_variations",
         "label": "Whizard factorized, decay projected, EHA, $h=1,f=1$",
-        "color": "red"
+        "color": "red",
+        "hide_line": true
       },
       { "name": "validation-sqrts--0-nrqcd_order--15-mass_cut--1-FF--3-factorization_type--0-scale_variations",
         "label": "Whizard factorized, decay projected, EHA, $h=1/2,f=1$",
-        "color": "red", "linestyle": "dashed"
+        "color": "red", "linestyle": "dashed",
+        "hide_line": true
       },
       { "name": "validation-sqrts--0-nrqcd_order--15-mass_cut--1-FF--3-factorization_type--1-scale_variations",
         "label": "Whizard factorized, decay projected, EHA, $h=1/2,f=2$",
@@ -439,22 +506,15 @@
       },
       { "name": "validation-sqrts--0-nrqcd_order--15-mass_cut--1-FF--3-factorization_type--2-scale_variations",
         "label": "Whizard factorized, decay projected, EHA, $h=2,f=1$",
-        "color": "red", "linestyle": "dashed"
-      },
-      { "name": "validation-sqrts--0-nrqcd_order--15-mass_cut--1-FF--2-factorization_type--4-scale_variations",
-        "label": "Whizard factorized, all projected, EHA",
-        "color": "orange"
-      },
-      { "name": "validation-sqrts--0-nrqcd_order--15-mass_cut--1-FF--1-factorization_type--4-scale_variations",
-        "label": "Whizard signal",
-        "color": "green"
+        "color": "red", "linestyle": "dashed",
+        "hide_line": true
       },
       { "name": "Max_WhizardValidation_MPoleFixed_LL_dm15_h1f1",
-        "label": "Analytic, $h=1,f=1$",
+        "label": "Analytic, $h=1,f=1$", "hide_label": true,
         "color": "blue"
       },
       { "name": "Max_WhizardValidation_MPoleFixed_LL_dm15_h05f1",
-        "label": "Analytic, $h=1/2,f=1$",
+        "label": "Analytic, $h=1/2,f=1$", "hide_line": true,
         "color": "blue", "linestyle": "dashed"
       },
       { "name": "Max_WhizardValidation_MPoleFixed_LL_dm15_h05f2",
@@ -466,12 +526,12 @@
         "color": "blue", "linestyle": "dotted", "hide_line": true
       },
       { "name": "Max_WhizardValidation_MPoleFixed_LL_dm15_h2f1",
-        "label": "Analytic, $h=2,f=1$",
+        "label": "Analytic, $h=2,f=1$", "hide_line": true,
         "color": "blue", "linestyle": "dashed"
       }
     ],
     "ratio": [
-      { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
+      { "ylabel": "$\\sigma/\\sigma^{\\text{Whizard factorized}}$",
         "ymax": 1.75, "ymin": 0.5, "ymajors": 6, "yminors": 4,
         "extra_lines": [
           { "type": "vertical",
@@ -508,36 +568,65 @@
     "xmax": 380.0,
     "ymin": 0.0,
     "ymax": 1500.0,
-    "yminors": 4,
+    "yminors": 5,
     "xmajors": 6,
     "xminors": 3
   },
-  { "title": "$\\Delta M = 100 $ GeV, NLL, only s-wave contributions",
+  { "title": "$\\Delta_{m_t} = 100 $ GeV, NLL, only s-wave contributions",
     "output_file": "validation_dm100_NLL",
+    "bands": [
+      { "label": "Analytic",
+        "opacity": 0.4,
+        "color": "blue",
+        "data": [
+          { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm100_h1f1" },
+          { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm100_h05f1" },
+          { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm100_h05f2" },
+          { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm100_h2f05" },
+          { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm100_h2f1" }
+        ]
+      },
+      { "label": "Whizard factorized",
+        "opacity": 0.4,
+        "color": "red",
+        "data": [
+          { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--1-FF--2-factorization_type--0-scale_variations" },
+          { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--1-FF--2-factorization_type--1-scale_variations" },
+          { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--1-FF--2-factorization_type--2-scale_variations" },
+          { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--1-FF--2-factorization_type--3-scale_variations" },
+          { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--1-FF--2-factorization_type--4-scale_variations" }
+        ]
+      }
+    ],
     "lines": [
+      { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--1-FF--2-factorization_type--4-scale_variations",
+        "label": "Whizard factorized",
+        "color": "red", "hide_label": true
+      },
       { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--1-FF--3-factorization_type--4-scale_variations",
         "label": "Whizard factorized, decay projected, EHA, $h=1,f=1$",
-        "color": "red"
+        "color": "red",
+        "hide_line": true
       },
       { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--1-FF--3-factorization_type--0-scale_variations",
         "label": "Whizard factorized, decay projected, EHA, $h=1/2,f=1$",
-        "color": "red", "linestyle": "dashed"
+        "color": "red", "linestyle": "dashed",
+        "hide_line": true
       },
       { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--1-FF--3-factorization_type--1-scale_variations",
         "label": "Whizard factorized, decay projected, EHA, $h=1/2,f=2$",
-        "color": "red", "linestyle": "dotted"
+        "color": "red", "linestyle": "dotted",
+        "hide_line": true
       },
       { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--1-FF--3-factorization_type--3-scale_variations",
         "label": "Whizard factorized, decay projected, EHA, $h=2,f=1/2$",
-        "color": "red", "linestyle": "dotted"
+        "color": "red", "linestyle": "dotted",
+        "hide_line": true
       },
       { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--1-FF--3-factorization_type--2-scale_variations",
         "label": "Whizard factorized, decay projected, EHA, $h=2,f=1$",
-        "color": "red", "linestyle": "dashed"
-      },
-      { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--1-FF--2-factorization_type--4-scale_variations",
-        "label": "Whizard factorized, all projected, EHA",
-        "color": "orange"
+        "color": "red", "linestyle": "dashed",
+        "hide_line": true
       },
       { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--1-FF--1-factorization_type--4-scale_variations",
         "label": "Whizard signal",
@@ -545,27 +634,27 @@
       },
       { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm100_h1f1",
         "label": "Analytic, $h=1,f=1$",
-        "color": "blue"
+        "color": "blue", "hide_label": true
       },
       { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm100_h05f1",
         "label": "Analytic, $h=1/2,f=1$",
-        "color": "blue", "linestyle": "dashed"
+        "color": "blue", "linestyle": "dashed", "hide_line": true
       },
       { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm100_h05f2",
         "label": "Analytic, $h=1/2,f=2$",
-        "color": "blue", "linestyle": "dotted"
+        "color": "blue", "linestyle": "dotted", "hide_line": true
       },
       { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm100_h2f05",
         "label": "Analytic, $h=2,f=1/2$",
-        "color": "blue", "linestyle": "dotted"
+        "color": "blue", "linestyle": "dotted", "hide_line": true
       },
       { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm100_h2f1",
         "label": "Analytic, $h=2,f=1$",
-        "color": "blue", "linestyle": "dashed"
+        "color": "blue", "linestyle": "dashed", "hide_line": true
       }
     ],
     "ratio": [
-      { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
+      { "ylabel": "$\\sigma/\\sigma^{\\text{Whizard factorized}}$",
         "ymax": 1.50, "ymin": 0.5, "ymajors": 5, "yminors": 4,
         "extra_lines": [
           { "type": "vertical",
@@ -601,37 +690,66 @@
     "xmin": 330.0,
     "xmax": 380.0,
     "ymin": 0.0,
-    "ymax": 1500.0,
+    "ymax": 1000.0,
     "yminors": 4,
     "xmajors": 6,
     "xminors": 3
   },
-  { "title": "$\\Delta M = 15 $ GeV, NLL, only s-wave contributions",
+  { "title": "$\\Delta_{m_t} = 15 $ GeV, NLL, only s-wave contributions",
     "output_file": "validation_dm15_NLL",
+    "bands": [
+      { "label": "Analytic",
+        "opacity": 0.4,
+        "color": "blue",
+        "data": [
+          { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm15_h1f1" },
+          { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm15_h05f1" },
+          { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm15_h05f2" },
+          { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm15_h2f05" },
+          { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm15_h2f1" }
+        ]
+      },
+      { "label": "Whizard factorized",
+        "opacity": 0.4,
+        "color": "red",
+        "data": [
+          { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--1-FF--2-factorization_type--0-scale_variations" },
+          { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--1-FF--2-factorization_type--1-scale_variations" },
+          { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--1-FF--2-factorization_type--2-scale_variations" },
+          { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--1-FF--2-factorization_type--3-scale_variations" },
+          { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--1-FF--2-factorization_type--4-scale_variations" }
+        ]
+      }
+    ],
     "lines": [
+      { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--1-FF--2-factorization_type--4-scale_variations",
+        "label": "Whizard factorized",
+        "color": "red", "hide_label": true
+      },
       { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--1-FF--3-factorization_type--4-scale_variations",
         "label": "Whizard factorized, decay projected, EHA, $h=1,f=1$",
-        "color": "red"
+        "color": "red",
+        "hide_line": true
       },
       { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--1-FF--3-factorization_type--0-scale_variations",
         "label": "Whizard factorized, decay projected, EHA, $h=1/2,f=1$",
-        "color": "red", "linestyle": "dashed"
+        "color": "red", "linestyle": "dashed",
+        "hide_line": true
       },
       { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--1-FF--3-factorization_type--1-scale_variations",
         "label": "Whizard factorized, decay projected, EHA, $h=1/2,f=2$",
-        "color": "red", "linestyle": "dotted"
+        "color": "red", "linestyle": "dotted",
+        "hide_line": true
       },
       { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--1-FF--3-factorization_type--3-scale_variations",
         "label": "Whizard factorized, decay projected, EHA, $h=2,f=1/2$",
-        "color": "red", "linestyle": "dotted"
+        "color": "red", "linestyle": "dotted",
+        "hide_line": true
       },
       { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--1-FF--3-factorization_type--2-scale_variations",
         "label": "Whizard factorized, decay projected, EHA, $h=2,f=1$",
-        "color": "red", "linestyle": "dashed"
-      },
-      { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--1-FF--2-factorization_type--4-scale_variations",
-        "label": "Whizard factorized, all projected, EHA",
-        "color": "orange"
+        "color": "red", "linestyle": "dashed",
+        "hide_line": true
       },
       { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--1-FF--1-factorization_type--4-scale_variations",
         "label": "Whizard signal",
@@ -639,183 +757,27 @@
       },
       { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm15_h1f1",
         "label": "Analytic, $h=1,f=1$",
-        "color": "blue"
+        "color": "blue", "hide_label": true
       },
       { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm15_h05f1",
         "label": "Analytic, $h=1/2,f=1$",
-        "color": "blue", "linestyle": "dashed"
+        "color": "blue", "linestyle": "dashed", "hide_line": true
       },
       { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm15_h05f2",
         "label": "Analytic, $h=1/2,f=2$",
-        "color": "blue", "linestyle": "dotted"
+        "color": "blue", "linestyle": "dotted", "hide_line": true
       },
       { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm15_h2f05",
         "label": "Analytic, $h=2,f=1/2$",
-        "color": "blue", "linestyle": "dotted"
+        "color": "blue", "linestyle": "dotted", "hide_line": true
       },
       { "name": "Max_WhizardValidation_MPoleFixed_NLL_dm15_h2f1",
         "label": "Analytic, $h=2,f=1$",
-        "color": "blue", "linestyle": "dashed"
+        "color": "blue", "linestyle": "dashed", "hide_line": true
       }
     ],
     "ratio": [
-      { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
-        "ymax": 1.25, "ymin": 0.5, "ymajors": 6, "yminors": 4,
-        "extra_lines": [
-          { "type": "vertical",
-            "value": 344.0,
-            "opacity": 0.2,
-            "linestyle": "dashed"
-          },
-          {"type": "horizontal",
-            "value": 1.05,
-            "opacity": 0.1
-          },
-          {"type": "horizontal",
-            "value": 0.95,
-            "opacity": 0.1
-          }
-        ]
-      }
-    ],
-    "extra_lines": [
-      {"type": "vertical",
-       "value": 344.0,
-       "opacity": 0.2,
-       "linestyle": "dashed"
-      }
-    ],
-    "legend_height_shrinker": 0.8,
-    "legend_outside": false,
-    "xlabel": "$\\sqrt{s}$ [GeV]",
-    "ylabel": "$\\sigma$ [fb]",
-    "opacity": 0.7,
-    "ylog": false,
-    "xlog": false,
-    "xmin": 330.0,
-    "xmax": 380.0,
-    "ymin": 0.0,
-    "ymax": 1500.0,
-    "yminors": 4,
-    "xmajors": 6,
-    "xminors": 3
-  },
-  { "title": "$\\Delta M = 100 $ GeV, expanded, evaluated with $\\alpha_H$, only s-wave contributions",
-    "output_file": "validation_dm100_expanded",
-    "lines": [
-      { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--4-FF--3-factorization_type--4-scale_variations",
-        "label": "Whizard factorized, decay projected, EHA, $h=1$",
-        "color": "red"
-      },
-      { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--4-FF--3-factorization_type--0-scale_variations",
-        "label": "Whizard factorized, decay projected, EHA, $h=1/2$",
-        "color": "red", "linestyle": "dashed"
-      },
-      { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--4-FF--3-factorization_type--3-scale_variations",
-        "label": "Whizard factorized, decay projected, EHA, $h=2$",
-        "color": "red", "linestyle": "dashed"
-      },
-      { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--4-FF--2-factorization_type--4-scale_variations",
-        "label": "Whizard factorized, all projected, EHA",
-        "color": "orange"
-      },
-      { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--4-FF--1-factorization_type--4-scale_variations",
-        "label": "Whizard signal",
-        "color": "green"
-      },
-      { "name": "Max_WhizardValidation_MPoleFixed_exp_dm100_h1f1",
-        "label": "Analytic, no p-wave, $h=1,f=1$",
-        "color": "blue"
-      },
-      { "name": "Max_WhizardValidation_MPoleFixed_exp_dm100_h05f1",
-        "label": "Analytic, no p-wave, $h=1/2,f=1$",
-        "color": "blue", "linestyle": "dashed"
-      },
-      { "name": "Max_WhizardValidation_MPoleFixed_exp_dm100_h2f1",
-        "label": "Analytic, no p-wave, $h=2,f=1$",
-        "color": "blue", "linestyle": "dashed"
-      }
-    ],
-    "ratio": [
-      { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
-        "ymax": 1.75, "ymin": 0.5, "ymajors": 6, "yminors": 4,
-        "extra_lines": [
-          { "type": "vertical",
-            "value": 344.0,
-            "opacity": 0.2,
-            "linestyle": "dashed"
-          },
-          {"type": "horizontal",
-            "value": 1.05,
-            "opacity": 0.1
-          },
-          {"type": "horizontal",
-            "value": 0.95,
-            "opacity": 0.1
-          }
-        ]
-      }
-    ],
-    "extra_lines": [
-      {"type": "vertical",
-       "value": 344.0,
-       "opacity": 0.2,
-       "linestyle": "dashed"
-      }
-    ],
-    "legend_height_shrinker": 0.8,
-    "legend_outside": false,
-    "xlabel": "$\\sqrt{s}$ [GeV]",
-    "ylabel": "$\\sigma$ [fb]",
-    "opacity": 0.7,
-    "ylog": false,
-    "xlog": false,
-    "xmin": 330.0,
-    "xmax": 380.0,
-    "ymin": 0.0,
-    "ymax": 1500.0,
-    "yminors": 4,
-    "xmajors": 6,
-    "xminors": 3
-  },
-  { "title": "$\\Delta M = 15 $ GeV, expanded, evaluated with $\\alpha_H$, only s-wave contributions",
-    "output_file": "validation_dm15_expanded",
-    "lines": [
-      { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--4-FF--3-factorization_type--4-scale_variations",
-        "label": "Whizard factorized, decay projected, EHA, $h=1$",
-        "color": "red"
-      },
-      { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--4-FF--3-factorization_type--0-scale_variations",
-        "label": "Whizard factorized, decay projected, EHA, $h=1/2$",
-        "color": "red", "linestyle": "dashed"
-      },
-      { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--4-FF--3-factorization_type--3-scale_variations",
-        "label": "Whizard factorized, decay projected, EHA, $h=2$",
-        "color": "red", "linestyle": "dashed"
-      },
-      { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--4-FF--2-factorization_type--4-scale_variations",
-        "label": "Whizard factorized, all projected, EHA",
-        "color": "orange"
-      },
-      { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--4-FF--1-factorization_type--4-scale_variations",
-        "label": "Whizard signal",
-        "color": "green"
-      },
-      { "name": "Max_WhizardValidation_MPoleFixed_exp_dm15_h1f1",
-        "label": "Analytic, no p-wave, $h=1,f=1$",
-        "color": "blue"
-      },
-      { "name": "Max_WhizardValidation_MPoleFixed_exp_dm15_h05f1",
-        "label": "Analytic, no p-wave, $h=1/2,f=1$",
-        "color": "blue", "linestyle": "dashed"
-      },
-      { "name": "Max_WhizardValidation_MPoleFixed_exp_dm15_h2f1",
-        "label": "Analytic, no p-wave, $h=2,f=1$",
-        "color": "blue", "linestyle": "dashed"
-      }
-    ],
-    "ratio": [
-      { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
+      { "ylabel": "$\\sigma/\\sigma^{\\text{Whizard factorized}}$",
         "ymax": 1.25, "ymin": 0.5, "ymajors": 4, "yminors": 4,
         "extra_lines": [
           { "type": "vertical",
@@ -851,7 +813,217 @@
     "xmin": 330.0,
     "xmax": 380.0,
     "ymin": 0.0,
-    "ymax": 1500.0,
+    "ymax": 1000.0,
+    "yminors": 4,
+    "xmajors": 6,
+    "xminors": 3
+  },
+  { "title": "$\\Delta_{m_t} = 100 $ GeV, expanded, evaluated with $\\alpha_H$, only s-wave contributions",
+    "output_file": "validation_dm100_expanded",
+    "bands": [
+      { "label": "Analytic",
+        "opacity": 0.4,
+        "color": "blue",
+        "data": [
+          { "name": "Max_WhizardValidation_MPoleFixed_exp_dm100_h1f1" },
+          { "name": "Max_WhizardValidation_MPoleFixed_exp_dm100_h05f1" },
+          { "name": "Max_WhizardValidation_MPoleFixed_exp_dm100_h05f2" },
+          { "name": "Max_WhizardValidation_MPoleFixed_exp_dm100_h2f05" },
+          { "name": "Max_WhizardValidation_MPoleFixed_exp_dm100_h2f1" }
+        ]
+      },
+      { "label": "Whizard factorized",
+        "opacity": 0.4,
+        "color": "red",
+        "data": [
+          { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--4-FF--2-factorization_type--0-scale_variations" },
+          { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--4-FF--2-factorization_type--1-scale_variations" },
+          { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--4-FF--2-factorization_type--2-scale_variations" },
+          { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--4-FF--2-factorization_type--3-scale_variations" },
+          { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--4-FF--2-factorization_type--4-scale_variations" }
+        ]
+      }
+    ],
+    "lines": [
+      { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--4-FF--2-factorization_type--4-scale_variations",
+        "label": "Whizard factorized",
+        "color": "red", "hide_label": true
+      },
+      { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--4-FF--3-factorization_type--4-scale_variations",
+        "label": "Whizard factorized, decay projected, EHA, $h=1$",
+        "color": "red",
+        "hide_line": true
+      },
+      { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--4-FF--3-factorization_type--0-scale_variations",
+        "label": "Whizard factorized, decay projected, EHA, $h=1/2$",
+        "color": "red", "linestyle": "dashed",
+        "hide_line": true
+      },
+      { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--4-FF--3-factorization_type--3-scale_variations",
+        "label": "Whizard factorized, decay projected, EHA, $h=2$",
+        "color": "red", "linestyle": "dashed",
+        "hide_line": true
+      },
+      { "name": "validation-sqrts--1-nrqcd_order--100-mass_cut--4-FF--1-factorization_type--4-scale_variations",
+        "label": "Whizard signal",
+        "color": "green"
+      },
+      { "name": "Max_WhizardValidation_MPoleFixed_exp_dm100_h1f1",
+        "label": "Analytic, no p-wave, $h=1,f=1$",
+        "color": "blue", "hide_label": true
+      },
+      { "name": "Max_WhizardValidation_MPoleFixed_exp_dm100_h05f1",
+        "label": "Analytic, no p-wave, $h=1/2,f=1$",
+        "color": "blue", "linestyle": "dashed", "hide_line": true
+      },
+      { "name": "Max_WhizardValidation_MPoleFixed_exp_dm100_h2f1",
+        "label": "Analytic, no p-wave, $h=2,f=1$",
+        "color": "blue", "linestyle": "dashed", "hide_line": true
+      }
+    ],
+    "ratio": [
+      { "ylabel": "$\\sigma/\\sigma^{\\text{Whizard factorized}}$",
+        "ymax": 1.50, "ymin": 0.5, "ymajors": 5, "yminors": 4,
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          },
+          {"type": "horizontal",
+            "value": 1.05,
+            "opacity": 0.1
+          },
+          {"type": "horizontal",
+            "value": 0.95,
+            "opacity": 0.1
+          }
+        ]
+      }
+    ],
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "legend_height_shrinker": 0.8,
+    "legend_outside": false,
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "xmin": 330.0,
+    "xmax": 380.0,
+    "ymin": 0.0,
+    "ymax": 1000.0,
+    "yminors": 4,
+    "xmajors": 6,
+    "xminors": 3
+  },
+  { "title": "$\\Delta_{m_t} = 15 $ GeV, expanded, evaluated with $\\alpha_H$, only s-wave contributions",
+    "output_file": "validation_dm15_expanded",
+    "bands": [
+      { "label": "Analytic",
+        "opacity": 0.4,
+        "color": "blue",
+        "data": [
+          { "name": "Max_WhizardValidation_MPoleFixed_exp_dm15_h1f1" },
+          { "name": "Max_WhizardValidation_MPoleFixed_exp_dm15_h05f1" },
+          { "name": "Max_WhizardValidation_MPoleFixed_exp_dm15_h05f2" },
+          { "name": "Max_WhizardValidation_MPoleFixed_exp_dm15_h2f05" },
+          { "name": "Max_WhizardValidation_MPoleFixed_exp_dm15_h2f1" }
+        ]
+      },
+      { "label": "Whizard factorized",
+        "opacity": 0.4,
+        "color": "red",
+        "data": [
+          { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--4-FF--2-factorization_type--0-scale_variations" },
+          { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--4-FF--2-factorization_type--1-scale_variations" },
+          { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--4-FF--2-factorization_type--2-scale_variations" },
+          { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--4-FF--2-factorization_type--3-scale_variations" },
+          { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--4-FF--2-factorization_type--4-scale_variations" }
+        ]
+      }
+    ],
+    "lines": [
+      { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--4-FF--2-factorization_type--4-scale_variations",
+        "label": "Whizard factorized",
+        "color": "red", "hide_label": true
+      },
+      { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--4-FF--3-factorization_type--4-scale_variations",
+        "label": "Whizard factorized, decay projected, EHA, $h=1$",
+        "color": "red",
+        "hide_line": true
+      },
+      { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--4-FF--3-factorization_type--0-scale_variations",
+        "label": "Whizard factorized, decay projected, EHA, $h=1/2$",
+        "color": "red", "linestyle": "dashed",
+        "hide_line": true
+      },
+      { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--4-FF--3-factorization_type--3-scale_variations",
+        "label": "Whizard factorized, decay projected, EHA, $h=2$",
+        "color": "red", "linestyle": "dashed",
+        "hide_line": true
+      },
+      { "name": "validation-sqrts--1-nrqcd_order--15-mass_cut--4-FF--1-factorization_type--4-scale_variations",
+        "label": "Whizard signal",
+        "color": "green"
+      },
+      { "name": "Max_WhizardValidation_MPoleFixed_exp_dm15_h1f1",
+        "label": "Analytic, no p-wave, $h=1,f=1$",
+        "color": "blue", "hide_label": true
+      },
+      { "name": "Max_WhizardValidation_MPoleFixed_exp_dm15_h05f1",
+        "label": "Analytic, no p-wave, $h=1/2,f=1$",
+        "color": "blue", "linestyle": "dashed", "hide_line": true
+      },
+      { "name": "Max_WhizardValidation_MPoleFixed_exp_dm15_h2f1",
+        "label": "Analytic, no p-wave, $h=2,f=1$",
+        "color": "blue", "linestyle": "dashed", "hide_line": true
+      }
+    ],
+    "ratio": [
+      { "ylabel": "$\\sigma/\\sigma^{\\text{Whizard factorized}}$",
+        "ymax": 1.25, "ymin": 0.5, "ymajors": 4, "yminors": 4,
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          },
+          {"type": "horizontal",
+            "value": 1.05,
+            "opacity": 0.1
+          },
+          {"type": "horizontal",
+            "value": 0.95,
+            "opacity": 0.1
+          }
+        ]
+      }
+    ],
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "legend_height_shrinker": 0.8,
+    "legend_outside": false,
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "xmin": 330.0,
+    "xmax": 380.0,
+    "ymin": 0.0,
+    "ymax": 1000.0,
     "yminors": 4,
     "xmajors": 6,
     "xminors": 3

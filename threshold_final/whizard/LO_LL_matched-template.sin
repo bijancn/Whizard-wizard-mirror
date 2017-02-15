@@ -1,14 +1,16 @@
 include("../process_settings_threshold.sin")
 
 library = PROCESS
-process PROCESS = e1, E1 => Wm, Wp, B, b
+process PROCESS = e1, E1 => Wp, Wm, b, B
 compile
 
 nrqcd_order = 0  !!! LL
 FF = -2          !!! resummed p0-constant with switchoff
 offshell_strategy = 2      !!! factorized
                   + 4      !!! interference with background diagrams
+                  + 64     !!! production on-shell projected
                   + 128    !!! decay on-shell projected
+                  + 512    !!! boost decay
 
 
 iterations = 3:20000:"gw",3:20000

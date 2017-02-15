@@ -1,7 +1,8 @@
 include("../process_settings_threshold.sin")
 
 library = PROCESS
-process PROCESS = e1, E1 => Wm, Wp, B, b
+$method = "omega"
+process PROCESS = e1, E1 => Wp, Wm, b, B
 compile
 
 nrqcd_order = 0  !!! LL

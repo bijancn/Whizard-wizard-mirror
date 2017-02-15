@@ -7,11 +7,11 @@
         "label": "signal diagram", "linestyle": "solid"
       },
       { "name": "interferences-sqrts--1-factorization_type",
-        "label": "factorized boosted", "linestyle": "dashdot"
+        "label": "factorized boosted", "linestyle": "dashed"
       },
       { "name": "interferences-sqrts--2-factorization_type",
         "label": "factorized rest frame",
-        "linestyle": "dashed"
+        "linestyle": "None"
       }
     ],
     "ratio": [
@@ -48,7 +48,7 @@
     "ymajors": 5
   },
   {"title": "LO + LL matched compared to LL, all without $f_s$",
-    "output_file": "lo_ll",
+    "output_file": "lo_ll_comp",
     "lines": [
       { "name": "LL-sqrts--1-mpole_fixed--0-switchoff",
         "label": "LL, factorized", "linestyle": "dotted", "folder": "../threshold_final",
@@ -60,7 +60,7 @@
         ]
       },
       { "name": "LO_LL-sqrts--0-factorization_type",
-        "label": "matched, signal diagram", "linestyle": "solid",
+        "label": "matched, signal diagram", "linestyle": "dashed",
         "base_line": [
           { "name": "LL-sqrts--1-mpole_fixed--0-switchoff",
             "folder": "../threshold_final"
@@ -69,7 +69,7 @@
         ]
       },
       { "name": "LO_LL-sqrts--1-factorization_type",
-        "label": "matched, factorized boosted", "linestyle": "dashdot",
+        "label": "matched, factorized", "linestyle": "solid",
         "base_line": [
           { "name": "LL-sqrts--1-mpole_fixed--0-switchoff",
             "folder": "../threshold_final"
@@ -80,6 +80,7 @@
       { "name": "LO_LL-sqrts--2-factorization_type",
         "label": "matched, factorized rest frame",
         "linestyle": "dashed",
+        "hide_line": true,
         "base_line": [
           { "name": "LL-sqrts--1-mpole_fixed--0-switchoff",
             "folder": "../threshold_final"
@@ -99,7 +100,7 @@
           }
         ]
       },
-      { "ylabel": "\\footnotesize$\\sigma_\\text{matched}^\\text{factorized,boosted}/\\sigma_\\text{matched}^{\\text{signal}}$",
+      { "ylabel": "\\footnotesize$\\sigma_\\text{matched}^\\text{factorized}/\\sigma_\\text{matched}^{\\text{signal}}$",
         "ymax": 1.15, "ymin": 1.0, "ymajors": 4, "yminors": 4,
         "extra_lines": [
           { "type": "vertical",
@@ -133,7 +134,7 @@
     "ymajors": 7
   },
   {"title": "Interference, no form factor",
-    "output_file": "interferences_noFF",
+    "output_file": "",
     "lines": [
       { "name": "full_LO-sqrts_scale",
         "label": "full LO | full LO", "linestyle": "solid"
@@ -154,13 +155,13 @@
       },
       { "name": "interferences_noFF-sqrts--2-factorization_type",
         "label": "factorized rest frame | full LO",
-        "linestyle": "dashed"
+        "linestyle": "None"
       },
       { "name": "interferences_noFF-sqrts--1-factorization_type",
-        "label": "factorized boosted | full LO", "linestyle": "dashdot", "color": "cyan"
+        "label": "factorized boosted | full LO", "linestyle": "dashed", "color": "cyan"
       },
       { "name": "interferences_noFF_signal-sqrts--1-factorization_type",
-        "label": "factorized boosted | signal", "linestyle": "dashdot"
+        "label": "factorized boosted | signal", "linestyle": "dashed"
       },
       { "name": "interferences_noFF_signal-sqrts--2-factorization_type",
         "label": "factorized rest frame | signal",
@@ -179,9 +180,61 @@
         ]
       }
     ],
-    "extra_texts": [
-      { "x": 300, "y": 250, "text": "no projection in production",
-        "opacity": 1.0}
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "legend_location": "upper left",
+    "legend_height_shrinker": 0.8,
+    "legend_outside": false,
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\text{IF}$ [fb]",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "xmin": 300.0,
+    "xmax": 400.0,
+    "ymin": 0,
+    "ymax": 1500,
+    "yminors": 4,
+    "xminors": 4,
+    "ymajors": 7
+  },
+  {"title": "Interference, no form factor",
+    "output_file": "interferences_noFF_nosquares",
+    "lines": [
+      { "name": "interferences_noFF-sqrts--0-factorization_type",
+        "label": "signal | full LO", "linestyle": "solid"
+      },
+      { "name": "interferences_noFF-sqrts--1-factorization_type",
+        "label": "factorized boosted | full LO", "linestyle": "dashed"
+      },
+      { "name": "interferences_noFF_signal-sqrts--1-factorization_type",
+        "label": "factorized boosted | signal", "linestyle": "dashed"
+      },
+      { "name": "interferences_noFF-sqrts--2-factorization_type",
+        "label": "factorized rest frame | full LO",
+        "linestyle": "None"
+      },
+      { "name": "interferences_noFF_signal-sqrts--2-factorization_type",
+        "label": "factorized rest frame | signal",
+        "linestyle": "None"
+      }
+    ],
+    "ratio": [
+      { "ylabel": "$\\text{IF}/\\text{IF}^{\\text{signal | full}}$",
+        "ymax": 1.1, "ymin": 0.9, "ymajors": 3, "yminors": 4,
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ]
+      }
     ],
     "extra_lines": [
       {"type": "vertical",
