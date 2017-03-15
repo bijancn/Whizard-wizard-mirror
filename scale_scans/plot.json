@@ -1,19 +1,28 @@
 {
+  "transforms": [
+    [{ "type": "scalings",
+      "scale_by_point": 1.0,
+      "data": [
+        {"name": "proc_nlo_tt"},
+        {"name": "proc_nlo_WbWb"}
+      ]
+    }]
+  ],
   "plots": [
   {"title": "",
    "output_file": "tt-mu-scan",
    "lines": [
-   {"name": "proc_nlo_tt",
+   {"name": "proc_nlo_tt_scale",
     "label": "$t \\bar{t}$"
    },
-   {"name": "proc_nlo_WbWb",
+   {"name": "proc_nlo_WbWb_scale",
     "label": "$W^+ W^- b \\bar{b}$"
    },
-   {"name": "proc_nlo_tt",
+   {"name": "proc_nlo_tt_scale",
     "label": "$t \\bar{t}$",
     "linestyle": "None"
    },
-   {"name": "proc_nlo_WbWb",
+   {"name": "proc_nlo_WbWb_scale",
     "label": "$W^+ W^- b \\bar{b}$",
     "linestyle": "None"
    }

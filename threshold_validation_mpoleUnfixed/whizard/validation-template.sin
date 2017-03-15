@@ -4,7 +4,7 @@ library = PROCESS
 process PROCESS = e1, E1 => Wm, Wp, B, b
 compile
 
-mpole_fixed = 1
+mpole_fixed = -1
 nrqcd_order = 0 # LL
 offshell_strategy =
   0 +    ! LO width and decay
@@ -12,7 +12,7 @@ offshell_strategy =
   0 +    ! interference with background
   1024 + ! extra helicity approximation
   128    ! on-shell projection of decay
-FF = 1  !!! tree-level form factor
+FF = 9  !!! tree-level form factor
 no_pwave = 1
 
 mult_call_real = 20
@@ -28,6 +28,9 @@ elsif (factorization_type == 2) then
   offshell_strategy = offshell_strategy + 64 ! factorized all on-shell projected
 elsif (factorization_type == 3) then
   ! factorized only decay on-shell projected
+endif
+if (FF == 4) then
+  offshell_strategy = offshell_strategy - 1024 !!! No EHA
 endif
 if (scale_variations == 0) then
   sh = 0.5
@@ -55,4 +58,4 @@ sqrtsmax = sqrts + 2 * sqrtsstepsize
 
 integrate (PROCESS)
 
-printf  "RES %8e %8e %8e" (mass_cut, integral(PROCESS), error(PROCESS))
+printf  "RES %8e %8e %8e" (sqrts, integral(PROCESS), error(PROCESS))
