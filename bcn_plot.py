@@ -319,12 +319,12 @@ def sanity_check(data):
   return True
 
 
-def append_from_ratio_dict(ratio_dict, attribute, lst):
+def append_from_ratio_dict(ratio_dict, attribute, lst, default_val=None):
   if ratio_dict is not None:
     if type(ratio_dict) != list:
       ratio_dict = [ratio_dict]
     for rd in ratio_dict:
-      lst.append(rd.get(attribute, None))
+      lst.append(rd.get(attribute, default_val))
   return lst
 
 
@@ -386,7 +386,8 @@ def setup_ticks(plot_dict, ratio_dict):
 def setup_majors(plot_dict, ratio_dict):
   xmajors = plot_dict.get('xmajors', N_XMAJORS_DEFAULT)
   ymajorss = [plot_dict.get('ymajors', N_YMAJORS_DEFAULT)]
-  ymajorss = append_from_ratio_dict(ratio_dict, 'ymajors', ymajorss)
+  ymajorss = append_from_ratio_dict(ratio_dict, 'ymajors', ymajorss,
+                                    N_YMAJORS_DEFAULT)
   return {'xmajors': xmajors, 'ymajorss': ymajorss}
 
 
