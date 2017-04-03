@@ -67,10 +67,11 @@ filename = args.path
 nlo = not args.is_lo
 if nlo and 'envelope' in filename:
   scales = ['central', 'low', 'high']
-elif nlo and 'proc_nlo' in filename:
-  foo = filename.split('/')
-  proc = foo[len(foo) - 1]
-  scales = [proc.split('_')[2].split('.')[0]]
+elif nlo:
+  tmp = filename.split('/')
+  proc = tmp[len(tmp) - 1]
+  tmp = proc.split('_')
+  scales = [tmp[len(tmp) - 1].split('.')[0]]
 else:
   scales = []
 
