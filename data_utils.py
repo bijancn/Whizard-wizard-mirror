@@ -197,28 +197,27 @@ def show_scale_variations(data):
 def build_smooth(data, smooth_dict):
   if smooth_dict is None:
     return data
-  smooth_data = get_associated_plot_data(data, smooth_dict)
-  for data_of_a_smooth, smooth in zip(smooth_data, smooth_dict):
-    for this_data in data_of_a_smooth:
-      x_start = smooth.get('start_at', this_data[1][0][0])
-      if x_start != this_data[1][0][0]:
-        i_start = min(enumerate(this_data[1][0]), key=lambda x: abs(x[1] - x_start))
-        x = this_data[1][0][i_start[0]:]
-        y = this_data[1][1][i_start[0]:]
-      else:
-        x = this_data[1][0]
-        y = this_data[1][1]
-      smooth_x, smooth_y = smooth_data_sg(x, y,
-          window_size=smooth.get('window_size', 0),
-          poly_order=smooth.get('poly_order', 3))
-      if x_start != this_data[1][0][0]:
-        non_smooth_x = np.array(this_data[1][0][0 : i_start[0] - 1])
-        non_smooth_y = np.array(this_data[1][1][0 : i_start[0] - 1])
-        smooth_x = np.concatenate((non_smooth_x, smooth_x))
-        smooth_y = np.concatenate((non_smooth_y, smooth_y))
-      smooth_name = this_data[0].replace('.dat', '_smooth.dat')
-      print 'Appending ' + smooth_name
-      data.append((smooth_name, np.array((smooth_x, smooth_y))))
+  smooth_data = get_associated_plot_data_single(data, smooth_dict)
+  for this_data in smooth_data:
+    x_start = smooth_dict.get('start_at', this_data[1][0][0])
+    if x_start != this_data[1][0][0]:
+      i_start = min(enumerate(this_data[1][0]), key=lambda x: abs(x[1] - x_start))
+      x = this_data[1][0][i_start[0]:]
+      y = this_data[1][1][i_start[0]:]
+    else:
+      x = this_data[1][0]
+      y = this_data[1][1]
+    smooth_x, smooth_y = smooth_data_sg(x, y,
+        window_size=smooth_dict.get('window_size', 0),
+        poly_order=smooth_dict.get('poly_order', 3))
+    if x_start != this_data[1][0][0]:
+      non_smooth_x = np.array(this_data[1][0][0 : i_start[0] - 1])
+      non_smooth_y = np.array(this_data[1][1][0 : i_start[0] - 1])
+      smooth_x = np.concatenate((non_smooth_x, smooth_x))
+      smooth_y = np.concatenate((non_smooth_y, smooth_y))
+    smooth_name = this_data[0].replace('.dat', '_smooth.dat')
+    print 'Appending ' + smooth_name
+    data.append((smooth_name, np.array((smooth_x, smooth_y))))
   return data
 
 
@@ -226,21 +225,20 @@ def build_fits(data, plot_json):
   fit_dict = plot_json.get('fits', None)
   if fit_dict is None:
     return data
-  fit_data = get_associated_plot_data(data, fit_dict)
-  for data_of_a_fit, fit in zip(fit_data, fit_dict):
-    degree = fit['fit_degree']
-    verbose = fit.get('print_fit_parameters', False)
-    for this_data in data_of_a_fit:
-      x = this_data[1][0]
-      xmin = fit.get('extrapolation_minus', min(x))
-      xmax = fit.get('extrapolation_plus', max(x))
-      y = this_data[1][1]
-      y_err = this_data[1][2]
-      fit_x, fit_y = fit_utils.fit_polynomial(x, y, xmin, xmax, degree,
-        y_err=y_err, verbose=verbose)
-      fit_name = this_data[0].replace('.dat', '_fit.dat')
-      print 'Appending ' + fit_name
-      data.append((fit_name, np.array((fit_x, fit_y))))
+  fit_data = get_associated_plot_data_single(data, fit_dict)
+  degree = fit_dict['fit_degree']
+  verbose = fit_dict.get('print_fit_parameters', False)
+  for this_data in fit_data:
+    x = this_data[1][0]
+    xmin = fit_dict.get('extrapolation_minus', min(x))
+    xmax = fit_dict.get('extrapolation_plus', max(x))
+    y = this_data[1][1]
+    y_err = this_data[1][2]
+    fit_x, fit_y = fit_utils.fit_polynomial(x, y, xmin, xmax, degree,
+      y_err=y_err, verbose=verbose)
+    fit_name = this_data[0].replace('.dat', '_fit.dat')
+    print 'Appending ' + fit_name
+    data.append((fit_name, np.array((fit_x, fit_y))))
   return data
 
 
@@ -255,12 +253,24 @@ def build_binary_function(data, action_dict):
           ' Skipping: ', action_dict
   else:
     print 'Appending ', binary_name
-    common_x, combined_y = remove_uncommon(
-        [action_data[0][1][0], action_data[1][1][0]],
-        [action_data[0][1][1], action_data[1][1][1]])
-    user_func = eval(action_dict.get('expression', 'lambda x,y: x + y'))
-    new_y = user_func(combined_y[0], combined_y[1])
-    data.append((binary_name, np.array((common_x, new_y))))
+    try:
+      common_x, combined_y, combined_yerr = remove_uncommon(
+          [action_data[0][1][0], action_data[1][1][0]],
+          [action_data[0][1][1], action_data[1][1][1]],
+          [action_data[0][1][2], action_data[1][1][2]])
+      user_func = eval(action_dict.get('expression', 'lambda x,y: x + y'))
+      user_errfunc = eval(action_dict.get('error_expression',
+                                          'lambda x,y: np.sqrt(x**2 + y**2)'))
+      new_y = user_func(combined_y[0], combined_y[1])
+      new_yerr = user_errfunc(combined_yerr[0], combined_yerr[1])
+      data.append((binary_name, np.array((common_x, new_y, new_yerr))))
+    except IndexError:
+      common_x, combined_y = remove_uncommon(
+          [action_data[0][1][0], action_data[1][1][0]],
+          [action_data[0][1][1], action_data[1][1][1]])
+      user_func = eval(action_dict.get('expression', 'lambda x,y: x + y'))
+      new_y = user_func(combined_y[0], combined_y[1])
+      data.append((binary_name, np.array((common_x, new_y))))
     return data
 
 
@@ -279,14 +289,39 @@ def test_build_binary_function():
   np.testing.assert_array_equal(data[2][1][0], x_array)
   np.testing.assert_array_equal(data[2][1][1], np.array((40, 40, 40)))
 
+  data = [(cwd + '/scan-results/foo.dat',
+           np.vstack((x_array, np.array((10, 20, 30)), np.array((0, 2, 0))))),
+          (os.path.abspath(cwd + '/../other/scan-results/bar.dat'),
+           np.vstack((x_array, np.array((30, 20, 10)), np.array((3, 0, 1)))))]
+  action_dict = {
+      'data': [
+          {'name': 'foo', 'folder': './'},
+          {'name': 'bar', 'folder': '../other'}],
+      "expression": "lambda x,y: x-y",
+      "infix": "_minus_",
+      "error_expression": "lambda x,y: np.sqrt(x**2+y**2)"
+  }
+  data = build_binary_function(data, action_dict)
+  nt.eq_(data[2][0], cwd + '/scan-results/foo_minus_bar.dat')
+  np.testing.assert_array_equal(data[2][1][0], x_array)
+  np.testing.assert_array_equal(data[2][1][1], np.array((-20, 0, 20)))
+  np.testing.assert_array_equal(data[2][1][2], np.array((3, 2, 1)))
 
-def remove_uncommon(list_of_x_arrays, list_of_y_arrays):
+
+def remove_uncommon(list_of_x_arrays, list_of_y_arrays, list_of_yerr_arrays=None):
   x_generators = [(value for value in array) for array in list_of_x_arrays]
   y_generators = [(value for value in array) for array in list_of_y_arrays]
-  combiner = Combiner(x_generators, y_generators,
-      [len(array) for array in list_of_x_arrays])
-  combined_x, combined_y = combiner.get_all()
-  return combined_x, combined_y
+  if list_of_yerr_arrays is None:
+    combiner = Combiner(x_generators, y_generators,
+        [len(array) for array in list_of_x_arrays])
+  else:
+    yerr_generators = [(value for value in array) for array in list_of_yerr_arrays]
+    error_func = lambda self: self.next_yerr_values
+    combiner = Combiner(x_generators, y_generators,
+                        [len(array) for array in list_of_x_arrays],
+                        yerr_generators=yerr_generators,
+                        error_func=error_func)
+  return combiner.get_all()
 
 
 def test_remove_uncommon():
@@ -411,8 +446,7 @@ def build_ratio(data, indices):
 
 def get_variance(sigma):
   if np.isclose(sum(sigma), 0.0):
-    print 'Warning: sum(sigma) = 0. Weighted average doesnt make sense'
-    return 0.0
+    raise ZeroDivisionError('y = 0')
   sum_var_inv = sum([1.0 / (s * s) for s in sigma
       if not np.isclose(s, 0.0, atol=1.e-10)])
   return 1.0 / sum_var_inv
@@ -434,6 +468,7 @@ def average_data_item(item, limits):
     return item
   new_y = []
   new_y_err = []
+  zeros = 0
   for i in range(len(limits)):
     if i < len(limits) - 1:
       l_low = limits[i]
@@ -446,9 +481,17 @@ def average_data_item(item, limits):
       new_y_err.append(item[1][2][l_low])
       new_y.append(item[1][1][l_low])
     else:
-      new_y_err.append(np.sqrt(get_variance(item[1][2][l_low:l_high])))
-      new_y.append(get_weighted_mean(item[1][1][l_low:l_high],
-         item[1][2][l_low:l_high]))
+      try:
+        new_y_err.append(np.sqrt(get_variance(item[1][2][l_low:l_high])))
+        new_y.append(get_weighted_mean(item[1][1][l_low:l_high],
+           item[1][2][l_low:l_high]))
+      except ZeroDivisionError:
+        new_y_err.append(0.0)
+        new_y.append(0.0)
+        zeros += 1
+  if zeros > 0:
+      print "{:5.2f}".format(100.0 * zeros / len(limits)), '% 0s in', \
+          item[0].split('/')[-1].replace('.dat', '')
   item = (item[0], np.array([item[1][0][limits], np.array(new_y),
           np.array(new_y_err)]))
   return item
@@ -709,7 +752,7 @@ try:
   import include  # NOQA
   print "Including custom include.py file"
 except ImportError:
-  print "Did not find a custom include.py file"
+  pass
 
 
 def execute_defined_functions(data, plot_json):
@@ -798,20 +841,19 @@ def smooth_data_internal(x_values, y_values, delta):
 def build_scaled(data, scale_dict):
   if scale_dict is None:
     return data
-  scale_data = get_associated_plot_data(data, scale_dict)
-  for data_of_a_scaling, scale in zip(scale_data, scale_dict):
-    scale_by_value = scale.get('scale_by_value', None)
-    scale_by_point = scale.get('scale_by_point', None)
-    scale_by_x = scale.get('scale_by_x', None)
-    for this_data in data_of_a_scaling:
-      scaled_name = this_data[0].replace('.dat', '_scale.dat')
-      for sc, sc_func in zip([scale_by_value, scale_by_point, scale_by_x],
-          [add_scaled_by_value, add_scaled_by_point, add_scaled_by_x]):
-        if sc is not None:
-          this_scale_data = sc_func(sc, this_data)
-          if this_scale_data is not None:
-            print 'Appending ' + scaled_name
-            data.append((scaled_name, this_scale_data))
+  scale_data = get_associated_plot_data_single(data, scale_dict)
+  scale_by_value = scale_dict.get('scale_by_value', None)
+  scale_by_point = scale_dict.get('scale_by_point', None)
+  scale_by_x = scale_dict.get('scale_by_x', None)
+  for this_data in scale_data:
+    scaled_name = this_data[0].replace('.dat', '_scale.dat')
+    for sc, sc_func in zip([scale_by_value, scale_by_point, scale_by_x],
+        [add_scaled_by_value, add_scaled_by_point, add_scaled_by_x]):
+      if sc is not None:
+        this_scale_data = sc_func(sc, this_data)
+        if this_scale_data is not None:
+          print 'Appending ' + scaled_name
+          data.append((scaled_name, this_scale_data))
   return data
 
 

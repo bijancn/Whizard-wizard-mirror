@@ -1,0 +1,89 @@
+{
+  "plots": [
+  {"title": "Comparison of $t\\bar t$ descriptions, high $\\sqrt{s}$ behavior",
+   "output_file": "high_sqrts_behavior",
+    "lines": [
+      {"name": "full_lo-sqrts", "label": "$W^+ b W^- \\bar b$, full",
+        "linestyle": "solid"},
+      {"name": "ttbar-sqrts", "label": "$t\\bar t$",
+        "linestyle": "solid"},
+      {"name": "signaldiagram_lo-sqrts", "label": "signal diagram, offshell evaluated"},
+      {"name": "fact_lo-sqrts", "label": "factorized, off-shell evaluated"},
+      {"name": "fact_lo_onshell-sqrts", "label":
+        "factorized, decay on-shell evaluated", "linestyle": "dashed"},
+      {"name": "fact_lo_onshell_all-sqrts", "label":
+        "factorized, all on-shell evaluated", "linestyle": "dashed"}
+    ],
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ],
+    "ratio": {"ylabel": "$\\sigma/\\sigma^{W^+ b W^- \\bar b}$",
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ],
+      "ymax": 1.25, "ymin": 0.50, "ymajors": 4},
+    "legend_ordering": [4, 5, 2, 3, 0, 1],
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": true,
+    "xlog": true,
+    "ymin": 1,
+    "xmin": 340,
+    "xmax": 50000,
+    "xticks": [340, 1000, 10000, 50000],
+    "yticks": [1, 10, 100, 1000],
+    "ymax": 2000
+  },
+  {"title": "Comparison of $t\\bar t$ descriptions, around threshold",
+   "output_file": "high_sqrts_behavior_zoom",
+    "lines": [
+      {"name": "full_lo-sqrts", "label": "$W^+ b W^- \\bar b$, full",
+        "linestyle": "solid"},
+      {"name": "ttbar-sqrts", "label": "$t\\bar t$",
+        "linestyle": "solid"},
+      {"name": "signaldiagram_lo-sqrts", "label": "signal diagram, offshell evaluated"},
+      {"name": "fact_lo-sqrts", "label": "factorized, off-shell evaluated"},
+      {"name": "fact_lo_onshell-sqrts", "label":
+        "factorized, decay on-shell evaluated", "linestyle": "dashed"},
+      {"name": "fact_lo_onshell_all-sqrts", "label":
+        "factorized, all on-shell evaluated", "linestyle": "dashed"}
+    ],
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ],
+    "ratio": {"ylabel": "$\\sigma/\\sigma^{W^+ b W^- \\bar b}$",
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ],
+      "ymax": 1.10, "ymin": 0.60, "ymajors": 6},
+    "legend_ordering": [4, 5, 2, 3, 0, 1],
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "ymin": 0,
+    "xmin": 300,
+    "xmax": 400,
+    "ymax": 700,
+    "ymajors": 8
+  }
+  ]
+}

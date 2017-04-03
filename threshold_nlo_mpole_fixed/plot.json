@@ -1,12 +1,163 @@
 {
+  "transforms": [
+    [{"type": "binary_function",
+      "expression": "lambda x,y: x-y",
+      "infix": "_minus_",
+      "data": [
+        { "name": "LO-sqrts--1-top_helicity_selection" },
+        { "name": "LO-sqrts--2-top_helicity_selection" }
+      ]
+     }
+    ]
+  ],
   "plots": [
+  { "title": "Absolute difference between mixed helicities (with Z)",
+    "output_file": "infiniteZ_LO_helicities_diff",
+    "lines": [
+      {"name": "LO-sqrts--1-top_helicity_selection_minus_LO-sqrts--2-top_helicity_selection",
+        "label": "", "linestyle": "None"}
+    ],
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma(-+)-\\sigma(+-)$ [fb]",
+    "ymax": 0.0,
+    "ymin": -25.0,
+    "ymajors": 6,
+    "xmin": 300.0,
+    "opacity": 0.7,
+    "xmax": 400.0
+  },
+  { "title": "Distribution over helicities (including Z)",
+    "output_file": "LO_helicities",
+    "lines": [
+      { "name": "LO-sqrts--MINUS1-top_helicity_selection",
+        "label": "$\\Sigma(h_t,h_{\\bar t})$", "color": "black",
+        "base_line": [
+          { "name": "LO-sqrts--0-top_helicity_selection" },
+          { "name": "LO-sqrts--1-top_helicity_selection" }
+        ]
+      },
+      { "name": "LO-sqrts--0-top_helicity_selection",
+        "label": "$(h_t,h_{\\bar t})=(-,-)$", "color": "green",
+        "base_line": [
+          { "name": "LO-sqrts--0-top_helicity_selection" },
+          { "name": "LO-sqrts--1-top_helicity_selection" }
+        ]
+      },
+      { "name": "LO-sqrts--1-top_helicity_selection",
+        "label": "$(h_t,h_{\\bar t})=(-,+)$", "color": "red",
+        "base_line": [
+          { "name": "LO-sqrts--0-top_helicity_selection" },
+          { "name": "LO-sqrts--1-top_helicity_selection" }
+        ]
+      },
+      { "name": "LO-sqrts--2-top_helicity_selection",
+        "label": "$(h_t,h_{\\bar t})=(+,-)$", "color": "blue",
+        "linestyle": "dashed",
+        "base_line": [
+          { "name": "LO-sqrts--0-top_helicity_selection" },
+          { "name": "LO-sqrts--1-top_helicity_selection" }
+        ]
+      },
+      { "name": "LO-sqrts--3-top_helicity_selection",
+        "label": "$(h_t,h_{\\bar t})=(+,+)$", "color": "orange",
+        "linestyle": "dashed",
+        "base_line": [
+          { "name": "LO-sqrts--0-top_helicity_selection" },
+          { "name": "LO-sqrts--1-top_helicity_selection" }
+        ]
+      },
+      { "name": "LO_ttbar-sqrts--MINUS1-top_helicity_selection",
+        "label": "$t\\bar{t}, \\Sigma(h_t,h_{\\bar t})$", "color": "black",
+        "linestyle": "dotted",
+        "base_line": [
+          { "name": "LO_ttbar-sqrts--0-top_helicity_selection" },
+          { "name": "LO_ttbar-sqrts--1-top_helicity_selection" }
+        ]
+      },
+      { "name": "LO_ttbar-sqrts--0-top_helicity_selection",
+        "label": "$t\\bar{t}, (h_t,h_{\\bar t})=(-,-)$", "color": "green",
+        "linestyle": "dotted",
+        "base_line": [
+          { "name": "LO_ttbar-sqrts--0-top_helicity_selection" },
+          { "name": "LO_ttbar-sqrts--1-top_helicity_selection" }
+        ]
+      },
+      { "name": "LO_ttbar-sqrts--1-top_helicity_selection",
+        "label": "$t\\bar{t}, (h_t,h_{\\bar t})=(-,+)$", "color": "red", "linestyle": "dotted",
+        "base_line": [
+          { "name": "LO_ttbar-sqrts--0-top_helicity_selection" },
+          { "name": "LO_ttbar-sqrts--1-top_helicity_selection" }
+        ]
+      },
+      { "name": "LO_ttbar-sqrts--2-top_helicity_selection",
+        "label": "$t\\bar{t}, (h_t,h_{\\bar t})=(+,-)$", "color": "blue", "linestyle": "dashdot",
+        "base_line": [
+          { "name": "LO_ttbar-sqrts--0-top_helicity_selection" },
+          { "name": "LO_ttbar-sqrts--1-top_helicity_selection" }
+        ]
+      },
+      { "name": "LO_ttbar-sqrts--3-top_helicity_selection",
+        "label": "$t\\bar{t}, (h_t,h_{\\bar t})=(+,+)$", "color": "orange", "linestyle": "dashdot",
+        "base_line": [
+          { "name": "LO_ttbar-sqrts--0-top_helicity_selection" },
+          { "name": "LO_ttbar-sqrts--1-top_helicity_selection" }
+          ]
+      }
+    ],
+    "ratio": [
+      { "ylabel": "$\\sigma/\\sigma(--)$",
+        "ymax": 1.01, "ymin": 0.99, "ymajors": 3, "yminors": 4,
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ]
+      },
+      { "ylabel": "$\\sigma/\\sigma(-+)$",
+        "ymax": 2.05, "ymin": 0.95, "ymajors": 3, "yminors": 4,
+        "yticks": [1.00, 1.50, 2.00],
+        "extra_lines": [
+          { "type": "vertical",
+            "value": 344.0,
+            "opacity": 0.2,
+            "linestyle": "dashed"
+          }
+        ]
+      }
+    ],
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "legend_height_shrinker": 0.8,
+    "legend_outside": false,
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "xmin": 300.0,
+    "xmax": 400.0,
+    "ymin": 0.0,
+    "ymax": 600.0,
+    "ymajors": 7,
+    "yminors": 5
+  },
   { "title": "NLO decay, tree-level formfactor",
     "output_file": "helicities",
     "lines": [
-      { "name": "NLO-sqrts--MINUS1-top_helicity_selection",
-        "label": "$\\Sigma(h_t,h_{\\bar t})$", "color": "black",
-        "base_line": [{ "name": "LO-sqrts--MINUS1-top_helicity_selection" }]
-      },
       { "name": "NLO-sqrts--0-top_helicity_selection",
         "label": "$(h_t,h_{\\bar t})=(-,-)$", "color": "green",
         "base_line": [{ "name": "LO-sqrts--0-top_helicity_selection" }]
@@ -22,6 +173,10 @@
       { "name": "NLO-sqrts--3-top_helicity_selection",
         "label": "$(h_t,h_{\\bar t})=(+,+)$", "color": "orange",
         "base_line": [{ "name": "LO-sqrts--3-top_helicity_selection" }]
+      },
+      { "name": "NLO-sqrts--MINUS1-top_helicity_selection",
+        "label": "$\\Sigma(h_t,h_{\\bar t})$", "color": "black",
+        "base_line": [{ "name": "LO-sqrts--MINUS1-top_helicity_selection" }]
       }
     ],
     "ratio": [

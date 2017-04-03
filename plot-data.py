@@ -55,5 +55,6 @@ def main():
     pool.map(plot_this, plots)
   else:
     map(plot_this, plots)
+  print 'Done with all plots'
 
 main()

@@ -3,8 +3,19 @@
 import sys
 import os
 import subprocess
+import argparse
+import multiprocessing as mp
 import whizard_wizard
 from utils import mkdirs
+
+# Parse command line options
+parser = argparse.ArgumentParser(description='Extract data',
+    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+# options how to behave
+parser.add_argument("-j", '--jobs', default=4, type=int,
+    help='Set number of jobs for extracting. Use -j1 to disable multiprocessing.')
+args = parser.parse_args()
 
 
 def get_RES(c):
@@ -30,6 +41,16 @@ def build_regexs(proc):
   return proc_regexs
 
 
+def pipe_results_to_file(arg_tupel):
+  cmd, file_name = arg_tupel
+  ret = subprocess.call(cmd + ' > ' + file_name, shell=True)
+  if (ret == 0):
+    print 'Saved to ' + file_name
+  else:
+    print 'Saving to ' + file_name + ' returned ' + str(ret)
+    sys.exit(1)
+
+
 def main():
   result_path = 'scan-results'
   mkdirs(result_path)
@@ -48,12 +69,10 @@ def main():
   result_cmd = [get_RES(runfolder) for runfolder in runfolders]
   result_files = [os.path.join(result_path, p.replace('-*', '') + '.dat')
       for p in process_names]
-  for cmd, file_name in zip(result_cmd, result_files):
-    ret = subprocess.call(cmd + ' > ' + file_name, shell=True)
-    if (ret == 0):
-      print 'Saved to ' + file_name
-    else:
-      print 'Saving to ' + file_name + ' returned ' + str(ret)
-      sys.exit(1)
+  if args.jobs > 1:
+    pool = mp.Pool(processes=args.jobs)
+    pool.map(pipe_results_to_file, zip(result_cmd, result_files))
+  else:
+    map(pipe_results_to_file, zip(result_cmd, result_files))
 
 main()

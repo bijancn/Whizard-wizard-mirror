@@ -1,0 +1,30 @@
+include("../process_settings_threshold.sin")
+
+library = fact_lo
+process fact_lo = e1, E1 => Wm, Wp, B, b {$restrictions = "3+5~tbar && 4+6~t"}
+compile
+
+mpole_fixed = 1
+FF = 9        # tree level from signal comp
+offshell_strategy = 0+2+0+0
+
+show(model)
+
+iterations = 3:20000:"gw",3:20000
+#ITERATIONS
+real mass_cut = - 1
+#SETSCAN
+if (mass_cut > 0) then
+  cuts = all abs (M - mtpole) < mass_cut [Wp, b] and
+         all abs (M - mtpole) < mass_cut [Wm, B]
+endif
+sqrtsstepsize = 0.1 GeV
+sqrtsmin = sqrts - sqrtsstepsize
+sqrtsmax = sqrts + sqrtsstepsize
+
+integrate (fact_lo)
+if (mass_cut > 0) then
+  printf "RES %g %g %g" (mass_cut, integral(fact_lo), error(fact_lo))
+else
+  printf "RES %g %g %g" (sqrts, integral(fact_lo), error(fact_lo))
+endif

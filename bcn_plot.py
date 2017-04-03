@@ -130,14 +130,14 @@ def set_minor_ticks(axes, xminors, yminorss, xlog, ylogs):
     if xminors is None:
       xminors = N_XMINORS_DEFAULT
     if xlog:
-      ax.set_xscale('log', subsx=[2, 3, 4, 5, 6, 7, 8, 9])
+      ax.set_xscale('log')
     else:
       minorLocator = AutoMinorLocator(xminors + 1)
       ax.xaxis.set_minor_locator(minorLocator)
     if yminors is None:
       yminors = N_YMINORS_DEFAULT
     if ylog:
-      ax.set_yscale('log', subsy=[2, 3, 4, 5, 6, 7, 8, 9])
+      ax.set_yscale('log')
     else:
       minorLocator = AutoMinorLocator(yminors + 1)
       ax.yaxis.set_minor_locator(minorLocator)
@@ -304,8 +304,8 @@ def get_object_name(obj, is_fit):
 
 def sanity_check(data):
   for dat in data:
-    if type(dat[0]) is not str:
-      print 'This is not an identifier_string:', dat[0]
+    if not (type(dat[0]) is str or type(dat[0]) is unicode):
+      print 'This is not an identifier_string:', dat[0], type(dat[0])
       print 'Aborting'
       return False
     if type(dat[1]) is not np.ndarray:
@@ -488,7 +488,7 @@ def save_fig(fig, title, plot_dict, pic_path):
       out_file = output_file + '.pdf'
   else:
     out_file = title + '.pdf'
-  print 'Writing to output: ', out_file.replace('.pdf', '')
+  print 'Writing to output:', out_file.replace('.pdf', '')
   out_path = os.path.join(pic_path, out_file).replace(' ', '_')
   strip_chars = ['(', ')', ',', ';']
   for sc in strip_chars:

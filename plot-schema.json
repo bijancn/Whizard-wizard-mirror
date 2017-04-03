@@ -55,8 +55,8 @@
           "type": "string",
           "description": "`text` to be displayed. Can contain (escaped) latex."
         },
-        "x": { "type": "number" },
-        "y": { "type": "number" },
+        "x": { "type": "number", "description": "Coordinates in the plot" },
+        "y": { "type": "number", "description": "Coordinates in the plot" },
         "fontsize": { "type": "number" },
         "opacity": { "type": "number" },
         "verticalalignment" : { "type": "string" },
@@ -278,12 +278,16 @@
     },
     "binary_function": {
       "type": "object",
-      "description": "Takes exactely two unique `line_core`s in `data` and combines them with the given lambda function in expression",
+      "description": "Takes exactely two unique `line_core`s in `data` and combines them with the given lambda functions in expression and error_expression",
       "properties": {
         "type": { "enum": [ "scalings", "smooth", "fits", "binary_function" ] },
         "expression": {
           "type": "string",
-          "description": "lambda expression to be `eval`uated: Default is `lambda x,y: x+y`."
+          "description": "lambda expression to be evaluated to obtain new y: Default is `lambda y1,y2: y1+y2`."
+        },
+        "error_expression": {
+          "type": "string",
+          "description": "lambda expression to be evaluated to obtain new yerr: Default is `lambda x,y: np.sqrt(x**2 + y**2)`."
         },
         "infix": {
           "type": "string",
@@ -298,7 +302,7 @@
         }
       },
       "additionalProperties": false,
-      "required": [ "fit_degree" ]
+      "required": [ "data", "type" ]
     },
     "transform": {
       "anyOf" : [

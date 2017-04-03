@@ -11,7 +11,6 @@ offshell_strategy = 2      !!! factorized
                   + 128    !!! decay on-shell projected
                   + 32   ! hel approx
                   + 1024 ! extra hel approx
-mpole_fixed = 0
 
 
 iterations = 3:20000:"gw",3:20000

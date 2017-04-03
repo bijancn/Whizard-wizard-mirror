@@ -39,11 +39,11 @@
         "ranges": [{ "type": "explicit", "range": [-1,0,1,2,3]} ]
       }
       ],
-    "adaption_iterations": "5:10000",
-    "integration_iterations": "3:10000",
+    "adaption_iterations": "5:20000",
+    "integration_iterations": "5:20000",
     "integration_copies": 5
   },
-  { "process": ["LO", "LO_noboost"],
+  { "process": ["LO", "LO_noboost", "LO_ttbar"],
     "disabled": true,
     "purpose": "scan",
     "whizard_options": "--no-banner -r",
@@ -82,9 +82,9 @@
         "ranges": [{ "type": "explicit", "range": [-1,0,1,2,3]} ]
       }
       ],
-    "adaption_iterations": "5:10000",
-    "integration_iterations": "3:10000",
-    "integration_copies": 5
+    "adaption_iterations": "5:20000",
+    "integration_iterations": "5:20000",
+    "integration_copies": 50
   },
   { "process": ["LO_full", "LO_full_NLOwidth"],
     "disabled": true,
@@ -121,8 +121,8 @@
       }
       ]}
       ],
-    "adaption_iterations": "5:10000",
-    "integration_iterations": "3:10000",
+    "adaption_iterations": "5:20000",
+    "integration_iterations": "5:20000",
     "integration_copies": 5
   }
   ],

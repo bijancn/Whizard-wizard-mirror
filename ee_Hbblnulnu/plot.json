@@ -1,0 +1,394 @@
+{
+  "plots": [
+    {"title": "$e^+ e^- \\to t \\bar{t}\\;$ and $\\;e^+ e^- \\to W^+ W^- b \\bar{b}$",
+      "output_file": "tt-scan-combined",
+      "lines": [
+        {"name": "proc_lo-sqrts",
+          "label": "LO $W^+ W^- b \\bar{b}$",
+          "base_line": [
+            {"name": "proc_lo-sqrts", "hide_line": true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/"},
+            {"name": "proc_lo-sqrts", "hide_line": true}
+          ],
+          "color": "blue"
+        },
+        {"name": "proc_nlo_central-sqrts",
+          "label": "NLO $W^+ W^- b \\bar{b}$",
+          "base_line": [
+            {"name": "proc_lo-sqrts"},
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tt_scan/"},
+            {"name": "proc_lo-sqrts"}
+          ],
+          "color": "red"
+        },
+        {"name": "proc_lo-sqrts",
+          "folder": "../ee_tt_scan/",
+          "linestyle": "dashed",
+          "label": "LO $t \\bar{t}$",
+          "color": "black",
+          "base_line": [
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/", "hide_line": true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/", "hide_line": true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/", "hide_line": true}
+          ]
+        },
+        {"name": "proc_nlo_central-sqrts",
+          "folder": "../ee_tt_scan/",
+          "linestyle": "dashed",
+          "label": "NLO $t \\bar{t}$",
+          "color": "#109618",
+          "base_line": [
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/"},
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tt_scan/", "hide_line": true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/"}
+          ]
+        },
+        { "name": "proc_nlo_low-sqrts",
+          "color": "red",
+          "base_line": [
+            { "name": "proc_lo-sqrts" },
+            { "name": "proc_nlo_central-sqrts", "folder": "../ee_tt_scan/" },
+            { "name": "proc_lo-sqrts" }
+          ],
+          "hide_label": true,
+          "linewidth": 0.5
+        },
+        { "name": "proc_nlo_high-sqrts",
+          "color": "red",
+          "base_line": [
+            { "name": "proc_lo-sqrts" },
+            { "name": "proc_nlo_central-sqrts", "folder": "../ee_tt_scan/" },
+            { "name": "proc_lo-sqrts" }
+          ],
+          "hide_label": true,
+          "linewidth": 0.5
+        },
+        { "name": "proc_nlo_low-sqrts",
+          "folder": "../ee_tt_scan/",
+          "linestyle": "dashed",
+          "hide_label": true,
+          "color": "#109618",
+          "base_line": [
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/"},
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tt_scan/", "hide_line": true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/"}
+          ],
+          "linewidth": 0.5
+        },
+        { "name": "proc_nlo_high-sqrts",
+          "folder": "../ee_tt_scan/",
+          "linestyle": "dashed",
+          "hide_label": true,
+          "color": "#109618",
+          "base_line": [
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/"},
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tt_scan/", "hide_line": true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/"}
+          ],
+          "linewidth": 0.5
+        }
+      ],
+      "bands": [
+        {"opacity": 0.4,
+          "label": "",
+          "color": "#109618",
+          "data":[{"name": "proc_nlo_central-sqrts", "folder": "../ee_tt_scan/"},
+            {"name": "proc_nlo_high-sqrts", "folder": "../ee_tt_scan/"},
+            {"name": "proc_nlo_low-sqrts", "folder": "../ee_tt_scan/"}
+          ],
+          "base_line": [
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/"},
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tt_scan/", "hide_line": true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/"}
+          ]
+        },
+        {"label": "",
+          "opacity": 0.2,
+          "color": "red",
+          "data":
+          [{"name": "proc_nlo_central-sqrts"},
+            {"name": "proc_nlo_high-sqrts"},
+            {"name": "proc_nlo_low-sqrts"}
+          ],
+          "base_line": [
+            {"name": "proc_lo-sqrts"},
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tt_scan/"},
+            {"name": "proc_lo-sqrts"}
+          ]
+        }
+      ],
+      "extra_texts": [
+        { "x": 1050,
+          "y": 10,
+          "color": "gray",
+          "opacity": 1.0,
+          "verticalalignment": "center",
+          "horizontalalignment": "center",
+          "text": "\\textsc{Whizard+OpenLoops}"}
+      ],
+      "ratio": [
+        { "ylabel": "K-factor",
+          "ymax": 1.15,
+          "ymin": 0.95,
+          "extra_lines": [ {"type": "horizontal", "value": 1.0, "color": "black" } ],
+          "ymajors": 5},
+        { "ylabel": "${\\sigma_{W^+W^-b\\bar{b}}}/{\\sigma_{t\\bar{t}}}$",
+          "ymax": 1.5,
+          "ymin": 0.9,
+          "yticks": [1.0, 1.25, 1.5],
+          "extra_lines": [ {"type": "horizontal", "value": 1.0, "color": "black" } ],
+          "ymajors": 3},
+        { "ylabel": "K-factor",
+          "ymax": 3.0,
+          "xlog": false,
+          "ymin": 1.0,
+          "xmin": 300,
+          "xmax": 400,
+          "xlabel": "$\\sqrt{s}\\;$ [GeV]",
+          "extra_lines": [ {"type": "horizontal", "value": 1.0, "color": "black" } ],
+          "ymajors": 3,
+          "inset": [0.47, 0.72, 0.2, 0.2],
+          "xmajors": 3
+        }
+      ],
+        "xpagelength": 9,
+        "ypagelength": 9,
+        "legend_ordering": [2,3,0,1],
+        "xlabel": "$\\sqrt{s}\\;$ [GeV]",
+        "ylabel": "$\\sigma\\;$ [fb]",
+        "ymin": 0,
+        "ymax": 875,
+        "xmax": 1500,
+        "xmajors": 5,
+        "xminors": 5,
+        "ymajors": 6,
+        "yminors": 6,
+        "ylog": false,
+        "xlog": false,
+        "legend_outside": false
+    },
+    {"title": "$e^+ e^- \\to t \\bar{t}\\;$ and $\\;e^+ e^- \\to W^+ W^- b \\bar{b}$",
+      "output_file": "tt-scan-combined-3000",
+      "lines": [
+        {"name": "proc_lo-sqrts",
+          "label": "LO $W^+ W^- b \\bar{b}$",
+          "base_line": [
+            {"name": "proc_lo-sqrts", "hide_line": true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/"},
+            {"name": "proc_lo-sqrts", "hide_line": true}
+          ],
+          "color": "blue"
+        },
+        {"name": "proc_nlo_central-sqrts",
+          "label": "NLO $W^+ W^- b \\bar{b}$",
+          "base_line": [
+            {"name": "proc_lo-sqrts"},
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tt_scan/"},
+            {"name": "proc_lo-sqrts"}
+          ],
+          "color": "red"
+        },
+        {"name": "proc_lo-sqrts",
+          "folder": "../ee_tt_scan/",
+          "linestyle": "dashed",
+          "label": "LO $t \\bar{t}$",
+          "color": "black",
+          "base_line": [
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/", "hide_line": true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/", "hide_line": true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/", "hide_line": true}
+          ]
+        },
+        {"name": "proc_nlo_central-sqrts",
+          "folder": "../ee_tt_scan/",
+          "linestyle": "dashed",
+          "label": "NLO $t \\bar{t}$",
+          "color": "#109618",
+          "base_line": [
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/"},
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tt_scan/", "hide_line": true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/"}
+          ]
+        },
+        { "name": "proc_nlo_low-sqrts",
+          "color": "red",
+          "base_line": [
+            { "name": "proc_lo-sqrts" },
+            { "name": "proc_nlo_central-sqrts", "folder": "../ee_tt_scan/" },
+            { "name": "proc_lo-sqrts" }
+          ],
+          "hide_label": true,
+          "linewidth": 0.5
+        },
+        { "name": "proc_nlo_high-sqrts",
+          "color": "red",
+          "base_line": [
+            { "name": "proc_lo-sqrts" },
+            { "name": "proc_nlo_central-sqrts", "folder": "../ee_tt_scan/" },
+            { "name": "proc_lo-sqrts" }
+          ],
+          "hide_label": true,
+          "linewidth": 0.5
+        },
+        { "name": "proc_nlo_low-sqrts",
+          "folder": "../ee_tt_scan/",
+          "linestyle": "dashed",
+          "hide_label": true,
+          "color": "#109618",
+          "base_line": [
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/"},
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tt_scan/", "hide_line": true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/"}
+          ],
+          "linewidth": 0.5
+        },
+        { "name": "proc_nlo_high-sqrts",
+          "folder": "../ee_tt_scan/",
+          "linestyle": "dashed",
+          "hide_label": true,
+          "color": "#109618",
+          "base_line": [
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/"},
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tt_scan/", "hide_line": true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/"}
+          ],
+          "linewidth": 0.5
+        }
+      ],
+      "bands": [
+        {"opacity": 0.4,
+          "label": "",
+          "color": "#109618",
+          "data":[{"name": "proc_nlo_central-sqrts", "folder": "../ee_tt_scan/"},
+            {"name": "proc_nlo_high-sqrts", "folder": "../ee_tt_scan/"},
+            {"name": "proc_nlo_low-sqrts", "folder": "../ee_tt_scan/"}
+          ],
+          "base_line": [
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/"},
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tt_scan/", "hide_line": true},
+            {"name": "proc_lo-sqrts", "folder": "../ee_tt_scan/"}
+          ]
+        },
+        {"label": "",
+          "opacity": 0.2,
+          "color": "red",
+          "data":
+          [{"name": "proc_nlo_central-sqrts"},
+            {"name": "proc_nlo_high-sqrts"},
+            {"name": "proc_nlo_low-sqrts"}
+          ],
+          "base_line": [
+            {"name": "proc_lo-sqrts"},
+            {"name": "proc_nlo_central-sqrts", "folder": "../ee_tt_scan/"},
+            {"name": "proc_lo-sqrts"}
+          ]
+        }
+      ],
+      "extra_texts": [
+        { "x": 1050,
+          "y": 10,
+          "color": "gray",
+          "opacity": 1.0,
+          "verticalalignment": "center",
+          "horizontalalignment": "center",
+          "text": "\\textsc{Whizard+OpenLoops}"}
+      ],
+      "ratio": [
+        { "ylabel": "K-factor",
+          "ymax": 1.15,
+          "ymin": 0.95,
+          "extra_lines": [ {"type": "horizontal", "value": 1.0, "color": "black" } ],
+          "ymajors": 5},
+        { "ylabel": "${\\sigma_{W^+W^-b\\bar{b}}}/{\\sigma_{t\\bar{t}}}$",
+          "ymax": 2.0,
+          "ymin": 0.9,
+        "yticks": [1.0, 1.25, 1.5, 1.75, 2.0],
+          "extra_lines": [ {"type": "horizontal", "value": 1.0, "color": "black" } ],
+          "ymajors": 3},
+        { "ylabel": "K-factor",
+          "ymax": 3.0,
+          "xlog": false,
+          "ymin": 1.0,
+          "xmin": 300,
+          "xmax": 400,
+          "xlabel": "$\\sqrt{s}\\;$ [GeV]",
+          "extra_lines": [ {"type": "horizontal", "value": 1.0, "color": "black" } ],
+          "ymajors": 3,
+          "inset": [0.47, 0.72, 0.2, 0.2],
+          "xmajors": 3
+        }
+      ],
+        "xpagelength": 9,
+        "ypagelength": 9,
+        "xticks": [500, 1000, 1500, 2000, 2500, 3000],
+        "legend_ordering": [2,3,0,1],
+        "xlabel": "$\\sqrt{s}\\;$ [GeV]",
+        "ylabel": "$\\sigma\\;$ [fb]",
+        "ymin": 0,
+        "ymax": 875,
+        "xmax": 3000,
+        "xmajors": 5,
+        "xminors": 5,
+        "ymajors": 6,
+        "yminors": 6,
+        "ylog": false,
+        "xlog": false,
+        "legend_outside": false
+    },
+    {"title": "$e^+ e^- \\to t \\bar{t}\\;$ and $\\;e^+ e^- \\to W^+ W^- b \\bar{b}$ at $\\sqrt{s}=800 \\;\\text{GeV}$",
+      "output_file": "tt-mu-scan",
+      "lines": [
+        {"name": "proc_nlo_tt_scale_smooth",
+          "folder": "../scale_scans",
+          "color": "#109618",
+          "label": "NLO $t \\bar{t}$"
+        },
+        {"name": "proc_nlo_WbWb_scale_smooth",
+          "folder": "../scale_scans",
+          "color": "red",
+          "label": "NLO $W^+ W^- b \\bar{b}$"
+        }
+      ],
+      "extra_texts": [
+        { "x": 0.245,
+          "y": 0.95,
+          "color": "gray",
+          "opacity": 1.0,
+          "verticalalignment": "center",
+          "horizontalalignment": "center",
+          "text": "\\textsc{Whizard+OpenLoops}"}
+      ],
+      "extra_lines": [
+        {"type": "vertical", "value": 2.0, "color": "gray" },
+        {"type": "vertical", "value": 0.5, "color": "gray" }
+      ],
+      "xlabel": "$\\mu_R / m_t$",
+      "ylabel": "$\\sigma(\\mu_R) / \\sigma(\\mu_R = \\mu_0)$",
+      "ymin": 0.95,
+      "ymajors": 4,
+      "ymax": 1.025,
+      "ylog": false,
+      "xlog": true,
+      "xminors": 0,
+      "yminors": 4,
+      "yticks": [0.950, 0.975, 1.000, 1.025],
+      "xticks": [0.125, 0.25, 0.50, 1.00, 2.00, 4.00, 8.00],
+      "legend_location": "lower right"
+    }
+  ],
+  "scalings": [
+    {"scale_by_point": 1.0,
+      "data": [{"name": "proc_nlo_tt", "folder": "../scale_scans"},
+        {"name": "proc_nlo_WbWb", "folder": "../scale_scans"}
+      ]
+    }
+  ],
+  "smooth": [
+    {"window_size": 3,
+      "poly_order": 1,
+      "data": [{"name": "proc_nlo_tt_scale", "folder": "../scale_scans"},
+        {"name": "proc_nlo_WbWb_scale", "folder": "../scale_scans"}
+      ]
+    }
+  ]
+}

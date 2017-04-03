@@ -7,11 +7,7 @@ compile
 nrqcd_order = 0  !!! LL
 FF = 1           !!! resummed p0-constant withOUT switchoff
 offshell_strategy = 0*2      !!! factorized
-                  + 0*4    !!! interference with background diagrams
                   + 0*128    !!! decay on-shell projected
-!                  + 32   ! hel approx
-!                  + 1024 ! extra hel approx
-mpole_fixed = 0
 
 
 iterations = 3:20000:"gw",3:20000

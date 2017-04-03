@@ -33,21 +33,14 @@
         "stop": 500.0,
         "stepsize": 5.0
       }
-      ]},
-      { "scan_object": "phase_flip",
-        "export_type": "separate",
-        "ranges": [{ "type": "explicit", "range": [0,1]} ]
-      },
-      { "scan_object": "force_factorized",
-        "export_type": "separate",
-        "ranges": [{ "type": "explicit", "range": [0,1]} ]
-      }
+      ]}
       ],
-    "integration_copies": 3,
     "adaption_iterations": "5:20000",
-    "integration_iterations": "5:20000"
+    "integration_iterations": "5:20000",
+    "integration_copies": 10
   },
-  { "process": ["LO_LL_matched_EHA", "LO",
+  { "process": ["LO"],
+    "disabled_process": ["LO_LL_matched_EHA", "LO",
              "LO_LL_matched_signal", "LL_signal", "LL_minus_One"],
     "disabled": true,
     "purpose": "scan",
@@ -87,9 +80,9 @@
         "ranges": [{ "type": "explicit", "range": [0,1]} ]
       }
       ],
-    "integration_copies": 3,
     "adaption_iterations": "5:20000",
-    "integration_iterations": "5:20000"
+    "integration_iterations": "5:20000",
+    "integration_copies": 10
   },
   { "process": ["LL"],
     "disabled": true,
@@ -134,9 +127,9 @@
         "ranges": [{ "type": "explicit", "range": [0,1]} ]
       }
       ],
-    "integration_copies": 3,
     "adaption_iterations": "5:20000",
-    "integration_iterations": "5:20000"
+    "integration_iterations": "5:20000",
+    "integration_copies": 10
   }
   ],
   "whizard": "whizard",
