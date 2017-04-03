@@ -12,7 +12,7 @@ alphas = 0.1185
 
 show (model)
 
-mult_call_real = 1000
+mult_call_real = 100
 ?combined_nlo_integration = false
 $fks_mapping_type = "default"
 

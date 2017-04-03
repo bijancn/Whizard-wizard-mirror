@@ -68,7 +68,7 @@ def build_merged_yodas(env, small_yoda_names, final_yoda_names):
     else:
       try:
         shutil.copyfile(str(small_yoda[0]), yoda)
-      except IOError:
+      except (IOError, IndexError):
         print 'File not there yet. This should be a builder'
       merged_yodas.append(yoda)
   return merged_yodas
@@ -104,11 +104,12 @@ def ADD_BUILDERS(env):
   env.Append(BUILDERS={'Yoda' : build_yoda_from_hepmc, 'Analysis' : build_analysis,
     'MergeYodas': merge_yodas, 'MergeYodasNoScale': merge_yodas_noscale,
     'BuildEnvelope': build_envelope,
-    'Plot' : build_plot, 'PlotLOLineWithNLOBand': build_plot_with_lo_line_and_nlo_band})
+    'Plot' : build_plot, 'PlotLOLineWithNLOBand':
+                       build_plot_with_lo_line_and_nlo_band})
 
 
 def main(env, analysiss, processes, plot_together, configs,
-    lo_nlo_lines_and_nlo_band, descriptions):
+    lo_nlo_lines_and_nlo_band, descriptions, do_controls=False):
   analysis = env.Analysis("RivetAnalysis", analysiss)
   make_plot_dir = lambda d : d + '/index.html'
   control_plots = map(make_plot_dir, processes)
@@ -126,12 +127,12 @@ def main(env, analysiss, processes, plot_together, configs,
   if n_yodas > 0:
     do_yodas(env, small_yoda_names, make_plot_dir, control_plots, configs,
              lo_nlo_lines_and_nlo_band, plot_targets, plot_together,
-             descriptions)
+             descriptions, do_controls)
 
 
 def do_yodas(env, small_yoda_names, make_plot_dir, control_plots, configs,
              lo_nlo_lines_and_nlo_band, plot_targets, plot_together,
-             descriptions):
+             descriptions, do_controls=False):
   final_yoda_names = su.get_final_yoda_names(small_yoda_names)
   print 'final_yoda_names: ', final_yoda_names
   merged_yodas = build_merged_yodas(env, small_yoda_names, final_yoda_names)
@@ -144,9 +145,10 @@ def do_yodas(env, small_yoda_names, make_plot_dir, control_plots, configs,
     control_plots += map(make_plot_dir, final_scale_yodas)
     env.BuildEnvelope(target='envelope.yoda', source=final_scale_yodas)
 
-  print 'Control plots: ', control_plots
-  for (small_yodas, control_plot) in zip(small_yoda_names, control_plots):
-    do_small_yodas(env, small_yodas, configs, control_plot)
+  if do_controls:
+    print 'Control plots: ', control_plots
+    for (small_yodas, control_plot) in zip(small_yoda_names, control_plots):
+      do_small_yodas(env, small_yodas, configs, control_plot)
 
   if len(lo_nlo_lines_and_nlo_band) > 0:
     env.PlotLOLineWithNLOBand(target=plot_targets[0],

@@ -157,34 +157,31 @@ def build_nlo_sums(data):
         data.append((combined_name, array))
       except StopIteration:
         pass
-    if False:
-      show_scale_variations(data)
   return data
 
 
-def show_scale_variations(data):
+def get_y_where_x(data_item, x):
+  index = np.where(data_item[1][0] == x)[0][0]
+  return data_item[1][1][index]
+
+
+def show_scale_variations(data, x):
   xs_low = 0
   xs_central = 0
   xs_high = 0
   for data_item in data:
-    #  TODO: (bcn 2016-10-31) should be steerable from plot.json
-    sqrts = 500
     if 'nlo_central' in data_item[0]:
-      i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
-      xs_central = data_item[1][1][i_sqrts]
+      xs_central = get_y_where_x(data_item, x)
     elif 'nlo_high' in data_item[0]:
-      i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
-      xs_high = data_item[1][1][i_sqrts]
+      xs_high = get_y_where_x(data_item, x)
     elif 'nlo_low' in data_item[0]:
-      i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
-      xs_low = data_item[1][1][i_sqrts]
+      xs_low = get_y_where_x(data_item, x)
     elif 'lo' in data_item[0]:
-      i_sqrts = np.where(data_item[1][0] == sqrts)[0][0]
-      xs_lo = data_item[1][1][i_sqrts]
+      xs_lo = get_y_where_x(data_item, x)
   if (xs_central > 0):
     k = xs_central / xs_lo
     print '***************'
-    print 'sqrts: ', sqrts
+    print 'x: ', x
     print 'LO: ', xs_lo
     print 'central: ', xs_central
     print 'scale_plus: ', (xs_high - xs_central) / xs_central * 100

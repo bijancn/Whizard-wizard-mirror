@@ -34,7 +34,7 @@
     ],
     "ratio": [
       { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
-        "ymax": 20.00, "ymin": 0.0, "ymajors": 5, "yminors": 5,
+        "ymax": 20.00, "ymin": 0.0, "ymajors": 5,
         "extra_lines": [
           { "type": "vertical",
             "value": 344.0,
@@ -44,7 +44,7 @@
         ]
       },
       { "ylabel": "$\\sigma/\\sigma^{\\text{LL with $f_s$}}$",
-        "ymax": 1.5, "ymin": 0.5, "ymajors": 3, "yminors": 5,
+        "ymax": 1.5, "ymin": 0.5, "ymajors": 3,
         "extra_lines": [
           { "type": "vertical",
             "value": 344.0,
@@ -71,8 +71,7 @@
     "xmin": 300.0,
     "xmax": 400.0,
     "ymin": 0.0,
-    "ymax": 1200.0,
-    "yminors": 5
+    "ymax": 1200.0
   },
   {"title": "",
     "output_file": "lo_ll",
@@ -139,7 +138,7 @@
     ],
     "ratio": [
       { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
-        "ymax": 20.00, "ymin": 1.0, "ymajors": 5, "yminors": 5,
+        "ymax": 20.00, "ymin": 1.0, "ymajors": 5,
         "extra_lines": [
           { "type": "vertical",
             "value": 344.0,
@@ -149,7 +148,7 @@
         ]
       },
       { "ylabel": "$\\sigma/\\sigma^{\\text{LL with $f_s$}}$",
-        "ymax": 1.5, "ymin": 0.5, "ymajors": 5, "yminors": 5,
+        "ymax": 1.5, "ymin": 0.5, "ymajors": 5,
         "extra_lines": [
           { "type": "vertical",
             "value": 344.0,
@@ -176,8 +175,7 @@
     "xmin": 300.0,
     "xmax": 400.0,
     "ymin": 0.0,
-    "ymax": 1200.0,
-    "yminors": 5
+    "ymax": 1200.0
   },
   {"title": "$m_\\text{pole}=m_{1\\text{S}}$",
     "output_file": "lo_ll_mpolefixed",
@@ -197,7 +195,7 @@
     ],
     "ratio": [
       { "ylabel": "$\\sigma/\\sigma^{\\text{LO}}$",
-        "ymax": 20.00, "ymin": 1.0, "ymajors": 5, "yminors": 5,
+        "ymax": 20.00, "ymin": 1.0, "ymajors": 5,
         "extra_lines": [
           { "type": "vertical",
             "value": 344.0,
@@ -207,7 +205,7 @@
         ]
       },
       { "ylabel": "$\\sigma^\\text{LO+LL}/\\sigma^{\\text{LL}}$",
-        "ymax": 1.25, "ymin": 0.25, "ymajors": 5, "yminors": 5,
+        "ymax": 1.25, "ymin": 0.25, "ymajors": 5,
         "extra_lines": [
           { "type": "vertical",
             "value": 344.0,
@@ -232,8 +230,7 @@
     "xmin": 300.0,
     "xmax": 400.0,
     "ymin": 0.0,
-    "ymax": 1200.0,
-    "yminors": 5
+    "ymax": 1200.0
   },
   { "title": "$e^+\\,e^-\\to t\\,\\bar{t}$",
     "output_file": "expansions_onshell",
@@ -317,7 +314,7 @@
       { "name": "imag_v_of_sqrts", "label": "$\\text{Im}[v(\\sqrt{s})]$",
         "linestyle": "dashdot", "color": "cyan"
       },
-      { "name": "switchoff_of_abs_v_of_sqrts", "label": "$f_s(|v(\\sqrt{s})|)$",
+      { "name": "smoothswitchoff_of_abs_v13_of_sqrts", "label": "$f_s(|v(\\sqrt{s})|)$",
         "linestyle": "solid", "color": "purple"
       },
       { "name": "switchoff_of_real_v_of_sqrts", "label": "$f_s(\\text{Re}[v(\\sqrt{s})])$",
@@ -358,8 +355,100 @@
     "xmin": 300.0,
     "xmax": 400.0,
     "ymin": 0.0,
+    "ymax": 1.0
+  },
+  {"title": "$f_s(|v(\\sqrt{s})|)$",
+    "output_file": "switch_off_variations",
+    "lines": [
+      { "name": "switchoff_of_abs_v12_of_sqrts", "label": "$v_1 = 0.1, v_2=0.2$",
+        "linestyle": "solid"
+      },
+      { "name": "switchoff_of_abs_v13_of_sqrts", "label": "$v_1 = 0.1, v_2=0.3$",
+        "linestyle": "dashed"
+      },
+      { "name": "switchoff_of_abs_v14_of_sqrts", "label": "$v_1 = 0.1, v_2=0.4$",
+        "linestyle": "dashdot"
+      },
+      { "name": "switchoff_of_abs_v23_of_sqrts", "label": "$v_1 = 0.2, v_2=0.3$",
+        "linestyle": "solid"
+      },
+      { "name": "switchoff_of_abs_v24_of_sqrts", "label": "$v_1 = 0.2, v_2=0.4$",
+        "linestyle": "dashed"
+      },
+      { "name": "switchoff_of_abs_v34_of_sqrts", "label": "$v_1 = 0.3, v_2=0.4$",
+        "linestyle": "solid"
+      },
+      { "name": "switchoff_of_abs_vbest_of_sqrts", "label": "$v_1 = 0.15, v_2=0.35$",
+        "linestyle": "dashed", "color": "black"
+      }
+    ],
+    "extra_texts": [
+      { "text": "$\\Gamma_t = 1.4$ GeV", "x": 300, "y": 0.9 }
+    ],
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "",
+    "legend_location": "upper right",
+    "legend_outside": false,
+    "xpagelength": 9,
+    "ypagelength": 7.5,
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "xmin": 300.0,
+    "xmax": 400.0,
+    "ymin": 0.0,
+    "ymax": 1.0
+  },
+  {"title": "$f_s(|v(\\sqrt{s})|)$",
+    "output_file": "switch_off_functions",
+    "lines": [
+      { "name": "smoothstep_of_abs_v14_of_sqrts", "label": "smoothstep",
+        "linestyle": "solid"
+      },
+      { "name": "switchoff_of_abs_v14_of_sqrts", "label": "quadratic",
+        "linestyle": "dashdot"
+      },
+      { "name": "linearswitchoff_of_abs_v14_of_sqrts", "label": "linear",
+        "linestyle": "dashed"
+      },
+      { "name": "fermiswitchoff_of_abs_v14_of_sqrts", "label": "Fermi",
+        "linestyle": "dotted"
+      }
+    ],
+    "extra_texts": [
+      { "text": "$\\Gamma_t = 1.4$ GeV", "x": 310, "y": 0.9 },
+      { "text": "$v_1=0.1, v_2=0.4$", "x": 310, "y": 0.8 }
+    ],
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "",
+    "legend_location": "upper right",
+    "legend_outside": false,
+    "xpagelength": 9,
+    "ypagelength": 7.5,
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "xmin": 310.0,
+    "xmax": 380.0,
+    "ymin": 0.0,
     "ymax": 1.0,
-    "yminors": 5
+    "yminors": 3,
+    "xminors": 4,
+    "xmajors": 8
   }
   ],
   "transforms": [
@@ -378,7 +467,17 @@
       "data_imag_v_of_sqrts",
       "data_switchoff_of_real_v_of_sqrts",
       "data_switchoff_of_imag_v_of_sqrts",
-      "data_switchoff_of_abs_v_of_sqrts"
+      "data_switchoff_of_abs_v12_of_sqrts",
+      "data_switchoff_of_abs_v13_of_sqrts",
+      "data_smoothswitchoff_of_abs_v13_of_sqrts",
+      "data_linearswitchoff_of_abs_v14_of_sqrts",
+      "data_fermiswitchoff_of_abs_v14_of_sqrts",
+      "data_smoothstep_of_abs_v14_of_sqrts",
+      "data_switchoff_of_abs_v14_of_sqrts",
+      "data_switchoff_of_abs_v23_of_sqrts",
+      "data_switchoff_of_abs_v24_of_sqrts",
+      "data_switchoff_of_abs_v34_of_sqrts",
+      "data_switchoff_of_abs_vbest_of_sqrts"
     ],
     "expression": [
       "def data_abs_v_of_sqrts():",
@@ -409,7 +508,7 @@
       "  v2 = 0.3",
       "  v = np.vectorize(include.real_v_of_sqrts)",
       "  v = v(sqrts)",
-      "  f = np.vectorize(lambda x: include.switch_off(v1,v2,x))",
+      "  f = np.vectorize(lambda x: include.smoothstep(v1,v2,x))",
       "  f = f(v)",
       "  return ('switchoff_of_real_v_of_sqrts', np.vstack([sqrts, f]))",
       "",
@@ -420,11 +519,31 @@
       "  v2 = 0.3",
       "  v = np.vectorize(include.imag_v_of_sqrts)",
       "  v = v(sqrts)",
-      "  f = np.vectorize(lambda x: include.switch_off(v1,v2,x))",
+      "  f = np.vectorize(lambda x: include.smoothstep(v1,v2,x))",
       "  f = f(v)",
       "  return ('switchoff_of_imag_v_of_sqrts', np.vstack([sqrts, f]))",
       "",
-      "def data_switchoff_of_abs_v_of_sqrts():",
+      "def data_smoothswitchoff_of_abs_v13_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v1 = 0.1",
+      "  v2 = 0.3",
+      "  v = np.vectorize(include.abs_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  f = np.vectorize(lambda x: include.smoothstep(v1,v2,x))",
+      "  f = f(v)",
+      "  return ('smoothswitchoff_of_abs_v13_of_sqrts', np.vstack([sqrts, f]))",
+      "def data_switchoff_of_abs_v12_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v1 = 0.1",
+      "  v2 = 0.2",
+      "  v = np.vectorize(include.abs_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  f = np.vectorize(lambda x: include.switch_off(v1,v2,x))",
+      "  f = f(v)",
+      "  return ('switchoff_of_abs_v12_of_sqrts', np.vstack([sqrts, f]))",
+      "def data_switchoff_of_abs_v13_of_sqrts():",
       "  import numpy as np",
       "  sqrts = np.arange(300.0, 400.0, 0.1)",
       "  v1 = 0.1",
@@ -433,7 +552,87 @@
       "  v = v(sqrts)",
       "  f = np.vectorize(lambda x: include.switch_off(v1,v2,x))",
       "  f = f(v)",
-      "  return ('switchoff_of_abs_v_of_sqrts', np.vstack([sqrts, f]))"
+      "  return ('switchoff_of_abs_v13_of_sqrts', np.vstack([sqrts, f]))",
+      "def data_linearswitchoff_of_abs_v14_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v1 = 0.1",
+      "  v2 = 0.4",
+      "  v = np.vectorize(include.abs_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  f = np.vectorize(lambda x: include.linearswitch_off(v1,v2,x))",
+      "  f = f(v)",
+      "  return ('linearswitchoff_of_abs_v14_of_sqrts', np.vstack([sqrts, f]))",
+      "def data_fermiswitchoff_of_abs_v14_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v1 = 0.1",
+      "  v2 = 0.4",
+      "  v = np.vectorize(include.abs_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  f = np.vectorize(lambda x: include.fermiswitch_off(v1,v2,x))",
+      "  f = f(v)",
+      "  return ('fermiswitchoff_of_abs_v14_of_sqrts', np.vstack([sqrts, f]))",
+      "def data_smoothstep_of_abs_v14_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v1 = 0.1",
+      "  v2 = 0.4",
+      "  v = np.vectorize(include.abs_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  f = np.vectorize(lambda x: include.smoothstep(v1,v2,x))",
+      "  f = f(v)",
+      "  return ('smoothstep_of_abs_v14_of_sqrts', np.vstack([sqrts, f]))",
+      "def data_switchoff_of_abs_v14_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v1 = 0.1",
+      "  v2 = 0.4",
+      "  v = np.vectorize(include.abs_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  f = np.vectorize(lambda x: include.switch_off(v1,v2,x))",
+      "  f = f(v)",
+      "  return ('switchoff_of_abs_v14_of_sqrts', np.vstack([sqrts, f]))",
+      "def data_switchoff_of_abs_v23_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v1 = 0.2",
+      "  v2 = 0.3",
+      "  v = np.vectorize(include.abs_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  f = np.vectorize(lambda x: include.switch_off(v1,v2,x))",
+      "  f = f(v)",
+      "  return ('switchoff_of_abs_v23_of_sqrts', np.vstack([sqrts, f]))",
+      "def data_switchoff_of_abs_v24_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v1 = 0.2",
+      "  v2 = 0.4",
+      "  v = np.vectorize(include.abs_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  f = np.vectorize(lambda x: include.switch_off(v1,v2,x))",
+      "  f = f(v)",
+      "  return ('switchoff_of_abs_v24_of_sqrts', np.vstack([sqrts, f]))",
+      "def data_switchoff_of_abs_v34_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v1 = 0.3",
+      "  v2 = 0.4",
+      "  v = np.vectorize(include.abs_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  f = np.vectorize(lambda x: include.switch_off(v1,v2,x))",
+      "  f = f(v)",
+      "  return ('switchoff_of_abs_v34_of_sqrts', np.vstack([sqrts, f]))",
+      "def data_switchoff_of_abs_vbest_of_sqrts():",
+      "  import numpy as np",
+      "  sqrts = np.arange(300.0, 400.0, 0.1)",
+      "  v1 = 0.15",
+      "  v2 = 0.35",
+      "  v = np.vectorize(include.abs_v_of_sqrts)",
+      "  v = v(sqrts)",
+      "  f = np.vectorize(lambda x: include.switch_off(v1,v2,x))",
+      "  f = f(v)",
+      "  return ('switchoff_of_abs_vbest_of_sqrts', np.vstack([sqrts, f]))"
     ]
   }
 }

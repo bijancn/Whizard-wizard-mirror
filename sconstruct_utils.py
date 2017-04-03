@@ -23,9 +23,13 @@ def get_yodas_from_proc_list(proc_list):
   for process in proc_list:
     hepmcs = glob(process + '-*.hepmc')
     if len(hepmcs) > 0:
-      yodas.append(get_yodas_from_hepmc(hepmcs))
+      sources = get_yodas_from_hepmc(hepmcs)
     else:
-      yodas.append(glob(process + '-*.yoda'))
+      sources = glob(process + '-*.yoda')
+    if len(sources) == 0:
+      raise Exception("Did not find yodas or hepmcs for required process: " + process)
+    else:
+      yodas.append(sources)
   return yodas
 
 

@@ -25,7 +25,8 @@ def fill_all_runs(_run_json):
   runs = []
   for proc_dict in _run_json['processes']:
     if proc_dict.get('scale_variation', False):
-      processes = append_scale_suffixes(proc_dict['process'])
+      processes = append_scale_suffixes(proc_dict['process'],
+                                        proc_dict.get('extra_scales', False))
     else:
       processes = [proc_dict['process']]
     for proc_name in processes:
@@ -153,7 +154,8 @@ class Whizard():
       _exe = lambda p: SUCCESS
     if event_generation:
       shutil.copyfile(sindarin, os.path.join(runfolder, sindarin))
-      shutil.copyfile(integration_grids, os.path.join(runfolder, integration_grids))
+      if not ut.grep('grid_path', sindarin):
+        shutil.copyfile(integration_grids, os.path.join(runfolder, integration_grids))
       with ut.cd(runfolder):
         if (purpose == 'histograms'):
           ut.remove(fifo)  # Suppress annoying display output if Fifo is already present
@@ -537,18 +539,24 @@ def get_component_suffixes(proc_dict):
   return suffixes
 
 
-def get_scale_suffixes():
-  return ['central', 'low', 'high']
+def get_scale_suffixes(extra):
+  if not extra:
+      return ['central', 'low', 'high']
+  else:
+      return ['central', 'low1', 'low2', 'high1', 'high2']
 
 
-def append_scale_suffixes(proc_name):
-  return [proc_name + '_' + s for s in get_scale_suffixes()]
+def append_scale_suffixes(proc_name, extra=False):
+  return [proc_name + '_' + s for s in get_scale_suffixes(extra)]
 
 
 def test_append_scale_suffixes():
   proc_name = 'test'
   nt.eq_(append_scale_suffixes(proc_name),
       ['test_central', 'test_low', 'test_high'])
+  proc_name = 'test'
+  nt.eq_(append_scale_suffixes(proc_name, True),
+      ['test_central', 'test_low1', 'test_low2', 'test_high1', 'test_high2'])
 
 
 def create_nlo_component_names(sindarin, proc_dict):
@@ -587,7 +595,7 @@ def replace_scale(factor, filename):
   ut.sed(filename, replace_line=replace_func)
 
 
-def check_for_n_events(line, new_n_events):
+def n_events_replacer(line, new_n_events):
   if 'n_events = ' in line:
      line_split = line.split()
      return line_split[0] + ' = ' + str(new_n_events) + '\n'
@@ -599,7 +607,7 @@ def replace_n_events(factor, filename):
   original_n_events = ut.get_n_events(filename)
   if original_n_events is not None:
     new_n_events = factor * int(original_n_events)
-    replace_func = lambda l: check_for_n_events(l, new_n_events)
+    replace_func = lambda l: n_events_replacer(l, int(new_n_events))
     ut.sed(filename, replace_line=replace_func)
 
 
@@ -655,6 +663,9 @@ def create_nlo_component_sindarins(proc_dict, integration_sindarin, all_sindarin
     replace_proc_id(suffix, new_sindarin)
     event_mult = proc_dict.get('event_mult_real', 1)
     if event_mult != 1 and "Real" in new_sindarin:
+      replace_n_events(event_mult, new_sindarin)
+    event_mult = proc_dict.get('event_mult_virt', 1)
+    if event_mult != 1 and "Virtual" in new_sindarin:
       replace_n_events(event_mult, new_sindarin)
 
 
@@ -772,7 +783,7 @@ def test_check_for_valid_wizard_sindarin():
 
 def create_scale_sindarins(base_sindarin, proc_dict):
   new_sindarins = []
-  for suffix in get_scale_suffixes():
+  for suffix in get_scale_suffixes(proc_dict.get('extra_scales', False)):
     new_sindarin = insert_suffix_in_sindarin(base_sindarin, suffix)
     new_sindarins.append(new_sindarin)
     shutil.copyfile(base_sindarin, new_sindarin)
@@ -781,8 +792,22 @@ def create_scale_sindarins(base_sindarin, proc_dict):
       replace_scale(1.0 / scale_multiplier, new_sindarin)
     elif suffix == 'high':
       replace_scale(scale_multiplier, new_sindarin)
+    elif suffix == 'low1':
+      replace_threshold_scale('0', new_sindarin)
+    elif suffix == 'low2':
+      replace_threshold_scale('1', new_sindarin)
+    elif suffix == 'high1':
+      replace_threshold_scale('2', new_sindarin)
+    elif suffix == 'high2':
+      replace_threshold_scale('3', new_sindarin)
     replace_proc_id(suffix, new_sindarin)
   return new_sindarins
+
+
+def replace_threshold_scale(number, filename):
+  scan_expression = "scale_variations = " + number + "\n"
+  replace_func = lambda line: line.replace('#SETSCAN', scan_expression)
+  ut.sed(filename, replace_line=replace_func)
 
 
 def multiply_sindarins(integration_sindarin, proc_dict, scaled, nlo_type,

@@ -1,8 +1,11 @@
 include("../../general_settings.sin")
 include("../process_settings.sin")
+wtop = 0.0
 
 #ITERATIONS
 process proc_nlo = t => Wp, b { nlo_calculation = "Full" }
+real my_scale = 1.0
 #SETSCAN
+scale = my_scale
 integrate (proc_nlo)
-printf "RES %8e %8e %8e" (mtop, integral(proc_nlo), error(proc_nlo))
+printf "RES %8e %8e %8e" (my_scale, integral(proc_nlo), error(proc_nlo))

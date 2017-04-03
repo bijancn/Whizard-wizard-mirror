@@ -29,7 +29,14 @@ colors = ['#EE3311',  # red
           '#ab47bc',  # purple
           '#000000',  # black
           '#f06292',  # pink
-          '#3f51b5'   # indigo
+          '#CDDC39',  # lime
+          '#303F9F',  # indigo
+          '#795548',  # brown
+          '#FFEB3B',  # yellow
+          '#FF7043',  # deeporange
+          '#009688',  # teal
+          '#607D8B',  # bluegray
+          '#EF9A9A'   # lightred
           ]
 
 color_names = [
@@ -41,7 +48,15 @@ color_names = [
     "purple",
     "black",
     "pink",
-    "indigo"]
+    "lime",
+    "indigo",
+    "brown",
+    "yellow",
+    "deeporange",
+    "teal",
+    "bluegray",
+    "lightred"
+]
 
 color_dict = dict(zip(color_names, colors))
 
@@ -150,7 +165,7 @@ def set_legend(fig, axes, legend_ordering, legend_outside, height_shrinker,
     # reorder if sequence of appropriate size is given
     handles = map(handles.__getitem__, legend_ordering)
     labels = map(labels.__getitem__, legend_ordering)
-  if legend_outside:
+  if legend_outside == 'vertical':
     # Shrink current axis's height by (1.0-height_shrinker) on the bottom
     reduced_amount = 0.0
     for ax in axes:
@@ -158,10 +173,39 @@ def set_legend(fig, axes, legend_ordering, legend_outside, height_shrinker,
       ax.set_position([box.x0, box.y0 + reduced_amount + box.height * (1.0 -
         height_shrinker), box.width, box.height * height_shrinker])
       reduced_amount = box.height * (1.0 - height_shrinker)
-    # Put a legend below current axis (coordinates are relative to last ax)
     fig.legend(handles, labels, loc='lower center',
         bbox_to_anchor=(0.5, 0.0),
         fancybox=False, ncol=legend_columns)
+  elif legend_outside == 'horizontal':
+    #  reduced_amount = 0.0
+    #  for ax in axes:
+    #    box = ax.get_position()
+    #    ax.set_position([box.x0 + reduced_amount + box.width * (1.0 -
+    #      height_shrinker), box.y0, box.width * height_shrinker, box.height])
+    #    reduced_amount = box.width * (1.0 - height_shrinker)
+    ax = axes[0]
+    ax.legend(handles, labels, loc='upper left',
+        bbox_to_anchor=(1.02, 1), borderaxespad=0,
+        fancybox=False, ncol=legend_columns)
+    plt.draw()         # to know size of legend
+    padLeft = ax.get_position().x0 * fig.get_size_inches()[0]
+    padBottom = ax.get_position().y0 * fig.get_size_inches()[1]
+    padTop = (1 - ax.get_position().y0 - ax.get_position().height) * \
+        fig.get_size_inches()[1]
+    padRight = (1 - ax.get_position().x0 - ax.get_position().width) * \
+        fig.get_size_inches()[0]
+    dpi = fig.get_dpi()
+    padLegend = ax.get_legend().get_frame().get_width() / dpi
+    widthAx = 9
+    heightAx = 9
+    widthTot = widthAx + padLeft + padRight + padLegend
+    heightTot = heightAx + padTop + padBottom
+    # set figure size and ax position
+    fig.set_size_inches(widthTot, heightTot)
+    ax.set_position([padLeft / widthTot, padBottom / heightTot,
+                     widthAx / widthTot, heightAx / heightTot])
+    plt.draw()
+
   else:
     #  TODO: (bcn 2016-08-17) in general one could imagine to give the ax to
     #  draw the legend on
@@ -196,7 +240,7 @@ class Plotter(object):
       xminors=0, yminorss=[],
       xticks=None, ytickss=[], puff=0.05,
       legend_location='best',
-      legend_columns=1, legend_outside=False, height_shrinker=0.80,
+      legend_columns=1, legend_outside="Nope", height_shrinker=0.80,
       legend_hide=False, legend_ordering=[]):
     set_labels(axes, xlabel, ylabels)
     for ax in axes:
@@ -401,7 +445,8 @@ def setup_minors(plot_dict, ratio_dict):
 def setup_extra_kwargs(plot_dict, many_labels):
   kwargs = {}
   kwargs['height_shrinker'] = plot_dict.get('legend_height_shrinker', 0.7)
-  kwargs['legend_outside'] = plot_dict.get('legend_outside', many_labels)
+  legend_outside = "vertical" if many_labels else "Nope"
+  kwargs['legend_outside'] = plot_dict.get('legend_outside', legend_outside)
   kwargs['legend_location'] = plot_dict.get('legend_location', 'best')
   kwargs['legend_ordering'] = plot_dict.get('legend_ordering', [])
   return kwargs
@@ -417,7 +462,17 @@ def plot_band(data_of_a_band, band, color, title, global_opacity, pretty_label,
   combined_x, list_of_y_arrays = data_utils.remove_uncommon(list_of_x_arrays,
       list_of_y_arrays)
   y_array = np.vstack(tuple(list_of_y_arrays))
-  this_fill_between(combined_x, np.amin(y_array, axis=0), np.amax(y_array, axis=0),
+  smallest = np.amin(y_array, axis=0)
+  largest = np.amax(y_array, axis=0)
+  if band.get('symmetrize', False):
+    central = y_array[0]
+    tmp = np.array(central + (central - smallest))
+    new_largest = np.amax(np.vstack((largest, tmp)), axis=0)
+    tmp = np.array(central - (largest - central))
+    new_smallest = np.amin(np.vstack((smallest, tmp)), axis=0)
+    largest = new_largest
+    smallest = new_smallest
+  this_fill_between(combined_x, smallest, largest,
       color=color, label=label, alpha=opacity)
 
 
@@ -662,7 +717,8 @@ def plot(plot_dict, data, pic_path='./',
             this_fill_between_func, global_base_line)
     plot_band(data_of_a_band, band, color, title, global_opacity, pretty_label,
         this_fill_between)
-  for ldata, line, color in zip(line_data + fit_data, lines + fits, colors + colors):
+  for ldata, line, color in zip(line_data + fit_data, lines + fits,
+                                colors + colors + colors + colors):
     i += 1
     if ratio_dict is not None:
       this_errorbar, this_plot, this_fill_between = \

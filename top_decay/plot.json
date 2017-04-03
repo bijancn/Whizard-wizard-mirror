@@ -1,8 +1,8 @@
 {
   "plots": [
   {"title": "top width",
-   "lines": ["proc_lo", "proc_nlo"],
-   "xlabel": "$m_t$",
+   "lines": [{"name": "proc_nlo-my_scale"}],
+   "xlabel": "$\\mu_r$",
    "ylabel": "$\\Gamma$"
   }
   ]

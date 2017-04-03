@@ -43,9 +43,15 @@ def main():
   files = [str(f) for dp in data_paths for f in glob.glob(dp + '/*.dat')]
   pic_path = os.path.abspath(os.path.join(cwd, 'plots')) + '/'
   data = data_utils.load_and_clean_files(files, plot_json)
+  #  TODO: (bcn 2017-02-22) make this steerable
   for idx, item in enumerate(data):
     if 'Analytic' in item[0]:
       data[idx][1][1] *= 1000
+  for output in plot_json.get('output', []):
+    data_to_show = data_utils.get_associated_plot_data_single(data, output)
+    for data_item in data_to_show:
+      for x in output.get('print_points', []):
+        print x, data_utils.get_y_where_x(data_item, x)
   plot_this = partial(bcn_plot.plot, data=data, pic_path=pic_path)
   plots = plot_json['plots']
   if args.plot is not None:

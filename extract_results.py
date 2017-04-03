@@ -37,7 +37,7 @@ def build_regexs(proc):
     else:
       proc_regexs = [pr + '-*-' + scan['scan_object'] for pr in proc_regexs]
   if proc[2].get('integration_copies', 0) > 0:
-    proc_regexs = [pr + '-*' for pr in proc_regexs]
+    proc_regexs = [pr + '-[0-9]*' for pr in proc_regexs]
   return proc_regexs
 
 
@@ -67,7 +67,8 @@ def main():
   for rf in runfolders:
     print 'runfolders = ', rf
   result_cmd = [get_RES(runfolder) for runfolder in runfolders]
-  result_files = [os.path.join(result_path, p.replace('-*', '') + '.dat')
+  result_files = [os.path.join(result_path,
+                   p.replace('-[0-9]*', '').replace('-*', '') + '.dat')
       for p in process_names]
   if args.jobs > 1:
     pool = mp.Pool(processes=args.jobs)

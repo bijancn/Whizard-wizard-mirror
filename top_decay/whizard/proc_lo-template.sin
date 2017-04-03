@@ -3,6 +3,8 @@ include("../process_settings.sin")
 
 #ITERATIONS
 process proc_lo = t => Wp, b
+real my_scale = 1.0
 #SETSCAN
+scale = my_scale
 integrate (proc_lo)
 printf "RES %8e %8e %8e" (mtop, integral(proc_lo), error(proc_lo))
