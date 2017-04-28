@@ -45,13 +45,14 @@ like
 }
 ```
 Create the plot with `../plot-data.py`. Enjoy your publication-level
-plot in `plots/myplot.pdf`. You can create any number of
-plots with any number of input data, plotted as lines or bands,
-including automatic ratio plots normalized to any of the input lines.
-Furthermore, you can compose transformations of data like rescalings,
-smoothing, fits to polynomials, combine two data sets with an arbitrary
-function or even plot a custom function that you supply, c.f. the
-steering with `plot.json`.
+plot in `plots/myplot.pdf`.
+![example plot](https://bijancn.github.io/Whizard-wizard-mirror/standalone-example/plots/myplot.svg)
+You can create any number of plots with any number of input data,
+plotted as lines or bands, including automatic ratio plots normalized to
+any of the input lines.  Furthermore, you can compose transformations of
+data like rescalings, smoothing, fits to polynomials, combine two data
+sets with an arbitrary function or even plot a custom function that you
+supply, c.f. the steering with `plot.json`.
 
 Steering with `run.json`
 ================================================================================
