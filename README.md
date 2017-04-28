@@ -59,6 +59,7 @@ Steering with `run.json`
 The run schema that shows which values can be used and what they do are found
 [here](http://desy.de/~bcho/docson/#run-schema.json) (because Gitlab does not
 allow custom Javascript, we can't show them here).
+{% include run.html %}
 
 Plotting with `plot.json`
 ================================================================================
