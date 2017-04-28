@@ -14,7 +14,7 @@ process.
 The allowed variables and syntax of both `.json` files is documented and
 validated against a schema: `plot-schema.json` and `run-schema.json`.
 
-Example usage
+Example WHIZARD usage
 ================================================================================
 Create a new process folder. Create in there a `whizard` folder and in that
 folder a `myprocess-template.sin`. Create a `run.json` in the process folder
@@ -24,6 +24,34 @@ the nodes and cores to use, above the process folder but this depends on your
 MPI installation. Check if `mpi_run_this.sh` uses a command that fits your
 installation). In case you did a scan, you can extract the results with
 `../extract-results.py` and plot it with `../plot-data.py`.
+
+Example stand-alone plot usage
+================================================================================
+Create a new process folder. Create in there a `scan-results` folder and
+put in there the results you want to plot as a e.g. `myresults.dat`
+file (the file is loaded with `numpy.loadtxt`, so a simple `1.0 1.0`
+format for x, y values and `1.0 1.0 0.1` for x, y and yerr in each row
+is fine).
+Create a `plot.json` in the process folder that uses `myresults`
+like
+```
+{
+  "plots": [{
+    "title": "myplot",
+    "lines": [{"name": "myresults"}],
+    "xlabel": "foo $x$",
+    "ylabel": "bar $x^2$"
+  }]
+}
+```
+Create the plot with `../plot-data.py`. Enjoy your publication-level
+plot in `plots/myplot.pdf`. You can create any number of
+plots with any number of input data, plotted as lines or bands,
+including automatic ratio plots normalized to any of the input lines.
+Furthermore, you can compose transformations of data like rescalings,
+smoothing, fits to polynomials, combine two data sets with an arbitrary
+function or even plot a custom function that you supply, c.f. the
+steering with `plot.json`.
 
 Steering with `run.json`
 ================================================================================

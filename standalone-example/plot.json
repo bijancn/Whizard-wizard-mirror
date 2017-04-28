@@ -1,0 +1,8 @@
+{
+  "plots": [{
+    "title": "myplot",
+    "lines": [{"name": "myresults"}],
+    "xlabel": "foo $x$",
+    "ylabel": "bar $x^2$"
+  }]
+}
