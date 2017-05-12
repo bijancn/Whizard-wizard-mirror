@@ -505,7 +505,7 @@ def plot_line(ldata, line, color, title, pretty_label, linestyle_decider,
       raise Exception("You have to supply errors for banded linestyle")
   elif linestyle == 'scatter':
     # TODO: (bcn 2016-03-31) hacking in a ratio for now #notproud
-    kwargs['marker'] = "+"
+    #  kwargs['marker'] = "+"
     ax.scatter(d[0], d[1] / d[2], **kwargs)
   elif linestyle == 'histogram':
     # TODO: (bcn 2016-03-31) hacking in a ratio for now #notproud

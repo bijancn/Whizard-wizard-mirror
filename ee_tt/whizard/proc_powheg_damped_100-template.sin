@@ -7,12 +7,14 @@ $loop_me_method = "openloops"
 ?powheg_matching = true
 powheg_grid_size_xi = 5
 powheg_grid_size_y = 5
-powheg_grid_sampling_points = 500000
+powheg_grid_sampling_points = 5000000
 powheg_pt_min = 1
 ?powheg_use_singular_jacobian = false
+?powheg_use_damping = true
+powheg_damping_scale = 100 GeV
 wtop = 0.0
-scale = mtop
 
+library = PROCESS
 process PROCESS = E1, e1 => t, T {nlo_calculation="Full"}
 
 #ITERATIONS

@@ -2,8 +2,6 @@ include("../../general_settings.sin")
 include("../process_settings.sin")
 
 wtop = 0.0
-wZ = 2.5060
-wW = 2.0978
 
 ?fixed_order_nlo_events = true
 ?unweighted = false

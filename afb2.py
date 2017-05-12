@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import argparse
 
 parser = argparse.ArgumentParser(description="Path to .dat-files")
@@ -56,7 +57,7 @@ def compute_afb_from_list(cos_theta, weight):
   sumwp = 0.0
   sumwm = 0.0
   for x, w in zip(cos_theta, weight):
-    if x <= 0.0:
+    if x < 0.0:
        sumwm += w
     else:
        sumwp += w
@@ -85,7 +86,7 @@ if nlo:
   if (len(scales) > 1):
     corr_minus = (afb[1] - afb[0]) / afb[0] * 100
     corr_plus = (afb[2] - afb[0]) / afb[0] * 100
-    print 'afb: ', afb[0], ' + ', corr_plus, '%   ', corr_minus, '%'
+    print 'afb: ', afb[0], ' + ', corr_plus, '%  - ', corr_minus, '%'
   else:
     print 'scale: ', scale, 'afb: ', afb[0]
 else:

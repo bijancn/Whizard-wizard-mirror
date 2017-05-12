@@ -767,14 +767,15 @@ def execute_defined_functions(data, plot_json):
 
 def load_and_clean_files(files, plot_json=None):
   data = [(filename, np.loadtxt(filename, unpack=True)) for filename in files]
-  data = remove_empty_data(data)
-  data = sort_data(data)
-  data = average_copies(data)
-  data = build_nlo_sums(data)
-  if plot_json is not None:
-    data = execute_defined_functions(data, plot_json)
-    data = apply_transforms(data, plot_json)
-  data = remove_empty_data(data)
+  if not plot_json.get('bare_data', False):
+    data = remove_empty_data(data)
+    data = sort_data(data)
+    data = average_copies(data)
+    data = build_nlo_sums(data)
+    if plot_json is not None:
+      data = execute_defined_functions(data, plot_json)
+      data = apply_transforms(data, plot_json)
+    data = remove_empty_data(data)
   return data
 
 
