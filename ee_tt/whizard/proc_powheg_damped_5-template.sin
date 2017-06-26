@@ -11,7 +11,7 @@ powheg_grid_sampling_points = 100000
 powheg_pt_min = 1
 ?powheg_use_singular_jacobian = false
 ?nlo_use_real_partition = true
-real_partition_scale = 1 GeV
+real_partition_scale = 5 GeV
 wtop = 0.0
 
 library = PROCESS

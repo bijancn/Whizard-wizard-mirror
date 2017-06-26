@@ -8,6 +8,7 @@ scale = mtop
 ?unweighted = false
 ?negative_weights = true
 #ITERATIONS
+library = proc_lo
 process proc_lo = E1, e1 => t, T
 #SETSCAN
 integrate (proc_lo)

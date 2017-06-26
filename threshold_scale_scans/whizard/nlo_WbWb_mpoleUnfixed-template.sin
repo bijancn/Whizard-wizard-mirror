@@ -1,0 +1,30 @@
+include("../process_settings_threshold.sin")
+
+$method                  = "openloops"
+$born_me_method          = "openloops"
+$loop_me_method          = "openloops"
+$correlation_me_method   = "openloops"
+$real_tree_me_method     = "openloops"
+$soft_mismatch_me_method = "openloops"
+
+mpole_fixed = -1
+offshell_strategy = 1     !!! NLO width and decay
+nrqcd_order = 1
+FF = -1  !!! MATCHED
+
+mult_call_real = 20
+mult_call_virt = 0.75
+
+sqrts = 350
+
+library = PROCESS
+real scale_var = 0.0
+#SETSCAN
+sh = scale_var
+scale = scale_var * m1S
+
+alpha_power = 4
+#ITERATIONS
+process PROCESS = e1, E1 => Wp, Wm, b, B { nlo_calculation = "Full" }
+integrate (PROCESS)
+printf "RES %8e %8e %8e" (scale_var, integral(PROCESS), error(PROCESS))

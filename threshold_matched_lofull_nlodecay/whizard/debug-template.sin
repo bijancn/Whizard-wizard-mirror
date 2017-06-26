@@ -1,0 +1,66 @@
+include("../process_settings_threshold.sin")
+
+library = PROCESS
+
+mpole_fixed = -1
+nrqcd_order = 1 # NLL
+offshell_strategy = 1     !!! NLO width and decay
+
+mult_call_real = 20
+mult_call_virt = 0.75
+#ITERATIONS
+real mass_cut = - 1
+real scale_variations = -1
+real formfactor = -1
+real factorization = -1
+#SETSCAN
+if (factorization == 1) then
+  offshell_strategy = offshell_strategy +
+    2+     !!! factorized
+    8+     !!! onshell projection all
+    512    !!! boost decay
+endif
+if (formfactor == 1) then
+  FF = 1   !!! RESUMMED
+  offshell_strategy = offshell_strategy + 4       !!! interference
+  offshell_strategy = offshell_strategy + 16384   !!! only interference
+  process PROCESS = e1, E1 => Wp, Wm, b, B
+elsif (formfactor == 2) then
+  FF = 4   !!! EXPANDED
+  offshell_strategy = offshell_strategy + 4       !!! interference
+  offshell_strategy = offshell_strategy + 16384   !!! only interference
+  process PROCESS = e1, E1 => Wp, Wm, b, B
+elsif (formfactor == 3) then
+  FF = 1   !!! RESUMMED
+  offshell_strategy = offshell_strategy + 32      !!! Hel Approx
+  offshell_strategy = offshell_strategy + 2048    !!! enforce minus 1
+  process PROCESS = e1, E1 => Wp, Wm, b, B { nlo_calculation = "Full" }
+endif
+compile
+if (scale_variations == 0) then
+  sh = 0.5
+  sf = 1.0
+elsif (scale_variations == 1) then
+  sh = 0.5
+  sf = 2.0
+elsif (scale_variations == 2) then
+  sh = 2.0
+  sf = 1.0
+elsif (scale_variations == 3) then
+  sh = 2.0
+  sf = 0.5
+elsif (scale_variations == 4) then
+  sh = 1.0
+  sf = 1.0
+endif
+if (mass_cut > 0) then
+  cuts = all abs (M - m1S) < mass_cut [Wp, b] and
+         all abs (M - m1S) < mass_cut [Wm, B]
+endif
+show(model)
+sqrtsmin = sqrts - 2 * sqrtsstepsize
+sqrtsmax = sqrts + 2 * sqrtsstepsize
+
+integrate (PROCESS)
+
+printf  "RES %8e %8e %8e" (sqrts, integral(PROCESS), error(PROCESS))

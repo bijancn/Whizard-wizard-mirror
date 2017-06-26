@@ -7,11 +7,11 @@ $loop_me_method = "openloops"
 ?powheg_matching = true
 powheg_grid_size_xi = 5
 powheg_grid_size_y = 5
-powheg_grid_sampling_points = 5000000
+powheg_grid_sampling_points = 100000
 powheg_pt_min = 1
 ?powheg_use_singular_jacobian = false
-?powheg_use_damping = true
-powheg_damping_scale = 100 GeV
+?nlo_use_real_partition = true
+real_partition_scale = 100 GeV
 wtop = 0.0
 
 library = PROCESS

@@ -1,0 +1,45 @@
+include("../process_settings_threshold_SM.sin")
+$method                = "openloops"
+$born_me_method        = "openloops"
+$loop_me_method        = "openloops"
+$correlation_me_method = "openloops"
+$real_tree_me_method   = "openloops"
+$soft_mismatch_me_method = "openloops"
+alpha_power = 4
+
+library = PROCESS
+process PROCESS = e1, E1 => Wm, Wp, B, b { nlo_calculation = "Full" }
+compile
+
+mult_call_real = 20
+mult_call_virt = 0.75
+real scale_variations = -1
+real mass_cut = - 1
+real sh = 1.0
+#SETSCAN
+if (scale_variations == 0) then
+  sh = 0.5
+elsif (scale_variations == 1) then
+  sh = 2.0
+elsif (scale_variations == 2) then
+  sh = 1.0
+endif
+scale = sh * mtop
+if (mass_cut > 0) then
+  cuts = all abs (M - mtop) < mass_cut [Wp, b] and
+         all abs (M - mtop) < mass_cut [Wm, B]
+endif
+show(model)
+
+alpha_power = 1
+wtop = 0.0
+iterations = 5:400:"gw",5:800
+process top_width_nlo = t => Wp, b { nlo_calculation = "Full" } #KEEP
+integrate (top_width_nlo)
+wtop = integral(top_width_nlo)
+alpha_power = 4
+
+#ITERATIONS
+integrate (PROCESS)
+
+printf  "RES %8e %8e %8e" (sqrts, integral(PROCESS), error(PROCESS))

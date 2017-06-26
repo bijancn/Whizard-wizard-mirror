@@ -13,6 +13,7 @@ powheg_pt_min = 1
 wtop = 0.0
 scale = mtop
 
+library = PROCESS
 process PROCESS = E1, e1 => t, T {nlo_calculation="Full"}
 
 #ITERATIONS
