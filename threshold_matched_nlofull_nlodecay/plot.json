@@ -1,0 +1,99 @@
+{
+  "transforms": [
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_nlodecay-sqrts--4-scale_variations--21-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ]
+  ],
+  "plots": [
+  { "title": "",
+    "output_file": "matched_nlofull_lodecay",
+    "bands": [
+      { "label": "NLO", "hide_label": true,
+        "color": "blue",
+        "opacity": 0.2,
+        "data": [
+        { "name": "nlofull-sqrts--0-scale_variations",
+          "folder": "../threshold_nlofull"
+        },
+        { "name": "nlofull-sqrts--1-scale_variations",
+          "folder": "../threshold_nlofull"
+        },
+        { "name": "nlofull-sqrts--2-scale_variations",
+          "folder": "../threshold_nlofull"
+        },
+        { "name": "nlofull-sqrts--3-scale_variations",
+          "folder": "../threshold_nlofull"
+        },
+        { "name": "nlofull-sqrts",
+          "folder": "../threshold_nlofull"
+        }
+      ]
+      }
+    ],
+    "lines": [
+      { "name": "matched_nlodecay-sqrts--4-scale_variations--21-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=1000,v_2=10000$", "linestyle": "solid",
+        "hide_label": false, "color": "black"
+      },
+      { "name": "nll-sqrts--4-scale_variations--0-interferences--1-FF",
+        "folder": "../threshold_matched_lofull_lodecay",
+        "label": "NLL", "color": "red"
+      },
+      { "name": "nll-sqrts--4-scale_variations--1-interferences--1-FF",
+        "folder": "../threshold_matched_lofull_lodecay",
+        "label": "NLL+LO", "color": "red", "linestyle": "dashed"
+      },
+      { "name": "nlofull-sqrts",
+        "label": "NLO", "hide_label": true,
+        "folder": "../threshold_nlofull", "color": "blue"
+      }
+    ],
+    "disabled": [
+      { "name": "nll-sqrts--4-scale_variations--0-interferences--4-FF",
+        "folder": "../threshold_matched_lofull_lodecay",
+        "label": "expanded", "color": "purple"
+      },
+      { "name": "nll-sqrts--4-scale_variations--1-interferences--4-FF",
+        "folder": "../threshold_matched_lofull_lodecay",
+        "label": "expanded+LO", "color": "purple", "linestyle": "dashed"
+      },
+      { "name": "nlofull-sqrts--0-scale_variations", "linestyle": "dashed",
+        "label": "NLO h=0.5", "folder": "../threshold_nlofull", "color": "blue"
+      },
+      { "name": "nlofull-sqrts--1-scale_variations", "linestyle": "dashed",
+        "label": "NLO1 h=0.5", "folder": "../threshold_nlofull", "color": "blue"
+      },
+      { "name": "nlofull-sqrts--2-scale_variations", "linestyle": "dotted",
+        "label": "NLO2 h=2", "folder": "../threshold_nlofull", "color": "blue"
+      },
+      { "name": "nlofull-sqrts--3-scale_variations", "linestyle": "dotted",
+        "label": "NLO3 h=2", "folder": "../threshold_nlofull", "color": "blue"
+      }
+    ],
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "height_shrinker": 0.4,
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "xmin": 330.0,
+    "xmax": 380.0,
+    "xmajors": 6,
+    "xminors": 3,
+    "ymin": 0.0,
+    "ymax": 1000.0,
+    "ymajors": 9,
+    "yminors": 4
+  }
+  ]
+}

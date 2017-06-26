@@ -1,0 +1,233 @@
+{
+  "plots": [
+  { "title": "",
+    "output_file": "nlofull",
+    "bands": [
+      { "label": "NLO $m_t[m_{1S}], \\mu=m_{1S}\\sqrt{|v|}$", "hide_label": true,
+        "color": "green",
+        "opacity": 0.3,
+        "data": [
+        { "name": "nlofull-sqrts--0-scale_variations",
+          "folder": "../threshold_nlofull_newscale"
+        },
+        { "name": "nlofull-sqrts--1-scale_variations",
+          "folder": "../threshold_nlofull_newscale"
+        },
+        { "name": "nlofull-sqrts--2-scale_variations",
+          "folder": "../threshold_nlofull_newscale"
+        },
+        { "name": "nlofull-sqrts--3-scale_variations",
+          "folder": "../threshold_nlofull_newscale"
+        }
+        ],
+        "base_line": [
+          {"name": "nlofull-sqrts", "folder": "../threshold_nlofull_newscale"},
+          {"hide_line": true}
+        ]
+      },
+      { "label": "NLO $m_t[m_{1S}], \\mu=m_{1S}$", "hide_label": true,
+        "color": "orange",
+        "opacity": 0.3,
+        "data": [
+        { "name": "nlofull-sqrts--0-scale_variations",
+          "folder": "../threshold_nlofull"
+        },
+        { "name": "nlofull-sqrts--1-scale_variations",
+          "folder": "../threshold_nlofull"
+        },
+        { "name": "nlofull-sqrts--2-scale_variations",
+          "folder": "../threshold_nlofull"
+        },
+        { "name": "nlofull-sqrts--3-scale_variations",
+          "folder": "../threshold_nlofull"
+        },
+        { "name": "nlofull-sqrts",
+          "folder": "../threshold_nlofull"
+        }
+      ],
+        "base_line": [
+          {"name": "nlofull-sqrts", "folder": "../threshold_nlofull"},
+          {"name": "nlofull-sqrts", "folder": "../threshold_nlofull", "hide_line": true}]
+      },
+      { "label": "NLO $m_t=m_{1S}, \\mu=m_{1S}$", "hide_label": true,
+        "color": "blue",
+        "opacity": 0.3,
+        "data": [
+        { "name": "nlofull-sqrts--0-scale_variations",
+          "folder": "../threshold_nlofull_mpoleFixed"
+        },
+        { "name": "nlofull-sqrts--1-scale_variations",
+          "folder": "../threshold_nlofull_mpoleFixed"
+        },
+        { "name": "nlofull-sqrts--2-scale_variations",
+          "folder": "../threshold_nlofull_mpoleFixed"
+        },
+        { "name": "nlofull-sqrts--3-scale_variations",
+          "folder": "../threshold_nlofull_mpoleFixed"
+        }
+        ],
+        "base_line": [
+          {"name": "nlofull-sqrts", "folder": "../threshold_nlofull_mpoleFixed"},
+          {"name": "nlofull-sqrts", "folder": "../threshold_nlofull_mpoleFixed"}]
+      },
+      { "label": "$t\\bar t$ NLO $m_t=m_{1S}, \\mu=m_{1S}$", "hide_label": true,
+        "color": "red",
+        "opacity": 0.3,
+        "data": [
+        { "name": "nlofull-sqrts--0-scale_variations",
+          "folder": "../threshold_nlofull_ttbar"
+        },
+        { "name": "nlofull-sqrts--1-scale_variations",
+          "folder": "../threshold_nlofull_ttbar"
+        },
+        { "name": "nlofull-sqrts--2-scale_variations",
+          "folder": "../threshold_nlofull_ttbar"
+        },
+        { "name": "nlofull-sqrts--3-scale_variations",
+          "folder": "../threshold_nlofull_ttbar"
+        }
+        ],
+        "base_line": [
+          {"name": "nlofull-sqrts", "folder": "../threshold_nlofull_ttbar", 
+            "hide_line": false},
+          {"name": "nlofull-sqrts", "folder": "../threshold_nlofull_mpoleFixed"}]
+      }
+    ],
+    "lines": [
+      { "name": "nlofull-sqrts",
+        "label": "NLO $h=1,f=1$", "hide_label": true,
+        "folder": "../threshold_nlofull", "color": "blue"
+      },
+      { "name": "nlofull-sqrts--0-scale_variations", "linestyle": "dashed","hide_label": true,
+        "label": "NLO $h=0.5, f=1$", "folder": "../threshold_nlofull", "color": "blue",
+        "hide_line": "true"
+      },
+      { "name": "nlofull-sqrts--1-scale_variations", "linestyle": "dashed","hide_label": true,
+        "label": "NLO $h=0.5, f=2$", "folder": "../threshold_nlofull", "color": "blue",
+        "hide_line": "true"
+      },
+      { "name": "nlofull-sqrts--2-scale_variations", "linestyle": "dotted","hide_label": true,
+        "label": "NLO $h=2, f=1$", "folder": "../threshold_nlofull", "color": "blue",
+        "hide_line": "true"
+      },
+      { "name": "nlofull-sqrts--3-scale_variations", "linestyle": "dotted","hide_label": true,
+        "label": "NLO $h=2, f=1/2$", "folder": "../threshold_nlofull", "color": "blue",
+        "hide_line": "true"
+      },
+      { "name": "nlofull-sqrts--0-scale_variations", "linestyle": "dashed","hide_label": true,
+        "label": "NLO $h=0.5, f=1$", "folder": "../threshold_nlofull_mpoleFixed", "color": "red",
+        "hide_line": "true"
+      },
+      { "name": "nlofull-sqrts--1-scale_variations", "linestyle": "dashed","hide_label": true,
+        "label": "NLO $h=0.5, f=2$", "folder": "../threshold_nlofull_mpoleFixed", "color": "red",
+        "hide_line": "true"
+      },
+      { "name": "nlofull-sqrts--2-scale_variations", "linestyle": "dotted","hide_label": true,
+        "label": "NLO $h=2, f=1$", "folder": "../threshold_nlofull_mpoleFixed", "color": "red",
+        "hide_line": "true"
+      },
+      { "name": "nlofull-sqrts--3-scale_variations", "linestyle": "dotted","hide_label": true,
+        "label": "NLO $h=2, f=1/2$", "folder": "../threshold_nlofull_mpoleFixed", "color": "red",
+        "hide_line": "true"
+      },
+      { "name": "nlofull-sqrts",
+        "label": "", "hide_label": true,
+        "folder": "../threshold_nlofull_mpoleFixed", "color": "red",
+        "base_line": [
+          {"name": "nlofull-sqrts", "folder": "../threshold_nlofull_mpoleFixed"},
+          {"name": "nlofull-sqrts", "folder": "../threshold_nlofull_mpoleFixed"}]
+      },
+      { "name": "nlofull-sqrts--0-scale_variations", "linestyle": "dashed","hide_label": true,
+        "label": "NLO $h=0.5, f=1$", "folder": "../threshold_nlofull_newscale", "color": "green",
+        "hide_line": "true"
+      },
+      { "name": "nlofull-sqrts--1-scale_variations", "linestyle": "dashed","hide_label": true,
+        "label": "NLO $h=0.5, f=2$", "folder": "../threshold_nlofull_newscale", "color": "green",
+        "hide_line": "true"
+      },
+      { "name": "nlofull-sqrts--2-scale_variations", "linestyle": "dotted","hide_label": true,
+        "label": "NLO $h=2, f=1$", "folder": "../threshold_nlofull_newscale", "color": "green",
+        "hide_line": "true"
+      },
+      { "name": "nlofull-sqrts--3-scale_variations", "linestyle": "dotted",
+        "hide_label": true,
+        "label": "NLO $h=2, f=1/2$",
+        "folder": "../threshold_nlofull_newscale", "color": "green",
+        "hide_line": "true"
+      },
+      { "name": "nlofull-sqrts",
+        "label": "NLO $h=1,f=1$", "hide_label": true,
+        "folder": "../threshold_nlofull_newscale", "color": "green", "hide_label":true,
+        "base_line": [
+          {"name": "nlofull-sqrts", "folder": "../threshold_nlofull_newscale"},
+          {"hide_line": true}
+        ]
+      },
+      { "name": "nlofull-sqrts",
+        "label": "$t\\bar{t}$ NLO $m_t=m_{1S}$", "hide_label": true,
+        "folder": "../threshold_nlofull_ttbar", "color": "orange",
+        "base_line": [
+          {"name": "nlofull-sqrts", "folder": "../threshold_nlofull_ttbar", "hide_line": true},
+          {"name": "nlofull-sqrts", "folder": "../threshold_nlofull_mpoleFixed"}]
+      }
+    ],
+    "disabled": [
+      { "name": "nll-sqrts--4-scale_variations--1-interferences--4-FF--1-nlo_width",
+        "folder": "../threshold_matched_lofull_lodecay",
+        "label": "NLL expanded, $\\Gamma_\\text{NLO}$",
+        "color": "green", "linestyle": "solid"
+      },
+      { "name": "nll-sqrts--4-scale_variations--1-interferences--4-FF",
+        "folder": "../threshold_matched_lofull_lodecay",
+        "label": "NLL expanded, $\\Gamma_\\text{LO}$",
+        "color": "green", "linestyle": "dashed"
+      }
+    ],
+    "ratio": [{
+      "ymin": 0.8,
+      "ymax": 1.2,
+      "ymajors": 5,
+      "ylabel": "Scale vars",
+      "extra_lines": [
+        {"type": "vertical",
+         "value": 344.0,
+         "opacity": 0.2,
+         "linestyle": "dashed"
+        }
+      ]
+    },{
+      "ymin": 0.8,
+      "ymax": 1.2,
+      "ymajors": 5,
+      "ylabel": "$\\sigma^{t\\bar t}/\\sigma^{W^{+}bW^{-}\\bar{b}}$",
+      "extra_lines": [
+        {"type": "vertical",
+         "value": 344.0,
+         "opacity": 0.2,
+         "linestyle": "dashed"
+        }
+      ]
+    }],
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "height_shrinker": 0.4,
+    "legend_outside": "Nope",
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "xmin": 330.0,
+    "xmax": 380.0,
+    "xmajors": 6,
+    "xminors": 3,
+    "ymin": 0.0,
+    "ymax": 1000.0,
+    "ymajors": 11,
+    "yminors": 4
+  }
+  ]
+}

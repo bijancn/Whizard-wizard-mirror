@@ -1,0 +1,259 @@
+{
+  "transforms": [
+    [{"type": "binary_function",
+      "data": [
+        {"name": "debug-sqrts--4-scale_variations--3-formfactor--1-factorization",
+         "folder": "../threshold_matched_lofull_nlodecay"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull_newscale"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "debug-sqrts--0-scale_variations--2-formfactor--1-factorization"},
+        {"name": "tree-sqrts--0-scale_variations--1-interferences"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "debug-sqrts--1-scale_variations--2-formfactor--1-factorization"},
+        {"name": "tree-sqrts--1-scale_variations--1-interferences"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "debug-sqrts--2-scale_variations--2-formfactor--1-factorization"},
+        {"name": "tree-sqrts--2-scale_variations--1-interferences"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "debug-sqrts--3-scale_variations--2-formfactor--1-factorization"},
+        {"name": "tree-sqrts--3-scale_variations--1-interferences"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "debug-sqrts--4-scale_variations--2-formfactor--1-factorization"},
+        {"name": "tree-sqrts--4-scale_variations--1-interferences"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "expression": "lambda y1, y2: y1 - y2",
+      "infix": "_minus_",
+      "data": [
+        {"name": "debug-sqrts--4-scale_variations--1-formfactor--1-factorization",
+         "folder": "../threshold_matched_lofull_nlodecay"},
+        {"name": "debug-sqrts--4-scale_variations--2-formfactor--1-factorization"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "debug-sqrts--4-scale_variations--3-formfactor--1-factorization_sum_nlofull-sqrts",
+         "folder": "../threshold_matched_lofull_nlodecay"},
+        {"name": "debug-sqrts--4-scale_variations--1-formfactor--1-factorization_minus_debug-sqrts--4-scale_variations--2-formfactor--1-factorization",
+         "folder": "../threshold_matched_lofull_nlodecay"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_nlodecay-sqrts--4-scale_variations--21-matched_variations",
+        "folder": "../threshold_matched_nlofull_nlodecay_newscale"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull_newscale"}
+      ]
+     }
+    ]
+  ],
+  "output": [
+    {
+      "data": [
+        { "name": "debug-sqrts--0-scale_variations--3-formfactor--1-factorization",
+          "folder": "../threshold_matched_lofull_nlodecay" },
+        { "name": "debug-sqrts--4-scale_variations--3-formfactor--1-factorization",
+          "folder": "../threshold_matched_lofull_nlodecay" }
+      ],
+      "print_points": [348.0, 349.0, 350.0]
+    }
+  ],
+  "plots": [
+  { "title": "",
+    "output_file": "matched_nlofull_lodecay",
+    "bands": [
+      {
+        "label": "Interference $\\tilde{F}_\\text{NLL,exp}$", "color": "green",
+        "opacity": 0.3,
+        "data": [
+          { "name": "debug-sqrts--0-scale_variations--2-formfactor--1-factorization" },
+          { "name": "debug-sqrts--1-scale_variations--2-formfactor--1-factorization" },
+          { "name": "debug-sqrts--2-scale_variations--2-formfactor--1-factorization" },
+          { "name": "debug-sqrts--3-scale_variations--2-formfactor--1-factorization" },
+          { "name": "debug-sqrts--4-scale_variations--2-formfactor--1-factorization" }
+        ],
+        "base_line": [
+          { "name": "debug-sqrts--4-scale_variations--2-formfactor--1-factorization" }
+        ]
+      },
+      {
+        "label": "Interference $\\tilde{F}_\\text{NLL,exp}$ + LO", "color": "green",
+        "opacity": 0.5,
+        "data": [
+          { "name": "debug-sqrts--0-scale_variations--2-formfactor--1-factorization_sum_tree-sqrts--0-scale_variations--1-interferences" },
+          { "name": "debug-sqrts--1-scale_variations--2-formfactor--1-factorization_sum_tree-sqrts--1-scale_variations--1-interferences" },
+          { "name": "debug-sqrts--2-scale_variations--2-formfactor--1-factorization_sum_tree-sqrts--2-scale_variations--1-interferences" },
+          { "name": "debug-sqrts--3-scale_variations--2-formfactor--1-factorization_sum_tree-sqrts--3-scale_variations--1-interferences" },
+          { "name": "debug-sqrts--4-scale_variations--2-formfactor--1-factorization_sum_tree-sqrts--4-scale_variations--1-interferences" }
+        ],
+        "base_line": [
+          { "name": "debug-sqrts--4-scale_variations--2-formfactor--1-factorization_sum_tree-sqrts--4-scale_variations--1-interferences" }
+        ]
+      },
+      {
+        "label": "Interference $\\tilde{F}_\\text{NLL}$", "color": "red",
+        "opacity": 0.3,
+        "data": [
+          { "name": "debug-sqrts--0-scale_variations--1-formfactor--1-factorization",
+            "folder": "../threshold_matched_lofull_nlodecay" },
+          { "name": "debug-sqrts--1-scale_variations--1-formfactor--1-factorization",
+            "folder": "../threshold_matched_lofull_nlodecay" },
+          { "name": "debug-sqrts--2-scale_variations--1-formfactor--1-factorization",
+            "folder": "../threshold_matched_lofull_nlodecay" },
+          { "name": "debug-sqrts--3-scale_variations--1-formfactor--1-factorization",
+            "folder": "../threshold_matched_lofull_nlodecay" },
+          { "name": "debug-sqrts--4-scale_variations--1-formfactor--1-factorization",
+            "folder": "../threshold_matched_lofull_nlodecay" }
+        ],
+        "base_line": [
+          { "name": "debug-sqrts--4-scale_variations--1-formfactor--1-factorization",
+            "folder": "../threshold_matched_lofull_nlodecay" }
+        ]
+      },
+      {
+        "label": "$|\\tilde{F}_\\text{NLL}|^2$", "color": "cyan",
+        "opacity": 0.4,
+        "data": [
+          { "name": "debug-sqrts--0-scale_variations--3-formfactor--1-factorization",
+            "folder": "../threshold_matched_lofull_nlodecay" },
+          { "name": "debug-sqrts--1-scale_variations--3-formfactor--1-factorization",
+            "folder": "../threshold_matched_lofull_nlodecay" },
+          { "name": "debug-sqrts--2-scale_variations--3-formfactor--1-factorization",
+            "folder": "../threshold_matched_lofull_nlodecay" },
+          { "name": "debug-sqrts--3-scale_variations--3-formfactor--1-factorization",
+            "folder": "../threshold_matched_lofull_nlodecay" },
+          { "name": "debug-sqrts--4-scale_variations--3-formfactor--1-factorization",
+            "folder": "../threshold_matched_lofull_nlodecay" }
+        ],
+        "base_line": [
+          { "name": "debug-sqrts--4-scale_variations--3-formfactor--1-factorization",
+            "folder": "../threshold_matched_lofull_nlodecay" }
+        ]
+      }
+    ],
+    "lines": [
+      { "name": "nlofull-sqrts",
+        "label": "NLO", "hide_label": false,
+        "folder": "../threshold_nlofull_newscale", "color": "blue",
+         "base_line": [ { "hide_line": true} ]
+      },
+      { "name": "debug-sqrts--4-scale_variations--1-formfactor--1-factorization",
+        "label": "Interference $\\tilde{F}_\\text{NLL}$", "color": "red",
+         "folder": "../threshold_matched_lofull_nlodecay",
+        "base_line": [
+      { "hide_line": true}
+        ]
+      },
+      { "name": "debug-sqrts--4-scale_variations--2-formfactor--1-factorization",
+        "label": "Interference $\\tilde{F}_\\text{NLL,exp}$", "color": "green",
+        "hide_label": true,
+        "base_line": [
+      { "hide_line": true}
+        ]
+      },
+      { "name": "debug-sqrts--4-scale_variations--2-formfactor--1-factorization_sum_tree-sqrts--4-scale_variations--1-interferences",
+        "label": "Interference $\\tilde{F}_\\text{NLL,exp}$ + LO", "color": "green",
+        "hide_label": true,
+        "base_line": [
+      { "hide_line": true}
+        ]
+      },
+          
+      { "name": "debug-sqrts--4-scale_variations--1-formfactor--1-factorization_minus_debug-sqrts--4-scale_variations--2-formfactor--1-factorization",
+        "label": "Interference $\\tilde{F}_\\text{NLL} - \\tilde{F}_\\text{NLL,exp}$", 
+        "color": "orange",
+         "folder": "../threshold_matched_lofull_nlodecay",
+         "base_line": [
+      { "hide_line": true}
+           ]
+      },
+      { "name": "debug-sqrts--4-scale_variations--3-formfactor--1-factorization",
+        "label": "$|\\tilde{F}_\\text{NLL}|^2$", "color": "cyan",
+         "folder": "../threshold_matched_lofull_nlodecay",
+         "base_line": [ { "hide_line": true} ]
+      },
+      { "name": "debug-sqrts--4-scale_variations--3-formfactor--1-factorization_sum_nlofull-sqrts",
+        "label": "$|\\tilde{F}_\\text{NLL}|^2$ + NLO", "color": "purple",
+         "folder": "../threshold_matched_lofull_nlodecay",
+         "base_line": [ { "hide_line": true} ]
+      },
+      { "name": "debug-sqrts--4-scale_variations--3-formfactor--1-factorization_sum_nlofull-sqrts_sum_debug-sqrts--4-scale_variations--1-formfactor--1-factorization_minus_debug-sqrts--4-scale_variations--2-formfactor--1-factorization",
+        "label": "$|\\tilde{F}_\\text{NLL}|^2$ + NLO + Interference", "color": "black",
+         "folder": "../threshold_matched_lofull_nlodecay",
+         "base_line": [ { "hide_line": true} ]
+      },
+      { "name": "matched_nlodecay-sqrts--4-scale_variations--21-matched_variations_sum_nlofull-sqrts",
+        "folder": "../threshold_matched_nlofull_nlodecay_newscale",
+        "label": "matched, $v_1=1000,v_2=10000$", "linestyle": "dashed",
+        "hide_label": false, "color": "red",
+         "base_line": [ { "hide_line": true} ]
+      }
+    ],
+    "ratio": {
+      "ymin": 0.8,
+      "ymax": 1.2,
+      "ymajors": 5,
+      "extra_lines": [
+        {"type": "vertical",
+         "value": 344.0,
+         "opacity": 0.2,
+         "linestyle": "dashed"
+        },
+        {"type": "horizontal",
+         "value": 1.0,
+         "opacity": 0.5,
+         "linestyle": "solid"
+        }
+      ]
+    },
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "legend_outside": "Nope",
+    "xpagelength": 8,
+    "ypagelength": 12,
+    "height_shrinker": 0.7,
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "xmin": 330.0,
+    "xmax": 380.0,
+    "xmajors": 6,
+    "xminors": 3,
+    "ymin": -700.0,
+    "ymax": 1000.0,
+    "ymajors": 18,
+    "yminors": 4
+  }
+  ]
+}

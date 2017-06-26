@@ -1,0 +1,76 @@
+{
+  "transforms": [
+    [
+    { "type": "smooth",
+      "window_size": 3,
+      "poly_order": 1,
+      "data": [{"name": "nlo_WbWb-scale_var--350-sqrts"}]
+    },
+      { "type": "scalings",
+      "scale_by_point": 1.0,
+      "data": [
+        {"name": "nlo_WbWb-scale_var--350-sqrts_smooth"},
+        {"name": "nlo_WbWb_mpoleUnfixed-scale_var--350-sqrts"},
+        {"name": "nlo_WbWb_newscalestar-scale_var--350-sqrts"},
+        {"name": "nlo_WbWb-scale_var--800-sqrts"},
+        {"name": "nlo_ttbar-scale_var--350-sqrts"},
+        {"name": "nlo_ttbar-scale_var--800-sqrts"}
+      ]
+    }
+    ]
+  ],
+  "plots": [
+    {"title": "NLO scale variations, $\\sqrt{s}=350$ GeV, $\\Gamma_{\\mathrm t}(\\mu_{\\mathrm R})$",
+      "output_file": "tt-mu-scan-350",
+      "lines": [
+        { "name": "nlo_WbWb_newscalestar-scale_var--350-sqrts_scale",
+          "label": "$\\mathrm{W^+ W^- b \\bar{b}}$, $m_{\\mathrm t}[m_{\\mathrm{1S}}], \\mu_0=m_{\\mathrm{1S}}\\sqrt{\\nu_{*}}$", "color": "blue"
+        },
+        { "name": "nlo_WbWb_mpoleUnfixed-scale_var--350-sqrts_scale",
+          "label": "$\\mathrm{W^+ W^- b \\bar{b}}$, $m_{\\mathrm t}[m_{\\mathrm{1S}}], \\mu_0=m_{\\mathrm{1S}}$", "color": "orange"
+        },
+        { "name": "nlo_WbWb-scale_var--350-sqrts_smooth_scale",
+          "label": "$\\mathrm{W^+ W^- b \\bar{b}}$, $m_{\\mathrm t}=m_{\\mathrm{1S}}, \\mu_0=m_{\\mathrm{1S}}$", "color": "green"
+        },
+        { "name": "nlo_ttbar-scale_var--350-sqrts_scale",
+          "color": "red",
+          "label": "$\\mathrm{t \\bar{t}}$, $m_{\\mathrm t}=m_{\\mathrm{1S}}$, $\\mu_0=m_{\\mathrm{1S}}$"
+        }
+      ],
+      "opacity": 0.8,
+      "extra_lines": [
+        { "type": "vertical", "value": 0.5,  "linestyle": "dashed", "opacity": 0.2
+        },
+        { "type": "vertical", "value": 2.0,  "linestyle": "dashed", "opacity": 0.2
+        }
+      ],
+      "xlabel": "$\\mu_{\\mathrm R} / \\mu_0$",
+      "ylabel": "$\\sigma(\\mu_{\\mathrm R}) / \\sigma(\\mu_{\\mathrm R} = \\mu_0)$",
+      "ylog": false,
+      "xlog": true,
+      "ymajors": 6,
+      "ymin": 0.80,
+      "ymax": 1.30,
+      "xticks": [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0]
+    },
+    {"title": "$\\sqrt{s}=800$ GeV, $m_{\\mathrm t}=m_{\\mathrm{1S}}$, $\\Gamma_{\\mathrm t}(\\mu_{\\mathrm R})$",
+      "output_file": "tt-mu-scan-800",
+      "lines": [
+        {"name": "nlo_WbWb-scale_var--800-sqrts_scale",
+          "label": "$W^+ W^- b \\bar{b}$"
+        },
+        {"name": "nlo_ttbar-scale_var--800-sqrts_scale",
+          "label": "$t \\bar{t}$"
+        }
+      ],
+      "xlabel": "$\\mu_{\\mathrm R} / m_{\\mathrm t}$",
+      "ylabel": "$\\sigma(\\mu_{\\mathrm R}) / \\sigma(\\mu_{\\mathrm R} = \\mu_0)$",
+      "ylog": false,
+      "xlog": true,
+      "ymajors": 8,
+      "ymin": 0.97,
+      "ymax": 1.03,
+      "xticks": [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0]
+    }
+  ]
+}

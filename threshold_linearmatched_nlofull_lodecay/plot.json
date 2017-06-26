@@ -1,0 +1,447 @@
+{
+  "transforms": [
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--0-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--1-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--2-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--3-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--4-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--5-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--6-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--7-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--8-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--9-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--10-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--11-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--12-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--13-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--14-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--15-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--16-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--17-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--18-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--19-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--20-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--21-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ],
+    [{"type": "binary_function",
+      "data": [
+        {"name": "matched_lodecay-sqrts--4-scale_variations--22-matched_variations"},
+        {"name": "nlofull-sqrts",
+        "folder": "../threshold_nlofull"}
+      ]
+     }
+    ]
+  ],
+  "output": [
+      { "data": [{"name": "nlofull-sqrts", "folder": "../threshold_nlofull"}],
+        "print_points": [350.0]
+      }
+  ],
+  "plots": [
+  { "title": "",
+    "output_file": "matched_nlofull_lodecay",
+    "bands": [
+      { "label": "NLO", "hide_label": true,
+        "color": "blue",
+        "opacity": 0.2,
+        "data": [
+        { "name": "nlofull-sqrts--0-scale_variations",
+          "folder": "../threshold_nlofull"
+        },
+        { "name": "nlofull-sqrts--1-scale_variations",
+          "folder": "../threshold_nlofull"
+        },
+        { "name": "nlofull-sqrts--2-scale_variations",
+          "folder": "../threshold_nlofull"
+        },
+        { "name": "nlofull-sqrts--3-scale_variations",
+          "folder": "../threshold_nlofull"
+        },
+        { "name": "nlofull-sqrts",
+          "folder": "../threshold_nlofull"
+        }
+      ]
+      }
+    ],
+    "lines": [
+      { "name": "matched_lodecay-sqrts--4-scale_variations--3-matched_variations",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "cyan", "hide_line": true
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--3-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.09,v_2=0.14$",
+        "hide_label": false, "color": "cyan", "hide_line": true
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--4-matched_variations",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "pink", "hide_line": true
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--4-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.08,0.13$",
+        "hide_label": false, "color": "pink", "hide_line": true
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--5-matched_variations",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "black", "hide_line": true
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--5-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.15,v_2=0.20$",
+        "hide_label": false, "color": "black", "hide_line": true
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--1-matched_variations",
+        "label": "matched - NLO, $v_1=0.3,0.40$",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "green", "hide_line": true
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--1-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.3,0.40$",
+        "hide_label": false, "color": "green", "hide_line": true
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--15-matched_variations",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "deeporange"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--15-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.15,v_2=0.30$",
+        "hide_label": false, "color": "brown"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--2-matched_variations",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "pink"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--2-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.15,v_2=0.35$",
+        "hide_label": false, "color": "pink"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--8-matched_variations",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "green"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--8-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.15,v_2=0.40$",
+        "hide_label": false, "color": "green"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--17-matched_variations",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "lime", "hide_line": false
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--17-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.15,v_2=0.45$",
+        "hide_label": false, "color": "lime", "hide_line": false
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--11-matched_variations",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "bluegray"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--11-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.15,v_2=0.50$",
+        "hide_label": false, "color": "bluegray"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--16-matched_variations",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "cyan", "hide_line": false
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--16-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.15,v_2=0.55$",
+        "hide_label": false, "color": "cyan", "hide_line": false
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--12-matched_variations",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "black"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--12-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.15,v_2=0.60$",
+        "hide_label": false, "color": "black"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--22-matched_variations",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "indigo"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--22-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.125,v_2=0.30$",
+        "hide_label": false, "color": "indigo"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--6-matched_variations",
+        "linestyle": "dotted", "hide_line": true,
+        "hide_label": true, "color": "pink"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--6-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.10,v_2=0.15$", "hide_line": true, "linestyle": "dashed",
+        "hide_label": false, "color": "pink"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--20-matched_variations",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "orange", "hide_line": false
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--20-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.10,v_2=0.25$",
+        "hide_label": false, "color": "orange", "hide_line": false
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--0-matched_variations",
+        "label": "matched - NLO, $v_1=0.10,v_2=0.20$",
+        "linestyle": "dotted", "hide_line": false,
+        "hide_label": true, "color": "yellow"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--0-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.10,v_2=0.20$", "hide_line": false, "linestyle": "dashed",
+        "hide_label": false, "color": "yellow"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--7-matched_variations",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "brown"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--7-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.10,v_2=0.30$", "linestyle": "dashed",
+        "hide_label": false, "color": "brown"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--13-matched_variations",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "pink", "hide_line": false
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--13-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.10,v_2=0.35$", "linestyle": "dashed",
+        "hide_label": false, "color": "pink", "hide_line": false
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--14-matched_variations",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "green"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--14-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.10,v_2=0.40$", "linestyle": "dashed",
+        "hide_label": false, "color": "green"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--19-matched_variations",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "lime", "hide_line": false
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--19-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.10,v_2=0.45$", "linestyle": "dashed",
+        "hide_label": false, "color": "lime", "hide_line": false
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--9-matched_variations",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "bluegray"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--9-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.10,v_2=0.50$", "linestyle": "dashed",
+        "hide_label": false, "color": "bluegray"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--18-matched_variations",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "cyan", "hide_line": false
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--18-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.10,v_2=0.55$", "linestyle": "dashed",
+        "hide_label": false, "color": "cyan", "hide_line": false
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--10-matched_variations",
+        "linestyle": "dotted",
+        "hide_label": true, "color": "black"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--10-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=0.10,v_2=0.60$", "linestyle": "dashed",
+        "hide_label": false, "color": "black"
+      },
+      { "name": "matched_lodecay-sqrts--4-scale_variations--21-matched_variations_sum_nlofull-sqrts",
+        "label": "matched, $v_1=1000,v_2=10000$", "linestyle": "dotted",
+        "hide_label": false, "color": "black"
+      },
+      { "name": "nll-sqrts--4-scale_variations--0-interferences--1-FF",
+        "folder": "../threshold_matched_lofull_lodecay",
+        "label": "NLL", "color": "red"
+      },
+      { "name": "nll-sqrts--4-scale_variations--1-interferences--1-FF",
+        "folder": "../threshold_matched_lofull_lodecay",
+        "label": "NLL+LO", "color": "red", "linestyle": "dashed"
+      },
+      { "name": "nll-sqrts--4-scale_variations--0-interferences--4-FF",
+        "folder": "../threshold_matched_lofull_lodecay",
+        "label": "expanded", "color": "purple"
+      },
+      { "name": "nll-sqrts--4-scale_variations--1-interferences--4-FF",
+        "folder": "../threshold_matched_lofull_lodecay",
+        "label": "expanded+LO", "color": "purple", "linestyle": "dashed"
+      },
+      { "name": "nlofull-sqrts",
+        "label": "NLO", "hide_label": false,
+        "folder": "../threshold_nlofull", "color": "blue"
+      }
+    ],
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "legend_outside": true,
+    "ypagelength": 8,
+    "xpagelength": 15,
+    "height_shrinker": 0.4,
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "xmin": 330.0,
+    "xmax": 380.0,
+    "xmajors": 6,
+    "xminors": 3,
+    "ymin": 0.0,
+    "ymax": 800.0,
+    "ymajors": 9,
+    "yminors": 4
+  }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "plots": [
+  { "title": "NLO predictions for on- and off-shell $t\\bar t$ production",
+    "output_file": "nlofull",
+    "bands": [
+      { "label": "ISR $\\mathrm{W^+ W^- b \\bar{b}}$, $m_{\\mathrm t}[m_{\\mathrm{1S}}], \\mu_0=m_{\\mathrm{1S}}$", "hide_label": true,
+        "color": "blue",
+        "opacity": 0.3,
+        "data": [
+        { "name": "nlofull-sqrts--0-scale_variations",
+          "folder": "../threshold_nlofull_isr"
+        },
+        { "name": "nlofull-sqrts--1-scale_variations",
+          "folder": "../threshold_nlofull_isr"
+        },
+        { "name": "nlofull-sqrts--2-scale_variations",
+          "folder": "../threshold_nlofull_isr"
+        },
+        { "name": "nlofull-sqrts--3-scale_variations",
+          "folder": "../threshold_nlofull_isr"
+        },
+        { "name": "nlofull-sqrts",
+          "folder": "../threshold_nlofull_isr"
+        }
+      ],
+        "base_line": [
+          {"name": "nlofull-sqrts", "folder": "../threshold_nlofull_isr"}]
+      },
+      { "label": "$\\mathrm{W^+ W^- b \\bar{b}}$, $m_{\\mathrm t}[m_{\\mathrm{1S}}], \\mu_0=m_{\\mathrm{1S}}$", "hide_label": true,
+        "color": "red",
+        "opacity": 0.3,
+        "data": [
+        { "name": "nlofull-sqrts--0-scale_variations",
+          "folder": "../threshold_nlofull_cms"
+        },
+        { "name": "nlofull-sqrts--1-scale_variations",
+          "folder": "../threshold_nlofull_cms"
+        },
+        { "name": "nlofull-sqrts--2-scale_variations",
+          "folder": "../threshold_nlofull_cms"
+        },
+        { "name": "nlofull-sqrts--3-scale_variations",
+          "folder": "../threshold_nlofull_cms"
+        },
+        { "name": "nlofull-sqrts",
+          "folder": "../threshold_nlofull_cms"
+        }
+      ],
+        "base_line": [
+          {"name": "nlofull-sqrts", "folder": "../threshold_nlofull_cms"}]
+      }
+    ],
+    "lines": [
+      { "name": "nlofull-sqrts",
+        "label": "NLO $h=1,f=1$", "hide_label": true,
+        "folder": "../threshold_nlofull_cms", "color": "red"
+      },
+      { "name": "nlofull-sqrts",
+        "label": "ISR NLO $h=1,f=1$", "hide_label": true,
+        "folder": "../threshold_nlofull_isr", "color": "blue"
+      }
+    ],
+    "ratio": [{
+      "ymin": 0.9,
+      "ymax": 1.1,
+      "ymajors": 5,
+      "ylabel": "Scale vars",
+      "extra_lines": [
+        {"type": "vertical",
+         "value": 344.0,
+         "opacity": 0.2,
+         "linestyle": "dashed"
+        }
+      ]
+    }],
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }
+    ],
+    "height_shrinker": 0.4,
+    "legend_outside": "Nope",
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.8,
+    "xmin": 330.0,
+    "xmax": 380.0,
+    "xmajors": 6,
+    "xminors": 3,
+    "ymin": 0.0,
+    "ymax": 1000.0,
+    "ymajors": 11,
+    "yminors": 4
+  }
+  ]
+}
