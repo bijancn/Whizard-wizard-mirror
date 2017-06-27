@@ -271,6 +271,49 @@ def build_binary_function(data, action_dict):
     return data
 
 
+def build_reduce(data, action_dict):
+  action_data = get_associated_plot_data_single(data, action_dict)
+  suffix = action_dict.get('suffix', '_sum')
+  try:
+    new_name = action_data[0][0].replace('.dat', suffix + '.dat')
+  except IndexError:
+      print 'Warning: You have to give at least one data entry to apply reduce.' + \
+          ' Skipping: ', action_dict
+  else:
+    print 'Appending ', new_name
+    user_func = eval(action_dict.get('expression', 'lambda x,y: x + y'))
+    try:
+      # Slicing is a bitch
+      new_x = []
+      new_y = []
+      new_z = []
+      for i in range(len(action_data)):
+        new_x.append(action_data[i][1][0])
+        new_y.append(action_data[i][1][1])
+        new_z.append(action_data[i][1][2])
+      common_x, combined_y, combined_yerr = remove_uncommon(
+          new_x,
+          new_y,
+          new_z)
+      user_errfunc = eval(action_dict.get('error_expression',
+                                          'lambda x,y: np.sqrt(x**2 + y**2)'))
+      new_y = reduce(user_func, combined_y)
+      new_yerr = reduce(user_errfunc, combined_yerr)
+      data.append((new_name, np.array((common_x, new_y, new_yerr))))
+    except IndexError:
+      new_x = []
+      new_y = []
+      for i in range(len(action_data)):
+        new_x.append(action_data[i][1][0])
+        new_y.append(action_data[i][1][1])
+      common_x, combined_y, combined_yerr = remove_uncommon(
+          new_x,
+          new_y)
+      new_y = reduce(user_func, combined_y)
+      data.append((new_name, np.array((common_x, new_y))))
+    return data
+
+
 def test_build_binary_function():
   cwd = os.getcwd()
   x_array = np.array((1, 2, 3))
@@ -730,6 +773,8 @@ def apply_transforms(data, plot_json):
          data = build_fits(data, action)
       elif action["type"] == "binary_function":
          data = build_binary_function(data, action)
+      elif action["type"] == "reduce":
+         data = build_reduce(data, action)
   return data
 
 
