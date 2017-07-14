@@ -1,0 +1,119 @@
+# Calculates NLO cross section of pp -> mu+ nu_mu e+ nu_e jj at LO
+# The content of this file is not optimized to be viewed using linewrapping
+########################################################################
+# Settings for custom parameters
+########################################################################
+logical ?integration_fast = true                                               ! fast integration to check for consistency. Not for final results
+int runID = 35
+string $mylogfilename = sprintf "mylog_run%d.log" (runID)
+open_out ($mylogfilename)
+$out_file = $mylogfilename
+printf "$pp \to \mu^+ \nu_\mu e^+ \nu_e jj$ @ LO, paralleltest, samplenorm=sigma, slowInt"
+close_out($mylogfilename)
+########################################################################
+# Settings for physical Parameters
+########################################################################
+model = SM (Complex_Mass_Scheme)                                                ! sets OpenLoops flags for complex mass scheme
+GF = 1.16637E-005         # => alpha                                            ! alpha = alpha_ew is locked and set via mW, mZ and GF
+# pole mass values
+mW = 80.3579736098775
+wW =  2.084298998278219
+mZ = 91.1534806191827
+wZ =  2.494266378772824
+show(alpha_em_i)                                                                ! Der Wert von alpha ist nur in den ersten 4 Nachkommastellen identisch mit dem auf der Comparison angegebenen paper.
+real aem = 1. / alpha_em_i
+show(aem)
+mH = 125.0
+wH = 4.07E-003
+mmu = 0
+me = 0
+show(mmu)                                                                       ! both are =/= 0 per default
+show(me)                                                                        ! warnings due to width of electron and muon..
+mc = 0
+ms = 0
+mb = 0                                                                          ! Auch die b-Masse soll ==0 sein, ich will ja bs im jet
+wtop = 0
+mtop = 173.21 GeV
+########################################################################
+# Settings for predeclared technical parameters
+########################################################################
+?logging = true                                                                 ! produces log file. true is default
+?openmp_logging = false                                                         ! same as ?logging for OpenMP
+?vis_history = false                                                            ! Not in manual
+?integration_timer = false                                                      ! Gives an estimation for the time it takes to generate 10000 events
+?pacify = false                                                                 ! Suppresses numerical noise and produces less digits
+# OpenMP Settings                                                               ! Berechnet die Phasenraumpunkte und die Helicity-Matrixelemente mit OpenMP
+openmp_num_threads = 4
+?omega_openmp = true                                                            ! Hiermit laesst sich OpenMP fuer die Matrixelemente separat ausschalten
+# Integration fuer NLO
+?use_vamp_equivalences = false                                                  ! Wird fuer NLO ohnehin disabled
+$method = "omega"                                                               ! legacy option for LO
+$born_me_method = "openloops"                                                   ! Verwende OpenLoops fuer alle Matrixelemente
+!$real_tree_me_method = "openloops"
+!$correlation_me_method = "openloops"
+!$loop_me_method = "openloops"
+?openloops_use_cms = true                                                       ! activates complex mass scheme !also for LO if calculated using nlo_calculation= "Born" and LO values for masses and widths
+?alphas_is_fixed = false
+!alphas = 0.118
+?alphas_from_lambda_qcd = false
+?alphas_from_mz = true                                                          ! start at alpha_S(Mz)
+!?alphas_is_fixed = true
+alphas = 0.0
+!?alphas_from_lambda_qcd = false
+!?alphas_from_mz = false
+alphas_order = 1
+alphas_nf = 5
+########################################################################
+# P r o c e s s
+########################################################################
+$run_id = sprintf "run%d" (runID)                                               ! define string to mark run-specific outputs
+# Order of the pro-cess                                                          ! relevant for OpenLoops to find the Matrixelement
+alpha_power = 6
+alphas_power = 0                                                                ! alphas_power does always account for the Born => it stays fixed =0 also for NLO
+# Define renormalisation scale and factorisation scale
+scale = mW                                                                      ! sets both scales
+# Set the pro-cess energy
+sqrts = 13000 GeV
+# Setup the beams
+beams = p, p => lhapdf
+$lhapdf_file = "NNPDF30_nlo_as_0118"                                            ! Yes, use this file for both, lo and nlo
+# Define aliasses
+alias jet = u:U:d:D:s:S:c:C
+alias lepton = E1:E2                                                            ! Da die experimental signature als "two equally charged leptons" angegeben ist, wird nicht auf neutrinos gecuttet
+$exclude_gauge_splittings = "t"                                                 ! (shouldn't matter)
+alias quark = u:d:s:c
+alias antiq = U:D:S:C
+alias pr = quark:antiq:g
+# Define pro-cess pp -> mu+ nu_mu e+ nu_e jj
+library = PROCESS
+process PROCESS = pr, pr => E2, n2, E1, n1, jet, jet{
+$restrictions = "!gl"                                                           ! disables gluon propagators
+!nlo_calculation = "Born"                                                       ! yields still LO if used with LO values for masses and widths
+}
+compile
+########################################################################
+# Cluster settings
+########################################################################
+jet_algorithm = antikt_algorithm                                                ! specifies algorithm used to cluster jets. ! choice doesnt matter for just 1 jet im final state
+jet_r = 0.4
+########################################################################
+# Cuts
+########################################################################
+cuts = let subevt @clustered_jets = cluster [jet] in
+       let subevt @selected_jets = select if ((Pt > 30 GeV) and (abs (Rap) < 4.5)) [@clustered_jets] in
+       let subevt @sorted_jets = sort by Pt [@selected_jets] in
+       let subevt @hardest_jet = extract index -1 [@sorted_jets] in
+       let subevt @second_hardest_jet = extract index -2 [@sorted_jets] in
+       all Pt > 20 GeV [lepton]
+       and all abs ( Rap ) < 2.5 [lepton]
+       and all sqrt ( Rap*Rap + Phi*Phi ) > 0.3 [lepton, lepton]
+       and all Pt > 40 GeV [collect[n1:n2]]                                     ! Ptmiss cut
+       and count [@selected_jets] >= 2
+       and all M > 500 GeV [@hardest_jet, @second_hardest_jet]
+       and all abs (Rap) > 2.5 [@hardest_jet, @second_hardest_jet]
+       and all sqrt ( Rap*Rap + Phi*Phi ) > 0.3 [lepton, @selected_jets]
+########################################################################
+# Integration
+########################################################################
+#ITERATIONS
+  integrate(PROCESS)
