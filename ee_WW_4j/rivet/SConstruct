@@ -21,14 +21,17 @@ env['ANALYSIS'] = base_analysis
 configs = [base_analysis, base_analysis + '-show-MCerrors']
 configs = [c + '.plot' for c in configs]
 configs = ['WHIZARD.plot']
-processes = ['jjjj', 'jjjj_ww'#, 'jjjj_jrr', 'jjjj_jrr_repro'
+#  processes = ['jjjj', 'jjjj_ww', 'jjjj_resonances', 'jjjj_resonances_osl1'
+processes = ['jjjj', 'jjjj_ww', 'jjjj_resonances'
       ]
 
 plot_together = [{'target': 'plots',
-                  'lines': ['jjjj', 'jjjj_ww'#, 'jjjj_jrr', 'jjjj_jrr_repro'
+                  #  'lines': ['jjjj', 'jjjj_ww', 'jjjj_resonances', 'jjjj_resonances_osl1'
+                  'lines': ['jjjj', 'jjjj_ww', 'jjjj_resonances',
                     ]}
                   ]
-descriptions = [r"4j", r"$ W^+ W^- \to 4j$", r"4j JRR", "4j JRR repro"]
+descriptions = [r"4j", r"$ W^+ W^- \to 4j$", r"$4j$ (with resonances, OSL=4)",
+                r"$4j$ (with resonances, OSL=1)"]
 plot_targets = ['plots', 'show-MCerrors']
 lo_nlo_lines_and_nlo_band = []
 # lo_nlo_lines_and_nlo_band = ['proc_lo.yoda', 'proc_nlo_central.yoda',

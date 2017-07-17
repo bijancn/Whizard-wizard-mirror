@@ -34,6 +34,8 @@ namespace Rivet {
       addProjection(t, "top");
       const IdentifiedFinalState tbar(-PID::TQUARK);
       addProjection(tbar, "antitop");
+      const IdentifiedFinalState gl(PID::GLUON);
+      addProjection(gl, "gluon");
 
       const double R = 0.4; const double p = -1.0;
       fastjet::JetDefinition ee(fastjet::ee_genkt_algorithm, R, p,
@@ -42,20 +44,23 @@ namespace Rivet {
       addProjection(jets, "Jets");
 
       _h["leadingjet_E"] = bookNLOHisto1D("leading-jet-E", stdbin, 250., 600.);
-      _h["leadingjet_Pt"] = bookNLOHisto1D("leading-jet-pT", stdbin, 0., 405.);
+      _h["leadingjet_Pt"] = bookNLOHisto1D("leading-jet-pT", stdbin, 0., 205.);
       _h["leadingjet_Theta"] = bookNLOHisto1D("leading-jet-Theta", stdbin, -1.1, 1.1);
 
       _h["2ndleadingjet_E"] = bookNLOHisto1D("2nd-leading-jet-E", stdbin, 0., 450.);
       _h["2ndleadingjet_Pt"] = bookNLOHisto1D("2nd-leading-jet-pT", stdbin, 0., 405.);
       _h["2ndleadingjet_Theta"] = bookNLOHisto1D("2nd-leading-jet-Theta", stdbin, -1.1, 1.1);
 
-      _h["top-E"] = bookNLOHisto1D("top-E", stdbin, 150.1, 500.1);
-      _h["antitop-E"] = bookNLOHisto1D("antitop-E", stdbin, 150.1, 500.1);
-      _h["top-pT"] = bookNLOHisto1D("top-pT", stdbin, 0., 405.);
-      _h["antitop-pT"] = bookNLOHisto1D("antitop-pT", stdbin, 0., 405.);
+      _h["gluon-E"] = bookNLOHisto1D("gluon-E", stdbin, 0., 300.1);
+      _h["gluon-E-zoom"] = bookNLOHisto1D("gluon-E-zoom", stdbin, 0., 20.1);
+
+      _h["top-E"] = bookNLOHisto1D("top-E", stdbin, 160.1, 260.1);
+      _h["antitop-E"] = bookNLOHisto1D("antitop-E", stdbin, 160.1, 260.1);
+      _h["top-pT"] = bookNLOHisto1D("top-pT", stdbin, 0., 205.);
+      _h["antitop-pT"] = bookNLOHisto1D("antitop-pT", stdbin, 0., 205.);
       _h["top-theta"] = bookNLOHisto1D("top-theta", stdbin, -1.1, 1.1);
       _h["antitop-theta"] = bookNLOHisto1D("antitop-theta", stdbin, -1.1, 1.1);
-      _h["tt-inv"] = bookNLOHisto1D("tt-inv", stdbin, 500., 805.);
+      _h["tt-inv"] = bookNLOHisto1D("tt-inv", stdbin, 300., 505.);
 
 
       _h["jets_invMass"] = bookNLOHisto1D("jets-inv", 25, 780.1, 805.1);
@@ -70,11 +75,12 @@ namespace Rivet {
 
     void analyze(const Event& event) {
       double weight = event.weight();
-    
+
       Jets jets, tjets, tbarjets;
 
       ParticleVector tpartons = applyProjection<IdentifiedFinalState>(event, "top").particlesByPt();
       ParticleVector tbarpartons = applyProjection<IdentifiedFinalState>(event, "antitop").particlesByPt();
+      ParticleVector gluons = applyProjection<IdentifiedFinalState>(event, "gluon").particlesByPt();
 
       const FastJets& fastjets = applyProjection<FastJets>(event, "Jets");
       double minjetE = 1. * GeV;
@@ -97,10 +103,11 @@ namespace Rivet {
          if (t_in_jet and tbar_in_jet) {
            vetoCounter++;
            vetoEvent;
-         }       
+         }
       }
 
       bool vetoCondition = jets.size() < 2 or tjets.size() == 0 or tbarjets.size() == 0;
+      vetoCondition = false;
       if (vetoCondition) {
         vetoCounter++;
         vetoEvent;
@@ -108,30 +115,38 @@ namespace Rivet {
       else {
         acceptedWeights += weight;
       }
+      if (gluons.size () > 0) {
+        _h["gluon-E"]->fill(gluons[0].E(), event);
+        _h["gluon-E-zoom"]->fill(gluons[0].E(), event);
+      }
 
       _h["jetcount"]->fill(jets.size(), event);
       for (unsigned int i = 0; i < jets.size(); i++)
          _h["jetcount_incl"]->fill(i + 1, event);
 
-      _h["top-E"]->fill(tjets[0].E(), event);
-      _h["antitop-E"]->fill(tbarjets[0].E(), event);
-      _h["top-pT"]->fill(tjets[0].pt(), event);
-      _h["antitop-pT"]->fill(tbarjets[0].pt(), event);
-      _h["top-theta"]->fill(std::cos(tjets[0].theta()), event);
-      _h["antitop-theta"]->fill(std::cos(tbarjets[0].theta()), event);
-      _h["tt-inv"]->fill((tjets[0].momentum() + tbarjets[0].momentum()).mass(), event);
+      if (tjets.size() > 0 and tbarjets.size() > 0) {
+        _h["top-E"]->fill(tjets[0].E(), event);
+        _h["antitop-E"]->fill(tbarjets[0].E(), event);
+        _h["top-pT"]->fill(tjets[0].pt(), event);
+        _h["antitop-pT"]->fill(tbarjets[0].pt(), event);
+        _h["top-theta"]->fill(std::cos(tjets[0].theta()), event);
+        _h["antitop-theta"]->fill(std::cos(tbarjets[0].theta()), event);
+        _h["tt-inv"]->fill((tjets[0].momentum() + tbarjets[0].momentum()).mass(), event);
+      }
 
-      _h["leadingjet_E"]->fill(jets[0].E(), event);
-      _h["leadingjet_Pt"]->fill(jets[0].pt(), event);
-      _h["leadingjet_Theta"]->fill(std::cos(jets[0].theta()), event);
+      if (jets.size() > 0) {
+        _h["leadingjet_E"]->fill(jets[0].E(), event);
+        _h["leadingjet_Pt"]->fill(jets[0].pt(), event);
+        _h["leadingjet_Theta"]->fill(std::cos(jets[0].theta()), event);
+      }
 
-      _h["2ndleadingjet_E"]->fill(jets[1].E(), event);
-      _h["2ndleadingjet_Pt"]->fill(jets[1].pt(), event);
-      _h["2ndleadingjet_Theta"]->fill(std::cos(jets[1].theta()), event);
-
-
-      double jetsMass = (jets[0].momentum() + jets[1].momentum()).mass();
-      _h["jets_invMass"]->fill(jetsMass, event);
+      if (jets.size() > 1) {
+        _h["2ndleadingjet_E"]->fill(jets[1].E(), event);
+        _h["2ndleadingjet_Pt"]->fill(jets[1].pt(), event);
+        _h["2ndleadingjet_Theta"]->fill(std::cos(jets[1].theta()), event);
+        double jetsMass = (jets[0].momentum() + jets[1].momentum()).mass();
+        _h["jets_invMass"]->fill(jetsMass, event);
+      }
 
     }
 
@@ -139,8 +154,8 @@ namespace Rivet {
       // normalize(_h_YYYY); // normalize to unity
       const double fb_per_pb = 1000.0;
       //double fiducial_xsection = crossSection() * fb_per_pb * acceptedWeights / sumOfWeights();
-      //double scale_factor = crossSection() * fb_per_pb / sumOfWeights();
-      double scale_factor = fb_per_pb / eventCounter;
+      double scale_factor = crossSection() * fb_per_pb / sumOfWeights();
+      // double scale_factor = fb_per_pb / eventCounter;
 
       cout << "Sum of weights: " << sumOfWeights () << endl;
       cout << "Sum of weights / N: " << sumOfWeights () / eventCounter << endl;

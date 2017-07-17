@@ -1,7 +1,7 @@
 alpha_power = 2
 alphas_power = 0
 
-sqrts = 800 GeV
+sqrts = 500 GeV
 iterations = 5:20*K:"gw", 3:15*K
 
 mZ = 91.1876

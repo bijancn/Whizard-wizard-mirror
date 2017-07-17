@@ -4,7 +4,6 @@ $born_me_method        = "openloops"
 $loop_me_method        = "openloops"
 $correlation_me_method = "openloops"
 $real_tree_me_method   = "openloops"
-$soft_mismatch_me_method = "openloops"
 alpha_power = 2
 
 library = PROCESS

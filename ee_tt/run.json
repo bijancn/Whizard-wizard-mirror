@@ -3,7 +3,6 @@
   {"process": ["proc_lo"],
     "disabled": true,
     "purpose": "histograms",
-    "whizard_options": "",
     "scan_object": "mtop",
     "nlo_type": "lo",
     "whizard_options":"--rebuild-library",
@@ -13,21 +12,13 @@
     "events_per_batch":100000,
     "analysis": "WHIZARD_tt_NLO"
   },
-  {"process": ["proc_powheg", "proc_powheg_damped"],
+  {"process": ["proc_lo", "proc_powheg", "proc_powheg_damped", "proc_powheg_damped_100", "proc_powheg_damped_1", "proc_powheg_damped_50", "proc_powheg_damped_5"],
     "disabled": true,
     "purpose": "integration",
     "nlo_type": "lo",
-    "adaption_iterations": "5:1000",
-    "integration_iterations": "5:1000"
-  },
-  {"process": ["proc_powheg", "proc_powheg_damped"],
-    "disabled": true,
-    "purpose": "events",
-    "nlo_type": "lo",
-    "adaption_iterations": "5:1000",
-    "integration_iterations": "5:1000",
-    "events_per_batch": 10000,
-    "batches": 5
+    "adaption_iterations": "3:5000",
+    "integration_iterations": "3:5000",
+    "whizard_options": "-r"
   },
   {"process": ["proc_nlo"],
     "disabled": true,
@@ -35,7 +26,17 @@
     "nlo_type": "nlo",
     "adaption_iterations": "3:5000",
     "integration_iterations": "3:5000",
-    "batches": 5
+    "whizard_options": "-r"
+  },
+  {"process": ["proc_lo", "proc_powheg", "proc_powheg_damped", "proc_powheg_damped_100", "proc_powheg_damped_1", "proc_powheg_damped_50", "proc_powheg_damped_5"],
+    "disabled": true,
+    "purpose": "events",
+    "nlo_type": "lo",
+    "adaption_iterations": "3:5000",
+    "integration_iterations": "3:5000",
+    "events_per_batch": 20000,
+    "batches": 100,
+    "whizard_options": "-r"
   },
   {"process": ["proc_nlo"],
     "disabled": true,
@@ -43,8 +44,8 @@
     "nlo_type": "nlo",
     "adaption_iterations": "3:5000",
     "integration_iterations": "3:5000",
-    "batches": 5,
-    "events_per_batch": 10000
+    "batches": 200,
+    "events_per_batch": 50000
   },
   {"process": ["proc_nlo"],
     "disabled": true,
@@ -141,5 +142,6 @@
   }
   ],
   "whizard": "whizard",
-  "data_output": "./"
+  "data_output": "./",
+  "whizard_options": "-r"
 }
