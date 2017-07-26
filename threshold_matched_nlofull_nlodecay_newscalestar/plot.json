@@ -824,19 +824,6 @@
     "disabled_bands": [
     ],
     "bands": [
-      { "label": "NNLL", "hide_label": false,
-        "color": "green",
-        "data": [
-        { "name": "Max_WhizardValidation_MPoleFromM1S_NNLL_dm100_h05f1" , "folder": "../threshold_validation_mpoleUnfixed"},
-        { "name": "Max_WhizardValidation_MPoleFromM1S_NNLL_dm100_h05f2", "folder": "../threshold_validation_mpoleUnfixed" },
-        { "name": "Max_WhizardValidation_MPoleFromM1S_NNLL_dm100_h1f1", "folder": "../threshold_validation_mpoleUnfixed" },
-        { "name": "Max_WhizardValidation_MPoleFromM1S_NNLL_dm100_h2f05", "folder": "../threshold_validation_mpoleUnfixed" },
-        { "name": "Max_WhizardValidation_MPoleFromM1S_NNLL_dm100_h2f1", "folder": "../threshold_validation_mpoleUnfixed" }
-      ],
-        "base_line": [
-        { "name": "Max_WhizardValidation_MPoleFromM1S_NNLL_dm100_h1f1", "folder": "../threshold_validation_mpoleUnfixed" }
-        ]
-      },
       { "label": "matched, combined, symmetrized", "hide_label": true,
         "color": "lightred",
         "opacity": 0.9,
@@ -953,27 +940,18 @@
           }
         ]
       },
-      { "label": "$\\mathrm{t \\bar{t}}$, $m_{\\mathrm t}=m_{\\mathrm{1S}}$, $\\mu_0=m_{\\mathrm{1S}}$",
-        "hide_label": true,
+      { "label": "NNLL", "hide_label": false,
         "color": "green",
         "opacity": 0.3,
         "data": [
-        { "name": "nlofull-sqrts--0-scale_variations",
-          "folder": "../threshold_nlofull_ttbar"
-        },
-        { "name": "nlofull-sqrts--1-scale_variations",
-          "folder": "../threshold_nlofull_ttbar"
-        },
-        { "name": "nlofull-sqrts--2-scale_variations",
-          "folder": "../threshold_nlofull_ttbar"
-        },
-        { "name": "nlofull-sqrts--3-scale_variations",
-          "folder": "../threshold_nlofull_ttbar"
-        }
-        ],
+        { "name": "Max_WhizardValidation_MPoleFromM1S_NNLL_dm100_h05f1" , "folder": "../threshold_validation_mpoleUnfixed"},
+        { "name": "Max_WhizardValidation_MPoleFromM1S_NNLL_dm100_h05f2", "folder": "../threshold_validation_mpoleUnfixed" },
+        { "name": "Max_WhizardValidation_MPoleFromM1S_NNLL_dm100_h1f1", "folder": "../threshold_validation_mpoleUnfixed" },
+        { "name": "Max_WhizardValidation_MPoleFromM1S_NNLL_dm100_h2f05", "folder": "../threshold_validation_mpoleUnfixed" },
+        { "name": "Max_WhizardValidation_MPoleFromM1S_NNLL_dm100_h2f1", "folder": "../threshold_validation_mpoleUnfixed" }
+      ],
         "base_line": [
-          {"name": "nlofull-sqrts", "folder": "../threshold_nlofull_ttbar",
-            "hide_line": false}
+        { "name": "Max_WhizardValidation_MPoleFromM1S_NNLL_dm100_h1f1", "folder": "../threshold_validation_mpoleUnfixed" }
         ]
       }
     ],
@@ -983,7 +961,11 @@
         "hide_label": false, "color": "black",
         "base_line": [{"hide_line": true}]
       },
-      { "name": "Max_WhizardValidation_MPoleFromM1S_NNLL_dm100_h1f1", "folder": "../threshold_validation_mpoleUnfixed" },
+      { "name": "Max_WhizardValidation_MPoleFromM1S_NNLL_dm100_h1f1", "folder":
+        "../threshold_validation_mpoleUnfixed",
+        "hide_label": true, "color": "green", "linestyle": "dotted",
+        "base_line": [{"hide_line": true}]
+      },
       { "name": "nll-sqrts--4-scale_variations--0-interferences--1-FF",
         "folder": "../threshold_matched_lofull_lodecay",
         "label": "NLL", "color": "red", "linestyle": "dashdot",
@@ -1007,13 +989,6 @@
           { "name": "nlofull-sqrts",
             "folder": "../threshold_nlofull_newscalestar_cms"
           }
-        ]
-      },
-      { "name": "nlofull-sqrts",
-        "label": "$t\\bar{t}$ NLO $m_t=m_{1S}$", "hide_label": true,
-        "folder": "../threshold_nlofull_ttbar", "color": "green",
-        "base_line": [
-          {"name": "nlofull-sqrts", "folder": "../threshold_nlofull_ttbar", "hide_line": true}
         ]
       }
     ],
@@ -1045,10 +1020,9 @@
     "xpagelength": 15.0,
     "ypagelength": 7.5,
     "opacity": 0.7,
-    "xmin": 450.0,
-    "xmax": 2200.0,
-    "xlog": true,
-    "xticks": [380, 500, 1000, 2000, 3000],
+    "xmin": 330.0,
+    "xmax": 380.0,
+    "xlog": false,
     "xmajors": 6,
     "xminors": 3,
     "ymin": 0.0,
