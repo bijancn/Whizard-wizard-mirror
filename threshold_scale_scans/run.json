@@ -1,0 +1,52 @@
+{
+  "processes": [
+  {"process": ["nlo_WbWb", "nlo_WbWb_mpoleUnfixed", "nlo_WbWb_newscalestar"],
+    "purpose": "scan",
+    "nlo_type": "nlo",
+    "only_sindarins": false,
+    "whizard_options": "-r",
+    "scans": [{
+       "scan_object": "scale_var",
+       "ranges": [
+       {"type": "logarithmic2",
+         "start": 0.125,
+         "stop": 8,
+         "steps": 7
+       }
+       ]},
+      { "scan_object": "sqrts",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [350]} ]
+      }
+    ],
+    "adaption_iterations": "10:40000",
+    "integration_iterations": "5:20000",
+    "integration_copies": 20
+  },
+  {"process": "nlo_ttbar",
+    "purpose": "scan",
+    "nlo_type": "nlo",
+    "only_sindarins": false,
+    "whizard_options": "-r",
+    "scans": [{
+       "scan_object": "scale_var",
+       "ranges": [
+       {"type": "logarithmic2",
+         "start": 0.125,
+         "stop": 8,
+         "steps": 7
+       }
+       ]},
+      { "scan_object": "sqrts",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [350, 800]} ]
+      }
+    ],
+    "adaption_iterations": "10:10000",
+    "integration_iterations": "5:10000",
+    "integration_copies": 10
+  }
+  ],
+  "whizard": "whizard",
+  "data_output": "./"
+}

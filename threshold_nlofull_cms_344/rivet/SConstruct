@@ -1,0 +1,54 @@
+#!/usr/bin/env python
+
+import sys
+import os
+import inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+grand_parentdir = os.path.dirname(os.path.dirname(currentdir))
+sys.path.insert(0, grand_parentdir)
+import sconstruct_utils as su
+from SCons.Script import Environment, Decider, ADD_BUILDERS, main
+
+env = Environment(ENV=os.environ, tools=['default', ADD_BUILDERS])
+# We use timestamps instead of MD5s since hepmc's are big
+Decider('timestamp-match')
+
+base_analysis = 'WHIZARD_2W2b_NLO'
+analysiss = [base_analysis]
+env['NUMTHREADS'] = '12'
+env['ANALYSIS'] = base_analysis
+configs = ['WHIZARD_threshold.plot']
+processes = []
+plot_together = []
+scales = ['_central', '_high1', '_high2', '_low1', '_low2']
+types = ['nlofull', 'matched_nlodecay']
+for proc in types:
+  processes += su.nlo_process(proc + '_low1') + su.nlo_process(proc + '_low2') + \
+              su.nlo_process(proc + '_high1') + su.nlo_process(proc + '_high2') + \
+              su.nlo_process(proc + '_central')
+  nlo_lines = [proc + s for s in scales]
+  plot_together += [{'target': proc + '_plots',
+                    'lines': nlo_lines + [proc + '_envelope']}
+                    ]
+  descriptions = [r"central", r"high1", r"high2", r"low1", r"low2", r"Title=:ErrorBands=1:ErrorBandColor=red:ErrorBandOpacity=0.5:LineColor=red"]
+  env.BuildEnvelope(target=proc + '_envelope.yoda', source=[nl + '.yoda' for nl in nlo_lines])
+lo_nlo_lines_and_nlo_band = []
+
+main(env, analysiss, processes, plot_together, configs,
+    lo_nlo_lines_and_nlo_band, descriptions, do_controls=False)
+
+merged = []
+for scale in scales:
+  merged.append(env.MergeYodasNoScale(target='matched' + scale,
+                                      source=[t + scale for t in types]))
+env.BuildEnvelope(target='matched_envelope.yoda', source=merged)
+lines = ['nlofull_central', 'nlofull_envelope',
+         'matched_central', 'matched_envelope']
+descriptions = [r"Title=NLO:LineColor=blue",
+                r"Title=:ErrorBands=1:ErrorBandColor=blue:ErrorBandOpacity=0.5:LineColor=blue",
+                r"Title=matched:LineColor=red",
+                r"Title=:ErrorBands=1:ErrorBandColor=red:ErrorBandOpacity=0.5:LineColor=red"
+                ]
+
+env.Plot(target='matched_plots/index.html', source=lines,
+      CONFIG='WHIZARD_threshold_combined.plot', DESCRIPTIONS=descriptions)

@@ -1,0 +1,41 @@
+{
+  "processes": [
+  { "process": ["nlofull", "matched_nlodecay"],
+    "purpose": "histograms",
+    "only_sindarins": false,
+    "disabled": false,
+    "nlo_type": "lo",
+    "batches": 20,
+    "events_per_batch": 100000,
+    "whizard_options": "",
+    "adaption_iterations": "10:40000",
+    "integration_iterations": "5:20000",
+    "scale_variation": false,
+    "extra_scales": false,
+    "analysis": "WHIZARD_2W2b_NLO",
+    "event_mult_real": 20,
+    "event_mult_virt": 0.75
+  },
+  { "process": ["nlofull", "matched_nlodecay"],
+    "purpose": "integration",
+    "only_sindarins": true,
+    "disabled": true,
+    "nlo_type": "lo",
+    "batches": 20,
+    "decent_events_per_batch": 100000,
+    "events_per_batch": 100000,
+    "working_events_per_batch": 10000,
+    "failed_events_per_batch": 500000,
+    "whizard_options": "",
+    "adaption_iterations": "10:40000",
+    "integration_iterations": "5:20000",
+    "scale_variation": false,
+    "extra_scales": false,
+    "analysis": "WHIZARD_2W2b_NLO",
+    "event_mult_real": 20,
+    "event_mult_virt": 0.75
+  }
+  ],
+  "whizard": "whizard",
+  "data_output": "./"
+}

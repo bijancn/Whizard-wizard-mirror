@@ -1,0 +1,26 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+?fixed_order_nlo_events = false
+?combined_nlo_integration = true
+$loop_me_method = "openloops"
+?powheg_matching = true
+powheg_grid_size_xi = 5
+powheg_grid_size_y = 5
+powheg_grid_sampling_points = 100000
+powheg_pt_min = 1
+?powheg_use_singular_jacobian = false
+?nlo_use_real_partition = true
+real_partition_scale = 1 GeV
+wtop = 0.0
+
+library = proc_powheg_damped_1
+process proc_powheg_damped_1 = E1, e1 => t, T {nlo_calculation="Full"}
+
+iterations = 3:5000:"gw",3:5000
+#SETSCAN
+
+integrate (proc_powheg_damped_1)
+n_events = 20000
+checkpoint = n_events / 20
+simulate(proc_powheg_damped_1)

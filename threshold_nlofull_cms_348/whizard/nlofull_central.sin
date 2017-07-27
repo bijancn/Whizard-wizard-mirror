@@ -1,0 +1,61 @@
+include("../process_settings_threshold.sin")
+$grid_path = "../"
+?check_grid_file = false
+
+$method                = "openloops"
+$born_me_method        = "openloops"
+$loop_me_method        = "openloops"
+$correlation_me_method = "openloops"
+$real_tree_me_method   = "openloops"
+$soft_mismatch_me_method = "openloops"
+
+library = nlofull_central
+process nlofull_central = E1, e1 => Wp, Wm, b, B { nlo_calculation = "Full" }
+compile
+
+mpole_fixed = -1
+offshell_strategy = 1     !!! NLO width and decay
+nrqcd_order = 1
+FF = -1  !!! MATCHED
+mpole_fixed = 1
+real wtop1S = wtop
+mpole_fixed = -1
+
+mult_call_real = 20
+mult_call_virt = 0.75
+real scale_variations = -1
+sqrts = 348 GeV
+iterations = 10:40000:"gw",5:20000
+real mass_cut = - 1
+#SETSCAN
+if (scale_variations == 0) then
+  sh = 0.5
+  sf = 1.0
+elsif (scale_variations == 1) then
+  sh = 0.5
+  sf = 2.0
+elsif (scale_variations == 2) then
+  sh = 2.0
+  sf = 1.0
+elsif (scale_variations == 3) then
+  sh = 2.0
+  sf = 0.5
+elsif (scale_variations == 4) then
+  sh = 1.0
+  sf = 1.0
+endif
+scale = sh * m1S * sqrt(abs(sqrt((sqrts - 2 * m1S + I * wtop1S) / m1S)) + 0.05)
+if (mass_cut > 0) then
+  cuts = all abs (M - m1S) < mass_cut [Wp, b] and
+         all abs (M - m1S) < mass_cut [Wm, B]
+endif
+show(model)
+sqrtsmin = sqrts - 2 * sqrtsstepsize
+sqrtsmax = sqrts + 2 * sqrtsstepsize
+
+integrate (nlofull_central)
+
+printf  "RES %8e %8e %8e" (sqrts, integral(nlofull_central), error(nlofull_central))
+n_events = 200000
+checkpoint = n_events / 20
+simulate(nlofull_central)

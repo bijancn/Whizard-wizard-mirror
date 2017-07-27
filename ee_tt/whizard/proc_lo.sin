@@ -1,0 +1,18 @@
+include("../../general_settings.sin")
+include("../process_settings.sin")
+
+wtop = 0.0
+real dummy = 0.0
+scale = mtop
+?fixed_order_nlo_events = true
+?unweighted = false
+?negative_weights = true
+iterations = 3:5000:"gw",3:5000
+library = proc_lo
+process proc_lo = E1, e1 => t, T
+#SETSCAN
+integrate (proc_lo)
+printf "RES %8e %8e %8e" (mtop, integral(proc_lo), error(proc_lo))
+n_events = 20000
+checkpoint = n_events / 20
+simulate(proc_lo)

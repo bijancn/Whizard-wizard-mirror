@@ -1,0 +1,42 @@
+model = SM
+
+?vis_history = false
+
+mZ = 91.1876
+mW = 80.385
+mb = 4.2
+mH = 1.250000000000E+02
+me = 0
+ms = 0
+mc = 0
+mmu = 0
+mtop = 172.0
+GF = 1.1663787E-005
+wZ =  2.443
+wW =  2.049000000000E+00
+wH =  4.143000000000E-03
+?alphas_is_fixed = false
+?alphas_from_mz = true
+?alphas_from_lambda_qcd = false
+alphas = 0.118 ! (Z pole, NLL running to mu_h)
+alphas_order = 2
+alphas_nf = 5
+
+scale = mtop
+
+$method                = "threshold"
+$born_me_method        = "threshold"
+$loop_me_method        = "threshold"
+$correlation_me_method = "threshold"
+$real_tree_me_method   = "threshold"
+?openloops_use_cms = true
+alpha_power = 4
+alphas_power = 0
+
+sqrts = 500 GeV
+
+sample_format = hepmc
+?write_raw = false
+?unweighted = false
+?hepmc_output_cross_section = true
+?negative_weights = true

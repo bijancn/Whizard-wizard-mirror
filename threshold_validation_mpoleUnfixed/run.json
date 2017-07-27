@@ -1,0 +1,61 @@
+{
+  "processes": [
+  { "process": ["validation"],
+    "disabled": false,
+    "purpose": "scan",
+    "only_sindarins": false,
+    "whizard_options": "--no-banner -r",
+    "nlo_type": "lo",
+    "scans": [{
+      "scan_object": "sqrts",
+      "ranges": [
+      { "type": "linear",
+        "start": 325.0,
+        "stop": 340.0,
+        "stepsize": 1.0
+      },
+      { "type": "linear",
+        "start": 340.0,
+        "stop": 350.0,
+        "stepsize": 0.2
+      },
+      { "type": "linear",
+        "start": 350.0,
+        "stop": 360.0,
+        "stepsize": 1.0
+      },
+      { "type": "linear",
+        "start": 360.0,
+        "stop": 390.0,
+        "stepsize": 5.0
+      }
+      ]},
+      { "scan_object": "nrqcd_order",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [0,1]} ]
+      },
+      { "scan_object": "mass_cut",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [15,30,100]} ]
+      },
+      { "scan_object": "FF",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [1,4]} ]
+      },
+      { "scan_object": "factorization_type",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [1,2]} ]
+      },
+      { "scan_object": "scale_variations",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [0,1,2,3,4]} ]
+      }
+      ],
+    "adaption_iterations": "5:20000",
+    "integration_iterations": "5:20000",
+    "integration_copies": 5
+  }
+  ],
+  "whizard": "whizard",
+  "data_output": "./"
+}

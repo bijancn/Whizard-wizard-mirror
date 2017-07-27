@@ -1,0 +1,13 @@
+{
+  "processes": [
+  {"process": ["proc_nlo", "proc_nlo_res"],
+    "disabled": false,
+    "purpose": "test_soft",
+    "nlo_type": "nlo_combined",
+    "adaption_iterations": "1:10000",
+    "integration_iterations": "1:10000"
+  }
+  ],
+  "whizard": "whizard",
+  "data_output": "./"
+}

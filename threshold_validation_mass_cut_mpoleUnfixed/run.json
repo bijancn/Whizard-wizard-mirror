@@ -1,0 +1,44 @@
+{
+  "processes": [
+  { "process":
+    [ "validation" ],
+    "disabled": false,
+    "purpose": "scan",
+    "scans": [{
+      "scan_object": "mass_cut",
+      "ranges": [
+      {"type": "linear",
+        "start": 1,
+        "stop": 50,
+        "stepsize": 1},
+      {"type": "linear",
+        "start": 50,
+        "stop": 100,
+        "stepsize": 2},
+      {"type": "linear",
+        "start": 101,
+        "stop": 160,
+        "stepsize": 3}
+      ]},
+      { "scan_object": "nrqcd_order",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [0,1]} ]
+      },
+      { "scan_object": "sqrts",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [330, 340, 350]} ]
+      },
+      { "scan_object": "factorization_type",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [1,2]} ]
+      }
+      ],
+    "nlo_type": "lo",
+    "adaption_iterations": "5:50000",
+    "integration_iterations": "5:20000",
+    "integration_copies": 5
+  }
+  ],
+  "whizard": "whizard",
+  "data_output": "./"
+}

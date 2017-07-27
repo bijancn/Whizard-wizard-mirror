@@ -1,0 +1,98 @@
+{
+  "processes": [
+  { "process": ["tree"],
+    "disabled": false,
+    "purpose": "scan",
+    "only_sindarins": false,
+    "whizard_options": "--no-banner -r",
+    "nlo_type": "lo",
+    "scans": [{
+      "scan_object": "sqrts",
+      "ranges": [
+      { "type": "linear",
+        "start": 325.0,
+        "stop": 340.0,
+        "stepsize": 1.0
+      },
+      { "type": "linear",
+        "start": 340.0,
+        "stop": 350.0,
+        "stepsize": 0.2
+      },
+      { "type": "linear",
+        "start": 350.0,
+        "stop": 360.0,
+        "stepsize": 1.0
+      },
+      { "type": "linear",
+        "start": 360.0,
+        "stop": 390.0,
+        "stepsize": 5.0
+      }
+      ]},
+      { "scan_object": "scale_variations",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [0,1,2,3,4]} ]
+      },
+      { "scan_object": "interferences",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [1]} ]
+      }
+      ],
+    "adaption_iterations": "5:20000",
+    "integration_iterations": "5:20000",
+    "integration_copies": 5
+  },
+  { "process": ["debug"],
+    "disabled": false,
+    "purpose": "scan",
+    "only_sindarins": false,
+    "whizard_options": "--no-banner -r",
+    "nlo_type": "lo",
+    "scans": [{
+      "scan_object": "sqrts",
+      "ranges": [
+      { "type": "linear",
+        "start": 325.0,
+        "stop": 340.0,
+        "stepsize": 1.0
+      },
+      { "type": "linear",
+        "start": 340.0,
+        "stop": 350.0,
+        "stepsize": 0.2
+      },
+      { "type": "linear",
+        "start": 350.0,
+        "stop": 360.0,
+        "stepsize": 1.0
+      },
+      { "type": "linear",
+        "start": 360.0,
+        "stop": 390.0,
+        "stepsize": 5.0
+      }
+      ]},
+      { "scan_object": "scale_variations",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit", "range": [0,1,2,3,4]} ]
+      },
+      { "scan_object": "formfactor",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit",
+          "range": [2]}]
+      },
+      { "scan_object": "factorization",
+        "export_type": "separate",
+        "ranges": [{ "type": "explicit",
+          "range": [1]}]
+      }
+      ],
+    "adaption_iterations": "5:20000",
+    "integration_iterations": "5:20000",
+    "integration_copies": 5
+  }
+  ],
+  "whizard": "whizard",
+  "data_output": "./"
+}
