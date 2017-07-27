@@ -25,7 +25,7 @@ namespace Rivet {
     /// Book histograms and initialise projections before the run
     void init() {
       const FinalState fs;
-      const int stdbin = 20;
+      const int stdbin = 1000;
 
       addProjection(fs, "FS");
       const Thrust thrust(fs);
@@ -116,19 +116,20 @@ namespace Rivet {
       _h["Sum_Weights"] = bookNLOHisto1D("Sum_Weights", 1, 0., 1.);
       _h["Sum_Weightsbar"] = bookNLOHisto1D("Sum_Weightsbar", 1, 0., 1.);
 
-      _h["Thrust"] = bookNLOHisto1D("Thrust", stdbin, 0, 1.0);
+      _h["Thrust"] = bookNLOHisto1D("Thrust", stdbin, 0, 0.5);
       _h["ThrustMajor"] = bookNLOHisto1D("ThrustMajor", stdbin, 0, 1.0);
-      _h["ThrustMinor"] = bookNLOHisto1D("ThrustMinor", stdbin, 0, 1.0);
+      _h["ThrustMinor"] = bookNLOHisto1D("ThrustMinor", stdbin, 0, 0.5);
       _h["Oblateness"] = bookNLOHisto1D("Oblateness", stdbin, 0, 1.0);
       _h["Sphericity"] = bookNLOHisto1D("Sphericity", stdbin, 0, 1.0);
       _h["Aplanarity"] = bookNLOHisto1D("Aplanarity", stdbin, 0, 1.0);
       _h["Planarity"] = bookNLOHisto1D("Planarity", stdbin, 0, 1.0);
 
+      _h["2jettiness"] = bookNLOHisto1D("2jettiness", stdbin, 0, 0.5);
+      _h["Cparameter"] = bookNLOHisto1D("Cparameter", stdbin, 0, 1);
+
       vetoCounter = 0;
       eventCounter = 0;
       acceptedWeights = 0.;
-      low_energy_counts = 0;
-      low_energy_weights = 0.;
     }
 
     void analyze(const Event& event) {
@@ -194,6 +195,29 @@ namespace Rivet {
       _h["Sphericity"]->fill(sphericity.sphericity(), event);
       _h["Aplanarity"]->fill(sphericity.aplanarity(), event);
       _h["Planarity"]->fill(sphericity.planarity(), event);
+
+      ParticleVector fs = applyProjection<FinalState>(event, "FS").particlesByPt();
+      double sum_abs_momenta = 0.0;
+      FourVector total_vec(0.0, 0.0, 0.0, 0.0);
+      foreach (const FourVector & finst, fs) {
+        sum_abs_momenta += finst.vector3().mod();
+        total_vec += finst;
+      }
+      double Q = total_vec.t();
+      _h["2jettiness"]->fill(1 - thrust.thrust() / Q * sum_abs_momenta, event);
+      double sum_p = 0.0;
+      foreach (const FourVector & finst_i, fs) {
+      // for (unsigned int i=0; i < fs.size(); i++) {
+        foreach (const FourVector & finst_j, fs) {
+        // for (unsigned int j=0; j < fs.size(); j++) {
+          if (finst_i != finst_j) {
+          // if (i != j) {
+            sum_p += pow(finst_i * finst_j, 2.0) / (finst_i.t() * finst_j.t());
+            // sum_p += pow(fs[i] * fs[j], 2.0) / (fs[i].t() * fs[j].t());
+          }
+        }
+      }
+      _h["Cparameter"]->fill(1.5 * (2 - 1 / (Q*Q) * sum_p), event);
 
       _h["jetcount"]->fill(jets.size(), event);
       for (unsigned int i=0; i < jets.size(); i++)
@@ -307,8 +331,6 @@ namespace Rivet {
       cout << "Numer of vetoed events: " << vetoCounter << endl;
       cout << "Final (fiducial) cross section (fb): " << fiducial_xsection << endl;
       cout << "Scale factor: " << scale_factor << endl;
-      cout << "Gluon weights below 5 GeV: " << low_energy_weights << endl;
-      cout << "Number of gluon emissions below 5 GeV: " << low_energy_counts << endl;
 
       typedef std::map<string, NLOHisto1DPtr>::iterator it;
       for(it iter = _h.begin(); iter != _h.end(); iter++) {
@@ -331,8 +353,6 @@ namespace Rivet {
     // std::map <string, Histo2DPtr> _h2;
 
     int vetoCounter, eventCounter;
-    int low_energy_counts;
-    double low_energy_weights;
     double acceptedWeights;
   };
 

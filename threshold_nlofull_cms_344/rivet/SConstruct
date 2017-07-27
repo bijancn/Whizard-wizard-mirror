@@ -22,6 +22,8 @@ processes = []
 plot_together = []
 scales = ['_central', '_high1', '_high2', '_low1', '_low2']
 types = ['nlofull', 'matched_nlodecay']
+types = []
+descriptions = [r"central", r"high1", r"high2", r"low1", r"low2", r"Title=:ErrorBands=1:ErrorBandColor=red:ErrorBandOpacity=0.5:LineColor=red"]
 for proc in types:
   processes += su.nlo_process(proc + '_low1') + su.nlo_process(proc + '_low2') + \
               su.nlo_process(proc + '_high1') + su.nlo_process(proc + '_high2') + \
@@ -30,7 +32,6 @@ for proc in types:
   plot_together += [{'target': proc + '_plots',
                     'lines': nlo_lines + [proc + '_envelope']}
                     ]
-  descriptions = [r"central", r"high1", r"high2", r"low1", r"low2", r"Title=:ErrorBands=1:ErrorBandColor=red:ErrorBandOpacity=0.5:LineColor=red"]
   env.BuildEnvelope(target=proc + '_envelope.yoda', source=[nl + '.yoda' for nl in nlo_lines])
 lo_nlo_lines_and_nlo_band = []
 

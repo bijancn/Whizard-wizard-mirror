@@ -1,6 +1,6 @@
 #!/bin/sh
-mkdir threshold_nlofull_cms_$1
-cd threshold_nlofull_cms_$1
+mkdir threshold_nlofull_cms_$1$2
+cd threshold_nlofull_cms_$1$2
 ln -s ../process_settings_threshold.sin process_settings_threshold.sin
 ln -s ../process_settings_threshold_SM.sin process_settings_threshold_SM.sin
 mkdir rivet whizard
@@ -14,7 +14,7 @@ cp ../threshold_nlofull_cms_344/whizard/*template.sin whizard/
 cp ../threshold_nlofull_cms_344/whizard/submit whizard/
 cp ../threshold_nlofull_cms_344/whizard/.commonrc whizard/
 cp ../threshold_nlofull_cms_344/run.json ./
-../copy_grids.sh $1
+# ../copy_grids.sh $1
 sed -i "s/sqrts = 344/sqrts = $1/" whizard/*sin
 sed -i "s/344/$1/" rivet/*plot
 cd rivet

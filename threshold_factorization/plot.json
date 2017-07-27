@@ -8,7 +8,7 @@
       "[162, 226, 674, 738, 1186, 1250, 1698, 1762]"
       ],
     "lines": [
-      { "name": "master_threshold-sqrts--9-FF--1762-offshell_strategy",
+      { "name": "master_threshold-sqrts--9-FF--706-offshell_strategy",
         "label": "full spin effects",
         "linestyle": "solid"
       },

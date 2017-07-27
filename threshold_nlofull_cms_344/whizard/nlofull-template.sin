@@ -7,7 +7,6 @@ $born_me_method        = "openloops"
 $loop_me_method        = "openloops"
 $correlation_me_method = "openloops"
 $real_tree_me_method   = "openloops"
-$soft_mismatch_me_method = "openloops"
 
 library = PROCESS
 process PROCESS = E1, e1 => Wp, Wm, b, B { nlo_calculation = "Full" }
