@@ -1,6 +1,6 @@
 #!/bin/sh
 energy=$1'.0-sqrts'
-src='../threshold_nlofull_cms/whizard/nlofull_'
+src='/nfs/theoc/data2/bcho/run-scripts/threshold_nlofull_cms/whizard/nlofull_'
 trgt='whizard/nlofull_'
 types=(
 Born
@@ -26,7 +26,7 @@ for index in ${!types[*]}; do
   cp ${src}${types[$index]}-${energy}-0/nlofull_${grid} ${trgt}central_${grid}
 done
 
-src='../threshold_matched_nlofull_nlodecay_newscalestar/whizard/matched_nlodecay_'
+src='/nfs/theoc/data2/bcho/run-scripts/threshold_matched_nlofull_nlodecay_newscalestar/whizard/matched_nlodecay_'
 trgt='whizard/matched_nlodecay_'
 scales[central]=4
 

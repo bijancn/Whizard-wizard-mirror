@@ -166,7 +166,7 @@
   "integration_iterations": "3:20000"
 },
 {"process": ["master_threshold"],
-  "disabled": true,
+  "disabled": false,
   "purpose": "scan",
   "whizard_options": "--no-banner -r",
   "nlo_type": "lo",
@@ -195,7 +195,7 @@
     },
     {"type": "linear",
       "start": 360.0,
-      "stop": 500.0,
+      "stop": 385.0,
       "stepsize": 5.0
     }
     ]},
@@ -207,9 +207,11 @@
     {"scan_object": "offshell_strategy",
      "export_type": "separate",
      "ranges": [{"type": "explicit",
-      "range": [162, 226, 674, 738, 1186, 1250, 1698, 1762]}]
-      }],
-    "integration_copies": 50,
+      "range": [706]}]
+      }
+  ],
+    "old_range": [162, 226, 674, 738, 1186, 1250, 1698, 1762],
+    "integration_copies": 10,
     "adaption_iterations": "5:20000",
     "integration_iterations": "5:20000"
   }

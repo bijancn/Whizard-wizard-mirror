@@ -1,5 +1,61 @@
 {
   "plots": [
+  {"title": "production projected, decay boosted",
+    "output_file": "helicity_approximations",
+    "notes": ["2 (factorization) + 32 (hel approx) + 128 (decay projected)",
+      "variables: 64 (production projected) + 512 (decay boost) + 1024 (spin average)",
+      "decay always projected, production Y/N, decay boosted Y/N, spin sum/average",
+      "[162, 226, 674, 738, 1186, 1250, 1698, 1762]"
+      ],
+    "lines": [
+      { "name": "master_threshold-sqrts--9-FF--1762-offshell_strategy",
+        "label": "full spin effects",
+        "linestyle": "solid"
+      },
+      { "name": "master_threshold-sqrts--9-FF--738-offshell_strategy",
+        "label": "correlated spins",
+        "linestyle": "dashed"
+      },
+      { "name": "master_threshold-sqrts--9-FF--1762-offshell_strategy",
+        "label": "spins averaged",
+        "linestyle": "dashdot"
+      }
+    ],
+    "ratio": {
+      "ylabel": "$\\sigma/\\sigma^{\\text{\\footnotesize full spin effects}}$",
+      "ymax": 1.01,
+      "ymin": 0.99,
+      "ymajors": 3,
+      "yminors": 4,
+      "extra_lines": [
+        { "type": "vertical",
+          "value": 344.0,
+          "opacity": 0.2,
+          "linestyle": "dashed"
+        }
+      ]
+    },
+    "legend_height_shrinker": 0.65,
+    "xlabel": "$\\sqrt{s}$ [GeV]",
+    "ylabel": "$\\sigma$ [fb]",
+    "opacity": 0.7,
+    "ylog": false,
+    "xlog": false,
+    "extra_lines": [
+      {"type": "vertical",
+       "value": 344.0,
+       "opacity": 0.2,
+       "linestyle": "dashed"
+      }],
+    "ymajors": 7,
+    "ymin": 0,
+    "ymax": 600,
+    "xmin": 330.0,
+    "xmax": 380.0,
+    "xmajors": 4,
+    "xminors": 3,
+    "yminors": 4
+  },
   {"title": "",
     "output_file": "influence_of_OS_projection_for_production_zoom",
     "notes": ["2 (factorization) + 32 (hel approx) + 128 (decay projected)",
