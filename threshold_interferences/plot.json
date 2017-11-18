@@ -3,11 +3,11 @@
   {"title": "Interference with full LO, including LL form factor",
     "output_file": "interferences",
     "lines": [
-      { "name": "interferences-sqrts--0-factorization_type",
-        "label": "signal diagram", "linestyle": "solid"
-      },
       { "name": "interferences-sqrts--1-factorization_type",
         "label": "factorized boosted", "linestyle": "dashed"
+      },
+      { "name": "interferences-sqrts--0-factorization_type",
+        "label": "signal diagram", "linestyle": "solid"
       },
       { "name": "interferences-sqrts--2-factorization_type",
         "label": "factorized rest frame",
@@ -16,7 +16,7 @@
     ],
     "ratio": [
       { "ylabel": "$\\text{IF}/\\text{IF}^{\\text{signal}}$",
-        "ymax": 1.5, "ymin": 0.9, "ymajors": 4, "yminors": 3,
+        "ymax": 1.25, "ymin": 0.75, "ymajors": 3, "yminors": 3,
         "extra_lines": [
           { "type": "vertical",
             "value": 344.0,
@@ -134,7 +134,7 @@
     "ymajors": 7
   },
   {"title": "Interference, no form factor",
-    "output_file": "",
+    "output_file": "foo",
     "lines": [
       { "name": "full_LO-sqrts_scale",
         "label": "full LO | full LO", "linestyle": "solid"
@@ -206,6 +206,9 @@
   {"title": "Interference, no form factor",
     "output_file": "interferences_noFF_nosquares",
     "lines": [
+      { "name": "full_LO-sqrts_scale",
+        "label": "full LO | full LO", "linestyle": "solid"
+      },
       { "name": "interferences_noFF-sqrts--0-factorization_type",
         "label": "signal | full LO", "linestyle": "solid"
       },
@@ -225,8 +228,8 @@
       }
     ],
     "ratio": [
-      { "ylabel": "$\\text{IF}/\\text{IF}^{\\text{signal | full}}$",
-        "ymax": 1.1, "ymin": 0.9, "ymajors": 3, "yminors": 4,
+      { "ylabel": "$\\text{IF}/\\text{IF}^{\\text{full | full}}$",
+        "ymax": 1.0, "ymin": 0.8, "ymajors": 3, "yminors": 4,
         "extra_lines": [
           { "type": "vertical",
             "value": 344.0,
